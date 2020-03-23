@@ -1,6 +1,5 @@
 #Database
-data/journal/
-data/diagnostic.data/
+data/
 
 # Logs
 logs
