@@ -1,17 +1,43 @@
-version: "2"
+version: '3'
+
 services:
-  calisthenicsgod:
-    container_name: calisthenicsgod
-    restart: always
-    build: .
-    ports:
-      - "8080:8080"
-    links:
-      - mongo
-  mongo:
-    container_name: mongo
+  calisthenicsgoddb:
+    container_name: calisthenicsGodDB
     image: mongo
+    restart: on-failure
     volumes:
       - ./data:/data/db
     ports:
       - "27017:27017"
+    networks:
+      - app-network
+  nodejs:
+    build:
+      context: ./backend
+      dockerfile: Dockerfile
+    image: backend
+    container_name: calisthenicsGodBackend
+    restart: unless-stopped
+    ports:
+      - "8080:8080"
+    expose:
+      - 8080
+    volumes:
+      - .:/home/node/app
+      - node_modules:/home/node/app/node_modules
+    depends_on:
+      - calisthenicsgoddb
+    environment:
+      - DB_CONNECT=${DB_CONNECT}
+      - PORT=${PORT}
+      - TOKEN_SECRET=${TOKEN_SECRET}
+    networks:
+      - app-network
+
+volumes:
+  dbdata:
+  node_modules:  
+
+networks:
+  app-network:
+    driver: bridge
