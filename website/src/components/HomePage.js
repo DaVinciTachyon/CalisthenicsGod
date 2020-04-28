@@ -11,6 +11,6 @@ export default class HomePage extends React.Component {
 	}
 
 	render() {
-		return <div>hi</div>;
+		return <div style={{ padding: '100px' }}>This is Calisthenics.</div>;
 	}
 }

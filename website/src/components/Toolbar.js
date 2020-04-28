@@ -23,6 +23,9 @@ function Toolbar() {
 				<Link to="/">
 					<li>Home Page</li>
 				</Link>
+				<Link to="/nutrientTracker">
+					<li>Nutrient Tracker</li>
+				</Link>
 				<li onClick={logOut}>Log Out</li>
 			</ul>
 		</nav>

@@ -76,3 +76,11 @@
 	color: darkgrey;
 	text-decoration: none;
 }
+
+.alignCentre {
+	text-align: center;
+}
+
+.centreMe {
+	display: inline-block;
+}
