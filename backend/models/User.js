@@ -26,6 +26,15 @@ const userSchema = new mongoose.Schema({
 	maintenanceCalories: {
 		type: Number
 	},
+	calorieMode: {
+		type: String,
+		enum: [
+			'maintenance',
+			'deficit',
+			'bulk'
+		],
+		default: 'maintenance'
+	},
 	weight: [
 		{
 			date: {

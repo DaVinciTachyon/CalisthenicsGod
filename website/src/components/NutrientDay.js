@@ -35,7 +35,7 @@ export default class NutrientDay extends React.Component {
 		let meals = [];
 		for (let i = 0; i < this.state.meals.length; i++) {
 			meals.push(
-				<tr>
+				<tr key={this.state.meals[i]._id}>
 					<td>{this.state.meals[i].name}</td>
 					<td style={{ background: this.props.fatLight }}>{this.state.meals[i].fat}</td>
 					<td style={{ background: this.props.carbLight }}>{this.state.meals[i].carbohydrate}</td>

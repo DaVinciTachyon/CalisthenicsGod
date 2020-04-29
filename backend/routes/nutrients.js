@@ -8,7 +8,7 @@ router.use(verify, (req, res, next) => {
 });
 
 const macronutrientDensities = {
-	//in db?
+	//FIXME in db?
 	fat: 9,
 	carbohydrate: 4,
 	protein: 4,
@@ -35,6 +35,11 @@ router.get('/today/meals', async (req, res) => {
 
 router.get('/today/userInfo', async (req, res) => {
 	const user = await User.findOne({ _id: req.user._id });
+
+	let weight = 0;
+	if (user.weight.length > 0) weight = user.weight[0].weight;
+	else return res.status(400).send('Weight required');
+
 	let fat = 0;
 	let carbohydrates = 0;
 	let protein = 0;
@@ -45,18 +50,15 @@ router.get('/today/userInfo', async (req, res) => {
 		user.food[0].date.getDay() === today.getDay() &&
 		user.food[0].date.getMonth() === today.getMonth() &&
 		user.food[0].date.getFullYear() === today.getFullYear()
-	) {
+	)
 		for (let i = 0; i < user.food[0].meals.length; i++) {
 			fat += user.food[0].meals[i].fat;
 			carbohydrates += user.food[0].meals[i].carbohydrate;
 			protein += user.food[0].meals[i].protein;
 			ethanol += user.food[0].meals[i].ethanol;
 		}
-	}
 
-	let mode = 'deficit';
-	let weight = 76;
-	let totalCalories = 1843;
+	let totalCalories = 1843; //FIXME put into db
 	let proteinPerKg = 1.9;
 	let fatPartition = 0.3;
 	let goalProtG = Math.round(weight * proteinPerKg * 10) / 10;
@@ -67,7 +69,7 @@ router.get('/today/userInfo', async (req, res) => {
 		) / 10;
 	let goalEthG = 0;
 	res.send({
-		mode: mode,
+		mode: user.calorieMode,
 		totalCalories: totalCalories,
 		goalProtein: goalProtG,
 		goalFat: goalFatG,
@@ -84,38 +86,33 @@ router.get('/macronutrientDensities', (req, res) => {
 	res.send(macronutrientDensities);
 });
 
-router.post('/food', (req, res) => {
+router.post('/food', async (req, res) => {
 	const food = req.body.food;
-	food.forEach(async (element) => {
-		const user = await User.findOne({ _id: req.user._id });
-		let today = new Date();
+	const user = await User.findOne({ _id: req.user._id });
+	let today = new Date();
+	for (let i = 0; i < food.length; i++) {
+		let meal = {
+			name: food[i].name,
+			fat: food[i].fat,
+			carbohydrate: food[i].carbohydrate,
+			protein: food[i].protein,
+			ethanol: food[i].ethanol
+		};
 		if (
 			user.food.length > 0 &&
 			user.food[0].date.getDay() === today.getDay() &&
 			user.food[0].date.getMonth() === today.getMonth() &&
 			user.food[0].date.getFullYear() === today.getFullYear()
 		)
-			user.food[0].meals.push({
-				name: element.name,
-				fat: element.fat,
-				carbohydrate: element.carbohydrate,
-				protein: element.protein,
-				ethanol: element.ethanol
-			});
+			user.food[0].meals.push(meal);
 		else
 			user.food.unshift({
 				meals: [
-					{
-						name: element.name,
-						fat: element.fat,
-						carbohydrate: element.carbohydrate,
-						protein: element.protein,
-						ethanol: element.ethanol
-					}
+					meal
 				]
 			});
-		await user.save();
-	});
+	}
+	await user.save();
 	res.sendStatus(200);
 });
 
