@@ -7,13 +7,23 @@ router.use(verify, (req, res, next) => {
 });
 
 let vars = {
+	//stored in db
 	fat: 1.0,
 	carbohydrate: 1.0,
 	protein: 1.0,
 	ethanol: 1.0
 };
 
+const macronutrientDensities = {
+	//in db?
+	fat: 9,
+	carbohydrate: 4,
+	protein: 4,
+	ethanol: 7
+};
+
 router.get('/today/userInfo', (req, res) => {
+	//mostly in db
 	let mode = 'deficit';
 	let weight = 76;
 	let fat = vars.fat;
@@ -21,9 +31,14 @@ router.get('/today/userInfo', (req, res) => {
 	let carbohydrates = vars.carbohydrate;
 	let ethanol = vars.ethanol;
 	let totalCalories = 1843;
-	let goalProtG = Math.round(weight * 1.9 * 10) / 10;
-	let goalFatG = Math.round(totalCalories * 0.3 / 9 * 10) / 10;
-	let goalCarbG = Math.round((totalCalories - goalFatG * 9 - goalProtG * 4) * 10) / 10;
+	let proteinPerKg = 1.9;
+	let fatPartition = 0.3;
+	let goalProtG = Math.round(weight * proteinPerKg * 10) / 10;
+	let goalFatG = Math.round(totalCalories * fatPartition / macronutrientDensities.fat * 10) / 10;
+	let goalCarbG =
+		Math.round(
+			(totalCalories - goalFatG * macronutrientDensities.fat - goalProtG * macronutrientDensities.protein) * 10
+		) / 10;
 	let goalEthG = 0;
 	res.send({
 		mode: mode,
@@ -40,7 +55,7 @@ router.get('/today/userInfo', (req, res) => {
 });
 
 router.get('/macronutrientDensities', (req, res) => {
-	res.send({ fat: 9, protein: 4, carbohydrates: 4, ethanol: 7 });
+	res.send(macronutrientDensities);
 });
 
 router.post('/food', (req, res) => {
