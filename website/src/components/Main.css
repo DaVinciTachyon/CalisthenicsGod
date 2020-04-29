@@ -84,3 +84,14 @@
 .centreMe {
 	display: inline-block;
 }
+
+.input {
+	border-radius: 3px;
+	border-width: 1px;
+	margin: 4px;
+	padding: 4px;
+}
+
+.numInput {
+	width: 50px;
+}

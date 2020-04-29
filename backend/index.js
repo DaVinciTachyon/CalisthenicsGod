@@ -8,7 +8,9 @@ const app = express();
 mongoose.connect(process.env.DB_CONNECT, { useNewUrlParser: true, useUnifiedTopology: true }, () =>
 	console.log('Connected To Database')
 );
+mongoose.set('useNewUrlParser', true);
 mongoose.set('useFindAndModify', false);
+mongoose.set('useCreateIndex', true);
 
 dotenv.config();
 
