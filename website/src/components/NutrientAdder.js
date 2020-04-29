@@ -13,7 +13,7 @@ export default class NutrientAdder extends React.Component {
 		};
 	}
 
-	nameInputChange = (evt) => {
+	nameChange = (evt) => {
 		const input = evt.target.validity.valid ? evt.target.value : this.state.name;
 		this.setState({ name: input });
 	};
@@ -46,6 +46,7 @@ export default class NutrientAdder extends React.Component {
 			body: JSON.stringify({
 				food: [
 					{
+						name: this.state.name,
 						fat: this.state.fat,
 						carbohydrate: this.state.carb,
 						protein: this.state.prot,
@@ -70,7 +71,13 @@ export default class NutrientAdder extends React.Component {
 		return (
 			<div className="card alignCentre">
 				<form className="centreMe" onSubmit={this.addMacros}>
-					<input name="name" type="text" onChange={this.nameInputChange.bind(this)} className="input" />
+					<input
+						name="name"
+						type="text"
+						value={this.state.name}
+						onChange={this.nameChange.bind(this)}
+						className="input"
+					/>
 					<input
 						name="fat"
 						type="number"

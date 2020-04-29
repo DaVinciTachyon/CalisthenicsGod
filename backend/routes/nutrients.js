@@ -1,18 +1,11 @@
 const router = require('express').Router();
 const verify = require('./verifyToken');
 const User = require('../models/User');
+const Food = require('../models/Food');
 
 router.use(verify, (req, res, next) => {
 	next();
 });
-
-let vars = {
-	//stored in db
-	fat: 1.0,
-	carbohydrate: 1.0,
-	protein: 1.0,
-	ethanol: 1.0
-};
 
 const macronutrientDensities = {
 	//in db?
@@ -22,14 +15,47 @@ const macronutrientDensities = {
 	ethanol: 7
 };
 
-router.get('/today/userInfo', (req, res) => {
-	//mostly in db
+router.get('/today/meals', async (req, res) => {
+	const user = await User.findOne({ _id: req.user._id });
+	let today = new Date();
+	if (
+		user.food.length > 0 &&
+		user.food[0].date.getDay() === today.getDay() &&
+		user.food[0].date.getMonth() === today.getMonth() &&
+		user.food[0].date.getFullYear() === today.getFullYear()
+	)
+		res.send({
+			meals: user.food[0].meals
+		});
+	else
+		res.send({
+			meals: []
+		});
+});
+
+router.get('/today/userInfo', async (req, res) => {
+	const user = await User.findOne({ _id: req.user._id });
+	let fat = 0;
+	let carbohydrates = 0;
+	let protein = 0;
+	let ethanol = 0;
+	let today = new Date();
+	if (
+		user.food.length > 0 &&
+		user.food[0].date.getDay() === today.getDay() &&
+		user.food[0].date.getMonth() === today.getMonth() &&
+		user.food[0].date.getFullYear() === today.getFullYear()
+	) {
+		for (let i = 0; i < user.food[0].meals.length; i++) {
+			fat += user.food[0].meals[i].fat;
+			carbohydrates += user.food[0].meals[i].carbohydrate;
+			protein += user.food[0].meals[i].protein;
+			ethanol += user.food[0].meals[i].ethanol;
+		}
+	}
+
 	let mode = 'deficit';
 	let weight = 76;
-	let fat = vars.fat;
-	let protein = vars.protein;
-	let carbohydrates = vars.carbohydrate;
-	let ethanol = vars.ethanol;
 	let totalCalories = 1843;
 	let proteinPerKg = 1.9;
 	let fatPartition = 0.3;
@@ -60,11 +86,35 @@ router.get('/macronutrientDensities', (req, res) => {
 
 router.post('/food', (req, res) => {
 	const food = req.body.food;
-	food.forEach((element) => {
-		vars.fat = Math.round((vars.fat + parseFloat(element.fat)) * 10) / 10;
-		vars.carbohydrate = Math.round((vars.carbohydrate + parseFloat(element.carbohydrate)) * 10) / 10;
-		vars.protein = Math.round((vars.protein + parseFloat(element.protein)) * 10) / 10;
-		vars.ethanol = Math.round((vars.ethanol + parseFloat(element.ethanol)) * 10) / 10;
+	food.forEach(async (element) => {
+		const user = await User.findOne({ _id: req.user._id });
+		let today = new Date();
+		if (
+			user.food.length > 0 &&
+			user.food[0].date.getDay() === today.getDay() &&
+			user.food[0].date.getMonth() === today.getMonth() &&
+			user.food[0].date.getFullYear() === today.getFullYear()
+		)
+			user.food[0].meals.push({
+				name: element.name,
+				fat: element.fat,
+				carbohydrate: element.carbohydrate,
+				protein: element.protein,
+				ethanol: element.ethanol
+			});
+		else
+			user.food.unshift({
+				meals: [
+					{
+						name: element.name,
+						fat: element.fat,
+						carbohydrate: element.carbohydrate,
+						protein: element.protein,
+						ethanol: element.ethanol
+					}
+				]
+			});
+		await user.save();
 	});
 	res.sendStatus(200);
 });
