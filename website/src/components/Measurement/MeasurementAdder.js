@@ -1,6 +1,7 @@
 import React from 'react';
+import '../Main.css';
 
-export default class WeightAdder extends React.Component {
+export default class MeasurementAdder extends React.Component {
 	constructor() {
 		super();
 		this.state = {
@@ -22,7 +23,9 @@ export default class WeightAdder extends React.Component {
 				weight: this.state.weight
 			})
 		};
-		fetch('http://localhost:8080/user/weight', requestOptions);
+		fetch('http://localhost:8080/measurement/weight', requestOptions).then(() => {
+			this.props.addMeasurement();
+		});
 		this.setState({
 			weight: 0
 		});

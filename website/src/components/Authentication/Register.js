@@ -1,15 +1,17 @@
 import React from 'react';
-import './Main.css';
+import '../Main.css';
 
-export default class Login extends React.Component {
+export default class Register extends React.Component {
 	constructor() {
 		super();
 		this.state = {
+			name: '',
 			email: '',
 			password: '',
 			error: ''
 		};
 
+		this.handleNameChange = this.handleNameChange.bind(this);
 		this.handleEmailChange = this.handleEmailChange.bind(this);
 		this.handlePasswordChange = this.handlePasswordChange.bind(this);
 		this.handleSubmit = this.handleSubmit.bind(this);
@@ -22,26 +24,30 @@ export default class Login extends React.Component {
 
 	handleSubmit(evt) {
 		evt.preventDefault();
+		if (!this.state.name) return this.setState({ error: 'Name is required' });
 		if (!this.state.email) return this.setState({ error: 'Email is required' });
 		if (!this.state.password) return this.setState({ error: 'Password is required' });
 		const requestOptions = {
 			method: 'POST',
 			headers: { 'Content-Type': 'application/json' },
 			body: JSON.stringify({
+				name: this.state.name,
 				email: this.state.email,
 				password: this.state.password
 			})
 		};
-		fetch('http://localhost:8080/auth/login', requestOptions)
+		fetch('http://localhost:8080/auth/register', requestOptions)
 			.then((response) => response.json())
 			.then((data) => {
-				if (data['auth-token']) {
-					localStorage.setItem('authToken', data['auth-token']);
-					window.location.reload(false);
-				}
+				if (data.user) window.location = '/login';
 				this.setState({ error: data.error });
-			})
-			.catch((err) => console.error(err));
+			});
+	}
+
+	handleNameChange(evt) {
+		this.setState({
+			name: evt.target.value
+		});
 	}
 
 	handleEmailChange(evt) {
@@ -72,6 +78,16 @@ export default class Login extends React.Component {
 					)}
 					<div className="center">
 						<input
+							id="name"
+							className="formElement"
+							type="text"
+							value={this.state.name}
+							onChange={this.handleNameChange}
+							placeholder="Name"
+						/>
+					</div>
+					<div className="center">
+						<input
 							id="email"
 							className="formElement"
 							type="text"
@@ -91,11 +107,11 @@ export default class Login extends React.Component {
 						/>
 					</div>
 					<div className="center">
-						<input className="primaryButton formElement" type="submit" value="Login" />
+						<input className="primaryButton formElement" type="submit" value="Register" />
 					</div>
 					<div className="center">
-						<a className="secondaryButton formElement" href="/register">
-							Register
+						<a className="secondaryButton formElement" href="/login">
+							Login
 						</a>
 					</div>
 				</form>

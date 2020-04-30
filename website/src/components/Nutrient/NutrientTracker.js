@@ -1,5 +1,5 @@
 import React from 'react';
-import './Main.css';
+import '../Main.css';
 import NutrientAdder from './NutrientAdder';
 import NutrientSummary from './NutrientSummary';
 import NutrientDay from './NutrientDay';

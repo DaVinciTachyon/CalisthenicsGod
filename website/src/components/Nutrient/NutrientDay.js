@@ -1,5 +1,5 @@
 import React from 'react';
-import './Main.css';
+import '../Main.css';
 
 export default class NutrientDay extends React.Component {
 	constructor() {

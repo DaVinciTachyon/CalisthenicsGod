@@ -1,5 +1,4 @@
 import React from 'react';
-import WeightAdder from './WeightAdder';
 
 export default class HomePage extends React.Component {
 	constructor() {
@@ -12,10 +11,6 @@ export default class HomePage extends React.Component {
 	}
 
 	render() {
-		return (
-			<div style={{ padding: '100px' }}>
-				<WeightAdder />
-			</div>
-		);
+		return <div style={{ padding: '100px' }}>Make this a summary page?</div>;
 	}
 }

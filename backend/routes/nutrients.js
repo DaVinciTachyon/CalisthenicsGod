@@ -58,7 +58,11 @@ router.get('/today/userInfo', async (req, res) => {
 			ethanol += user.food[0].meals[i].ethanol;
 		}
 
-	let totalCalories = 1843; //FIXME put into db
+	let totalCalories = 2.20462 * weight * 15;
+	if (user.calorieMode === 'deficit') totalCalories = 2.20462 * weight * 11;
+	else if (user.calorieMode === 'bulk') totalCalories += 200;
+	totalCalories = Math.round(totalCalories);
+
 	let proteinPerKg = 1.9;
 	let fatPartition = 0.3;
 	let goalProtG = Math.round(weight * proteinPerKg * 10) / 10;

@@ -1,5 +1,5 @@
 import React from 'react';
-import './Main.css';
+import '../Main.css';
 import PieChart from 'react-minimal-pie-chart';
 import Modal from 'react-modal';
 
