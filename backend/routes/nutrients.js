@@ -1,7 +1,6 @@
 const router = require('express').Router();
 const verify = require('./verifyToken');
 const User = require('../models/User');
-const Food = require('../models/Food');
 
 router.use(verify, (req, res, next) => {
 	next();
@@ -37,7 +36,7 @@ router.get('/today/userInfo', async (req, res) => {
 	const user = await User.findOne({ _id: req.user._id });
 
 	let weight = 0;
-	if (user.weight.length > 0) weight = user.weight[0].weight;
+	if (user.weight.length > 0) weight = user.weight[0].value;
 	else return res.status(400).send('Weight required');
 
 	let fat = 0;

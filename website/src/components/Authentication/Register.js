@@ -8,14 +8,11 @@ export default class Register extends React.Component {
 			name: '',
 			email: '',
 			password: '',
+			weight: 0,
+			gender: 'male',
+			birthDate: '',
 			error: ''
 		};
-
-		this.handleNameChange = this.handleNameChange.bind(this);
-		this.handleEmailChange = this.handleEmailChange.bind(this);
-		this.handlePasswordChange = this.handlePasswordChange.bind(this);
-		this.handleSubmit = this.handleSubmit.bind(this);
-		this.dismissError = this.dismissError.bind(this);
 	}
 
 	componentDidMount() {
@@ -33,7 +30,10 @@ export default class Register extends React.Component {
 			body: JSON.stringify({
 				name: this.state.name,
 				email: this.state.email,
-				password: this.state.password
+				password: this.state.password,
+				weight: this.state.weight,
+				gender: this.state.gender,
+				birthDate: this.state.birthDate
 			})
 		};
 		fetch('http://localhost:8080/auth/register', requestOptions)
@@ -62,6 +62,24 @@ export default class Register extends React.Component {
 		});
 	}
 
+	handleWeightChange(evt) {
+		this.setState({
+			weight: evt.target.value
+		});
+	}
+
+	handleGenderChange(evt) {
+		this.setState({
+			gender: evt.target.value
+		});
+	}
+
+	handleBirthDateChange(evt) {
+		this.setState({
+			birthDate: evt.target.value
+		});
+	}
+
 	dismissError() {
 		this.setState({ error: '' });
 	}
@@ -69,10 +87,10 @@ export default class Register extends React.Component {
 	render() {
 		return (
 			<div className="center">
-				<form onSubmit={this.handleSubmit} className="signCard card">
+				<form onSubmit={this.handleSubmit.bind(this)} className="signCard card">
 					{this.state.error && (
-						<h3 data-test="error" onClick={this.dismissError}>
-							<button onClick={this.dismissError}>✖</button>
+						<h3 data-test="error" onClick={this.dismissError.bind(this)}>
+							<button onClick={this.dismissError.bind(this)}>✖</button>
 							{this.state.error}
 						</h3>
 					)}
@@ -82,8 +100,9 @@ export default class Register extends React.Component {
 							className="formElement"
 							type="text"
 							value={this.state.name}
-							onChange={this.handleNameChange}
+							onChange={this.handleNameChange.bind(this)}
 							placeholder="Name"
+							required
 						/>
 					</div>
 					<div className="center">
@@ -92,8 +111,9 @@ export default class Register extends React.Component {
 							className="formElement"
 							type="text"
 							value={this.state.email}
-							onChange={this.handleEmailChange}
+							onChange={this.handleEmailChange.bind(this)}
 							placeholder="Email"
+							required
 						/>
 					</div>
 					<div className="center">
@@ -102,8 +122,39 @@ export default class Register extends React.Component {
 							className="formElement"
 							type="password"
 							value={this.state.password}
-							onChange={this.handlePasswordChange}
+							onChange={this.handlePasswordChange.bind(this)}
 							placeholder="Password"
+						/>
+					</div>
+					<div className="center">
+						<input
+							id="weight"
+							className="formElement"
+							type="number"
+							step="0.1"
+							min="0"
+							value={this.state.weight}
+							onChange={this.handleWeightChange.bind(this)}
+							placeholder="Weight"
+							required
+						/>
+					</div>
+					<div className="center">
+						<select name="gender" onChange={this.handleGenderChange.bind(this)} required>
+							<option value="male" selected>
+								Male
+							</option>
+							<option value="female">Female</option>
+						</select>
+					</div>
+					<div className="center">
+						<input
+							id="birthDate"
+							className="formElement"
+							type="date"
+							value={this.state.birthDate}
+							onChange={this.handleBirthDateChange.bind(this)}
+							required
 						/>
 					</div>
 					<div className="center">

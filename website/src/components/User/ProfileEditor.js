@@ -7,7 +7,16 @@ export default class ProfileEditor extends React.Component {
 		this.state = {
 			calorieMode: 'maintenance',
 			calorieOffset: 0,
-			currentOffset: 0
+			currentOffset: 0,
+			currentMode: 'maintenance',
+			name: '',
+			email: '',
+			dateJoined: '',
+			birthDate: '',
+			gender: '',
+			maintenanceCalories: 0,
+			proteinAmount: 0,
+			fatPartition: 0
 		};
 	}
 
@@ -16,23 +25,35 @@ export default class ProfileEditor extends React.Component {
 			method: 'GET',
 			headers: { 'Content-Type': 'application/json', 'auth-token': localStorage.getItem('authToken') }
 		};
-		fetch('http://localhost:8080/user/calorieOffset', requestOptions)
-			.then((response) => response.json())
-			.then((data) => {
+		fetch('http://localhost:8080/user/', requestOptions).then((response) => response.json()).then((data) => {
+			let dateJoined = new Date(data.dateJoined);
+			let birthDate = new Date(data.birthDate);
+			this.setState({
+				name: data.name,
+				email: data.email,
+				dateJoined: `${dateJoined.getDate()}/${dateJoined.getMonth() + 1}/${dateJoined.getFullYear()}`,
+				birthDate: `${birthDate.getDate()}/${birthDate.getMonth() + 1}/${birthDate.getFullYear()}`,
+				gender: data.gender,
+				maintenanceCalories: data.maintenanceCalories,
+				calorieOffset: data.calorieOffset,
+				proteinAmount: data.proteinAmount,
+				fatPartition: data.fatPartition
+			});
+			if (data.calorieOffset > 0)
 				this.setState({
+					calorieMode: 'bulk',
+					currentMode: 'bulk',
+					calorieOffset: data.calorieOffset,
 					currentOffset: data.calorieOffset
 				});
-				if (data.calorieOffset > 0)
-					this.setState({
-						calorieMode: 'bulk',
-						calorieOffset: data.calorieOffset
-					});
-				else if (data.calorieOffset < 0)
-					this.setState({
-						calorieMode: 'deficit',
-						calorieOffset: -1 * data.calorieOffset
-					});
-			});
+			else if (data.calorieOffset < 0)
+				this.setState({
+					calorieMode: 'deficit',
+					currentMode: 'deficit',
+					calorieOffset: -1 * data.calorieOffset,
+					currentOffset: data.calorieOffset
+				});
+		});
 	}
 
 	calorieModeChange = (evt) => {
@@ -65,37 +86,87 @@ export default class ProfileEditor extends React.Component {
 		fetch('http://localhost:8080/user/calorieOffset', requestOptions).then(() => {
 			this.props.editProfile();
 			this.setState({
-				currentOffset: this.state.calorieOffset
+				currentOffset: this.state.calorieOffset,
+				currentMode: this.state.calorieMode
 			});
 		});
 	};
 
 	render() {
 		return (
-			<div className="card alignCentre">
-				<form className="centreMe" onSubmit={this.editProfile}>
-					<select onChange={this.calorieModeChange}>
-						<option value="maintenance" selected={this.state.calorieMode === 'maintenace'}>
-							Maintenance
-						</option>
-						<option value="deficit" selected={this.state.calorieMode === 'deficit'}>
-							Deficit
-						</option>
-						<option value="bulk" selected={this.state.calorieMode === 'bulk'}>
-							Bulk
-						</option>
-					</select>
-					{this.state.calorieMode !== 'maintenance' && (
-						<input
-							type="number"
-							value={this.state.calorieOffset}
-							min="0"
-							step="1"
-							onChange={this.calorieOffsetChange}
-						/>
-					)}
-					<input type="submit" value="Edit Profile" />
-				</form>
+			<div>
+				<div className="card alignCentre">
+					<form className="centreMe" onSubmit={this.editProfile}>
+						<select onChange={this.calorieModeChange}>
+							<option value="maintenance" defaultValue={this.state.calorieMode === 'maintenance'}>
+								Maintenance
+							</option>
+							<option value="deficit" defaultValue={this.state.calorieMode === 'deficit'}>
+								Deficit
+							</option>
+							<option value="bulk" defaultValue={this.state.calorieMode === 'bulk'}>
+								Bulk
+							</option>
+						</select>
+						{this.state.calorieMode !== 'maintenance' && (
+							<input
+								type="number"
+								value={this.state.calorieOffset}
+								min="0"
+								step="1"
+								onChange={this.calorieOffsetChange}
+							/>
+						)}
+						<br />
+						<input type="submit" value="Edit Profile" />
+					</form>
+				</div>
+				<div className="card alignCentre">
+					<table className="centreMe">
+						<tbody>
+							<tr>
+								<td>Name</td>
+								<td>{this.state.name}</td>
+							</tr>
+							<tr>
+								<td>Email</td>
+								<td>{this.state.email}</td>
+							</tr>
+							<tr>
+								<td>Maintenance Calories</td>
+								<td>{this.state.maintenanceCalories}</td>
+							</tr>
+							<tr>
+								<td>Calorie Mode</td>
+								<td>{this.state.currentMode}</td>
+							</tr>
+							<tr>
+								<td>Calorie Offset</td>
+								<td>{this.state.currentOffset}</td>
+							</tr>
+							<tr>
+								<td>Protein Amount</td>
+								<td>{this.state.proteinAmount} g/kg</td>
+							</tr>
+							<tr>
+								<td>Fat Partition</td>
+								<td>{this.state.fatPartition * 100}%</td>
+							</tr>
+							<tr>
+								<td>Gender</td>
+								<td>{this.state.gender}</td>
+							</tr>
+							<tr>
+								<td>Birth Date</td>
+								<td>{this.state.birthDate}</td>
+							</tr>
+							<tr>
+								<td>Date Joined</td>
+								<td>{this.state.dateJoined}</td>
+							</tr>
+						</tbody>
+					</table>
+				</div>
 			</div>
 		);
 	}

@@ -25,8 +25,10 @@ export default class NutrientSummary extends React.Component {
 		};
 	}
 
-	componentWillReceiveProps() {
-		this.getUserInfo();
+	componentDidUpdate(prevProps) {
+		if (prevProps.update !== this.props.update) {
+			this.getUserInfo();
+		}
 	}
 
 	componentDidMount() {
@@ -228,10 +230,12 @@ export default class NutrientSummary extends React.Component {
 							this.getProtCals() > 0 ||
 							this.getEthCals() > 0) && (
 							<PieChart
+								animate
+								animationDuration={700}
 								data={[
 									{
 										title: 'Fat',
-										value: this.getFatCals() > 0 ? this.getFatCals() : '',
+										value: this.getFatCals(),
 										color: this.props.fatDark
 									},
 									{
@@ -266,6 +270,8 @@ export default class NutrientSummary extends React.Component {
 							/>
 						)}
 						<PieChart
+							animate
+							animationDuration={700}
 							data={[
 								{
 									title: 'Fat',

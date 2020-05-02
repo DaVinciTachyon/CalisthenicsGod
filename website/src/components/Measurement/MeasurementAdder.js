@@ -5,22 +5,18 @@ export default class MeasurementAdder extends React.Component {
 	constructor() {
 		super();
 		this.state = {
-			weight: 0
+			weight: 0,
+			height: 0,
+			waist: 0,
+			hips: 0,
+			rightBicep: 0,
+			leftBicep: 0,
+			rightForearm: 0,
+			leftForearm: 0,
+			shoulders: 0,
+			chest: 0,
+			neck: 0
 		};
-	}
-
-	componentDidMount() {
-		const requestOptions = {
-			method: 'GET',
-			headers: { 'Content-Type': 'application/json', 'auth-token': localStorage.getItem('authToken') }
-		};
-		fetch('http://localhost:8080/measurement/weight', requestOptions)
-			.then((response) => response.json())
-			.then((data) =>
-				this.setState({
-					weight: data.weight
-				})
-			);
 	}
 
 	weightChange = (evt) => {
@@ -28,24 +24,85 @@ export default class MeasurementAdder extends React.Component {
 		this.setState({ weight: input });
 	};
 
-	submitWeight = (evt) => {
+	heightChange = (evt) => {
+		const input = evt.target.validity.valid ? evt.target.value : this.state.height;
+		this.setState({ height: input });
+	};
+
+	waistChange = (evt) => {
+		const input = evt.target.validity.valid ? evt.target.value : this.state.waist;
+		this.setState({ waist: input });
+	};
+
+	hipsChange = (evt) => {
+		const input = evt.target.validity.valid ? evt.target.value : this.state.hips;
+		this.setState({ hips: input });
+	};
+
+	rightBicepChange = (evt) => {
+		const input = evt.target.validity.valid ? evt.target.value : this.state.rightBicep;
+		this.setState({ rightBicep: input });
+	};
+
+	leftBicepChange = (evt) => {
+		const input = evt.target.validity.valid ? evt.target.value : this.state.leftBicep;
+		this.setState({ leftBicep: input });
+	};
+
+	rightForearmChange = (evt) => {
+		const input = evt.target.validity.valid ? evt.target.value : this.state.rightForearm;
+		this.setState({ rightForearm: input });
+	};
+
+	leftForearmChange = (evt) => {
+		const input = evt.target.validity.valid ? evt.target.value : this.state.leftForearm;
+		this.setState({ leftForearm: input });
+	};
+
+	shouldersChange = (evt) => {
+		const input = evt.target.validity.valid ? evt.target.value : this.state.shoulders;
+		this.setState({ shoulders: input });
+	};
+
+	chestChange = (evt) => {
+		const input = evt.target.validity.valid ? evt.target.value : this.state.chest;
+		this.setState({ chest: input });
+	};
+
+	neckChange = (evt) => {
+		const input = evt.target.validity.valid ? evt.target.value : this.state.neck;
+		this.setState({ neck: input });
+	};
+
+	submitMeasurement = (evt) => {
 		evt.preventDefault();
 		const requestOptions = {
 			method: 'POST',
 			headers: { 'Content-Type': 'application/json', 'auth-token': localStorage.getItem('authToken') },
 			body: JSON.stringify({
-				weight: this.state.weight
+				weight: this.state.weight,
+				height: this.state.height,
+				waist: this.state.waist,
+				hips: this.state.hips,
+				rightBicep: this.state.rightBicep,
+				leftBicep: this.state.leftBicep,
+				rightForearm: this.state.rightForearm,
+				leftForearm: this.state.leftForearm,
+				shoulders: this.state.shoulders,
+				chest: this.state.chest,
+				neck: this.state.neck
 			})
 		};
-		fetch('http://localhost:8080/measurement/weight', requestOptions).then(() => {
+		fetch('http://localhost:8080/measurement/', requestOptions).then(() => {
 			this.props.addMeasurement();
 		});
 	};
 
 	render() {
 		return (
-			<div className="card alignCentre">
-				<form className="centreMe" onSubmit={this.submitWeight}>
+			<div className="alignCentre">
+				<form className="centreMe" onSubmit={this.submitMeasurement}>
+					<label for="weight">Weight</label>
 					<input
 						name="weight"
 						type="number"
@@ -55,7 +112,118 @@ export default class MeasurementAdder extends React.Component {
 						onChange={this.weightChange.bind(this)}
 						className="input"
 					/>
-					<input type="submit" value="Add Weight" />
+					<br />
+					<label for="height">Height</label>
+					<input
+						name="height"
+						type="number"
+						min="0"
+						step="0.1"
+						value={this.state.height}
+						onChange={this.heightChange.bind(this)}
+						className="input"
+					/>
+					<br />
+					<label for="waist">Waist</label>
+					<input
+						name="waist"
+						type="number"
+						min="0"
+						step="0.1"
+						value={this.state.waist}
+						onChange={this.waistChange.bind(this)}
+						className="input"
+					/>
+					<br />
+					<label for="hips">Hips</label>
+					<input
+						name="hips"
+						type="number"
+						min="0"
+						step="0.1"
+						value={this.state.hips}
+						onChange={this.hipsChange.bind(this)}
+						className="input"
+					/>
+					<br />
+					<label for="rightBicep">Right Bicep</label>
+					<input
+						name="rightBicep"
+						type="number"
+						min="0"
+						step="0.1"
+						value={this.state.rightBicep}
+						onChange={this.rightBicepChange.bind(this)}
+						className="input"
+					/>
+					<br />
+					<label for="leftBicep">Left Bicep</label>
+					<input
+						name="leftBicep"
+						type="number"
+						min="0"
+						step="0.1"
+						value={this.state.leftBicep}
+						onChange={this.leftBicepChange.bind(this)}
+						className="input"
+					/>
+					<br />
+					<label for="rightForearm">Right Forearm</label>
+					<input
+						name="rightForearm"
+						type="number"
+						min="0"
+						step="0.1"
+						value={this.state.rightForearm}
+						onChange={this.rightForearmChange.bind(this)}
+						className="input"
+					/>
+					<br />
+					<label for="leftForearm">Left Forearm</label>
+					<input
+						name="leftForearm"
+						type="number"
+						min="0"
+						step="0.1"
+						value={this.state.leftForearm}
+						onChange={this.leftForearmChange.bind(this)}
+						className="input"
+					/>
+					<br />
+					<label for="shoulders">Shoulders</label>
+					<input
+						name="shoulders"
+						type="number"
+						min="0"
+						step="0.1"
+						value={this.state.shoulders}
+						onChange={this.shouldersChange.bind(this)}
+						className="input"
+					/>
+					<br />
+					<label for="chest">Chest</label>
+					<input
+						name="chest"
+						type="number"
+						min="0"
+						step="0.1"
+						value={this.state.chest}
+						onChange={this.chestChange.bind(this)}
+						className="input"
+					/>
+					<br />
+					<label for="neck">Neck</label>
+					<input
+						name="neck"
+						type="number"
+						min="0"
+						step="0.1"
+						value={this.state.neck}
+						onChange={this.neckChange.bind(this)}
+						className="input"
+					/>
+					<br />
+					<input type="submit" value="Add Measurements" />
 				</form>
 			</div>
 		);

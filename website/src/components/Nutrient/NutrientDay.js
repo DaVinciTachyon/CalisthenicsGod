@@ -9,8 +9,10 @@ export default class NutrientDay extends React.Component {
 		};
 	}
 
-	componentWillReceiveProps() {
-		this.getMeals();
+	componentDidUpdate(prevProps) {
+		if (prevProps.update !== this.props.update) {
+			this.getMeals();
+		}
 	}
 
 	componentDidMount() {
