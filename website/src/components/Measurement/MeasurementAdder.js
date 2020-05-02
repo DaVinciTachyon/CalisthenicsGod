@@ -9,6 +9,20 @@ export default class MeasurementAdder extends React.Component {
 		};
 	}
 
+	componentDidMount() {
+		const requestOptions = {
+			method: 'GET',
+			headers: { 'Content-Type': 'application/json', 'auth-token': localStorage.getItem('authToken') }
+		};
+		fetch('http://localhost:8080/measurement/weight', requestOptions)
+			.then((response) => response.json())
+			.then((data) =>
+				this.setState({
+					weight: data.weight
+				})
+			);
+	}
+
 	weightChange = (evt) => {
 		const input = evt.target.validity.valid ? evt.target.value : this.state.weight;
 		this.setState({ weight: input });
@@ -26,9 +40,6 @@ export default class MeasurementAdder extends React.Component {
 		fetch('http://localhost:8080/measurement/weight', requestOptions).then(() => {
 			this.props.addMeasurement();
 		});
-		this.setState({
-			weight: 0
-		});
 	};
 
 	render() {
@@ -42,7 +53,7 @@ export default class MeasurementAdder extends React.Component {
 						step="0.1"
 						value={this.state.weight}
 						onChange={this.weightChange.bind(this)}
-						className="numInput input"
+						className="input"
 					/>
 					<input type="submit" value="Add Weight" />
 				</form>

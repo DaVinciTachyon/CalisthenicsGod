@@ -24,16 +24,24 @@ const userSchema = new mongoose.Schema({
 		default: Date.now
 	},
 	maintenanceCalories: {
-		type: Number
+		type: Number,
+		default: 0,
+		min: 0
 	},
-	calorieMode: {
-		type: String,
-		enum: [
-			'maintenance',
-			'deficit',
-			'bulk'
-		],
-		default: 'maintenance'
+	calorieOffset: {
+		type: Number,
+		default: 0
+	},
+	proteinAmount: {
+		type: Number,
+		default: 1.9,
+		min: 0
+	},
+	fatPartition: {
+		type: Number,
+		default: 0.3,
+		min: 0,
+		max: 1
 	},
 	weight: [
 		{
@@ -61,23 +69,19 @@ const userSchema = new mongoose.Schema({
 					},
 					fat: {
 						type: Number,
-						default: 0,
-						required: true
+						default: 0
 					},
 					carbohydrate: {
 						type: Number,
-						default: 0,
-						required: true
+						default: 0
 					},
 					protein: {
 						type: Number,
-						default: 0,
-						required: true
+						default: 0
 					},
 					ethanol: {
 						type: Number,
-						default: 0,
-						required: true
+						default: 0
 					}
 				}
 			]

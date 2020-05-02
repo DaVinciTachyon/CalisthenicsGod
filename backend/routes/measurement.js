@@ -12,6 +12,7 @@ router.post('/weight', async (req, res) => {
 	user.weight.unshift({
 		weight: req.body.weight
 	});
+	if (user.maintenanceCalories <= 0) user.maintenanceCalories = 2.20462 * user.weight[0].weight * 15;
 	await user.save();
 	res.sendStatus(200);
 });

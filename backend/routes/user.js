@@ -6,12 +6,17 @@ router.use(verify, (req, res, next) => {
 	next();
 });
 
-router.post('/calorieMode', async (req, res) => {
+router.post('/calorieOffset', async (req, res) => {
 	//validate calorieMode
 	const user = await User.findOne({ _id: req.user._id });
-	user.calorieMode = req.body.calorieMode;
+	user.calorieOffset = req.body.calorieOffset;
 	await user.save();
 	res.sendStatus(200);
+});
+
+router.get('/calorieOffset', async (req, res) => {
+	const user = await User.findOne({ _id: req.user._id });
+	res.send({ calorieOffset: user.calorieOffset });
 });
 
 module.exports = router;
