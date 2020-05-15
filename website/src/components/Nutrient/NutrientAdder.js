@@ -9,7 +9,10 @@ export default class NutrientAdder extends React.Component {
 			carb: 0,
 			prot: 0,
 			eth: 0,
-			name: ''
+			name: '',
+			ingredientId: '',
+			weight: 0,
+			ingredients: []
 		};
 	}
 
@@ -36,6 +39,16 @@ export default class NutrientAdder extends React.Component {
 	ethChange = (evt) => {
 		const input = evt.target.validity.valid ? evt.target.value : this.state.eth;
 		this.setState({ eth: input });
+	};
+
+	ingredientChange = (evt) => {
+		const input = evt.target.validity.valid ? evt.target.value : this.state.eth;
+		this.setState({ ingredientId: input });
+	};
+
+	weightChange = (evt) => {
+		const input = evt.target.validity.valid ? evt.target.value : this.state.eth;
+		this.setState({ weight: input });
 	};
 
 	addMacros = (evt) => {
@@ -66,6 +79,54 @@ export default class NutrientAdder extends React.Component {
 			eth: 0
 		});
 	};
+
+	addIngredient = (evt) => {
+		evt.preventDefault();
+		if (!this.state.ingredientId) return this.setState({ error: 'Ingredient is required' });
+		const requestOptions = {
+			method: 'POST',
+			headers: { 'Content-Type': 'application/json', 'auth-token': localStorage.getItem('authToken') },
+			body: JSON.stringify({
+				history: [
+					{
+						ingredientId: this.state.ingredientId,
+						weight: this.state.weight
+					}
+				]
+			})
+		};
+		fetch('http://localhost:8080/nutrition/history/', requestOptions).then(() => {
+			this.props.addMacros();
+		});
+		// this.setState({
+		// 	ingredientId: '',
+		// 	weight: 0
+		// });
+	};
+
+	getIngredients = () => {
+		const requestOptions = {
+			method: 'GET',
+			headers: { 'Content-Type': 'application/json', 'auth-token': localStorage.getItem('authToken') }
+		};
+		fetch('http://localhost:8080/nutrition/ingredients/', requestOptions)
+			.then((response) => response.json())
+			.then((data) => {
+				this.setState((state) => {
+					let ingredients = Object.assign({}, state.ingredients);
+					ingredients = data.ingredients;
+					return { ingredients };
+				});
+			});
+		let ingredients = []
+		for(let i = 0; i < this.state.ingredients.length; i++) {
+			ingredients.push(
+			<option key={this.state.ingredients[i]._id} value={this.state.ingredients[i]._id}>
+				{this.state.ingredients[i].name}
+			</option>);
+		}
+		return ingredients;
+	}
 
 	render() {
 		return (
@@ -117,6 +178,22 @@ export default class NutrientAdder extends React.Component {
 						onChange={this.ethChange.bind(this)}
 						className="numInput input"
 						style={{ background: this.props.ethLight }}
+					/>
+					<input type="submit" value="Add" />
+				</form>
+				<form className="centreMe" onSubmit={this.addIngredient}>
+					<select name="ingredient" onChange={this.ingredientChange.bind(this)}>
+						<option value="">Select Ingredient</option>
+						{this.getIngredients()}
+					</select>
+					<input
+						name="weight"
+						type="number"
+						min="0"
+						step="0.1"
+						value={this.state.weight}
+						onChange={this.weightChange.bind(this)}
+						className="numInput input"
 					/>
 					<input type="submit" value="Add" />
 				</form>

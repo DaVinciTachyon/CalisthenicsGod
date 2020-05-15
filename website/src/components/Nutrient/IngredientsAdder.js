@@ -73,6 +73,7 @@ export default class IngredientAdder extends React.Component {
                         value={this.state.name}
                         onChange={this.nameChange.bind(this)}
                         className="input"
+                        required
                     />
                     <input
                         name="fat"

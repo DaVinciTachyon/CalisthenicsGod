@@ -39,22 +39,32 @@ router.get('/calorieOffset', async (req, res) => {
 router.get('/today/meals', async (req, res) => {
 	const nutrients = await Nutrients.findOne({ userId: req.user._id });
 	const today = new Date();
+	let meals = [];
 	if (
 		nutrients.history.length > 0 &&
 		nutrients.history[0].date.getDay() === today.getDay() &&
 		nutrients.history[0].date.getMonth() === today.getMonth() &&
 		nutrients.history[0].date.getFullYear() === today.getFullYear()
 	)
-		res.send({
-			meals: nutrients.history[0].meals
-		});
-	else
-		res.send({
-			meals: []
-		});
+		for (let i = 0; i < nutrients.history[0].meals.length; i++) {
+			if (nutrients.history[0].meals[i].ingredientId) {
+				const ingredient = await Ingredients.findOne({ _id: nutrients.history[0].meals[i].ingredientId });
+				meals.push({
+					name: ingredient.name,
+					fat: Math.round(ingredient.fat * nutrients.history[0].meals[i].weight / 100 * 10)/10,
+					carbohydrate: Math.round(ingredient.carbohydrate * nutrients.history[0].meals[i].weight / 100 * 10) / 10,
+					protein: Math.round(ingredient.protein * nutrients.history[0].meals[i].weight / 100 * 10) / 10,
+					ethanol: Math.round(ingredient.ethanol * nutrients.history[0].meals[i].weight / 100 * 10) /10
+				});
+			} else
+				meals.push(nutrients.history[0].meals[i]);
+		}
+	res.send({
+		meals: meals
+	});
 });
 
-router.get('/today/userInfo', async (req, res) => { //separate
+router.get('/today/userInfo', async (req, res) => { //TODO separate
 	const measurements = await Measurements.findOne({ userId: req.user._id });
 	const nutrients = await Nutrients.findOne({ userId: req.user._id });
 
@@ -72,11 +82,19 @@ router.get('/today/userInfo', async (req, res) => { //separate
 		nutrients.history[0].date.getMonth() === today.getMonth() &&
 		nutrients.history[0].date.getFullYear() === today.getFullYear()
 	)
-		for (let i = 0; i < nutrients.history[0].meals.length; i++) {
-			fat 			+= nutrients.history[0].meals[i].fat;
-			carbohydrates 	+= nutrients.history[0].meals[i].carbohydrate;
-			protein 		+= nutrients.history[0].meals[i].protein;
-			ethanol 		+= nutrients.history[0].meals[i].ethanol;
+		for (let i = 0; i < nutrients.history[0].meals.length; i++) { //FIXME
+			if (nutrients.history[0].meals[i].ingredientId) {
+				const ingredient = await Ingredients.findOne({ _id: nutrients.history[0].meals[i].ingredientId });
+				fat 			+= Math.round(ingredient.fat * nutrients.history[0].meals[i].weight / 100 * 10) / 10;
+				carbohydrates 	+= Math.round(ingredient.carbohydrate * nutrients.history[0].meals[i].weight / 100 * 10) / 10;
+				protein 		+= Math.round(ingredient.protein * nutrients.history[0].meals[i].weight / 100 * 10) / 10;
+				ethanol 		+= Math.round(ingredient.ethanol * nutrients.history[0].meals[i].weight / 100 * 10) / 10;
+			} else {
+				fat 			+= nutrients.history[0].meals[i].fat;
+				carbohydrates 	+= nutrients.history[0].meals[i].carbohydrate;
+				protein 		+= nutrients.history[0].meals[i].protein;
+				ethanol 		+= nutrients.history[0].meals[i].ethanol;
+			}
 		}
 
 	const totalCalories = Math.round(nutrients.maintenanceCalories + nutrients.calorieOffset);
@@ -113,25 +131,16 @@ router.post('/history', async (req, res) => {
 	const nutrients = await Nutrients.findOne({ userId: req.user._id });
 	const today = new Date();
 	for (let i = 0; i < history.length; i++) {
-		const meal = {
-			name: history[i].name,
-			fat: history[i].fat,
-			carbohydrate: history[i].carbohydrate,
-			protein: history[i].protein,
-			ethanol: history[i].ethanol
-		};
 		if (
 			nutrients.history.length > 0 &&
 			nutrients.history[0].date.getDay() === today.getDay() &&
 			nutrients.history[0].date.getMonth() === today.getMonth() &&
 			nutrients.history[0].date.getFullYear() === today.getFullYear()
 		)
-			nutrients.history[0].meals.push(meal);
+			nutrients.history[0].meals.push(history[i]);
 		else
 			nutrients.history.unshift({
-				meals: [
-					meal
-				]
+				meals: history[i]
 			});
 	}
 	try {
