@@ -80,17 +80,17 @@ export default class MeasurementAdder extends React.Component {
 			method: 'POST',
 			headers: { 'Content-Type': 'application/json', 'auth-token': localStorage.getItem('authToken') },
 			body: JSON.stringify({
-				weight: this.state.weight,
-				height: this.state.height,
-				waist: this.state.waist,
-				hips: this.state.hips,
-				rightBicep: this.state.rightBicep,
-				leftBicep: this.state.leftBicep,
-				rightForearm: this.state.rightForearm,
-				leftForearm: this.state.leftForearm,
-				shoulders: this.state.shoulders,
-				chest: this.state.chest,
-				neck: this.state.neck
+				weight: this.state.weight > 0 ? this.state.weight : undefined,
+				height: this.state.height > 0 ? this.state.height : undefined,
+				waist: this.state.waist > 0 ? this.state.waist : undefined,
+				hips: this.state.hips > 0 ? this.state.hips : undefined,
+				rightBicep: this.state.rightBicep > 0 ? this.state.rightBicep : undefined,
+				leftBicep: this.state.leftBicep > 0 ? this.state.leftBicep : undefined,
+				rightForearm: this.state.rightForearm > 0 ? this.state.rightForearm : undefined,
+				leftForearm: this.state.leftForearm > 0 ? this.state.leftForearm : undefined,
+				shoulders: this.state.shoulders > 0 ? this.state.shoulders : undefined,
+				chest: this.state.chest > 0 ? this.state.chest : undefined,
+				neck: this.state.neck > 0 ? this.state.neck : undefined,
 			})
 		};
 		fetch('http://localhost:8080/measurement/', requestOptions).then(() => {

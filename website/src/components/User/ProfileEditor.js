@@ -5,10 +5,9 @@ export default class ProfileEditor extends React.Component {
 	constructor() {
 		super();
 		this.state = {
-			calorieMode: 'maintenance',
 			calorieOffset: 0,
 			currentOffset: 0,
-			currentMode: 'maintenance',
+			calorieMode: 'maintenance',
 			name: '',
 			email: '',
 			dateJoined: '',
@@ -35,23 +34,20 @@ export default class ProfileEditor extends React.Component {
 				birthDate: `${birthDate.getDate()}/${birthDate.getMonth() + 1}/${birthDate.getFullYear()}`,
 				gender: data.gender,
 				maintenanceCalories: data.maintenanceCalories,
-				calorieOffset: data.calorieOffset,
 				proteinAmount: data.proteinAmount,
 				fatPartition: data.fatPartition
 			});
 			if (data.calorieOffset > 0)
 				this.setState({
-					calorieMode: 'bulk',
-					currentMode: 'bulk',
 					calorieOffset: data.calorieOffset,
-					currentOffset: data.calorieOffset
+					currentOffset: data.calorieOffset,
+					calorieMode: 'bulk'
 				});
 			else if (data.calorieOffset < 0)
 				this.setState({
-					calorieMode: 'deficit',
-					currentMode: 'deficit',
 					calorieOffset: -1 * data.calorieOffset,
-					currentOffset: data.calorieOffset
+					currentOffset: data.calorieOffset,
+					calorieMode: 'deficit'
 				});
 		});
 	}
@@ -61,13 +57,13 @@ export default class ProfileEditor extends React.Component {
 		this.setState({ calorieMode: input });
 		if (this.state.currentOffset < 0 && input === 'deficit')
 			this.setState({ calorieOffset: -1 * this.state.currentOffset });
+		else if (input === 'deficit') this.setState({ calorieOffset: 300 });
 		else if (this.state.currentOffset > 0 && input === 'bulk')
 			this.setState({ calorieOffset: this.state.currentOffset });
-		else if (input === 'deficit') this.setState({ calorieOffset: 300 });
 		else if (input === 'bulk') this.setState({ calorieOffset: 200 });
 		else this.setState({ calorieOffset: 0 });
 	};
-
+	
 	calorieOffsetChange = (evt) => {
 		const input = evt.target.validity.valid ? evt.target.value : this.state.calorieOffset;
 		this.setState({ calorieOffset: input });
@@ -83,11 +79,10 @@ export default class ProfileEditor extends React.Component {
 					this.state.calorieMode === 'deficit' ? -1 * this.state.calorieOffset : this.state.calorieOffset
 			})
 		};
-		fetch('http://localhost:8080/user/calorieOffset', requestOptions).then(() => {
+		fetch('http://localhost:8080/nutrition/calorieOffset', requestOptions).then(() => {
 			this.props.editProfile();
 			this.setState({
-				currentOffset: this.state.calorieOffset,
-				currentMode: this.state.calorieMode
+				currentOffset: this.state.calorieMode === 'deficit' ? -1 * this.state.calorieOffset : this.state.calorieOffset
 			});
 		});
 	};
@@ -97,18 +92,18 @@ export default class ProfileEditor extends React.Component {
 			<div>
 				<div className="card alignCentre">
 					<form className="centreMe" onSubmit={this.editProfile}>
-						<select onChange={this.calorieModeChange}>
-							<option value="maintenance" defaultValue={this.state.calorieMode === 'maintenance'}>
+						<select id="calorieMode" onChange={this.calorieModeChange}>
+							<option value="maintenance" selected={this.state.currentOffset === 0}>
 								Maintenance
 							</option>
-							<option value="deficit" defaultValue={this.state.calorieMode === 'deficit'}>
+							<option value="deficit" selected={this.state.currentOffset < 0}>
 								Deficit
 							</option>
-							<option value="bulk" defaultValue={this.state.calorieMode === 'bulk'}>
+							<option value="bulk" selected={this.state.currentOffset > 0}>
 								Bulk
 							</option>
 						</select>
-						{this.state.calorieMode !== 'maintenance' && (
+						{this.state.calorieOffset !== 0 && (
 							<input
 								type="number"
 								value={this.state.calorieOffset}
@@ -126,7 +121,7 @@ export default class ProfileEditor extends React.Component {
 						<tbody>
 							<tr>
 								<td>Name</td>
-								<td>{this.state.name}</td>
+								<td>{this.state.name.first} {this.state.name.last}</td>
 							</tr>
 							<tr>
 								<td>Email</td>
@@ -138,7 +133,7 @@ export default class ProfileEditor extends React.Component {
 							</tr>
 							<tr>
 								<td>Calorie Mode</td>
-								<td>{this.state.currentMode}</td>
+								<td>{this.state.currentOffset > 0 ? 'bulk' : (this.state.currentOffset < 0 ? 'deficit' : 'maintenance')}</td>
 							</tr>
 							<tr>
 								<td>Calorie Offset</td>

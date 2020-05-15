@@ -1,15 +1,39 @@
 import React from 'react';
 import '../Main.css';
+import { Line } from 'react-chartjs-2';
 
 export default class MeasurementHistory extends React.Component {
 	constructor() {
 		super();
 		this.state = {
-			weightHistory: []
+			chart: {
+				labels: [],
+				datasets: [
+					{
+						label: 'Weight',
+						fill: false,
+						lineTension: 0.5,
+						backgroundColor: 'rgba(75,192,192,1)',
+						borderColor: 'rgba(0,0,0,1)',
+						borderWidth: 2,
+						data: []
+					}
+				]
+			}
 		};
 	}
 
+	componentDidUpdate(prevProps) {
+		if (prevProps.update !== this.props.update) {
+			this.getWeightHistory();
+		}
+	}
+
 	componentDidMount() {
+		this.getWeightHistory();
+	}
+
+	getWeightHistory = () => {
 		const requestOptions = {
 			method: 'GET',
 			headers: { 'Content-Type': 'application/json', 'auth-token': localStorage.getItem('authToken') }
@@ -18,12 +42,21 @@ export default class MeasurementHistory extends React.Component {
 			.then((response) => response.json())
 			.then((data) => {
 				this.setState((state) => {
-					let weightHistory = Object.assign({}, state.weightHistory);
-					weightHistory = data.weight;
-					return { weightHistory };
+					let chart = Object.assign({}, state.chart);
+					chart.labels = [];
+					chart.datasets[0].data = [];
+					for (let i = 0; i < data.weight.length; i++) {
+						chart.labels.unshift(
+							`${new Date(data.weight[i].date).getDate()}/${new Date(
+								data.weight[i].date
+							).getMonth()}/${new Date(data.weight[i].date).getFullYear()}`
+						);
+						chart.datasets[0].data.unshift(data.weight[i].value);
+					}
+					return { chart };
 				});
 			});
-	}
+	};
 
 	addWeightHistory = () => {
 		return this.state.weightHistory.map((weight) => {
@@ -42,15 +75,20 @@ export default class MeasurementHistory extends React.Component {
 	render() {
 		return (
 			<div className="card alignCentre">
-				<table className="centreMe">
-					<tbody>
-						<tr>
-							<th>Date</th>
-							<th>Weight</th>
-						</tr>
-						{this.addWeightHistory()}
-					</tbody>
-				</table>
+				<Line
+					data={this.state.chart}
+					options={{
+						title: {
+							display: true,
+							text: 'Weight History',
+							fontSize: 20
+						},
+						legend: {
+							display: false,
+							position: 'right'
+						}
+					}}
+				/>
 			</div>
 		);
 	}

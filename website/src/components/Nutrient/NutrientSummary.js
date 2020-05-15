@@ -20,7 +20,6 @@ export default class NutrientSummary extends React.Component {
 			goalCarb: 0,
 			goalProt: 0,
 			goalEth: 0,
-			mode: '',
 			showFullCals: false
 		};
 	}
@@ -37,7 +36,7 @@ export default class NutrientSummary extends React.Component {
 			method: 'GET',
 			headers: { 'Content-Type': 'application/json', 'auth-token': localStorage.getItem('authToken') }
 		};
-		fetch('http://localhost:8080/nutrients/macronutrientDensities', requestOptions)
+		fetch('http://localhost:8080/nutrition/macronutrientDensities', requestOptions)
 			.then((response) => response.json())
 			.then((data) =>
 				this.setState({
@@ -54,11 +53,10 @@ export default class NutrientSummary extends React.Component {
 			method: 'GET',
 			headers: { 'Content-Type': 'application/json', 'auth-token': localStorage.getItem('authToken') }
 		};
-		fetch('http://localhost:8080/nutrients/today/userInfo', requestOptions)
+		fetch('http://localhost:8080/nutrition/today/userInfo', requestOptions)
 			.then((response) => response.json())
 			.then((data) =>
 				this.setState({
-					mode: data.mode,
 					dailyCals: data.totalCalories,
 					fat: data.currentFat,
 					carb: data.currentCarbohydrate,

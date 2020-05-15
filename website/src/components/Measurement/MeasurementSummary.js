@@ -29,6 +29,7 @@ export default class MeasurementSummary extends React.Component {
 	addMeasurement = () => {
 		this.newMeasurements();
 		this.getMeasurements();
+		this.props.addMeasurement();
 	};
 
 	newMeasurements = () => {

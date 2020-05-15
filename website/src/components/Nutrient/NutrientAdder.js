@@ -44,7 +44,7 @@ export default class NutrientAdder extends React.Component {
 			method: 'POST',
 			headers: { 'Content-Type': 'application/json', 'auth-token': localStorage.getItem('authToken') },
 			body: JSON.stringify({
-				food: [
+				history: [
 					{
 						name: this.state.name,
 						fat: this.state.fat,
@@ -55,7 +55,7 @@ export default class NutrientAdder extends React.Component {
 				]
 			})
 		};
-		fetch('http://localhost:8080/nutrients/food', requestOptions).then(() => {
+		fetch('http://localhost:8080/nutrition/history/', requestOptions).then(() => {
 			this.props.addMacros();
 		});
 		this.setState({

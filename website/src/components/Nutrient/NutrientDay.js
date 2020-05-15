@@ -24,11 +24,13 @@ export default class NutrientDay extends React.Component {
 			method: 'GET',
 			headers: { 'Content-Type': 'application/json', 'auth-token': localStorage.getItem('authToken') }
 		};
-		fetch('http://localhost:8080/nutrients/today/meals', requestOptions)
+		fetch('http://localhost:8080/nutrition/today/meals', requestOptions)
 			.then((response) => response.json())
 			.then((data) => {
-				this.setState({
-					meals: data.meals
+				this.setState((state) => {
+					let meals = Object.assign({}, state.meals);
+					meals = data.meals;
+					return { meals };
 				});
 			});
 	};

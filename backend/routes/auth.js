@@ -1,13 +1,18 @@
 const router = require('express').Router();
 const bcrypt = require('bcryptjs');
 const jwt = require('jsonwebtoken');
-const { registerValidation, loginValidation } = require('./validation');
+const authorisationValidation = require('../validation/auth');
+const measurementValidation = require('../validation/measurement');
 const User = require('../models/User');
+const Measurements = require('../models/Measurements');
+const Nutrients = require('../models/Nutrients');
 
 router.post('/register', async (req, res) => {
-	//verify weight, gender, birth date
-	const { error } = registerValidation(req.body);
+	const { error } = authorisationValidation.register(req.body);
 	if (error) return res.status(400).send({ error: error.details[0].message });
+
+	const { merror } = measurementValidation.weight({ weight: req.body.weight });
+	if (merror) return res.status(400).send({ error: merror.details[0].message });
 
 	const emailExist = await User.findOne({ email: req.body.email });
 	if (emailExist) return res.status(400).send({ error: 'Email already exists' });
@@ -20,15 +25,23 @@ router.post('/register', async (req, res) => {
 		email: req.body.email,
 		password: hashedPassword,
 		gender: req.body.gender,
-		birthDate: req.body.birthDate,
-		maintenanceCalories: Math.round(2.20462 * req.body.weight * 15)
+		birthDate: req.body.birthDate
 	});
-	user.weight.unshift({
+	const measurements = new Measurements({
+		userId: user._id,
+	})
+	measurements.weight.unshift({
 		value: req.body.weight
-	});
+	})
+	const nutrients = new Nutrients({
+		userId: user._id,
+		maintenanceCalories: Math.round(2.20462 * req.body.weight * 15)
+	})
 
 	try {
 		await user.save();
+		await measurements.save();
+		await nutrients.save();
 		res.status(200).send({ user: user._id });
 	} catch (err) {
 		res.status(400).send({ error: err });
@@ -36,7 +49,7 @@ router.post('/register', async (req, res) => {
 });
 
 router.post('/login', async (req, res) => {
-	const { error } = loginValidation(req.body);
+	const { error } = authorisationValidation.login(req.body);
 	if (error) return res.status(400).send({ error: error.details[0].message });
 
 	const user = await User.findOne({ email: req.body.email });

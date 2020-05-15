@@ -5,7 +5,9 @@ export default class Register extends React.Component {
 	constructor() {
 		super();
 		this.state = {
-			name: '',
+			firstname: '',
+			middlename: '',
+			lastname: '',
 			email: '',
 			password: '',
 			weight: 0,
@@ -21,14 +23,22 @@ export default class Register extends React.Component {
 
 	handleSubmit(evt) {
 		evt.preventDefault();
-		if (!this.state.name) return this.setState({ error: 'Name is required' });
+		if (!this.state.firstname) return this.setState({ error: 'First Name is required' });
+		if (!this.state.lastname) return this.setState({ error: 'Last Name is required' });
 		if (!this.state.email) return this.setState({ error: 'Email is required' });
 		if (!this.state.password) return this.setState({ error: 'Password is required' });
+		if (!this.state.weight) return this.setState({ error: 'Weight is required' });
+		if (!this.state.gender) return this.setState({ error: 'Gender is required' });
+		if (!this.state.birthDate) return this.setState({ error: 'Birth Date is required' });
 		const requestOptions = {
 			method: 'POST',
 			headers: { 'Content-Type': 'application/json' },
 			body: JSON.stringify({
-				name: this.state.name,
+				name: {
+					first: this.state.firstname,
+					middle: this.state.middlename ? this.state.middlename : undefined,
+					last: this.state.lastname,
+				},
 				email: this.state.email,
 				password: this.state.password,
 				weight: this.state.weight,
@@ -41,12 +51,26 @@ export default class Register extends React.Component {
 			.then((data) => {
 				if (data.user) window.location = '/login';
 				this.setState({ error: data.error });
+			}).catch(err => {
+				console.log(err)
 			});
 	}
 
-	handleNameChange(evt) {
+	handleFirstNameChange(evt) {
 		this.setState({
-			name: evt.target.value
+			firstname: evt.target.value
+		});
+	}
+
+	handleMiddleNameChange(evt) {
+		this.setState({
+			middlename: evt.target.value
+		});
+	}
+
+	handleLastNameChange(evt) {
+		this.setState({
+			lastname: evt.target.value
 		});
 	}
 
@@ -96,12 +120,33 @@ export default class Register extends React.Component {
 					)}
 					<div className="center">
 						<input
-							id="name"
+							id="firstname"
 							className="formElement"
 							type="text"
-							value={this.state.name}
-							onChange={this.handleNameChange.bind(this)}
-							placeholder="Name"
+							value={this.state.firstname}
+							onChange={this.handleFirstNameChange.bind(this)}
+							placeholder="First Name"
+							required
+						/>
+					</div>
+					<div className="center">
+						<input
+							id="middlename"
+							className="formElement"
+							type="text"
+							value={this.state.middlename}
+							onChange={this.handleMiddleNameChange.bind(this)}
+							placeholder="Middle Name"
+						/>
+					</div>
+					<div className="center">
+						<input
+							id="lastname"
+							className="formElement"
+							type="text"
+							value={this.state.lastname}
+							onChange={this.handleLastNameChange.bind(this)}
+							placeholder="Last Name"
 							required
 						/>
 					</div>
@@ -141,7 +186,7 @@ export default class Register extends React.Component {
 					</div>
 					<div className="center">
 						<select name="gender" onChange={this.handleGenderChange.bind(this)} required>
-							<option value="male" selected>
+							<option value="male" defaultValue>
 								Male
 							</option>
 							<option value="female">Female</option>
