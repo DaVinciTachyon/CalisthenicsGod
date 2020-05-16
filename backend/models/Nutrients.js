@@ -36,30 +36,13 @@ const nutrientSchema = new mongoose.Schema({
 					ingredients: [
 						{
 							ingredientId: {
-								type: String
+								type: String,
+								required: true
 							},
 							weight: {
 								type: Number,
-								min: 0.01
-							},
-							name: {
-								type: String
-							},
-							fat: {
-								type: Number,
-								min: 0
-							},
-							carbohydrate: {
-								type: Number,
-								min: 0
-							},
-							protein: {
-								type: Number,
-								min: 0
-							},
-							ethanol: {
-								type: Number,
-								min: 0
+								min: 0.01,
+								required: true
 							}
 						}
 					]

@@ -117,22 +117,22 @@ export default class NutrientSummary extends React.Component {
 									<th>Grams Left</th>
 									<th>Calories Left</th>
 								</tr>
-								<tr style={{ background: this.props.fatLight }}>
+								<tr style={{ background: this.props.colours.fatLight }}>
 									<td>Fat</td>
 									<td>{this.getFatGramsLeft()} g</td>
 									<td>{this.getGoalFatCals() - this.getFatCals()} cals</td>
 								</tr>
-								<tr style={{ background: this.props.carbLight }}>
+								<tr style={{ background: this.props.colours.carbLight }}>
 									<td>Carbohydrates</td>
 									<td>{this.getCarbGramsLeft()} g</td>
 									<td>{this.getGoalCarbCals() - this.getCarbCals()} cals</td>
 								</tr>
-								<tr style={{ background: this.props.protLight }}>
+								<tr style={{ background: this.props.colours.protLight }}>
 									<td>Protein</td>
 									<td>{this.getProtGramsLeft()} g</td>
 									<td>{this.getGoalProtCals() - this.getProtCals()} cals</td>
 								</tr>
-								<tr style={{ background: this.props.ethLight }}>
+								<tr style={{ background: this.props.colours.ethLight }}>
 									<td>Ethanol</td>
 									<td>{this.getEthGramsLeft()} g</td>
 									<td>{this.getGoalEthCals() - this.getEthCals()} cals</td>
@@ -157,25 +157,25 @@ export default class NutrientSummary extends React.Component {
 										<th>Goal Grams</th>
 										<th>Grams Left</th>
 									</tr>
-									<tr style={{ background: this.props.fatLight }}>
+									<tr style={{ background: this.props.colours.fatLight }}>
 										<td>Fat</td>
 										<td>{this.getFatGrams()} g</td>
 										<td>{this.getGoalFatGrams()} g</td>
 										<td>{this.getFatGramsLeft()} g</td>
 									</tr>
-									<tr style={{ background: this.props.carbLight }}>
+									<tr style={{ background: this.props.colours.carbLight }}>
 										<td>Carbohydrates</td>
 										<td>{this.getCarbGrams()} g</td>
 										<td>{this.getGoalCarbGrams()} g</td>
 										<td>{this.getCarbGramsLeft()} g</td>
 									</tr>
-									<tr style={{ background: this.props.protLight }}>
+									<tr style={{ background: this.props.colours.protLight }}>
 										<td>Protein</td>
 										<td>{this.getProtGrams()} g</td>
 										<td>{this.getGoalProtGrams()} g</td>
 										<td>{this.getProtGramsLeft()} g</td>
 									</tr>
-									<tr style={{ background: this.props.ethLight }}>
+									<tr style={{ background: this.props.colours.ethLight }}>
 										<td>Ethanol</td>
 										<td>{this.getEthGrams()} g</td>
 										<td>{this.getGoalEthGrams()} g</td>
@@ -193,25 +193,25 @@ export default class NutrientSummary extends React.Component {
 										<th>Goal Calories</th>
 										<th>Calories Left</th>
 									</tr>
-									<tr style={{ background: this.props.fatLight }}>
+									<tr style={{ background: this.props.colours.fatLight }}>
 										<td>Fat</td>
 										<td>{this.getFatCals()} cals</td>
 										<td>{this.getGoalFatCals()} cals</td>
 										<td>{this.getGoalFatCals() - this.getFatCals()} cals</td>
 									</tr>
-									<tr style={{ background: this.props.carbLight }}>
+									<tr style={{ background: this.props.colours.carbLight }}>
 										<td>Carbohydrates</td>
 										<td>{this.getCarbCals()} cals</td>
 										<td>{this.getGoalCarbCals()} cals</td>
 										<td>{this.getGoalCarbCals() - this.getCarbCals()} cals</td>
 									</tr>
-									<tr style={{ background: this.props.protLight }}>
+									<tr style={{ background: this.props.colours.protLight }}>
 										<td>Protein</td>
 										<td>{this.getProtCals()} cals</td>
 										<td>{this.getGoalProtCals()} cals</td>
 										<td>{this.getGoalProtCals() - this.getProtCals()} cals</td>
 									</tr>
-									<tr style={{ background: this.props.ethLight }}>
+									<tr style={{ background: this.props.colours.ethLight }}>
 										<td>Ethanol</td>
 										<td>{this.getEthCals()} cals</td>
 										<td>{this.getGoalEthCals()} cals</td>
@@ -234,22 +234,22 @@ export default class NutrientSummary extends React.Component {
 									{
 										title: 'Fat',
 										value: this.getFatCals(),
-										color: this.props.fatDark
+										color: this.props.colours.fatDark
 									},
 									{
 										title: 'Carbs',
 										value: this.getCarbCals() > 0 ? this.getCarbCals() : '',
-										color: this.props.carbDark
+										color: this.props.colours.carbDark
 									},
 									{
 										title: 'Protein',
 										value: this.getProtCals() > 0 ? this.getProtCals() : '',
-										color: this.props.protDark
+										color: this.props.colours.protDark
 									},
 									{
 										title: 'Ethanol',
 										value: this.getEthCals() > 0 ? this.getEthCals() : '',
-										color: this.props.ethDark
+										color: this.props.colours.ethDark
 									}
 								]}
 								cx={50}
@@ -274,22 +274,22 @@ export default class NutrientSummary extends React.Component {
 								{
 									title: 'Fat',
 									value: this.getGoalFatCals() > 0 ? this.getGoalFatCals() : '',
-									color: this.props.fatDark
+									color: this.props.colours.fatDark
 								},
 								{
 									title: 'Carbs',
 									value: this.getGoalCarbCals() > 0 ? this.getGoalCarbCals() : '',
-									color: this.props.carbDark
+									color: this.props.colours.carbDark
 								},
 								{
 									title: 'Protein',
 									value: this.getGoalProtCals() > 0 ? this.getGoalProtCals() : '',
-									color: this.props.protDark
+									color: this.props.colours.protDark
 								},
 								{
 									title: 'Ethanol',
 									value: this.getGoalEthCals() > 0 ? this.getGoalEthCals : '',
-									color: this.props.ethDark
+									color: this.props.colours.ethDark
 								}
 							]}
 							cx={50}

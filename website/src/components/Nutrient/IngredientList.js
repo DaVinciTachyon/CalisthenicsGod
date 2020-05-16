@@ -1,5 +1,6 @@
 import React from 'react';
 import '../Main.css';
+import IngredientRow from './IngredientRow';
 
 export default class IngredientList extends React.Component {
 	constructor() {
@@ -24,28 +25,33 @@ export default class IngredientList extends React.Component {
 			method: 'GET',
 			headers: { 'Content-Type': 'application/json', 'auth-token': localStorage.getItem('authToken') }
 		};
-		fetch('http://localhost:8080/nutrition/ingredients/', requestOptions)
-			.then((response) => response.json())
-			.then((data) => {
-				this.setState((state) => {
-					let ingredients = Object.assign({}, state.ingredients);
-					ingredients = data.ingredients;
-					return { ingredients };
-				});
+		let url = 'http://localhost:8080/nutrition/ingredients/';
+		if (this.props.isUnavailable) url = 'http://localhost:8080/nutrition/ingredients/unavailable';
+		fetch(url, requestOptions).then((response) => response.json()).then((data) => {
+			this.setState((state) => {
+				let ingredients = Object.assign({}, state.ingredients);
+				ingredients = data.ingredients;
+				return { ingredients };
 			});
+		});
+	};
+
+	update = () => {
+		this.getIngredients();
+		this.props.updateIngredients();
 	};
 
 	render() {
 		let ingredients = [];
 		for (let i = 0; i < this.state.ingredients.length; i++) {
 			ingredients.push(
-				<tr key={this.state.ingredients[i]._id}>
-					<td>{this.state.ingredients[i].name}</td>
-					<td style={{ background: this.props.fatLight }}>{this.state.ingredients[i].fat}</td>
-					<td style={{ background: this.props.carbLight }}>{this.state.ingredients[i].carbohydrate}</td>
-					<td style={{ background: this.props.protLight }}>{this.state.ingredients[i].protein}</td>
-					<td style={{ background: this.props.ethLight }}>{this.state.ingredients[i].ethanol}</td>
-				</tr>
+				<IngredientRow
+					key={this.state.ingredients[i]._id}
+					colours={this.props.colours}
+					isUnavailable={this.props.isUnavailable}
+					ingredient={this.state.ingredients[i]}
+					update={this.update}
+				/>
 			);
 		}
 		return (
@@ -58,6 +64,8 @@ export default class IngredientList extends React.Component {
 							<th>Carbohydrate</th>
 							<th>Protein</th>
 							<th>Ethanol</th>
+							<th />
+							<th />
 						</tr>
 						{ingredients}
 					</tbody>

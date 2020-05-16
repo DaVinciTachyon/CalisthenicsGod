@@ -32,47 +32,40 @@ router.use(verify, (req, res, next) => {
 router.get('/today', async (req, res) => {
 	const nutrients = await Nutrients.findOne({ userId: req.user._id });
 	let meals = [];
-	if (nutrients.history !== undefined && nutrients.history.length > 0 && isToday(nutrients.history[0].date))
+	if (nutrients.history !== undefined && nutrients.history.length > 0 && isToday(nutrients.history[0].date)) {
+		const userIngredients = await Ingredients.findOne({
+			userId: req.user._id
+		});
 		for (let i = 0; i < nutrients.history[0].meals.length; i++) {
 			let meal = {
 				_id: nutrients.history[0].meals[i]._id,
 				ingredients: []
 			};
 			for (let j = 0; j < nutrients.history[0].meals[i].ingredients.length; j++) {
-				if (nutrients.history[0].meals[i].ingredients[j].ingredientId) {
-					const ingredient = await Ingredients.findOne({
-						_id: nutrients.history[0].meals[i].ingredients[j].ingredientId
-					});
-					const weight = nutrients.history[0].meals[i].ingredients[j].weight;
-					meal.ingredients.push({
-						_id: nutrients.history[0].meals[i].ingredients[j]._id,
-						name: ingredient.name,
-						fat: Math.round(ingredient.fat * weight / 100 * 10) / 10,
-						carbohydrate: Math.round(ingredient.carbohydrate * weight / 100 * 10) / 10,
-						protein: Math.round(ingredient.protein * weight / 100 * 10) / 10,
-						ethanol: Math.round(ingredient.ethanol * weight / 100 * 10) / 10
-					});
-				} else meal.ingredients.push(nutrients.history[0].meals[i].ingredients[j]);
+				const ingredient = userIngredients.ingredients.find(
+					(val) => val._id == nutrients.history[0].meals[i].ingredients[j].ingredientId
+				);
+				meal.ingredients.push({
+					_id: nutrients.history[0].meals[i].ingredients[j]._id,
+					name: ingredient.name,
+					weight: nutrients.history[0].meals[i].ingredients[j].weight,
+					fat: ingredient.fat,
+					carbohydrate: ingredient.carbohydrate,
+					protein: ingredient.protein,
+					ethanol: ingredient.ethanol
+				});
 			}
 			meals.push(meal);
 		}
+	}
 	res.send({
 		meals: meals
 	});
 });
 
+//FIXME separate
 router.post('/', async (req, res) => {
 	if (req.body.ingredient === undefined) return res.status(400).send({ error: 'Ingredient Required' });
-	if (req.body.ingredient.ingredientId !== undefined && req.body.ingredient.weight === undefined)
-		return res.status(400).send({ error: 'Weight Required' });
-	if (req.body.ingredient.ingredientId === undefined) {
-		if (req.body.ingredient.name === undefined) return res.status(400).send({ error: 'Name Required' });
-		if (req.body.ingredient.fat === undefined) return res.status(400).send({ error: 'Fat Required' });
-		if (req.body.ingredient.carbohydrate === undefined)
-			return res.status(400).send({ error: 'Carbohydrate Required' });
-		if (req.body.ingredient.protein === undefined) return res.status(400).send({ error: 'Protein Required' });
-		if (req.body.ingredient.ethanol === undefined) return res.status(400).send({ error: 'Ethanol Required' });
-	}
 
 	const { error } = nutrientValidation.mealIngredient(req.body.ingredient);
 	if (error) return res.status(400).send({ error: error.details[0].message });

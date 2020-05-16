@@ -8,12 +8,20 @@ export default class NutrientDay extends React.Component {
 		super();
 		this.state = {
 			meals: [],
-			newMeal: false
+			newMeal: false,
+			update: false
 		};
 	}
 
 	componentDidMount() {
 		this.getMeals();
+	}
+
+	componentDidUpdate(prevProps) {
+		if (prevProps.update !== this.props.update) {
+			this.setState({ update: !this.state.update });
+			this.getMeals();
+		}
 	}
 
 	getMeals = () => {
@@ -34,7 +42,8 @@ export default class NutrientDay extends React.Component {
 
 	update = () => {
 		this.getMeals();
-		this.props.update();
+		this.props.updateNutrients();
+		this.setState({ update: !this.state.update });
 	};
 
 	flipNewMeal = () => {
@@ -48,12 +57,10 @@ export default class NutrientDay extends React.Component {
 		for (let i = 0; i < this.state.meals.length; i++) {
 			meals.push(
 				<MealTable
-					fatLight={this.props.fatLight}
-					carbLight={this.props.carbLight}
-					protLight={this.props.protLight}
-					ethLight={this.props.ethLight}
+					colours={this.props.colours}
 					meal={this.state.meals[i]}
-					update={this.update}
+					updateNutrients={this.update}
+					update={this.state.update}
 				/>
 			);
 		}
@@ -62,20 +69,18 @@ export default class NutrientDay extends React.Component {
 				{meals}
 				{meals.length !== 0 && !this.state.newMeal && <button onClick={this.flipNewMeal}>New Meal</button>}
 				{(meals.length === 0 || this.state.newMeal) && (
-					<div>
-						<NutrientAdder
-							fatLight={this.props.fatLight}
-							carbLight={this.props.carbLight}
-							protLight={this.props.protLight}
-							ethLight={this.props.ethLight}
-							update={() => {
-								this.update();
-								this.flipNewMeal();
-							}}
-						/>
-						<button onClick={this.flipNewMeal}>Cancel</button>
-					</div>
+					<NutrientAdder
+						colours={this.props.colours}
+						updateNutrients={() => {
+							this.update();
+							this.setState({
+								newMeal: false
+							});
+						}}
+						update={this.state.update}
+					/>
 				)}
+				{meals.length !== 0 && this.state.newMeal && <button onClick={this.flipNewMeal}>Cancel</button>}
 			</div>
 		);
 	}

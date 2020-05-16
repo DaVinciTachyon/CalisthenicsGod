@@ -51,7 +51,7 @@ export default class IngredientAdder extends React.Component {
 				ethanol: this.state.eth
 			})
 		};
-		fetch('http://localhost:8080/nutrition/ingredient/', requestOptions).then(() => {
+		fetch('http://localhost:8080/nutrition/ingredients/add/', requestOptions).then(() => {
 			this.props.update();
 		});
 		this.setState({
@@ -85,7 +85,7 @@ export default class IngredientAdder extends React.Component {
 						value={this.state.fat}
 						onChange={this.fatChange.bind(this)}
 						className="numInput input"
-						style={{ background: this.props.fatLight }}
+						style={{ background: this.props.colours.fatLight }}
 					/>
 					<input
 						name="carb"
@@ -96,7 +96,7 @@ export default class IngredientAdder extends React.Component {
 						value={this.state.carb}
 						onChange={this.carbChange.bind(this)}
 						className="numInput input"
-						style={{ background: this.props.carbLight }}
+						style={{ background: this.props.colours.carbLight }}
 					/>
 					<input
 						name="prot"
@@ -107,7 +107,7 @@ export default class IngredientAdder extends React.Component {
 						value={this.state.prot}
 						onChange={this.protChange.bind(this)}
 						className="numInput input"
-						style={{ background: this.props.protLight }}
+						style={{ background: this.props.colours.protLight }}
 					/>
 					<input
 						name="eth"
@@ -118,7 +118,7 @@ export default class IngredientAdder extends React.Component {
 						value={this.state.eth}
 						onChange={this.ethChange.bind(this)}
 						className="numInput input"
-						style={{ background: this.props.ethLight }}
+						style={{ background: this.props.colours.ethLight }}
 					/>
 					<br />
 					<input type="submit" value="Add" />

@@ -6,15 +6,26 @@ export default class MealTable extends React.Component {
 	constructor() {
 		super();
 		this.state = {
-			add: false
+			add: false,
+			update: false
 		};
+	}
+
+	componentDidUpdate(prevProps) {
+		if (prevProps.update !== this.props.update) {
+			this.setState({ update: !this.state.update });
+		}
 	}
 
 	flipAdd = async () => {
 		await this.setState({
 			add: !this.state.add
 		});
-		this.props.update();
+		this.props.updateNutrients();
+	};
+
+	round = (value, precision) => {
+		return Math.round(value * (1 / precision)) / (1 / precision);
 	};
 
 	removeIngredient = (index) => {
@@ -27,20 +38,29 @@ export default class MealTable extends React.Component {
 			})
 		};
 		fetch('http://localhost:8080/nutrition/meals/remove/', requestOptions).then(() => {
-			this.props.update();
+			this.props.updateNutrients();
 		});
 	};
 
 	render() {
 		let meal = [];
 		for (let i = 0; i < this.props.meal.ingredients.length; i++) {
+			const weight = this.props.meal.ingredients[i].weight;
 			meal.push(
 				<tr key={this.props.meal.ingredients[i]._id}>
 					<td>{this.props.meal.ingredients[i].name}</td>
-					<td style={{ background: this.props.fatLight }}>{this.props.meal.ingredients[i].fat}</td>
-					<td style={{ background: this.props.carbLight }}>{this.props.meal.ingredients[i].carbohydrate}</td>
-					<td style={{ background: this.props.protLight }}>{this.props.meal.ingredients[i].protein}</td>
-					<td style={{ background: this.props.ethLight }}>{this.props.meal.ingredients[i].ethanol}</td>
+					<td style={{ background: this.props.colours.fatLight }}>
+						{this.round(this.props.meal.ingredients[i].fat * weight / 100, 0.1)}
+					</td>
+					<td style={{ background: this.props.colours.carbLight }}>
+						{this.round(this.props.meal.ingredients[i].carbohydrate * weight / 100, 0.1)}
+					</td>
+					<td style={{ background: this.props.colours.protLight }}>
+						{this.round(this.props.meal.ingredients[i].protein * weight / 100, 0.1)}
+					</td>
+					<td style={{ background: this.props.colours.ethLight }}>
+						{this.round(this.props.meal.ingredients[i].ethanol * weight / 100, 0.1)}
+					</td>
 					<td>
 						<button onClick={() => this.removeIngredient(i)}>×</button>
 					</td>
@@ -66,12 +86,10 @@ export default class MealTable extends React.Component {
 								{this.state.add && (
 									<div>
 										<NutrientAdder
-											fatLight={this.props.fatLight}
-											carbLight={this.props.carbLight}
-											protLight={this.props.protLight}
-											ethLight={this.props.ethLight}
+											colours={this.props.colours}
 											mealId={this.props.meal._id}
-											update={this.flipAdd}
+											updateNutrients={this.flipAdd}
+											update={this.state.update}
 										/>
 										<button onClick={this.flipAdd}>Cancel</button>
 									</div>

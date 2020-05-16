@@ -11,19 +11,15 @@ nutrientValidation.calorieOffset = (data) => {
 
 nutrientValidation.mealIngredient = (data) => {
 	const schema = Joi.object({
-		ingredientId: Joi.string().min(1), //FIXME
-		weight: Joi.number().min(0.01),
-		name: Joi.string().min(1),
-		fat: Joi.number().min(0),
-		carbohydrate: Joi.number().min(0),
-		protein: Joi.number().min(0),
-		ethanol: Joi.number().min(0)
+		ingredientId: Joi.string().min(1).required(),
+		weight: Joi.number().min(0.01).required()
 	});
 	return schema.validate(data);
 };
 
 nutrientValidation.ingredient = (data) => {
 	const schema = Joi.object({
+		_id: Joi.string().min(1),
 		name: Joi.string().min(1).required(),
 		fat: Joi.number().min(0).max(100).required(),
 		carbohydrate: Joi.number().min(0).max(100).required(),

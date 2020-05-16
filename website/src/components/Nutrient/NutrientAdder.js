@@ -23,6 +23,12 @@ export default class NutrientAdder extends React.Component {
 		};
 	}
 
+	componentDidUpdate(prevProps) {
+		if (prevProps.update !== this.props.update) {
+			this.getIngredients();
+		}
+	}
+
 	componentDidMount() {
 		this.getIngredients();
 	}
@@ -90,40 +96,74 @@ export default class NutrientAdder extends React.Component {
 
 	addIngredient = (evt) => {
 		evt.preventDefault();
-		let ingredient = {};
-		if (this.state.ingredientId === '')
-			ingredient = {
-				name: this.state.name,
-				fat: Math.round(this.state.fat * this.state.weight / 100 * 10) / 10,
-				carbohydrate: Math.round(this.state.carb * this.state.weight / 100 * 10) / 10,
-				protein: Math.round(this.state.prot * this.state.weight / 100 * 10) / 10,
-				ethanol: Math.round(this.state.eth * this.state.weight / 100 * 10) / 10
+		if (this.state.ingredientId === '') {
+			const requestOptions = {
+				method: 'POST',
+				headers: { 'Content-Type': 'application/json', 'auth-token': localStorage.getItem('authToken') },
+				body: JSON.stringify({
+					name: this.state.name,
+					fat: this.state.fat,
+					carbohydrate: this.state.carb,
+					protein: this.state.prot,
+					ethanol: this.state.eth
+				})
 			};
-		else
-			ingredient = {
-				ingredientId: this.state.ingredientId,
-				weight: this.state.weight
+			fetch('http://localhost:8080/nutrition/ingredients/add/', requestOptions)
+				.then((response) => response.json())
+				.then((data) => {
+					const requestOptions = {
+						method: 'POST',
+						headers: {
+							'Content-Type': 'application/json',
+							'auth-token': localStorage.getItem('authToken')
+						},
+						body: JSON.stringify({
+							mealId: this.props.mealId === '' ? undefined : this.props.mealId,
+							ingredient: {
+								ingredientId: data._id,
+								weight: this.state.weight
+							}
+						})
+					};
+					fetch('http://localhost:8080/nutrition/meals/', requestOptions);
+				})
+				.then(() => {
+					this.props.updateNutrients();
+					this.setState({
+						ingredientId: '',
+						name: '',
+						weight: 0,
+						fat: 0,
+						carb: 0,
+						prot: 0,
+						eth: 0
+					});
+				});
+		} else {
+			const requestOptions = {
+				method: 'POST',
+				headers: { 'Content-Type': 'application/json', 'auth-token': localStorage.getItem('authToken') },
+				body: JSON.stringify({
+					mealId: this.props.mealId === '' ? undefined : this.props.mealId,
+					ingredient: {
+						ingredientId: this.state.ingredientId,
+						weight: this.state.weight
+					}
+				})
 			};
-		const requestOptions = {
-			method: 'POST',
-			headers: { 'Content-Type': 'application/json', 'auth-token': localStorage.getItem('authToken') },
-			body: JSON.stringify({
-				mealId: this.props.mealId === '' ? undefined : this.props.mealId,
-				ingredient: ingredient
-			})
-		};
-		fetch('http://localhost:8080/nutrition/meals/', requestOptions).then(() => {
-			this.props.update();
-			this.setState({
-				ingredientId: '',
-				name: '',
-				weight: 0,
-				fat: 0,
-				carb: 0,
-				prot: 0,
-				eth: 0
+			fetch('http://localhost:8080/nutrition/meals/', requestOptions).then(() => {
+				this.props.updateNutrients();
+				this.setState({
+					ingredientId: '',
+					name: '',
+					weight: 0,
+					fat: 0,
+					carb: 0,
+					prot: 0,
+					eth: 0
+				});
 			});
-		});
+		}
 	};
 
 	getIngredients = () => {
@@ -179,7 +219,7 @@ export default class NutrientAdder extends React.Component {
 						value={this.state.fat}
 						onChange={this.fatChange.bind(this)}
 						className="numInput input"
-						style={{ background: this.props.fatLight }}
+						style={{ background: this.props.colours.fatLight }}
 						readOnly={this.state.ingredientId !== ''}
 					/>
 					<input
@@ -191,7 +231,7 @@ export default class NutrientAdder extends React.Component {
 						value={this.state.carb}
 						onChange={this.carbChange.bind(this)}
 						className="numInput input"
-						style={{ background: this.props.carbLight }}
+						style={{ background: this.props.colours.carbLight }}
 						readOnly={this.state.ingredientId !== ''}
 					/>
 					<input
@@ -203,7 +243,7 @@ export default class NutrientAdder extends React.Component {
 						value={this.state.prot}
 						onChange={this.protChange.bind(this)}
 						className="numInput input"
-						style={{ background: this.props.protLight }}
+						style={{ background: this.props.colours.protLight }}
 						readOnly={this.state.ingredientId !== ''}
 					/>
 					<input
@@ -215,7 +255,7 @@ export default class NutrientAdder extends React.Component {
 						value={this.state.eth}
 						onChange={this.ethChange.bind(this)}
 						className="numInput input"
-						style={{ background: this.props.ethLight }}
+						style={{ background: this.props.colours.ethLight }}
 						readOnly={this.state.ingredientId !== ''}
 					/>
 					<br />
@@ -234,7 +274,7 @@ export default class NutrientAdder extends React.Component {
 						step="0.1"
 						value={Math.round(this.state.fat * this.state.weight / 100 * 10) / 10}
 						className="numInput input"
-						style={{ background: this.props.fatLight }}
+						style={{ background: this.props.colours.fatLight }}
 						readOnly
 					/>
 					<input
@@ -243,7 +283,7 @@ export default class NutrientAdder extends React.Component {
 						step="0.1"
 						value={Math.round(this.state.carb * this.state.weight / 100 * 10) / 10}
 						className="numInput input"
-						style={{ background: this.props.carbLight }}
+						style={{ background: this.props.colours.carbLight }}
 						readOnly
 					/>
 					<input
@@ -252,7 +292,7 @@ export default class NutrientAdder extends React.Component {
 						step="0.1"
 						value={Math.round(this.state.prot * this.state.weight / 100 * 10) / 10}
 						className="numInput input"
-						style={{ background: this.props.protLight }}
+						style={{ background: this.props.colours.protLight }}
 						readOnly
 					/>
 					<input
@@ -261,7 +301,7 @@ export default class NutrientAdder extends React.Component {
 						step="0.1"
 						value={Math.round(this.state.eth * this.state.weight / 100 * 10) / 10}
 						className="numInput input"
-						style={{ background: this.props.ethLight }}
+						style={{ background: this.props.colours.ethLight }}
 						readOnly
 					/>
 					<br />
