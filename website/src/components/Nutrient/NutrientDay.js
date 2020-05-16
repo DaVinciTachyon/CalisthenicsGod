@@ -68,7 +68,10 @@ export default class NutrientDay extends React.Component {
 							carbLight={this.props.carbLight}
 							protLight={this.props.protLight}
 							ethLight={this.props.ethLight}
-							update={this.update}
+							update={() => {
+								this.update();
+								this.flipNewMeal();
+							}}
 						/>
 						<button onClick={this.flipNewMeal}>Cancel</button>
 					</div>

@@ -75,10 +75,10 @@ export default class NutrientAdder extends React.Component {
 		let eth = 0;
 		if (this.state.ingredientId !== '') {
 			const ingredient = this.state.ingredients.find((ing) => ing._id === this.state.ingredientId);
-			fat = Math.round(ingredient.fat * this.state.weight / 100 * 10) / 10;
-			carb = Math.round(ingredient.carbohydrate * this.state.weight / 100 * 10) / 10;
-			prot = Math.round(ingredient.protein * this.state.weight / 100 * 10) / 10;
-			eth = Math.round(ingredient.ethanol * this.state.weight / 100 * 10) / 10;
+			fat = ingredient.fat;
+			carb = ingredient.carbohydrate;
+			prot = ingredient.protein;
+			eth = ingredient.ethanol;
 		}
 		this.setState({
 			fat: fat,
@@ -169,15 +169,7 @@ export default class NutrientAdder extends React.Component {
 							className="input"
 						/>
 					)}
-					<input
-						name="weight"
-						type="number"
-						min="0.1"
-						step="0.1"
-						value={this.state.weight}
-						onChange={this.weightChange.bind(this)}
-						className="numInput input"
-					/>
+					<br />
 					<input
 						name="fat"
 						type="number"
@@ -226,6 +218,69 @@ export default class NutrientAdder extends React.Component {
 						style={{ background: this.props.ethLight }}
 						readOnly={this.state.ingredientId !== ''}
 					/>
+					<br />
+					<input
+						name="weight"
+						type="number"
+						min="0.1"
+						step="0.1"
+						value={this.state.weight}
+						onChange={this.weightChange.bind(this)}
+						className="numInput input"
+					/>
+					<input
+						type="number"
+						min="0"
+						step="0.1"
+						value={Math.round(this.state.fat * this.state.weight / 100 * 10) / 10}
+						className="numInput input"
+						style={{ background: this.props.fatLight }}
+						readOnly
+					/>
+					<input
+						type="number"
+						min="0"
+						step="0.1"
+						value={Math.round(this.state.carb * this.state.weight / 100 * 10) / 10}
+						className="numInput input"
+						style={{ background: this.props.carbLight }}
+						readOnly
+					/>
+					<input
+						type="number"
+						min="0"
+						step="0.1"
+						value={Math.round(this.state.prot * this.state.weight / 100 * 10) / 10}
+						className="numInput input"
+						style={{ background: this.props.protLight }}
+						readOnly
+					/>
+					<input
+						type="number"
+						min="0"
+						step="0.1"
+						value={Math.round(this.state.eth * this.state.weight / 100 * 10) / 10}
+						className="numInput input"
+						style={{ background: this.props.ethLight }}
+						readOnly
+					/>
+					<br />
+					<label for="calories">Calories:</label>
+					<input
+						name="calories"
+						type="number"
+						min="0"
+						step="1"
+						value={Math.round(
+							this.state.fat * this.state.weight / 100 * 9 +
+								this.state.carb * this.state.weight / 100 * 4 +
+								this.state.prot * this.state.weight / 100 * 4 +
+								this.state.eth * this.state.weight / 100 * 7
+						)}
+						className="numInput input"
+						readOnly
+					/>
+					<br />
 					<input type="submit" value="Add" />
 				</form>
 			</div>

@@ -75,6 +75,7 @@ export default class IngredientAdder extends React.Component {
 						className="input"
 						required
 					/>
+					<br />
 					<input
 						name="fat"
 						type="number"
@@ -119,6 +120,7 @@ export default class IngredientAdder extends React.Component {
 						className="numInput input"
 						style={{ background: this.props.ethLight }}
 					/>
+					<br />
 					<input type="submit" value="Add" />
 				</form>
 			</div>

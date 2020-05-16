@@ -45,6 +45,7 @@ router.get('/today', async (req, res) => {
 					});
 					const weight = nutrients.history[0].meals[i].ingredients[j].weight;
 					meal.ingredients.push({
+						_id: nutrients.history[0].meals[i].ingredients[j]._id,
 						name: ingredient.name,
 						fat: Math.round(ingredient.fat * weight / 100 * 10) / 10,
 						carbohydrate: Math.round(ingredient.carbohydrate * weight / 100 * 10) / 10,
@@ -107,6 +108,32 @@ router.post('/', async (req, res) => {
 			});
 		}
 	}
+
+	try {
+		await nutrients.save();
+		res.sendStatus(200);
+	} catch (err) {
+		res.status(400).send({ error: err });
+	}
+});
+
+router.post('/remove', async (req, res) => {
+	if (!req.body.mealId) return res.status(400).send({ error: 'Meal ID Required' });
+	if (!req.body.ingredientId) return res.status(400).send({ error: 'Ingredient ID Required' });
+
+	const nutrients = await Nutrients.findOne({ userId: req.user._id });
+
+	const mealIndex = nutrients.history[0].meals.findIndex((meal) => meal._id == req.body.mealId);
+	if (mealIndex === -1) return res.status(400).send({ error: 'Invalid Meal ID' });
+
+	const ingredientIndex = nutrients.history[0].meals[mealIndex].ingredients.findIndex(
+		(ingredient) => ingredient._id == req.body.ingredientId
+	);
+	if (ingredientIndex === -1) return res.status(400).send({ error: 'Invalid Ingredient ID' });
+
+	if (nutrients.history[0].meals[mealIndex].ingredients.length > 1)
+		nutrients.history[0].meals[mealIndex].ingredients.splice(ingredientIndex, 1);
+	else nutrients.history[0].meals.splice(mealIndex, 1);
 
 	try {
 		await nutrients.save();
