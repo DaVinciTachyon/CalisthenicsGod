@@ -1,18 +1,15 @@
 import React from 'react';
 import '../Main.css';
+import NutrientAdder from './NutrientAdder';
+import MealTable from './MealTable';
 
 export default class NutrientDay extends React.Component {
 	constructor() {
 		super();
 		this.state = {
-			meals: []
+			meals: [],
+			newMeal: false
 		};
-	}
-
-	componentDidUpdate(prevProps) {
-		if (prevProps.update !== this.props.update) {
-			this.getMeals();
-		}
 	}
 
 	componentDidMount() {
@@ -24,7 +21,7 @@ export default class NutrientDay extends React.Component {
 			method: 'GET',
 			headers: { 'Content-Type': 'application/json', 'auth-token': localStorage.getItem('authToken') }
 		};
-		fetch('http://localhost:8080/nutrition/today/meals', requestOptions)
+		fetch('http://localhost:8080/nutrition/meals/today/', requestOptions)
 			.then((response) => response.json())
 			.then((data) => {
 				this.setState((state) => {
@@ -35,33 +32,47 @@ export default class NutrientDay extends React.Component {
 			});
 	};
 
+	addMacros = () => {
+		this.getMeals();
+		this.props.addMacros();
+	};
+
+	flipNewMeal = () => {
+		this.setState({
+			newMeal: !this.state.newMeal
+		});
+	};
+
 	render() {
 		let meals = [];
 		for (let i = 0; i < this.state.meals.length; i++) {
 			meals.push(
-				<tr key={this.state.meals[i]._id}>
-					<td>{this.state.meals[i].name}</td>
-					<td style={{ background: this.props.fatLight }}>{this.state.meals[i].fat}</td>
-					<td style={{ background: this.props.carbLight }}>{this.state.meals[i].carbohydrate}</td>
-					<td style={{ background: this.props.protLight }}>{this.state.meals[i].protein}</td>
-					<td style={{ background: this.props.ethLight }}>{this.state.meals[i].ethanol}</td>
-				</tr>
+				<MealTable
+					fatLight={this.props.fatLight}
+					carbLight={this.props.carbLight}
+					protLight={this.props.protLight}
+					ethLight={this.props.ethLight}
+					meal={this.state.meals[i]}
+					addMacros={this.addMacros}
+				/>
 			);
 		}
 		return (
-			<div className="card alignCentre">
-				<table className="centreMe">
-					<tbody>
-						<tr>
-							<th>Name</th>
-							<th>Fat</th>
-							<th>Carbohydrate</th>
-							<th>Protein</th>
-							<th>Ethanol</th>
-						</tr>
-						{meals}
-					</tbody>
-				</table>
+			<div className="alignCentre">
+				{meals}
+				{meals.length !== 0 && !this.state.newMeal && <button onClick={this.flipNewMeal}>New Meal</button>}
+				{(meals.length === 0 || this.state.newMeal) && (
+					<div>
+						<NutrientAdder
+							fatLight={this.props.fatLight}
+							carbLight={this.props.carbLight}
+							protLight={this.props.protLight}
+							ethLight={this.props.ethLight}
+							addMacros={this.addMacros}
+						/>
+						<button onClick={this.flipNewMeal}>Cancel</button>
+					</div>
+				)}
 			</div>
 		);
 	}

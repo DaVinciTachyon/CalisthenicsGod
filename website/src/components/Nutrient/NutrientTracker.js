@@ -1,6 +1,5 @@
 import React from 'react';
 import '../Main.css';
-import NutrientAdder from './NutrientAdder';
 import NutrientSummary from './NutrientSummary';
 import NutrientDay from './NutrientDay';
 
@@ -31,31 +30,28 @@ export default class NutrientTracker extends React.Component {
 	render() {
 		return (
 			<div style={{ padding: '100px' }}>
-				<NutrientSummary
-					fatLight={this.state.fatLight}
-					carbLight={this.state.carbLight}
-					protLight={this.state.protLight}
-					ethLight={this.state.ethLight}
-					fatDark={this.state.fatDark}
-					carbDark={this.state.carbDark}
-					protDark={this.state.protDark}
-					ethDark={this.state.ethDark}
-					update={this.state.update}
-				/>
-				<NutrientAdder
-					fatLight={this.state.fatLight}
-					carbLight={this.state.carbLight}
-					protLight={this.state.protLight}
-					ethLight={this.state.ethLight}
-					addMacros={this.addMacros}
-				/>
-				<NutrientDay
-					fatLight={this.state.fatLight}
-					carbLight={this.state.carbLight}
-					protLight={this.state.protLight}
-					ethLight={this.state.ethLight}
-					update={this.state.update}
-				/>
+				<div className="card">
+					<NutrientSummary
+						fatLight={this.state.fatLight}
+						carbLight={this.state.carbLight}
+						protLight={this.state.protLight}
+						ethLight={this.state.ethLight}
+						fatDark={this.state.fatDark}
+						carbDark={this.state.carbDark}
+						protDark={this.state.protDark}
+						ethDark={this.state.ethDark}
+						update={this.state.update}
+					/>
+				</div>
+				<div className="card">
+					<NutrientDay
+						fatLight={this.state.fatLight}
+						carbLight={this.state.carbLight}
+						protLight={this.state.protLight}
+						ethLight={this.state.ethLight}
+						addMacros={this.addMacros}
+					/>
+				</div>
 			</div>
 		);
 	}

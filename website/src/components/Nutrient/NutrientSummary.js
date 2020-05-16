@@ -108,7 +108,7 @@ export default class NutrientSummary extends React.Component {
 	render() {
 		return (
 			<div>
-				<div className="card" onClick={this.showFullCals}>
+				<div onClick={this.showFullCals}>
 					<div className="alignCentre">
 						<table className="centreMe">
 							<tbody>

@@ -16,6 +16,17 @@ export default class NutrientAdder extends React.Component {
 		};
 	}
 
+	componentWillUnmount() {
+		// fix Warning: Can't perform a React state update on an unmounted component
+		this.setState = (state, callback) => {
+			return;
+		};
+	}
+
+	componentDidMount() {
+		this.getIngredients();
+	}
+
 	nameChange = (evt) => {
 		const input = evt.target.validity.valid ? evt.target.value : this.state.name;
 		this.setState({ name: input });
@@ -41,67 +52,78 @@ export default class NutrientAdder extends React.Component {
 		this.setState({ eth: input });
 	};
 
-	ingredientChange = (evt) => {
+	ingredientChange = async (evt) => {
 		const input = evt.target.validity.valid ? evt.target.value : this.state.eth;
-		this.setState({ ingredientId: input });
-	};
-
-	weightChange = (evt) => {
-		const input = evt.target.validity.valid ? evt.target.value : this.state.eth;
-		this.setState({ weight: input });
-	};
-
-	addMacros = (evt) => {
-		evt.preventDefault();
-		const requestOptions = {
-			method: 'POST',
-			headers: { 'Content-Type': 'application/json', 'auth-token': localStorage.getItem('authToken') },
-			body: JSON.stringify({
-				history: [
-					{
-						name: this.state.name,
-						fat: this.state.fat,
-						carbohydrate: this.state.carb,
-						protein: this.state.prot,
-						ethanol: this.state.eth
-					}
-				]
-			})
-		};
-		fetch('http://localhost:8080/nutrition/history/', requestOptions).then(() => {
-			this.props.addMacros();
+		await this.setState({
+			ingredientId: input,
+			weight: 0,
+			name: ''
 		});
+		this.updateMacros();
+	};
+
+	weightChange = async (evt) => {
+		const input = evt.target.validity.valid ? evt.target.value : this.state.eth;
+		await this.setState({ weight: input });
+		if (this.state.ingredientId !== '') this.updateMacros();
+	};
+
+	updateMacros = () => {
+		let fat = 0;
+		let carb = 0;
+		let prot = 0;
+		let eth = 0;
+		if (this.state.ingredientId !== '') {
+			const ingredient = this.state.ingredients.find((ing) => ing._id === this.state.ingredientId);
+			fat = Math.round(ingredient.fat * this.state.weight / 100 * 10) / 10;
+			carb = Math.round(ingredient.carbohydrate * this.state.weight / 100 * 10) / 10;
+			prot = Math.round(ingredient.protein * this.state.weight / 100 * 10) / 10;
+			eth = Math.round(ingredient.ethanol * this.state.weight / 100 * 10) / 10;
+		}
 		this.setState({
-			name: '',
-			fat: 0,
-			carb: 0,
-			prot: 0,
-			eth: 0
+			fat: fat,
+			carb: carb,
+			prot: prot,
+			eth: eth
 		});
 	};
 
 	addIngredient = (evt) => {
 		evt.preventDefault();
-		if (!this.state.ingredientId) return this.setState({ error: 'Ingredient is required' });
+		let ingredient = {};
+		if (this.state.ingredientId === '')
+			ingredient = {
+				name: this.state.name,
+				fat: Math.round(this.state.fat * this.state.weight / 100 * 10) / 10,
+				carbohydrate: Math.round(this.state.carb * this.state.weight / 100 * 10) / 10,
+				protein: Math.round(this.state.prot * this.state.weight / 100 * 10) / 10,
+				ethanol: Math.round(this.state.eth * this.state.weight / 100 * 10) / 10
+			};
+		else
+			ingredient = {
+				ingredientId: this.state.ingredientId,
+				weight: this.state.weight
+			};
 		const requestOptions = {
 			method: 'POST',
 			headers: { 'Content-Type': 'application/json', 'auth-token': localStorage.getItem('authToken') },
 			body: JSON.stringify({
-				history: [
-					{
-						ingredientId: this.state.ingredientId,
-						weight: this.state.weight
-					}
-				]
+				mealId: this.props.mealId === '' ? undefined : this.props.mealId,
+				ingredient: ingredient
 			})
 		};
-		fetch('http://localhost:8080/nutrition/history/', requestOptions).then(() => {
+		fetch('http://localhost:8080/nutrition/meals/', requestOptions).then(() => {
 			this.props.addMacros();
+			this.setState({
+				ingredientId: '',
+				name: '',
+				weight: 0,
+				fat: 0,
+				carb: 0,
+				prot: 0,
+				eth: 0
+			});
 		});
-		// this.setState({
-		// 	ingredientId: '',
-		// 	weight: 0
-		// });
 	};
 
 	getIngredients = () => {
@@ -118,26 +140,43 @@ export default class NutrientAdder extends React.Component {
 					return { ingredients };
 				});
 			});
-		let ingredients = []
-		for(let i = 0; i < this.state.ingredients.length; i++) {
-			ingredients.push(
-			<option key={this.state.ingredients[i]._id} value={this.state.ingredients[i]._id}>
-				{this.state.ingredients[i].name}
-			</option>);
-		}
-		return ingredients;
-	}
+	};
 
 	render() {
+		let ingredients = [];
+		for (let i = 0; i < this.state.ingredients.length; i++) {
+			ingredients.push(
+				<option key={this.state.ingredients[i]._id} value={this.state.ingredients[i]._id}>
+					{this.state.ingredients[i].name}
+				</option>
+			);
+		}
 		return (
-			<div className="card alignCentre">
-				<form className="centreMe" onSubmit={this.addMacros}>
+			<div className="alignCentre">
+				<form className="centreMe" onSubmit={this.addIngredient}>
+					<select name="ingredient" onChange={this.ingredientChange.bind(this)}>
+						<option value="" selected={this.state.ingredientId === ''}>
+							Add Own Ingredient
+						</option>
+						{ingredients}
+					</select>
+					{this.state.ingredientId === '' && (
+						<input
+							name="name"
+							type="text"
+							value={this.state.name}
+							onChange={this.nameChange.bind(this)}
+							className="input"
+						/>
+					)}
 					<input
-						name="name"
-						type="text"
-						value={this.state.name}
-						onChange={this.nameChange.bind(this)}
-						className="input"
+						name="weight"
+						type="number"
+						min="0.1"
+						step="0.1"
+						value={this.state.weight}
+						onChange={this.weightChange.bind(this)}
+						className="numInput input"
 					/>
 					<input
 						name="fat"
@@ -148,6 +187,7 @@ export default class NutrientAdder extends React.Component {
 						onChange={this.fatChange.bind(this)}
 						className="numInput input"
 						style={{ background: this.props.fatLight }}
+						readOnly={this.state.ingredientId !== ''}
 					/>
 					<input
 						name="carb"
@@ -158,6 +198,7 @@ export default class NutrientAdder extends React.Component {
 						onChange={this.carbChange.bind(this)}
 						className="numInput input"
 						style={{ background: this.props.carbLight }}
+						readOnly={this.state.ingredientId !== ''}
 					/>
 					<input
 						name="prot"
@@ -168,6 +209,7 @@ export default class NutrientAdder extends React.Component {
 						onChange={this.protChange.bind(this)}
 						className="numInput input"
 						style={{ background: this.props.protLight }}
+						readOnly={this.state.ingredientId !== ''}
 					/>
 					<input
 						name="eth"
@@ -178,22 +220,7 @@ export default class NutrientAdder extends React.Component {
 						onChange={this.ethChange.bind(this)}
 						className="numInput input"
 						style={{ background: this.props.ethLight }}
-					/>
-					<input type="submit" value="Add" />
-				</form>
-				<form className="centreMe" onSubmit={this.addIngredient}>
-					<select name="ingredient" onChange={this.ingredientChange.bind(this)}>
-						<option value="">Select Ingredient</option>
-						{this.getIngredients()}
-					</select>
-					<input
-						name="weight"
-						type="number"
-						min="0"
-						step="0.1"
-						value={this.state.weight}
-						onChange={this.weightChange.bind(this)}
-						className="numInput input"
+						readOnly={this.state.ingredientId !== ''}
 					/>
 					<input type="submit" value="Add" />
 				</form>
