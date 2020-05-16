@@ -14,7 +14,7 @@ export default class MealTable extends React.Component {
 		await this.setState({
 			add: !this.state.add
 		});
-		this.props.addMacros();
+		this.props.update();
 	};
 
 	render() {
@@ -53,7 +53,7 @@ export default class MealTable extends React.Component {
 											protLight={this.props.protLight}
 											ethLight={this.props.ethLight}
 											mealId={this.props.meal._id}
-											addMacros={this.flipAdd}
+											update={this.flipAdd}
 										/>
 										<button onClick={this.flipAdd}>Cancel</button>
 									</div>

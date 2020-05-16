@@ -32,9 +32,9 @@ export default class NutrientDay extends React.Component {
 			});
 	};
 
-	addMacros = () => {
+	update = () => {
 		this.getMeals();
-		this.props.addMacros();
+		this.props.update();
 	};
 
 	flipNewMeal = () => {
@@ -53,7 +53,7 @@ export default class NutrientDay extends React.Component {
 					protLight={this.props.protLight}
 					ethLight={this.props.ethLight}
 					meal={this.state.meals[i]}
-					addMacros={this.addMacros}
+					update={this.update}
 				/>
 			);
 		}
@@ -68,7 +68,7 @@ export default class NutrientDay extends React.Component {
 							carbLight={this.props.carbLight}
 							protLight={this.props.protLight}
 							ethLight={this.props.ethLight}
-							addMacros={this.addMacros}
+							update={this.update}
 						/>
 						<button onClick={this.flipNewMeal}>Cancel</button>
 					</div>

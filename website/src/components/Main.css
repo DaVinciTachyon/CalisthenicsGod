@@ -95,3 +95,15 @@
 .numInput {
 	width: 60px;
 }
+
+#seeIngredients {
+	top: 0;
+	right: 0;
+	position: absolute;
+	padding: 0px;
+	margin: 10px;
+}
+
+.relative {
+	position: relative;
+}

@@ -113,7 +113,7 @@ export default class NutrientAdder extends React.Component {
 			})
 		};
 		fetch('http://localhost:8080/nutrition/meals/', requestOptions).then(() => {
-			this.props.addMacros();
+			this.props.update();
 			this.setState({
 				ingredientId: '',
 				name: '',
@@ -182,6 +182,7 @@ export default class NutrientAdder extends React.Component {
 						name="fat"
 						type="number"
 						min="0"
+						max="100"
 						step="0.1"
 						value={this.state.fat}
 						onChange={this.fatChange.bind(this)}
@@ -193,6 +194,7 @@ export default class NutrientAdder extends React.Component {
 						name="carb"
 						type="number"
 						min="0"
+						max="100"
 						step="0.1"
 						value={this.state.carb}
 						onChange={this.carbChange.bind(this)}
@@ -204,6 +206,7 @@ export default class NutrientAdder extends React.Component {
 						name="prot"
 						type="number"
 						min="0"
+						max="100"
 						step="0.1"
 						value={this.state.prot}
 						onChange={this.protChange.bind(this)}
@@ -215,6 +218,7 @@ export default class NutrientAdder extends React.Component {
 						name="eth"
 						type="number"
 						min="0"
+						max="100"
 						step="0.1"
 						value={this.state.eth}
 						onChange={this.ethChange.bind(this)}

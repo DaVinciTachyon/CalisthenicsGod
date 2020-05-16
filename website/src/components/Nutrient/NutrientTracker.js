@@ -2,6 +2,8 @@ import React from 'react';
 import '../Main.css';
 import NutrientSummary from './NutrientSummary';
 import NutrientDay from './NutrientDay';
+import Ingredients from './Ingredients';
+import Modal from 'react-modal';
 
 export default class NutrientTracker extends React.Component {
 	constructor() {
@@ -15,7 +17,8 @@ export default class NutrientTracker extends React.Component {
 			protLight: '#99f1ff',
 			ethDark: '#35ff38',
 			ethLight: '#82ff84',
-			update: false
+			update: false,
+			showIngredients: false
 		};
 	}
 
@@ -23,8 +26,12 @@ export default class NutrientTracker extends React.Component {
 		if (!localStorage.getItem('authToken')) window.location = '/login';
 	}
 
-	addMacros = () => {
+	update = () => {
 		this.setState({ update: !this.state.update });
+	};
+
+	showIngredients = () => {
+		this.setState({ showIngredients: !this.state.showIngredients });
 	};
 
 	render() {
@@ -43,13 +50,32 @@ export default class NutrientTracker extends React.Component {
 						update={this.state.update}
 					/>
 				</div>
-				<div className="card">
+				<div className="card relative">
+					<button id="seeIngredients" onClick={this.showIngredients}>
+						+
+					</button>
+					<Modal
+						isOpen={this.state.showIngredients}
+						onRequestClose={this.showIngredients}
+						contentLabel="Full Calorie View"
+					>
+						<div className="alignCentre">
+							<Ingredients
+								fatLight={this.state.fatLight}
+								carbLight={this.state.carbLight}
+								protLight={this.state.protLight}
+								ethLight={this.state.ethLight}
+								update={this.update}
+							/>
+							<button onClick={this.showIngredients}>Cancel</button>
+						</div>
+					</Modal>
 					<NutrientDay
 						fatLight={this.state.fatLight}
 						carbLight={this.state.carbLight}
 						protLight={this.state.protLight}
 						ethLight={this.state.ethLight}
-						addMacros={this.addMacros}
+						update={this.update}
 					/>
 				</div>
 			</div>

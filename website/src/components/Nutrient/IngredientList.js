@@ -49,7 +49,7 @@ export default class IngredientList extends React.Component {
 			);
 		}
 		return (
-			<div className="card alignCentre">
+			<div className="alignCentre">
 				<table className="centreMe">
 					<tbody>
 						<tr>

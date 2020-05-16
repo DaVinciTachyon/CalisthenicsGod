@@ -26,9 +26,6 @@ function Toolbar() {
 				<Link to="/nutrientTracker">
 					<li>Nutrient Tracker</li>
 				</Link>
-				<Link to="/ingredients">
-					<li>Ingredients</li>
-				</Link>
 				<Link to="/measurementTracker">
 					<li>Measurement Tracker</li>
 				</Link>

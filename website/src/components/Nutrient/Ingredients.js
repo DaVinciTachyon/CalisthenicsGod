@@ -4,47 +4,36 @@ import IngredientAdder from './IngredientsAdder';
 import IngredientList from './IngredientList';
 
 export default class Ingredients extends React.Component {
-    constructor() {
-        super();
-        this.state = {
-            fatDark: '#ffd433',
-            fatLight: '#ffe582',
-            carbDark: '#ff3f3f',
-            carbLight: '#ff9999',
-            protDark: '#3fafff',
-            protLight: '#99f1ff',
-            ethDark: '#35ff38',
-            ethLight: '#82ff84',
-            update: false
-        };
-    }
+	constructor() {
+		super();
+		this.state = {
+			update: false
+		};
+	}
 
-    async componentDidMount() {
-        if (!localStorage.getItem('authToken')) window.location = '/login';
-    }
+	update = () => {
+		this.setState({ update: !this.state.update });
+		this.props.update();
+	};
 
-    addIngredient = () => {
-        this.setState({ update: !this.state.update });
-    };
-
-    render() {
-        return (
-            <div style={{ padding: '100px' }}>
-                <IngredientAdder
-                    fatLight={this.state.fatLight}
-                    carbLight={this.state.carbLight}
-                    protLight={this.state.protLight}
-                    ethLight={this.state.ethLight}
-                    addIngredient={this.addIngredient}
-                />
-                <IngredientList
-                    fatLight={this.state.fatLight}
-                    carbLight={this.state.carbLight}
-                    protLight={this.state.protLight}
-                    ethLight={this.state.ethLight}
-                    update={this.state.update}
-                />
-            </div>
-        );
-    }
+	render() {
+		return (
+			<div>
+				<IngredientAdder
+					fatLight={this.props.fatLight}
+					carbLight={this.props.carbLight}
+					protLight={this.props.protLight}
+					ethLight={this.props.ethLight}
+					update={this.update}
+				/>
+				<IngredientList
+					fatLight={this.props.fatLight}
+					carbLight={this.props.carbLight}
+					protLight={this.props.protLight}
+					ethLight={this.props.ethLight}
+					update={this.state.update}
+				/>
+			</div>
+		);
+	}
 }

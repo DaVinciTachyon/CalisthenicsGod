@@ -25,10 +25,10 @@ nutrientValidation.mealIngredient = (data) => {
 nutrientValidation.ingredient = (data) => {
 	const schema = Joi.object({
 		name: Joi.string().min(1).required(),
-		fat: Joi.number().min(0).required(),
-		carbohydrate: Joi.number().min(0).required(),
-		protein: Joi.number().min(0).required(),
-		ethanol: Joi.number().min(0).required()
+		fat: Joi.number().min(0).max(100).required(),
+		carbohydrate: Joi.number().min(0).max(100).required(),
+		protein: Joi.number().min(0).max(100).required(),
+		ethanol: Joi.number().min(0).max(100).required()
 	});
 	return schema.validate(data);
 };
