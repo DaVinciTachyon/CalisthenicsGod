@@ -7,37 +7,45 @@ router.use((req, res, next) => {
 });
 
 router.get('/', async (req, res) => {
-	const userIngredients = await Ingredients.findOne({
-		userId: req.user._id
+	const ingredients = await Ingredients.find({
+		userId: req.user._id,
+		isAvailable: true
 	});
 
-	if (userIngredients.ingredients !== undefined)
-		res.send({ ingredients: userIngredients.ingredients.filter((ing) => ing.isAvailable) });
-	else res.send({ ingredients: [] });
+	res.send({ ingredients: ingredients });
 });
 
 router.get('/unavailable', async (req, res) => {
-	const userIngredients = await Ingredients.findOne({
-		userId: req.user._id
+	const ingredients = await Ingredients.find({
+		userId: req.user._id,
+		isAvailable: false
 	});
 
-	if (userIngredients.ingredients !== undefined)
-		res.send({ ingredients: userIngredients.ingredients.filter((ing) => !ing.isAvailable) });
-	else res.send({ ingredients: [] });
+	res.send({ ingredients: ingredients });
 });
 
 router.post('/add', async (req, res) => {
 	const { error } = nutrientValidation.ingredient(req.body);
 	if (error) return res.status(400).send({ error: error.details[0].message });
 
-	const userIngredients = await Ingredients.findOne({
+	const ingredientName = await Ingredients.findOne({
+		userId: req.user._id,
+		name: req.body.name
+	});
+	if (ingredientName) return res.status(400).send({ error: 'Name already in use.' });
+
+	const ingredient = new Ingredients({
+		name: req.body.name,
+		fat: req.body.fat,
+		carbohydrate: req.body.carbohydrate,
+		protein: req.body.protein,
+		ethanol: req.body.ethanol,
 		userId: req.user._id
 	});
-	userIngredients.ingredients.push(req.body);
 
 	try {
-		await userIngredients.save();
-		res.status(200).send(userIngredients.ingredients[userIngredients.ingredients.length - 1]);
+		await ingredient.save();
+		res.status(200).send(ingredient);
 	} catch (err) {
 		res.status(400).send({ error: err });
 	}
@@ -45,15 +53,16 @@ router.post('/add', async (req, res) => {
 
 router.post('/makeUnavailable', async (req, res) => {
 	if (!req.body._id) return res.status(400).send({ error: 'ID required' });
-	const userIngredients = await Ingredients.findOne({
-		userId: req.user._id
+	const ingredient = await Ingredients.findOne({
+		userId: req.user._id,
+		_id: req.body._id
 	});
-	const index = userIngredients.ingredients.findIndex((val) => val._id === req.body.id);
-	if (index === -1) return res.status(400).send({ error: 'ID not found' });
+	if (!ingredient) return res.status(400).send({ error: 'ID not found' });
 
-	userIngredients.ingredients[index].isAvailable = false;
+	ingredient.isAvailable = false;
+
 	try {
-		await userIngredients.save();
+		await ingredient.save();
 		res.sendStatus(200);
 	} catch (err) {
 		res.status(400).send({ error: err });
@@ -62,15 +71,16 @@ router.post('/makeUnavailable', async (req, res) => {
 
 router.post('/makeAvailable', async (req, res) => {
 	if (!req.body._id) return res.status(400).send({ error: 'ID required' });
-	const userIngredients = await Ingredients.findOne({
-		userId: req.user._id
+	const ingredient = await Ingredients.findOne({
+		userId: req.user._id,
+		_id: req.body._id
 	});
-	const index = userIngredients.ingredients.findIndex((val) => val._id === req.body.id);
-	if (index === -1) return res.status(400).send({ error: 'ID not found' });
+	if (!ingredient) return res.status(400).send({ error: 'ID not found' });
 
-	userIngredients.ingredients[index].isAvailable = true;
+	ingredient.isAvailable = true;
+
 	try {
-		await userIngredients.save();
+		await ingredient.save();
 		res.sendStatus(200);
 	} catch (err) {
 		res.status(400).send({ error: err });
@@ -81,20 +91,20 @@ router.post('/edit', async (req, res) => {
 	const { error } = nutrientValidation.ingredient(req.body);
 	if (error) return res.status(400).send({ error: error.details[0].message });
 
-	const userIngredients = await Ingredients.findOne({
-		userId: req.user._id
+	const ingredient = await Ingredients.findOne({
+		userId: req.user._id,
+		_id: req.body._id
 	});
-	const index = userIngredients.ingredients.findIndex((val) => val._id === req.body.id);
-	if (index === -1) return res.status(400).send({ error: 'ID not found' });
+	if (!ingredient) return res.status(400).send({ error: 'ID not found' });
 
-	userIngredients.ingredients[index].name = req.body.name;
-	userIngredients.ingredients[index].fat = req.body.fat;
-	userIngredients.ingredients[index].carbohydrate = req.body.carbohydrate;
-	userIngredients.ingredients[index].protein = req.body.protein;
-	userIngredients.ingredients[index].ethanol = req.body.ethanol;
+	ingredient.name = req.body.name;
+	ingredient.fat = req.body.fat;
+	ingredient.carbohydrate = req.body.carbohydrate;
+	ingredient.protein = req.body.protein;
+	ingredient.ethanol = req.body.ethanol;
 
 	try {
-		await userIngredients.save();
+		await ingredient.save();
 		res.sendStatus(200);
 	} catch (err) {
 		res.status(400).send({ error: err });

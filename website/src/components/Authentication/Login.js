@@ -5,9 +5,9 @@ export default class Login extends React.Component {
 	constructor() {
 		super();
 		this.state = {
-			email: '',
-			password: '',
-			error: ''
+			email    : '',
+			password : '',
+			error    : ''
 		};
 
 		this.handleEmailChange = this.handleEmailChange.bind(this);
@@ -25,11 +25,11 @@ export default class Login extends React.Component {
 		if (!this.state.email) return this.setState({ error: 'Email is required' });
 		if (!this.state.password) return this.setState({ error: 'Password is required' });
 		const requestOptions = {
-			method: 'POST',
-			headers: { 'Content-Type': 'application/json' },
-			body: JSON.stringify({
-				email: this.state.email,
-				password: this.state.password
+			method  : 'POST',
+			headers : { 'Content-Type': 'application/json' },
+			body    : JSON.stringify({
+				email    : this.state.email,
+				password : this.state.password
 			})
 		};
 		fetch('http://localhost:8080/auth/login', requestOptions)
@@ -46,13 +46,13 @@ export default class Login extends React.Component {
 
 	handleEmailChange(evt) {
 		this.setState({
-			email: evt.target.value
+			email : evt.target.value
 		});
 	}
 
 	handlePasswordChange(evt) {
 		this.setState({
-			password: evt.target.value
+			password : evt.target.value
 		});
 	}
 

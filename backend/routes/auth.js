@@ -6,7 +6,6 @@ const measurementValidation = require('../validation/measurement');
 const User = require('../models/User');
 const Measurements = require('../models/Measurements');
 const Nutrients = require('../models/Nutrients');
-const Ingredients = require('../models/Ingredients');
 
 router.post('/register', async (req, res) => {
 	const { error } = authorisationValidation.register(req.body);
@@ -38,15 +37,11 @@ router.post('/register', async (req, res) => {
 		userId: user._id,
 		maintenanceCalories: Math.round(2.20462 * req.body.weight * 15)
 	});
-	const ingredients = new Ingredients({
-		userId: user._id
-	});
 
 	try {
 		await user.save();
 		await measurements.save();
 		await nutrients.save();
-		await ingredients.save();
 		res.status(200).send({ user: user._id });
 	} catch (err) {
 		res.status(400).send({ error: err });

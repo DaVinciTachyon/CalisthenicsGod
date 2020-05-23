@@ -1,13 +1,14 @@
 import React from 'react';
 import '../Main.css';
-import NutrientAdder from './NutrientAdder';
+import IngredientRow from './IngredientRow';
 
 export default class MealTable extends React.Component {
 	constructor() {
 		super();
 		this.state = {
-			add: false,
-			update: false
+			add    : false,
+			update : false,
+			focus  : false
 		};
 	}
 
@@ -19,8 +20,12 @@ export default class MealTable extends React.Component {
 
 	flipAdd = async () => {
 		await this.setState({
-			add: !this.state.add
+			add : !this.state.add
 		});
+		this.update();
+	};
+
+	update = () => {
 		this.props.updateNutrients();
 	};
 
@@ -28,78 +33,182 @@ export default class MealTable extends React.Component {
 		return Math.round(value * (1 / precision)) / (1 / precision);
 	};
 
-	removeIngredient = (index) => {
-		const requestOptions = {
-			method: 'POST',
-			headers: { 'Content-Type': 'application/json', 'auth-token': localStorage.getItem('authToken') },
-			body: JSON.stringify({
-				mealId: this.props.meal._id,
-				ingredientId: this.props.meal.ingredients[index]._id
+	onSubmit = (ingredient) => {
+		fetch('http://localhost:8080/nutrition/meals/edit/', {
+			method  : 'POST',
+			headers : {
+				'Content-Type' : 'application/json',
+				'auth-token'   : localStorage.getItem('authToken')
+			},
+			body    : JSON.stringify({
+				mealId : ingredient.mealId,
+				_id    : ingredient._id,
+				weight : ingredient.weight
 			})
-		};
-		fetch('http://localhost:8080/nutrition/meals/remove/', requestOptions).then(() => {
-			this.props.updateNutrients();
+		}).then(() => {
+			this.update();
 		});
+	};
+
+	submitStatus = (ingredient) => {
+		fetch('http://localhost:8080/nutrition/meals/remove/', {
+			method  : 'POST',
+			headers : {
+				'Content-Type' : 'application/json',
+				'auth-token'   : localStorage.getItem('authToken')
+			},
+			body    : JSON.stringify({
+				mealId       : ingredient.mealId,
+				ingredientId : ingredient._id
+			})
+		}).then(() => {
+			this.update();
+		});
+	};
+
+	changeFocus = async () => {
+		await this.setState({ focus: true });
+		this.setState({ focus: false });
+	};
+
+	addIngredient = (ingredient) => {
+		if (!ingredient._id) {
+			const requestOptions = {
+				method  : 'POST',
+				headers : {
+					'Content-Type' : 'application/json',
+					'auth-token'   : localStorage.getItem('authToken')
+				},
+				body    : JSON.stringify({
+					name         : ingredient.name,
+					fat          : ingredient.fat,
+					carbohydrate : ingredient.carb,
+					protein      : ingredient.prot,
+					ethanol      : ingredient.eth
+				})
+			};
+			fetch('http://localhost:8080/nutrition/ingredients/add/', requestOptions)
+				.then((response) => response.json())
+				.then((data) => {
+					const requestOptions = {
+						method  : 'POST',
+						headers : {
+							'Content-Type' : 'application/json',
+							'auth-token'   : localStorage.getItem('authToken')
+						},
+						body    : JSON.stringify({
+							mealId     : ingredient.mealId === '' ? undefined : ingredient.mealId,
+							ingredient : {
+								ingredientId : data._id,
+								weight       : ingredient.weight
+							}
+						})
+					};
+					fetch('http://localhost:8080/nutrition/meals/', requestOptions);
+				})
+				.then(() => {
+					this.update();
+				});
+		} else {
+			const requestOptions = {
+				method  : 'POST',
+				headers : {
+					'Content-Type' : 'application/json',
+					'auth-token'   : localStorage.getItem('authToken')
+				},
+				body    : JSON.stringify({
+					mealId     : ingredient.mealId === '' ? undefined : ingredient.mealId,
+					ingredient : {
+						ingredientId : ingredient._id,
+						weight       : ingredient.weight
+					}
+				})
+			};
+			fetch('http://localhost:8080/nutrition/meals/', requestOptions).then(() => {
+				this.update();
+			});
+		}
 	};
 
 	render() {
 		let meal = [];
+		let summary = {
+			name         : 'Total',
+			weight       : 0,
+			fat          : 0,
+			carbohydrate : 0,
+			protein      : 0,
+			ethanol      : 0
+		};
 		for (let i = 0; i < this.props.meal.ingredients.length; i++) {
-			const weight = this.props.meal.ingredients[i].weight;
 			meal.push(
-				<tr key={this.props.meal.ingredients[i]._id}>
-					<td>{this.props.meal.ingredients[i].name}</td>
-					<td style={{ background: this.props.colours.fatLight }}>
-						{this.round(this.props.meal.ingredients[i].fat * weight / 100, 0.1)}
-					</td>
-					<td style={{ background: this.props.colours.carbLight }}>
-						{this.round(this.props.meal.ingredients[i].carbohydrate * weight / 100, 0.1)}
-					</td>
-					<td style={{ background: this.props.colours.protLight }}>
-						{this.round(this.props.meal.ingredients[i].protein * weight / 100, 0.1)}
-					</td>
-					<td style={{ background: this.props.colours.ethLight }}>
-						{this.round(this.props.meal.ingredients[i].ethanol * weight / 100, 0.1)}
-					</td>
-					<td>
-						<button onClick={() => this.removeIngredient(i)}>×</button>
-					</td>
-				</tr>
+				<IngredientRow
+					key={this.props.meal.ingredients[i]._id}
+					colours={this.props.colours}
+					ingredient={this.props.meal.ingredients[i]}
+					update={this.update}
+					changeFocus={this.changeFocus}
+					focus={this.state.focus}
+					onSubmit={this.onSubmit}
+					submitStatus={this.submitStatus}
+					mealId={this.props.meal._id}
+					hasWeight={true}
+				/>
 			);
+			const weight = this.props.meal.ingredients[i].weight;
+			summary.weight += weight;
+			summary.fat += weight * this.props.meal.ingredients[i].fat / 100;
+			summary.carbohydrate += weight * this.props.meal.ingredients[i].carbohydrate / 100;
+			summary.protein += weight * this.props.meal.ingredients[i].protein / 100;
+			summary.ethanol += weight * this.props.meal.ingredients[i].ethanol / 100;
 		}
 		return (
-			<div>
-				<table className="centreMe">
-					<tbody>
-						<tr>
-							<th>Name</th>
-							<th>Fat</th>
-							<th>Carbohydrate</th>
-							<th>Protein</th>
-							<th>Ethanol</th>
-							<th />
-						</tr>
-						{meal}
-						<tr>
-							<td colSpan="5">
-								{!this.state.add && <button onClick={this.flipAdd}>Add Ingredient</button>}
-								{this.state.add && (
-									<div>
-										<NutrientAdder
-											colours={this.props.colours}
-											mealId={this.props.meal._id}
-											updateNutrients={this.flipAdd}
-											update={this.state.update}
-										/>
-										<button onClick={this.flipAdd}>Cancel</button>
-									</div>
-								)}
-							</td>
-						</tr>
-					</tbody>
-				</table>
-				<br />
-			</div>
+			<table className="centreMe ingredientTable">
+				<tbody>
+					<tr className="title">
+						<th />
+						<th>Calories</th>
+						<th>Weight</th>
+						<th>Fat</th>
+						<th>Carbohydrate</th>
+						<th>Protein</th>
+						<th>Ethanol</th>
+						<th />
+					</tr>
+					<tr className="subtitle">
+						<th />
+						<th>kcal</th>
+						<th>grams</th>
+						<th>grams</th>
+						<th>grams</th>
+						<th>grams</th>
+						<th>grams</th>
+						<th />
+					</tr>
+					{meal}
+					<IngredientRow
+						key={'adder'}
+						colours={this.props.colours}
+						update={this.flipAdd}
+						changeFocus={this.changeFocus}
+						mealId={this.props.meal._id}
+						focus={this.state.focus}
+						onSubmit={this.addIngredient}
+						isNew={true}
+						hasWeight={true}
+						isNewMeal={true}
+						cancel={this.flipAdd}
+					/>
+					<IngredientRow
+						key={'summary'}
+						colours={this.props.colours}
+						ingredient={summary}
+						update={this.update}
+						hasWeight={true}
+						isSummary={true}
+					/>
+				</tbody>
+			</table>
 		);
 	}
 }

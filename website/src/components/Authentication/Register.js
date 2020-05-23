@@ -5,15 +5,15 @@ export default class Register extends React.Component {
 	constructor() {
 		super();
 		this.state = {
-			firstname: '',
-			middlename: '',
-			lastname: '',
-			email: '',
-			password: '',
-			weight: 0,
-			gender: 'male',
-			birthDate: '',
-			error: ''
+			firstname  : '',
+			middlename : '',
+			lastname   : '',
+			email      : '',
+			password   : '',
+			weight     : '',
+			gender     : 'male',
+			birthDate  : '',
+			error      : ''
 		};
 	}
 
@@ -31,19 +31,19 @@ export default class Register extends React.Component {
 		if (!this.state.gender) return this.setState({ error: 'Gender is required' });
 		if (!this.state.birthDate) return this.setState({ error: 'Birth Date is required' });
 		const requestOptions = {
-			method: 'POST',
-			headers: { 'Content-Type': 'application/json' },
-			body: JSON.stringify({
-				name: {
-					first: this.state.firstname,
-					middle: this.state.middlename ? this.state.middlename : undefined,
-					last: this.state.lastname,
+			method  : 'POST',
+			headers : { 'Content-Type': 'application/json' },
+			body    : JSON.stringify({
+				name      : {
+					first  : this.state.firstname,
+					middle : this.state.middlename ? this.state.middlename : undefined,
+					last   : this.state.lastname
 				},
-				email: this.state.email,
-				password: this.state.password,
-				weight: this.state.weight,
-				gender: this.state.gender,
-				birthDate: this.state.birthDate
+				email     : this.state.email,
+				password  : this.state.password,
+				weight    : this.state.weight,
+				gender    : this.state.gender,
+				birthDate : this.state.birthDate
 			})
 		};
 		fetch('http://localhost:8080/auth/register', requestOptions)
@@ -51,56 +51,57 @@ export default class Register extends React.Component {
 			.then((data) => {
 				if (data.user) window.location = '/login';
 				this.setState({ error: data.error });
-			}).catch(err => {
-				console.log(err)
+			})
+			.catch((err) => {
+				console.log(err);
 			});
 	}
 
 	handleFirstNameChange(evt) {
 		this.setState({
-			firstname: evt.target.value
+			firstname : evt.target.value
 		});
 	}
 
 	handleMiddleNameChange(evt) {
 		this.setState({
-			middlename: evt.target.value
+			middlename : evt.target.value
 		});
 	}
 
 	handleLastNameChange(evt) {
 		this.setState({
-			lastname: evt.target.value
+			lastname : evt.target.value
 		});
 	}
 
 	handleEmailChange(evt) {
 		this.setState({
-			email: evt.target.value
+			email : evt.target.value
 		});
 	}
 
 	handlePasswordChange(evt) {
 		this.setState({
-			password: evt.target.value
+			password : evt.target.value
 		});
 	}
 
 	handleWeightChange(evt) {
 		this.setState({
-			weight: evt.target.value
+			weight : evt.target.value
 		});
 	}
 
 	handleGenderChange(evt) {
 		this.setState({
-			gender: evt.target.value
+			gender : evt.target.value
 		});
 	}
 
 	handleBirthDateChange(evt) {
 		this.setState({
-			birthDate: evt.target.value
+			birthDate : evt.target.value
 		});
 	}
 
@@ -185,7 +186,10 @@ export default class Register extends React.Component {
 						/>
 					</div>
 					<div className="center">
-						<select name="gender" onChange={this.handleGenderChange.bind(this)} required>
+						<select
+							name="gender"
+							onChange={this.handleGenderChange.bind(this)}
+							required>
 							<option value="male" defaultValue>
 								Male
 							</option>
@@ -196,14 +200,24 @@ export default class Register extends React.Component {
 						<input
 							id="birthDate"
 							className="formElement"
-							type="date"
+							type="text"
+							max={new Date().toISOString().split('T')[0]}
+							onFocus={(e) => (e.target.type = 'date')}
+							onBlur={(e) => {
+								if (e.target.value === '') e.target.type = 'text';
+							}}
+							placeholder="Date of Birth"
 							value={this.state.birthDate}
 							onChange={this.handleBirthDateChange.bind(this)}
 							required
 						/>
 					</div>
 					<div className="center">
-						<input className="primaryButton formElement" type="submit" value="Register" />
+						<input
+							className="primaryButton formElement"
+							type="submit"
+							value="Register"
+						/>
 					</div>
 					<div className="center">
 						<a className="secondaryButton formElement" href="/login">

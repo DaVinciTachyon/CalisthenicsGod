@@ -16,6 +16,7 @@ nav {
 	align-items: center;
 	position: fixed;
 	top: 0;
+	z-index: 1;
 }
 
 nav ul {
@@ -24,7 +25,7 @@ nav ul {
 	display: flex;
 	list-style: none;
 	height: 100%;
-	width: 50%;
+	width: 70%;
 	justify-content: space-around;
 	top: 7vh;
 	align-items: center;
@@ -45,7 +46,7 @@ nav li:hover {
 }
 
 nav li.active {
-	background-color: rgb(42, 39, 71);
+	background-color: var(--primaryTextColour);
 	color: var(--primaryTextColour);
 }
 
@@ -58,7 +59,7 @@ nav .logo {
 	nav ul {
 		position: fixed;
 		background-color: var(--primaryBackground);
-		height: 100vh;
+		height: 95vh;
 		width: 100%;
 		top: 7vh;
 		flex-direction: column;

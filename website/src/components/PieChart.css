@@ -1,0 +1,66 @@
+.pie {
+	border-radius: 100%;
+	height: calc(var(--size, 200) * 1px);
+	width: calc(var(--size, 200) * 1px);
+	position: relative;
+	/* overflow: hidden; */
+}
+
+.pie-segment {
+	--a: calc(var(--over50, 0) * -100%);
+	--b: calc((1 + var(--over50, 0)) * 100%);
+	--degrees: calc(var(--offset, 0) * 3.6);
+	height: 100%;
+	width: 100%;
+	position: absolute;
+	transform: translate(0, -50%) rotate(90deg) rotate(calc(var(--degrees, 0) * 1deg));
+	transform-origin: 50% 100%;
+	clip-path: polygon(var(--a) var(--a), var(--b) var(--a), var(--b) var(--b), var(--a) var(--b));
+	-webkit-clip-path: polygon(
+		var(--a) var(--a),
+		var(--b) var(--a),
+		var(--b) var(--b),
+		var(--a) var(--b)
+	);
+	z-index: calc(1 + var(--over50));
+	opacity: 1;
+	background-color: var(--bg);
+}
+
+.pie-segment::before {
+	--degrees: calc(var(--value, 45) * 3.6);
+	transform: translate(0, 100%) rotate(calc(var(--degrees, 0) * 1deg));
+	transform-origin: 50% 0%;
+}
+
+.pie-segment:hover {
+	opacity: 1;
+}
+
+.pie-segment:hover .pie-label {
+	opacity: 1;
+}
+
+.pie-label {
+	color: var(--colour, #fff);
+	bottom: 0;
+	left: 5px;
+	opacity: 0;
+	position: absolute;
+	text-align: start;
+	width: 50%;
+	z-index: 2;
+}
+
+.pie-segment::before,
+.pie-segment::after {
+	background: var(--bg, #e74c3c);
+	content: '';
+	height: 100%;
+	width: 100%;
+	position: absolute;
+}
+
+.pie-segment::after {
+	opacity: var(--over50, 0);
+}

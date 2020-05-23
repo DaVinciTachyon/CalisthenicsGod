@@ -1,6 +1,5 @@
 import React from 'react';
 import '../Main.css';
-import IngredientAdder from './IngredientsAdder';
 import IngredientList from './IngredientList';
 
 export default class Ingredients extends React.Component {
@@ -21,33 +20,26 @@ export default class Ingredients extends React.Component {
 		this.setState({ newIngredient: !this.state.newIngredient });
 	};
 
+	changeFocus = () => {
+		this.setState({ focus: !this.state.focus });
+	};
+
 	render() {
 		return (
 			<div>
-				<h3>Available</h3>
 				<IngredientList
 					colours={this.props.colours}
 					update={this.state.update}
 					updateIngredients={this.update}
+					changeFocus={this.changeFocus}
+					focus={this.state.focus}
 				/>
-				{!this.state.newIngredient && <button onClick={this.flipNewIngredient}>New Ingredient</button>}
-				{this.state.newIngredient && (
-					<div>
-						<IngredientAdder
-							colours={this.props.colours}
-							update={() => {
-								this.update();
-								this.flipNewIngredient();
-							}}
-						/>
-						<button onClick={this.flipNewIngredient}>Cancel</button>
-					</div>
-				)}
-				<h3>Unavailable</h3>
 				<IngredientList
 					colours={this.props.colours}
 					update={this.state.update}
 					updateIngredients={this.update}
+					changeFocus={this.changeFocus}
+					focus={this.state.focus}
 					isUnavailable={true}
 				/>
 			</div>

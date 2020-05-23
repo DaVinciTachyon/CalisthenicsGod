@@ -1,0 +1,26 @@
+.blur {
+	-webkit-filter: blur(1px);
+	-moz-filter: blur(1px);
+	-o-filter: blur(1px);
+	-ms-filter: blur(1px);
+	filter: blur(1px);
+}
+
+.modal {
+	z-index: 100;
+	position: fixed;
+	top: 0;
+	left: 0;
+	width: 100vw;
+	height: 80vh;
+}
+
+.modal-container {
+	margin: 10vh auto;
+	background-color: white;
+	width: 80%;
+	height: 100%;
+	border: 1px solid lightgrey;
+	padding: 20px;
+	overflow: scroll;
+}

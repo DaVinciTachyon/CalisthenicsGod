@@ -64,16 +64,14 @@ router.get('/today/userInfo', async (req, res) => {
 	let protein = 0;
 	let ethanol = 0;
 	if (nutrients.history.length > 0 && isToday(nutrients.history[0].date)) {
-		const userIngredients = await Ingredients.findOne({
-			userId: req.user._id
-		});
 		for (let i = 0; i < nutrients.history[0].meals.length; i++) {
 			for (let j = 0; j < nutrients.history[0].meals[i].ingredients.length; j++) {
 				const weight = nutrients.history[0].meals[i].ingredients[j].weight;
 				if (nutrients.history[0].meals[i].ingredients[j].ingredientId) {
-					const ingredient = userIngredients.ingredients.find(
-						(val) => val._id == nutrients.history[0].meals[i].ingredients[j].ingredientId
-					);
+					const ingredient = await Ingredients.findOne({
+						_id: nutrients.history[0].meals[i].ingredients[j].ingredientId,
+						userId: req.user._id
+					});
 					fat += ingredient.fat * weight / 100;
 					carbohydrates += ingredient.carbohydrate * weight / 100;
 					protein += ingredient.protein * weight / 100;

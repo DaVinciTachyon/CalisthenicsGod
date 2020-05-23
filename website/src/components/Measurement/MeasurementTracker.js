@@ -19,7 +19,7 @@ export default class MeasurementTracker extends React.Component {
 
 	render() {
 		return (
-			<div style={{ padding: '100px' }}>
+			<div>
 				<MeasurementSummary addMeasurement={this.addMeasurement} />
 				<MeasurementHistory update={this.state.update} />
 			</div>

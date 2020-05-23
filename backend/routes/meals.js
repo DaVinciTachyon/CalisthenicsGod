@@ -2,7 +2,9 @@ const router = require('express').Router();
 const verify = require('./verifyToken');
 const Nutrients = require('../models/Nutrients');
 const Ingredients = require('../models/Ingredients');
+const Meals = require('../models/Meals');
 const nutrientValidation = require('../validation/nutrition');
+const presetMealsRoute = require('./presetMeals');
 
 const macronutrientDensities = {
 	//FIXME in db?
@@ -29,22 +31,44 @@ router.use(verify, (req, res, next) => {
 	next();
 });
 
+router.post('/edit', async (req, res) => {
+	if (!req.body.mealId) return res.status(400).send({ error: 'Meal ID Required' });
+	if (!req.body._id) return res.status(400).send({ error: 'Ingredient ID Required' });
+	if (!req.body.weight) return res.status(400).send({ error: 'Weight Required' });
+	if (isNaN(req.body.weight) || req.body.weight <= 0) return res.status(400).send({ error: 'Invalid Weight' });
+
+	const nutrients = await Nutrients.findOne({ userId: req.user._id });
+	const mealIndex = nutrients.history[0].meals.findIndex((val) => val._id == req.body.mealId);
+	if (mealIndex === -1) return res.status(400).send({ error: 'Invalid Meal ID' });
+	const ingredientIndex = nutrients.history[0].meals[mealIndex].ingredients.findIndex(
+		(val) => val._id == req.body._id
+	);
+	if (ingredientIndex === -1) return res.status(400).send({ error: 'Invalid Ingredient ID' });
+
+	nutrients.history[0].meals[mealIndex].ingredients[ingredientIndex].weight = req.body.weight;
+
+	try {
+		await nutrients.save();
+		res.sendStatus(200);
+	} catch (err) {
+		res.status(400).send({ error: err });
+	}
+});
+
 router.get('/today', async (req, res) => {
 	const nutrients = await Nutrients.findOne({ userId: req.user._id });
 	let meals = [];
 	if (nutrients.history !== undefined && nutrients.history.length > 0 && isToday(nutrients.history[0].date)) {
-		const userIngredients = await Ingredients.findOne({
-			userId: req.user._id
-		});
 		for (let i = 0; i < nutrients.history[0].meals.length; i++) {
 			let meal = {
 				_id: nutrients.history[0].meals[i]._id,
 				ingredients: []
 			};
 			for (let j = 0; j < nutrients.history[0].meals[i].ingredients.length; j++) {
-				const ingredient = userIngredients.ingredients.find(
-					(val) => val._id == nutrients.history[0].meals[i].ingredients[j].ingredientId
-				);
+				const ingredient = await Ingredients.findOne({
+					_id: nutrients.history[0].meals[i].ingredients[j].ingredientId,
+					userId: req.user._id
+				});
 				meal.ingredients.push({
 					_id: nutrients.history[0].meals[i].ingredients[j]._id,
 					name: ingredient.name,
@@ -65,7 +89,7 @@ router.get('/today', async (req, res) => {
 
 //FIXME separate
 router.post('/', async (req, res) => {
-	if (req.body.ingredient === undefined) return res.status(400).send({ error: 'Ingredient Required' });
+	if (!req.body.ingredient) return res.status(400).send({ error: 'Ingredient Required' });
 
 	const { error } = nutrientValidation.mealIngredient(req.body.ingredient);
 	if (error) return res.status(400).send({ error: error.details[0].message });
@@ -135,5 +159,33 @@ router.post('/remove', async (req, res) => {
 		res.status(400).send({ error: err });
 	}
 });
+
+router.post('/addPreset', async (req, res) => {
+	if (!req.body._id) return res.status(400).send('ID Required');
+	const meal = await Meals.findById(req.body._id);
+	const nutrients = await Nutrients.findOne({ userId: req.user._id });
+
+	if (meal.ingredients.length === 0) return res.status(400).send('No Ingredients');
+
+	if (nutrients.history !== undefined && nutrients.history.length > 0 && isToday(nutrients.history[0].date))
+		nutrients.history[0].meals.push({ ingredients: meal.ingredients });
+	else
+		nutrients.history.unshift({
+			meals: [
+				{
+					ingredients: meal.ingredients
+				}
+			]
+		});
+
+	try {
+		await nutrients.save();
+		res.sendStatus(200);
+	} catch (err) {
+		res.status(400).send({ error: err });
+	}
+});
+
+router.use('/preset', presetMealsRoute);
 
 module.exports = router;

@@ -12,18 +12,17 @@ import UserProfile from './components/User/UserProfile';
 function App() {
 	return (
 		<Router>
-			<div>
-				<Toolbar />
-				<div className="main">
-					<Switch>
-						<Route path="/" exact component={HomePage} />
-						<Route path="/register" exact component={Register} />
-						<Route path="/login" exact component={Login} />
-						<Route path="/nutrientTracker" exact component={NutrientTracker} />
-						<Route path="/measurementTracker" exact component={MeasurementTracker} />
-						<Route path="/userProfile" exact component={UserProfile} />
-					</Switch>
-				</div>
+			<Toolbar />
+			<div id="body">
+				<div id="blocker" />
+				<Switch>
+					<Route path="/" exact component={HomePage} />
+					<Route path="/register" exact component={Register} />
+					<Route path="/login" exact component={Login} />
+					<Route path="/nutrientTracker" exact component={NutrientTracker} />
+					<Route path="/measurementTracker" exact component={MeasurementTracker} />
+					<Route path="/userProfile" exact component={UserProfile} />
+				</Switch>
 			</div>
 		</Router>
 	);

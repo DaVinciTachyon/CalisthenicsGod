@@ -1,26 +1,26 @@
 import React from 'react';
 import '../Main.css';
-import PieChart from 'react-minimal-pie-chart';
-import Modal from 'react-modal';
+import PieChart from '../PieChart';
+import Modal from '../Modal';
 
 export default class NutrientSummary extends React.Component {
 	constructor() {
 		super();
 		this.state = {
-			fat: 0,
-			carb: 0,
-			prot: 0,
-			eth: 0,
-			dailyCals: 0,
-			fatCals: 9,
-			carbCals: 4,
-			protCals: 4,
-			ethCals: 7,
-			goalFat: 0,
-			goalCarb: 0,
-			goalProt: 0,
-			goalEth: 0,
-			showFullCals: false
+			fat          : 0,
+			carb         : 0,
+			prot         : 0,
+			eth          : 0,
+			dailyCals    : 0,
+			fatCals      : 9,
+			carbCals     : 4,
+			protCals     : 4,
+			ethCals      : 7,
+			goalFat      : 0,
+			goalCarb     : 0,
+			goalProt     : 0,
+			goalEth      : 0,
+			showFullCals : false
 		};
 	}
 
@@ -33,39 +33,45 @@ export default class NutrientSummary extends React.Component {
 	componentDidMount() {
 		this.getUserInfo();
 		const requestOptions = {
-			method: 'GET',
-			headers: { 'Content-Type': 'application/json', 'auth-token': localStorage.getItem('authToken') }
+			method  : 'GET',
+			headers : {
+				'Content-Type' : 'application/json',
+				'auth-token'   : localStorage.getItem('authToken')
+			}
 		};
 		fetch('http://localhost:8080/nutrition/macronutrientDensities', requestOptions)
 			.then((response) => response.json())
 			.then((data) =>
 				this.setState({
-					fatCals: data.fat,
-					carbCals: data.carbohydrate,
-					protCals: data.protein,
-					ethCals: data.ethanol
+					fatCals  : data.fat,
+					carbCals : data.carbohydrate,
+					protCals : data.protein,
+					ethCals  : data.ethanol
 				})
 			);
 	}
 
 	getUserInfo = () => {
 		const requestOptions = {
-			method: 'GET',
-			headers: { 'Content-Type': 'application/json', 'auth-token': localStorage.getItem('authToken') }
+			method  : 'GET',
+			headers : {
+				'Content-Type' : 'application/json',
+				'auth-token'   : localStorage.getItem('authToken')
+			}
 		};
 		fetch('http://localhost:8080/nutrition/today/userInfo', requestOptions)
 			.then((response) => response.json())
 			.then((data) =>
 				this.setState({
-					dailyCals: data.totalCalories,
-					fat: data.currentFat,
-					carb: data.currentCarbohydrate,
-					prot: data.currentProtein,
-					eth: data.currentEthanol,
-					goalFat: data.goalFat,
-					goalCarb: data.goalCarbohydrate,
-					goalProt: data.goalProtein,
-					goalEth: data.goalEthanol
+					dailyCals : data.totalCalories,
+					fat       : data.currentFat,
+					carb      : data.currentCarbohydrate,
+					prot      : data.currentProtein,
+					eth       : data.currentEthanol,
+					goalFat   : data.goalFat,
+					goalCarb  : data.goalCarbohydrate,
+					goalProt  : data.goalProtein,
+					goalEth   : data.goalEthanol
 				})
 			);
 	};
@@ -97,7 +103,8 @@ export default class NutrientSummary extends React.Component {
 	getProtCals = () => Math.round(this.getProtGrams() * this.state.protCals);
 	getEthCals = () => Math.round(this.getEthGrams() * this.state.ethCals);
 
-	getTotCals = () => this.getFatCals() + this.getCarbCals() + this.getProtCals() + this.getEthCals();
+	getTotCals = () =>
+		this.getFatCals() + this.getCarbCals() + this.getProtCals() + this.getEthCals();
 
 	getCalsLeft = () => this.getDailyCals() - this.getTotCals();
 
@@ -144,170 +151,176 @@ export default class NutrientSummary extends React.Component {
 				</div>
 				<Modal
 					isOpen={this.state.showFullCals}
-					onRequestClose={this.showFullCals}
-					contentLabel="Full Calorie View"
-				>
-					<div onClick={this.showFullCals} className="alignCentre">
-						<div>
-							<table className="centreMe">
-								<tbody>
-									<tr>
-										<th>Macro</th>
-										<th>Current Grams</th>
-										<th>Goal Grams</th>
-										<th>Grams Left</th>
-									</tr>
-									<tr style={{ background: this.props.colours.fatLight }}>
-										<td>Fat</td>
-										<td>{this.getFatGrams()} g</td>
-										<td>{this.getGoalFatGrams()} g</td>
-										<td>{this.getFatGramsLeft()} g</td>
-									</tr>
-									<tr style={{ background: this.props.colours.carbLight }}>
-										<td>Carbohydrates</td>
-										<td>{this.getCarbGrams()} g</td>
-										<td>{this.getGoalCarbGrams()} g</td>
-										<td>{this.getCarbGramsLeft()} g</td>
-									</tr>
-									<tr style={{ background: this.props.colours.protLight }}>
-										<td>Protein</td>
-										<td>{this.getProtGrams()} g</td>
-										<td>{this.getGoalProtGrams()} g</td>
-										<td>{this.getProtGramsLeft()} g</td>
-									</tr>
-									<tr style={{ background: this.props.colours.ethLight }}>
-										<td>Ethanol</td>
-										<td>{this.getEthGrams()} g</td>
-										<td>{this.getGoalEthGrams()} g</td>
-										<td>{this.getEthGramsLeft()} g</td>
-									</tr>
-								</tbody>
-							</table>
+					toggle={this.showFullCals}
+					onInternalClick={true}>
+					<div className="alignCentre">
+						<table className="centreMe">
+							<tbody>
+								<tr>
+									<th>Macro</th>
+									<th>Current Grams</th>
+									<th>Goal Grams</th>
+									<th>Grams Left</th>
+								</tr>
+								<tr style={{ background: this.props.colours.fatLight }}>
+									<td>Fat</td>
+									<td>{this.getFatGrams()} g</td>
+									<td>{this.getGoalFatGrams()} g</td>
+									<td>{this.getFatGramsLeft()} g</td>
+								</tr>
+								<tr style={{ background: this.props.colours.carbLight }}>
+									<td>Carbohydrates</td>
+									<td>{this.getCarbGrams()} g</td>
+									<td>{this.getGoalCarbGrams()} g</td>
+									<td>{this.getCarbGramsLeft()} g</td>
+								</tr>
+								<tr style={{ background: this.props.colours.protLight }}>
+									<td>Protein</td>
+									<td>{this.getProtGrams()} g</td>
+									<td>{this.getGoalProtGrams()} g</td>
+									<td>{this.getProtGramsLeft()} g</td>
+								</tr>
+								<tr style={{ background: this.props.colours.ethLight }}>
+									<td>Ethanol</td>
+									<td>{this.getEthGrams()} g</td>
+									<td>{this.getGoalEthGrams()} g</td>
+									<td>{this.getEthGramsLeft()} g</td>
+								</tr>
+							</tbody>
+						</table>
+						<table className="centreMe">
+							<tbody>
+								<tr>
+									<th>Macro</th>
+									<th>Current Calories</th>
+									<th>Goal Calories</th>
+									<th>Calories Left</th>
+								</tr>
+								<tr style={{ background: this.props.colours.fatLight }}>
+									<td>Fat</td>
+									<td>{this.getFatCals()} cals</td>
+									<td>{this.getGoalFatCals()} cals</td>
+									<td>{this.getGoalFatCals() - this.getFatCals()} cals</td>
+								</tr>
+								<tr style={{ background: this.props.colours.carbLight }}>
+									<td>Carbohydrates</td>
+									<td>{this.getCarbCals()} cals</td>
+									<td>{this.getGoalCarbCals()} cals</td>
+									<td>{this.getGoalCarbCals() - this.getCarbCals()} cals</td>
+								</tr>
+								<tr style={{ background: this.props.colours.protLight }}>
+									<td>Protein</td>
+									<td>{this.getProtCals()} cals</td>
+									<td>{this.getGoalProtCals()} cals</td>
+									<td>{this.getGoalProtCals() - this.getProtCals()} cals</td>
+								</tr>
+								<tr style={{ background: this.props.colours.ethLight }}>
+									<td>Ethanol</td>
+									<td>{this.getEthCals()} cals</td>
+									<td>{this.getGoalEthCals()} cals</td>
+									<td>{this.getGoalEthCals() - this.getEthCals()} cals</td>
+								</tr>
+							</tbody>
+						</table>
+						<div style={{ fontSize: '20px' }}>
+							Daily Cals: {this.getDailyCals()} cals
 						</div>
-						<div>
-							<table className="centreMe">
-								<tbody>
-									<tr>
-										<th>Macro</th>
-										<th>Current Calories</th>
-										<th>Goal Calories</th>
-										<th>Calories Left</th>
-									</tr>
-									<tr style={{ background: this.props.colours.fatLight }}>
-										<td>Fat</td>
-										<td>{this.getFatCals()} cals</td>
-										<td>{this.getGoalFatCals()} cals</td>
-										<td>{this.getGoalFatCals() - this.getFatCals()} cals</td>
-									</tr>
-									<tr style={{ background: this.props.colours.carbLight }}>
-										<td>Carbohydrates</td>
-										<td>{this.getCarbCals()} cals</td>
-										<td>{this.getGoalCarbCals()} cals</td>
-										<td>{this.getGoalCarbCals() - this.getCarbCals()} cals</td>
-									</tr>
-									<tr style={{ background: this.props.colours.protLight }}>
-										<td>Protein</td>
-										<td>{this.getProtCals()} cals</td>
-										<td>{this.getGoalProtCals()} cals</td>
-										<td>{this.getGoalProtCals() - this.getProtCals()} cals</td>
-									</tr>
-									<tr style={{ background: this.props.colours.ethLight }}>
-										<td>Ethanol</td>
-										<td>{this.getEthCals()} cals</td>
-										<td>{this.getGoalEthCals()} cals</td>
-										<td>{this.getGoalEthCals() - this.getEthCals()} cals</td>
-									</tr>
-								</tbody>
-							</table>
-						</div>
-						<div style={{ fontSize: '20px' }}>Daily Cals: {this.getDailyCals()} cals</div>
 						<br />
 						<div style={{ fontSize: '20px' }}>Cals Left: {this.getCalsLeft()} cals</div>
-						{(this.getFatCals() > 0 ||
+						{/* {(this.getFatCals() > 0 ||
 							this.getCarbCals() > 0 ||
 							this.getProtCals() > 0 ||
 							this.getEthCals() > 0) && (
 							<PieChart
-								animate
-								animationDuration={700}
 								data={[
 									{
-										title: 'Fat',
-										value: this.getFatCals(),
-										color: this.props.colours.fatDark
+										value       : this.getFatCals(),
+										label       : 'Fat',
+										colour      : this.props.colours.fatDark,
+										labelColour : 'white'
 									},
 									{
-										title: 'Carbs',
-										value: this.getCarbCals() > 0 ? this.getCarbCals() : '',
-										color: this.props.colours.carbDark
+										value       : this.getCarbCals(),
+										label       : 'Carbohydrate',
+										colour      : this.props.colours.carbDark,
+										labelColour : 'white'
 									},
 									{
-										title: 'Protein',
-										value: this.getProtCals() > 0 ? this.getProtCals() : '',
-										color: this.props.colours.protDark
+										value       : this.getProtCals(),
+										label       : 'Protein',
+										colour      : this.props.colours.protDark,
+										labelColour : 'white'
 									},
 									{
-										title: 'Ethanol',
-										value: this.getEthCals() > 0 ? this.getEthCals() : '',
-										color: this.props.colours.ethDark
+										value       : this.getEthCals(),
+										label       : 'Ethanol',
+										colour      : this.props.colours.ethDark,
+										labelColour : 'white'
 									}
 								]}
-								cx={50}
-								cy={50}
-								label
-								labelPosition={50}
-								labelStyle={{
-									fill: '#121212',
-									fontFamily: 'sans-serif',
-									fontSize: '5px'
-								}}
-								style={{
-									height: '250px',
-									display: 'inline-block'
-								}}
+								size={300}
 							/>
-						)}
+						)} */}
 						<PieChart
-							animate
-							animationDuration={700}
 							data={[
 								{
-									title: 'Fat',
-									value: this.getGoalFatCals() > 0 ? this.getGoalFatCals() : '',
-									color: this.props.colours.fatDark
+									value       : this.getGoalFatCals(),
+									label       : 'Fat',
+									colour      : this.props.colours.fatDark,
+									labelColour : 'white'
 								},
 								{
-									title: 'Carbs',
-									value: this.getGoalCarbCals() > 0 ? this.getGoalCarbCals() : '',
-									color: this.props.colours.carbDark
+									value       : this.getGoalCarbCals(),
+									label       : 'Carbohydrate',
+									colour      : this.props.colours.carbDark,
+									labelColour : 'white'
 								},
 								{
-									title: 'Protein',
-									value: this.getGoalProtCals() > 0 ? this.getGoalProtCals() : '',
-									color: this.props.colours.protDark
+									value       : this.getGoalProtCals(),
+									label       : 'Protein',
+									colour      : this.props.colours.protDark,
+									labelColour : 'white'
 								},
 								{
-									title: 'Ethanol',
-									value: this.getGoalEthCals() > 0 ? this.getGoalEthCals : '',
-									color: this.props.colours.ethDark
+									value       : this.getGoalEthCals(),
+									label       : 'Ethanol',
+									colour      : this.props.colours.ethDark,
+									labelColour : 'white'
 								}
 							]}
-							cx={50}
-							cy={50}
-							label
-							labelPosition={50}
-							labelStyle={{
-								fill: '#121212',
-								fontFamily: 'sans-serif',
-								fontSize: '5px'
-							}}
-							style={{
-								height: '250px',
-								display: 'inline-block'
-							}}
+							size={300}
 						/>
 					</div>
 				</Modal>
+				<PieChart
+					data={[
+						{
+							value       : this.getGoalFatCals(),
+							label       : 'Fat',
+							colour      : this.props.colours.fatDark,
+							labelColour : 'white'
+						},
+						{
+							value       : this.getGoalCarbCals(),
+							label       : 'Carbohydrate',
+							colour      : this.props.colours.carbDark,
+							labelColour : 'white'
+						},
+						{
+							value       : this.getGoalProtCals(),
+							label       : 'Protein',
+							colour      : this.props.colours.protDark,
+							labelColour : 'white'
+						},
+						{
+							value       : this.getGoalEthCals(),
+							label       : 'Ethanol',
+							colour      : this.props.colours.ethDark,
+							labelColour : 'white'
+						}
+					]}
+					size={300}
+				/>
 			</div>
 		);
 	}
