@@ -10,7 +10,7 @@ nav {
 	background-color: var(--primaryBackground);
 	font-size: 2rem;
 	color: var(--primaryTextColour);
-	width: 100%;
+	width: 100vw;
 	height: 7vh;
 	display: flex;
 	align-items: center;

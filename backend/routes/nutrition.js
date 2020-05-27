@@ -9,10 +9,10 @@ const ingredientsRoute = require('./ingredients');
 
 const macronutrientDensities = {
 	//FIXME in db?
-	fat: 9,
-	carbohydrate: 4,
-	protein: 4,
-	ethanol: 7
+	fat          : 9,
+	carbohydrate : 4,
+	protein      : 4,
+	ethanol      : 7
 };
 
 /**
@@ -51,67 +51,34 @@ router.get('/calorieOffset', async (req, res) => {
 	res.send({ calorieOffset: nutrients.calorieOffset });
 });
 
-router.get('/today/userInfo', async (req, res) => {
-	//TODO separate
+router.get('/goals', async (req, res) => {
 	const measurements = await Measurements.findOne({ userId: req.user._id });
+
+	if (measurements.weight.length == 0) return res.status(404);
+	const weight = measurements.weight[0].value;
+
 	const nutrients = await Nutrients.findOne({ userId: req.user._id });
 
-	const weight = measurements.weight.length > 0 ? measurements.weight[0].value : 0;
-	if (weight == 0) return res.status(404);
+	const calories = Math.round(nutrients.maintenanceCalories + nutrients.calorieOffset);
 
-	let fat = 0;
-	let carbohydrates = 0;
-	let protein = 0;
-	let ethanol = 0;
-	if (nutrients.history.length > 0 && isToday(nutrients.history[0].date)) {
-		for (let i = 0; i < nutrients.history[0].meals.length; i++) {
-			for (let j = 0; j < nutrients.history[0].meals[i].ingredients.length; j++) {
-				const weight = nutrients.history[0].meals[i].ingredients[j].weight;
-				if (nutrients.history[0].meals[i].ingredients[j].ingredientId) {
-					const ingredient = await Ingredients.findOne({
-						_id: nutrients.history[0].meals[i].ingredients[j].ingredientId,
-						userId: req.user._id
-					});
-					fat += ingredient.fat * weight / 100;
-					carbohydrates += ingredient.carbohydrate * weight / 100;
-					protein += ingredient.protein * weight / 100;
-					ethanol += ingredient.ethanol * weight / 100;
-				} else {
-					fat += nutrients.history[0].meals[i].ingredients[j].fat * weight / 100;
-					carbohydrates += nutrients.history[0].meals[i].ingredients[j].carbohydrate * weight / 100;
-					protein += nutrients.history[0].meals[i].ingredients[j].protein * weight / 100;
-					ethanol += nutrients.history[0].meals[i].ingredients[j].ethanol * weight / 100;
-				}
-			}
-		}
-	}
-
-	fat = Math.round(fat * 10) / 10;
-	carbohydrates = Math.round(carbohydrates * 10) / 10;
-	protein = Math.round(protein * 10) / 10;
-	ethanol = Math.round(ethanol * 10) / 10;
-
-	const totalCalories = Math.round(nutrients.maintenanceCalories + nutrients.calorieOffset);
-
-	const goalProtG = Math.round(weight * nutrients.proteinAmount * 10) / 10;
-	const goalFatG = Math.round(totalCalories * nutrients.fatPartition / macronutrientDensities.fat * 10) / 10;
-	const goalCarbG =
+	const protein = Math.round(weight * nutrients.proteinAmount * 10) / 10;
+	const fat =
+		Math.round(calories * nutrients.fatPartition / macronutrientDensities.fat * 10) / 10;
+	const carbohydrate =
 		Math.round(
-			(totalCalories - goalFatG * macronutrientDensities.fat - goalProtG * macronutrientDensities.protein) /
+			(calories -
+				fat * macronutrientDensities.fat -
+				protein * macronutrientDensities.protein) /
 				macronutrientDensities.carbohydrate *
 				10
 		) / 10;
-	const goalEthG = 0;
+	const ethanol = 0;
+
 	res.send({
-		totalCalories: totalCalories,
-		goalProtein: goalProtG,
-		goalFat: goalFatG,
-		goalCarbohydrate: goalCarbG,
-		goalEthanol: goalEthG,
-		currentFat: fat,
-		currentProtein: protein,
-		currentCarbohydrate: carbohydrates,
-		currentEthanol: ethanol
+		fat          : fat,
+		carbohydrate : carbohydrate,
+		protein      : protein,
+		ethanol      : ethanol
 	});
 });
 

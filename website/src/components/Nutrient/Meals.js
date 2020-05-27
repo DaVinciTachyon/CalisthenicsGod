@@ -1,15 +1,14 @@
 import React from 'react';
-import '../Main.css';
 import MealEditor from './MealEditor';
 
 export default class Meals extends React.Component {
 	constructor() {
 		super();
 		this.state = {
-			update: false,
-			newMeal: false,
-			meals: [],
-			name: ''
+			update  : false,
+			newMeal : false,
+			meals   : [],
+			name    : ''
 		};
 	}
 
@@ -29,8 +28,11 @@ export default class Meals extends React.Component {
 
 	getMealNames = () => {
 		const requestOptions = {
-			method: 'GET',
-			headers: { 'Content-Type': 'application/json', 'auth-token': localStorage.getItem('authToken') }
+			method  : 'GET',
+			headers : {
+				'Content-Type' : 'application/json',
+				'auth-token'   : localStorage.getItem('authToken')
+			}
 		};
 		fetch('http://localhost:8080/nutrition/meals/preset/names/', requestOptions)
 			.then((response) => response.json())
@@ -46,11 +48,14 @@ export default class Meals extends React.Component {
 	newMeal = (evt) => {
 		evt.preventDefault();
 		const requestOptions = {
-			method: 'POST',
-			headers: { 'Content-Type': 'application/json', 'auth-token': localStorage.getItem('authToken') },
-			body: JSON.stringify({
-				name: this.state.name,
-				ingredients: []
+			method  : 'POST',
+			headers : {
+				'Content-Type' : 'application/json',
+				'auth-token'   : localStorage.getItem('authToken')
+			},
+			body    : JSON.stringify({
+				name        : this.state.name,
+				ingredients : []
 			})
 		};
 		fetch('http://localhost:8080/nutrition/meals/preset/add/', requestOptions).then(() => {
@@ -69,7 +74,14 @@ export default class Meals extends React.Component {
 	render() {
 		let meals = [];
 		for (let i = 0; i < this.state.meals.length; i++) {
-			meals.push(<MealEditor update={this.update} meal={this.state.meals[i]} colours={this.props.colours} />);
+			meals.push(
+				<MealEditor
+					key={`meals${i}`}
+					update={this.update}
+					meal={this.state.meals[i]}
+					colours={this.props.colours}
+				/>
+			);
 		}
 		return (
 			<div>
@@ -90,10 +102,8 @@ export default class Meals extends React.Component {
 						<button onClick={this.flipNewMeal}>Cancel</button>
 					</div>
 				)}
-				<br />
-				<br />
+
 				{meals}
-				<br />
 			</div>
 		);
 	}

@@ -1,5 +1,4 @@
 import React from 'react';
-import '../Main.css';
 import Modal from '../Modal';
 import MeasurementAdder from './MeasurementAdder';
 
@@ -69,7 +68,7 @@ export default class MeasurementSummary extends React.Component {
 		return (
 			<div>
 				<div className="card alignCentre">
-					<table className="centreMe">
+					<table>
 						<tbody>
 							{this.state.weight > 0 && (
 								<tr>
@@ -139,15 +138,13 @@ export default class MeasurementSummary extends React.Component {
 							)}
 						</tbody>
 					</table>
-					<br />
+
 					<button onClick={this.newMeasurements}>New Measurements</button>
 				</div>
 				<Modal isOpen={this.state.newMeasurements} toggle={this.newMeasurements}>
 					<div className="alignCentre">
 						<MeasurementAdder addMeasurement={this.addMeasurement} />
-						<button onClick={this.newMeasurements} className="centreMe">
-							Cancel
-						</button>
+						<button onClick={this.newMeasurements}>Cancel</button>
 					</div>
 				</Modal>
 			</div>

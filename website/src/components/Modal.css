@@ -18,9 +18,9 @@
 .modal-container {
 	margin: 10vh auto;
 	background-color: white;
-	width: 80%;
-	height: 100%;
-	border: 1px solid lightgrey;
-	padding: 20px;
+	width: 90vw;
+	height: 80vh;
+	border: 0.05rem solid lightgrey;
+	padding: 2rem;
 	overflow: scroll;
 }

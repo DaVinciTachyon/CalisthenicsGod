@@ -1,5 +1,4 @@
 import React from 'react';
-import '../Main.css';
 import MealTable from './MealTable';
 import IngredientRow from './IngredientRow';
 
@@ -8,10 +7,10 @@ export default class NutrientDay extends React.Component {
 		super();
 		this.state = {
 			meals       : [],
-			newMeal     : false,
-			update      : false,
 			mealId      : '',
-			presetMeals : []
+			presetMeals : [],
+			newMeal     : false,
+			update      : false
 		};
 	}
 
@@ -28,159 +27,19 @@ export default class NutrientDay extends React.Component {
 		}
 	}
 
-	getMeals = () => {
-		const requestOptions = {
-			method  : 'GET',
-			headers : {
-				'Content-Type' : 'application/json',
-				'auth-token'   : localStorage.getItem('authToken')
-			}
-		};
-		fetch('http://localhost:8080/nutrition/meals/today/', requestOptions)
-			.then((response) => response.json())
-			.then((data) => {
-				this.setState((state) => {
-					let meals = Object.assign({}, state.meals);
-					meals = data.meals;
-					return { meals };
-				});
-			});
-	};
-
-	update = () => {
-		this.getMeals();
-		this.props.updateNutrients();
-		this.setState({ update: !this.state.update });
-	};
-
-	flipNewMeal = () => {
-		this.setState({
-			newMeal : !this.state.newMeal
-		});
-	};
-
-	mealChange = (evt) => {
-		const input = evt.target.validity.valid ? evt.target.value : this.state.meal;
-		this.setState({ mealId: input });
-	};
-
-	getPresetMeals = () => {
-		const requestOptions = {
-			method  : 'GET',
-			headers : {
-				'Content-Type' : 'application/json',
-				'auth-token'   : localStorage.getItem('authToken')
-			}
-		};
-		fetch('http://localhost:8080/nutrition/meals/preset/names/', requestOptions)
-			.then((response) => response.json())
-			.then((data) => {
-				this.setState((state) => {
-					let presetMeals = Object.assign({}, state.presetMeals);
-					presetMeals = data.names;
-					return { presetMeals };
-				});
-			});
-	};
-
-	selectMeal = (evt) => {
-		evt.preventDefault();
-		if (this.state.mealId === '') this.flipNewMeal();
-		else {
-			const requestOptions = {
-				method  : 'POST',
-				headers : {
-					'Content-Type' : 'application/json',
-					'auth-token'   : localStorage.getItem('authToken')
-				},
-				body    : JSON.stringify({
-					_id : this.state.mealId
-				})
-			};
-			fetch('http://localhost:8080/nutrition/meals/addPreset/', requestOptions).then(() => {
-				this.getMeals();
-				this.setState({
-					mealId : ''
-				});
-			});
-		}
-	};
-
-	addIngredient = (ingredient) => {
-		console.log(ingredient);
-		if (!ingredient._id) {
-			const requestOptions = {
-				method  : 'POST',
-				headers : {
-					'Content-Type' : 'application/json',
-					'auth-token'   : localStorage.getItem('authToken')
-				},
-				body    : JSON.stringify({
-					name         : ingredient.name,
-					fat          : ingredient.fat,
-					carbohydrate : ingredient.carb,
-					protein      : ingredient.prot,
-					ethanol      : ingredient.eth
-				})
-			};
-			fetch('http://localhost:8080/nutrition/ingredients/add/', requestOptions)
-				.then((response) => response.json())
-				.then((data) => {
-					const requestOptions = {
-						method  : 'POST',
-						headers : {
-							'Content-Type' : 'application/json',
-							'auth-token'   : localStorage.getItem('authToken')
-						},
-						body    : JSON.stringify({
-							mealId     : ingredient.mealId,
-							ingredient : {
-								ingredientId : data._id,
-								weight       : ingredient.weight
-							}
-						})
-					};
-					fetch('http://localhost:8080/nutrition/meals/', requestOptions);
-				})
-				.then(() => {
-					this.update();
-					this.flipNewMeal();
-				});
-		} else {
-			const requestOptions = {
-				method  : 'POST',
-				headers : {
-					'Content-Type' : 'application/json',
-					'auth-token'   : localStorage.getItem('authToken')
-				},
-				body    : JSON.stringify({
-					mealId     : ingredient.mealId,
-					ingredient : {
-						ingredientId : ingredient._id,
-						weight       : ingredient.weight
-					}
-				})
-			};
-			fetch('http://localhost:8080/nutrition/meals/', requestOptions).then(() => {
-				this.update();
-				this.flipNewMeal();
-			});
-		}
-	};
-
 	render() {
 		let meals = [];
 		for (let i = 0; i < this.state.meals.length; i++) {
 			meals.push(
-				<div key={i}>
-					<MealTable
-						colours={this.props.colours}
-						meal={this.state.meals[i]}
-						updateNutrients={this.update}
-						update={this.state.update}
-					/>
-					<br />
-				</div>
+				<MealTable
+					key={i}
+					colours={this.props.colours}
+					meal={this.state.meals[i]}
+					macroDensities={this.props.macroDensities}
+					addNutrient={this.addIngredientToMeal}
+					removeNutrient={this.removeIngredientFromMeal}
+					update={this.state.update}
+				/>
 			);
 		}
 		let presetMeals = [];
@@ -208,7 +67,7 @@ export default class NutrientDay extends React.Component {
 					</div>
 				)}
 				{this.state.newMeal && (
-					<div>
+					<div class="ingredientTable">
 						<IngredientRow
 							key={'adder'}
 							colours={this.props.colours}
@@ -219,6 +78,7 @@ export default class NutrientDay extends React.Component {
 							changeFocus={() => {}}
 							focus={this.state.focus}
 							onSubmit={this.addIngredient}
+							macroDensities={this.props.macroDensities}
 							isNew={true}
 							hasWeight={true}
 							isNewMeal={true}
@@ -229,4 +89,175 @@ export default class NutrientDay extends React.Component {
 			</div>
 		);
 	}
+
+	addIngredient = async (ingredient) => {
+		let newId = '';
+		if (!ingredient._id) {
+			const response = await fetch('http://localhost:8080/nutrition/ingredients/add/', {
+				method  : 'POST',
+				headers : {
+					'Content-Type' : 'application/json',
+					'auth-token'   : localStorage.getItem('authToken')
+				},
+				body    : JSON.stringify({
+					name         : ingredient.name,
+					fat          : ingredient.fat,
+					carbohydrate : ingredient.carb,
+					protein      : ingredient.prot,
+					ethanol      : ingredient.eth
+				})
+			});
+			const data = await response.json();
+			newId = data._id;
+		} else newId = ingredient._id;
+
+		await fetch('http://localhost:8080/nutrition/meals/', {
+			method  : 'POST',
+			headers : {
+				'Content-Type' : 'application/json',
+				'auth-token'   : localStorage.getItem('authToken')
+			},
+			body    : JSON.stringify({
+				ingredient : {
+					ingredientId : newId,
+					weight       : ingredient.weight
+				}
+			})
+		});
+		this.addIngredientToMeal({
+			ingredient : {
+				_id          : newId,
+				name         : ingredient.name,
+				weight       : ingredient.weight,
+				fat          : ingredient.fat,
+				carbohydrate : ingredient.carb,
+				protein      : ingredient.prot,
+				ethanol      : ingredient.eth
+			}
+		});
+		this.flipNewMeal();
+		this.update();
+	};
+
+	update = () => {
+		this.setState({
+			mealId : ''
+		});
+	};
+
+	addIngredientToMeal = (ingredient) => {
+		this.setState((state) => {
+			let meals = Array.from(state.meals);
+			const mealI = meals.findIndex((val) => val._id === ingredient.mealId);
+			if (mealI === -1)
+				meals.push({
+					ingredients : [
+						ingredient.ingredient
+					]
+				});
+			else {
+				let ingredients = Array.from(meals[mealI].ingredients);
+				ingredients.push(ingredient.ingredient);
+				meals[mealI].ingredients = ingredients;
+			}
+			return { meals };
+		});
+		this.updateOverallMacros();
+	};
+
+	removeIngredientFromMeal = (ingredient) => {
+		this.setState((state) => {
+			let meals = Array.from(state.meals);
+			const mealI = meals.findIndex((val) => val._id === ingredient.mealId);
+			let ingredients = Array.from(meals[mealI].ingredients);
+			ingredients = ingredients.filter((val) => val._id !== ingredient._id);
+			meals[mealI].ingredients = ingredients;
+			return { meals };
+		});
+		this.updateOverallMacros();
+	};
+
+	//TODO edit ingredient
+
+	updateOverallMacros = () => {
+		let currentMacros = {
+			fat          : 0,
+			carbohydrate : 0,
+			protein      : 0,
+			ethanol      : 0
+		};
+		for (let i = 0; i < this.state.meals.length; i++) {
+			for (let j = 0; j < this.state.meals[i].ingredients.length; j++) {
+				const weight = this.state.meals[i].ingredients[j].weight / 100;
+				currentMacros.fat += this.state.meals[i].ingredients[j].fat * weight;
+				currentMacros.carbohydrate +=
+					this.state.meals[i].ingredients[j].carbohydrate * weight;
+				currentMacros.protein += this.state.meals[i].ingredients[j].protein * weight;
+				currentMacros.ethanol += this.state.meals[i].ingredients[j].ethanol * weight;
+			}
+		}
+		this.props.updateNutrients(currentMacros);
+	};
+
+	getMeals = async () => {
+		const response = await fetch('http://localhost:8080/nutrition/meals/today/', {
+			method  : 'GET',
+			headers : {
+				'Content-Type' : 'application/json',
+				'auth-token'   : localStorage.getItem('authToken')
+			}
+		});
+		const data = await response.json();
+		this.setState((state) => {
+			let meals = Object.assign({}, state.meals);
+			meals = data.meals;
+			return { meals };
+		});
+		this.updateOverallMacros();
+	};
+
+	getPresetMeals = async () => {
+		const response = await fetch('http://localhost:8080/nutrition/meals/preset/names/', {
+			method  : 'GET',
+			headers : {
+				'Content-Type' : 'application/json',
+				'auth-token'   : localStorage.getItem('authToken')
+			}
+		});
+		const data = await response.json();
+		this.setState((state) => {
+			let presetMeals = Object.assign({}, state.presetMeals);
+			presetMeals = data.names;
+			return { presetMeals };
+		});
+	};
+
+	flipNewMeal = () => {
+		this.setState({
+			newMeal : !this.state.newMeal
+		});
+	};
+
+	mealChange = (evt) => {
+		const input = evt.target.validity.valid ? evt.target.value : this.state.meal;
+		this.setState({ mealId: input });
+	};
+
+	selectMeal = async (evt) => {
+		evt.preventDefault();
+		if (this.state.mealId === '') this.flipNewMeal();
+		else {
+			await fetch('http://localhost:8080/nutrition/meals/addPreset/', {
+				method  : 'POST',
+				headers : {
+					'Content-Type' : 'application/json',
+					'auth-token'   : localStorage.getItem('authToken')
+				},
+				body    : JSON.stringify({
+					_id : this.state.mealId
+				})
+			});
+			this.update();
+		}
+	};
 }

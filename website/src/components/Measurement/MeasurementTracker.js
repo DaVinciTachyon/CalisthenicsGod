@@ -1,5 +1,4 @@
 import React from 'react';
-import '../Main.css';
 import MeasurementSummary from './MeasurementSummary';
 import MeasurementHistory from './MeasurementHistory';
 

@@ -1,22 +1,21 @@
 import React from 'react';
-import '../Main.css';
 import { Line } from 'react-chartjs-2';
 
 export default class MeasurementHistory extends React.Component {
 	constructor() {
 		super();
 		this.state = {
-			chart: {
-				labels: [],
-				datasets: [
+			chart : {
+				labels   : [],
+				datasets : [
 					{
-						label: 'Weight',
-						fill: false,
-						lineTension: 0.5,
-						backgroundColor: 'rgba(75,192,192,1)',
-						borderColor: 'rgba(0,0,0,1)',
-						borderWidth: 2,
-						data: []
+						label           : 'Weight',
+						fill            : false,
+						lineTension     : 0.5,
+						backgroundColor : 'rgba(75,192,192,1)',
+						borderColor     : 'rgba(0,0,0,1)',
+						borderWidth     : 2,
+						data            : []
 					}
 				]
 			}
@@ -35,8 +34,11 @@ export default class MeasurementHistory extends React.Component {
 
 	getWeightHistory = () => {
 		const requestOptions = {
-			method: 'GET',
-			headers: { 'Content-Type': 'application/json', 'auth-token': localStorage.getItem('authToken') }
+			method  : 'GET',
+			headers : {
+				'Content-Type': 'application/json',
+				'auth-token': localStorage.getItem('authToken')
+			}
 		};
 		fetch('http://localhost:8080/measurement/weight/history', requestOptions)
 			.then((response) => response.json())
@@ -78,14 +80,14 @@ export default class MeasurementHistory extends React.Component {
 				<Line
 					data={this.state.chart}
 					options={{
-						title: {
-							display: true,
-							text: 'Weight History',
-							fontSize: 20
+						title  : {
+							display  : true,
+							text     : 'Weight History',
+							fontSize : 20
 						},
-						legend: {
-							display: false,
-							position: 'right'
+						legend : {
+							display  : false,
+							position : 'right'
 						}
 					}}
 				/>

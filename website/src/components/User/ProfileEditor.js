@@ -1,55 +1,61 @@
 import React from 'react';
-import '../Main.css';
 
 export default class ProfileEditor extends React.Component {
 	constructor() {
 		super();
 		this.state = {
-			calorieOffset: 0,
-			currentOffset: 0,
-			calorieMode: 'maintenance',
-			name: '',
-			email: '',
-			dateJoined: '',
-			birthDate: '',
-			gender: '',
-			maintenanceCalories: 0,
-			proteinAmount: 0,
-			fatPartition: 0
+			calorieOffset       : 0,
+			currentOffset       : 0,
+			calorieMode         : 'maintenance',
+			name                : '',
+			email               : '',
+			dateJoined          : '',
+			birthDate           : '',
+			gender              : '',
+			maintenanceCalories : 0,
+			proteinAmount       : 0,
+			fatPartition        : 0
 		};
 	}
 
 	componentDidMount() {
 		const requestOptions = {
-			method: 'GET',
-			headers: { 'Content-Type': 'application/json', 'auth-token': localStorage.getItem('authToken') }
+			method  : 'GET',
+			headers : {
+				'Content-Type' : 'application/json',
+				'auth-token'   : localStorage.getItem('authToken')
+			}
 		};
-		fetch('http://localhost:8080/user/', requestOptions).then((response) => response.json()).then((data) => {
-			let dateJoined = new Date(data.dateJoined);
-			let birthDate = new Date(data.birthDate);
-			this.setState({
-				name: data.name,
-				email: data.email,
-				dateJoined: `${dateJoined.getDate()}/${dateJoined.getMonth() + 1}/${dateJoined.getFullYear()}`,
-				birthDate: `${birthDate.getDate()}/${birthDate.getMonth() + 1}/${birthDate.getFullYear()}`,
-				gender: data.gender,
-				maintenanceCalories: data.maintenanceCalories,
-				proteinAmount: data.proteinAmount,
-				fatPartition: data.fatPartition
+		fetch('http://localhost:8080/user/', requestOptions)
+			.then((response) => response.json())
+			.then((data) => {
+				let dateJoined = new Date(data.dateJoined);
+				let birthDate = new Date(data.birthDate);
+				this.setState({
+					name                : data.name,
+					email               : data.email,
+					dateJoined          : `${dateJoined.getDate()}/${dateJoined.getMonth() +
+						1}/${dateJoined.getFullYear()}`,
+					birthDate           : `${birthDate.getDate()}/${birthDate.getMonth() +
+						1}/${birthDate.getFullYear()}`,
+					gender              : data.gender,
+					maintenanceCalories : data.maintenanceCalories,
+					proteinAmount       : data.proteinAmount,
+					fatPartition        : data.fatPartition
+				});
+				if (data.calorieOffset > 0)
+					this.setState({
+						calorieOffset : data.calorieOffset,
+						currentOffset : data.calorieOffset,
+						calorieMode   : 'bulk'
+					});
+				else if (data.calorieOffset < 0)
+					this.setState({
+						calorieOffset : -1 * data.calorieOffset,
+						currentOffset : data.calorieOffset,
+						calorieMode   : 'deficit'
+					});
 			});
-			if (data.calorieOffset > 0)
-				this.setState({
-					calorieOffset: data.calorieOffset,
-					currentOffset: data.calorieOffset,
-					calorieMode: 'bulk'
-				});
-			else if (data.calorieOffset < 0)
-				this.setState({
-					calorieOffset: -1 * data.calorieOffset,
-					currentOffset: data.calorieOffset,
-					calorieMode: 'deficit'
-				});
-		});
 	}
 
 	calorieModeChange = (evt) => {
@@ -63,7 +69,7 @@ export default class ProfileEditor extends React.Component {
 		else if (input === 'bulk') this.setState({ calorieOffset: 200 });
 		else this.setState({ calorieOffset: 0 });
 	};
-	
+
 	calorieOffsetChange = (evt) => {
 		const input = evt.target.validity.valid ? evt.target.value : this.state.calorieOffset;
 		this.setState({ calorieOffset: input });
@@ -72,17 +78,25 @@ export default class ProfileEditor extends React.Component {
 	editProfile = (evt) => {
 		evt.preventDefault();
 		const requestOptions = {
-			method: 'POST',
-			headers: { 'Content-Type': 'application/json', 'auth-token': localStorage.getItem('authToken') },
-			body: JSON.stringify({
-				calorieOffset:
-					this.state.calorieMode === 'deficit' ? -1 * this.state.calorieOffset : this.state.calorieOffset
+			method  : 'POST',
+			headers : {
+				'Content-Type' : 'application/json',
+				'auth-token'   : localStorage.getItem('authToken')
+			},
+			body    : JSON.stringify({
+				calorieOffset :
+					this.state.calorieMode === 'deficit'
+						? -1 * this.state.calorieOffset
+						: this.state.calorieOffset
 			})
 		};
 		fetch('http://localhost:8080/nutrition/calorieOffset', requestOptions).then(() => {
 			this.props.editProfile();
 			this.setState({
-				currentOffset: this.state.calorieMode === 'deficit' ? -1 * this.state.calorieOffset : this.state.calorieOffset
+				currentOffset :
+					this.state.calorieMode === 'deficit'
+						? -1 * this.state.calorieOffset
+						: this.state.calorieOffset
 			});
 		});
 	};
@@ -91,7 +105,7 @@ export default class ProfileEditor extends React.Component {
 		return (
 			<div>
 				<div className="card alignCentre">
-					<form className="centreMe" onSubmit={this.editProfile}>
+					<form onSubmit={this.editProfile}>
 						<select id="calorieMode" onChange={this.calorieModeChange}>
 							<option value="maintenance" selected={this.state.currentOffset === 0}>
 								Maintenance
@@ -112,16 +126,18 @@ export default class ProfileEditor extends React.Component {
 								onChange={this.calorieOffsetChange}
 							/>
 						)}
-						<br />
+
 						<input type="submit" value="Edit Profile" />
 					</form>
 				</div>
 				<div className="card alignCentre">
-					<table className="centreMe">
+					<table>
 						<tbody>
 							<tr>
 								<td>Name</td>
-								<td>{this.state.name.first} {this.state.name.last}</td>
+								<td>
+									{this.state.name.first} {this.state.name.last}
+								</td>
 							</tr>
 							<tr>
 								<td>Email</td>
@@ -133,7 +149,15 @@ export default class ProfileEditor extends React.Component {
 							</tr>
 							<tr>
 								<td>Calorie Mode</td>
-								<td>{this.state.currentOffset > 0 ? 'bulk' : (this.state.currentOffset < 0 ? 'deficit' : 'maintenance')}</td>
+								<td>
+									{this.state.currentOffset > 0 ? (
+										'bulk'
+									) : this.state.currentOffset < 0 ? (
+										'deficit'
+									) : (
+										'maintenance'
+									)}
+								</td>
 							</tr>
 							<tr>
 								<td>Calorie Offset</td>

@@ -1,13 +1,12 @@
 import React from 'react';
-import '../Main.css';
 import IngredientList from './IngredientList';
 
 export default class Ingredients extends React.Component {
 	constructor() {
 		super();
 		this.state = {
-			update: false,
-			newIngredient: false
+			update        : false,
+			newIngredient : false
 		};
 	}
 

@@ -1,5 +1,4 @@
 import React from 'react';
-import '../Main.css';
 import Modal from '../Modal';
 import IngredientRow from './IngredientRow';
 
@@ -196,7 +195,7 @@ export default class MealEditor extends React.Component {
 				<button onClick={this.showMeal}>{this.props.meal.name}</button>
 				<Modal isOpen={this.state.showMeal} toggle={this.showMeal}>
 					<div className="alignCentre">
-						<table className="centreMe ingredientTable">
+						<table className="ingredientTable">
 							<tbody>
 								<tr className="title">
 									<th />
@@ -250,10 +249,9 @@ export default class MealEditor extends React.Component {
 								/>
 							</tbody>
 						</table>
-						<br />
+
 						<button onClick={this.removeMeal}>Delete</button>
-						<br />
-						<br />
+
 						<button onClick={this.showMeal}>Exit</button>
 					</div>
 				</Modal>

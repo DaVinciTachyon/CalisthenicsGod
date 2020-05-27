@@ -1,5 +1,4 @@
 import React from 'react';
-import '../Main.css';
 
 export default class Register extends React.Component {
 	constructor() {

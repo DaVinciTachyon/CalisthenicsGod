@@ -1,12 +1,11 @@
 import React from 'react';
-import '../Main.css';
 import ProfileEditor from './ProfileEditor';
 
 export default class UserProfile extends React.Component {
 	constructor() {
 		super();
 		this.state = {
-			update: false
+			update : false
 		};
 	}
 
@@ -20,7 +19,7 @@ export default class UserProfile extends React.Component {
 
 	render() {
 		return (
-			<div style={{ padding: '100px' }}>
+			<div>
 				<ProfileEditor editProfile={this.editProfile} />
 			</div>
 		);

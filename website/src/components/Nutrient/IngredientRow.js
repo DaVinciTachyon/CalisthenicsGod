@@ -1,5 +1,4 @@
 import React from 'react';
-import '../Main.css';
 
 export default class IngredientRow extends React.Component {
 	constructor() {
@@ -23,16 +22,27 @@ export default class IngredientRow extends React.Component {
 	}
 
 	componentDidMount() {
-		if (!this.props.isNew) {
-			if (this.props.isSummary) {
+		if (!this.props.isNew && this.props.isSummary) {
+			if (this.props.hasWeight)
 				this.setState({
-					weight : Math.round(this.props.ingredient.weight * 10) / 10,
-					fat    : Math.round(this.props.ingredient.fat * 10) / 10,
-					carb   : Math.round(this.props.ingredient.carbohydrate * 10) / 10,
-					prot   : Math.round(this.props.ingredient.protein * 10) / 10,
-					eth    : Math.round(this.props.ingredient.ethanol * 10) / 10
+					weight : Math.round(this.props.ingredient.weight * 10) / 10
 				});
-			} else if (this.props.hasWeight)
+			this.setState({
+				fat  : Math.round(this.props.ingredient.fat * 10) / 10,
+				carb : Math.round(this.props.ingredient.carbohydrate * 10) / 10,
+				prot : Math.round(this.props.ingredient.protein * 10) / 10,
+				eth  : Math.round(this.props.ingredient.ethanol * 10) / 10
+			});
+			this.setState({
+				name    : this.props.ingredient.name,
+				name_og : this.props.ingredient.name,
+				fat_og  : this.props.ingredient.fat,
+				carb_og : this.props.ingredient.carbohydrate,
+				prot_og : this.props.ingredient.protein,
+				eth_og  : this.props.ingredient.ethanol
+			});
+		} else if (!this.props.isNew) {
+			if (this.props.hasWeight) {
 				this.setState({
 					weight    : this.props.ingredient.weight,
 					weight_og : this.props.ingredient.weight,
@@ -60,13 +70,14 @@ export default class IngredientRow extends React.Component {
 							this.props.ingredient.ethanol * this.props.ingredient.weight / 100 * 10
 						) / 10
 				});
-			else
+			} else {
 				this.setState({
-					fat  : this.props.ingredient.fat,
-					carb : this.props.ingredient.carbohydrate,
-					prot : this.props.ingredient.protein,
-					eth  : this.props.ingredient.ethanol
+					fat  : Math.round(this.props.ingredient.fat * 10) / 10,
+					carb : Math.round(this.props.ingredient.carbohydrate * 10) / 10,
+					prot : Math.round(this.props.ingredient.protein * 10) / 10,
+					eth  : Math.round(this.props.ingredient.ethanol * 10) / 10
 				});
+			}
 			this.setState({
 				name    : this.props.ingredient.name,
 				name_og : this.props.ingredient.name,
@@ -160,6 +171,18 @@ export default class IngredientRow extends React.Component {
 			this.stopEdit();
 			if (!this.props.isNew) this.submit();
 		}
+		if (
+			this.props.isSummary &&
+			JSON.stringify(prevProps.ingredient) !== JSON.stringify(this.props.ingredient)
+		) {
+			this.setState({
+				weight : Math.round(this.props.ingredient.weight * 10) / 10,
+				fat    : Math.round(this.props.ingredient.fat * 10) / 10,
+				carb   : Math.round(this.props.ingredient.carbohydrate * 10) / 10,
+				prot   : Math.round(this.props.ingredient.protein * 10) / 10,
+				eth    : Math.round(this.props.ingredient.ethanol * 10) / 10
+			});
+		}
 	}
 
 	stopEdit = () => {
@@ -191,7 +214,12 @@ export default class IngredientRow extends React.Component {
 				};
 			} else {
 				ingredient = {
-					_id : this.state.ingredient
+					_id  : this.state.ingredient,
+					name : this.state.name,
+					fat  : this.state.fat_base,
+					carb : this.state.carb_base,
+					prot : this.state.prot_base,
+					eth  : this.state.eth_base
 				};
 			}
 			ingredient.mealId = this.props.mealId;
@@ -380,13 +408,15 @@ export default class IngredientRow extends React.Component {
 							onChange={this.nameChange}
 							className={
 								'input' +
-								(this.props.hasWeight && !this.props.isNew
+								((this.props.hasWeight && !this.props.isNew) || this.props.isSummary
 									? ' readOnly inheritBackground'
 									: ' editable')
 							}
 							required
 							readOnly={
-								!this.state.edit || (this.props.hasWeight && !this.props.isNew)
+								!this.state.edit ||
+								(this.props.hasWeight && !this.props.isNew) ||
+								this.props.isSummary
 							}
 							onDoubleClick={this.props.isSummary ? () => {} : this.changeFocus}
 						/>
@@ -443,10 +473,13 @@ export default class IngredientRow extends React.Component {
 						value={this.state.fat}
 						onChange={this.fatChange}
 						className={
-							'numInput input' + (this.props.hasWeight ? ' readOnly' : ' editable')
+							'numInput input' +
+							(this.props.hasWeight || this.props.isSummary
+								? ' readOnly'
+								: ' editable')
 						}
 						style={{ background: this.props.colours.fatLight }}
-						readOnly={!this.state.edit || this.props.hasWeight}
+						readOnly={!this.state.edit || this.props.hasWeight || this.props.isSummary}
 						onDoubleClick={this.props.isSummary ? () => {} : this.changeFocus}
 					/>
 					{this.props.isNew &&
@@ -463,9 +496,10 @@ export default class IngredientRow extends React.Component {
 								'numInput input' +
 								(!this.state.isNew ||
 								!(
-									this.props.isNew &&
-									this.props.hasWeight &&
-									this.state.ingredient === ''
+									(this.props.isNew &&
+										this.props.hasWeight &&
+										this.state.ingredient === '') ||
+									this.props.isSummary
 								)
 									? ' readOnly'
 									: ' editable')
@@ -478,7 +512,8 @@ export default class IngredientRow extends React.Component {
 									this.props.isNew &&
 									this.props.hasWeight &&
 									this.state.ingredient === ''
-								)
+								) ||
+								this.props.isSummary
 							}
 							onDoubleClick={this.changeFocus}
 						/>
@@ -494,10 +529,13 @@ export default class IngredientRow extends React.Component {
 						value={this.state.carb}
 						onChange={this.carbChange}
 						className={
-							'numInput input' + (this.props.hasWeight ? ' readOnly' : ' editable')
+							'numInput input' +
+							(this.props.hasWeight || this.props.isSummary
+								? ' readOnly'
+								: ' editable')
 						}
 						style={{ background: this.props.colours.carbLight }}
-						readOnly={!this.state.edit || this.props.hasWeight}
+						readOnly={!this.state.edit || this.props.hasWeight || this.props.isSummary}
 						onDoubleClick={this.props.isSummary ? () => {} : this.changeFocus}
 					/>
 					{this.props.isNew &&
@@ -514,9 +552,10 @@ export default class IngredientRow extends React.Component {
 								'numInput input' +
 								(!this.state.isNew ||
 								!(
-									this.props.isNew &&
-									this.props.hasWeight &&
-									this.state.ingredient === ''
+									(this.props.isNew &&
+										this.props.hasWeight &&
+										this.state.ingredient === '') ||
+									this.props.isSummary
 								)
 									? ' readOnly'
 									: ' editable')
@@ -529,7 +568,8 @@ export default class IngredientRow extends React.Component {
 									this.props.isNew &&
 									this.props.hasWeight &&
 									this.state.ingredient === ''
-								)
+								) ||
+								this.props.isSummary
 							}
 							onDoubleClick={this.changeFocus}
 						/>
@@ -545,10 +585,13 @@ export default class IngredientRow extends React.Component {
 						value={this.state.prot}
 						onChange={this.protChange}
 						className={
-							'numInput input' + (this.props.hasWeight ? ' readOnly' : ' editable')
+							'numInput input' +
+							(this.props.hasWeight || this.props.isSummary
+								? ' readOnly'
+								: ' editable')
 						}
 						style={{ background: this.props.colours.protLight }}
-						readOnly={!this.state.edit || this.props.hasWeight}
+						readOnly={!this.state.edit || this.props.hasWeight || this.props.isSummary}
 						onDoubleClick={this.props.isSummary ? () => {} : this.changeFocus}
 					/>
 					{this.props.isNew &&
@@ -568,7 +611,8 @@ export default class IngredientRow extends React.Component {
 									this.props.isNew &&
 									this.props.hasWeight &&
 									this.state.ingredient === ''
-								)
+								) ||
+								this.props.isSummary
 									? ' readOnly'
 									: ' editable')
 							}
@@ -580,7 +624,8 @@ export default class IngredientRow extends React.Component {
 									this.props.isNew &&
 									this.props.hasWeight &&
 									this.state.ingredient === ''
-								)
+								) ||
+								this.props.isSummary
 							}
 							onDoubleClick={this.changeFocus}
 						/>
@@ -596,10 +641,13 @@ export default class IngredientRow extends React.Component {
 						value={this.state.eth}
 						onChange={this.ethChange}
 						className={
-							'numInput input' + (this.props.hasWeight ? ' readOnly' : ' editable')
+							'numInput input' +
+							(this.props.hasWeight || this.props.isSummary
+								? ' readOnly'
+								: ' editable')
 						}
 						style={{ background: this.props.colours.ethLight }}
-						readOnly={!this.state.edit || this.props.hasWeight}
+						readOnly={!this.state.edit || this.props.hasWeight || this.props.isSummary}
 						onDoubleClick={this.props.isSummary ? () => {} : this.changeFocus}
 					/>
 					{this.props.isNew &&
@@ -619,7 +667,8 @@ export default class IngredientRow extends React.Component {
 									this.props.isNew &&
 									this.props.hasWeight &&
 									this.state.ingredient === ''
-								)
+								) ||
+								this.props.isSummary
 									? ' readOnly'
 									: ' editable')
 							}
@@ -631,7 +680,8 @@ export default class IngredientRow extends React.Component {
 									this.props.isNew &&
 									this.props.hasWeight &&
 									this.state.ingredient === ''
-								)
+								) ||
+								this.props.isSummary
 							}
 							onDoubleClick={this.changeFocus}
 						/>

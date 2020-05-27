@@ -14,7 +14,6 @@ function App() {
 		<Router>
 			<Toolbar />
 			<div id="body">
-				<div id="blocker" />
 				<Switch>
 					<Route path="/" exact component={HomePage} />
 					<Route path="/register" exact component={Register} />

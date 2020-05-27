@@ -1,5 +1,4 @@
 import React from 'react';
-import '../Main.css';
 import IngredientRow from './IngredientRow';
 
 export default class MealTable extends React.Component {
@@ -22,19 +21,15 @@ export default class MealTable extends React.Component {
 		await this.setState({
 			add : !this.state.add
 		});
-		this.update();
-	};
-
-	update = () => {
-		this.props.updateNutrients();
 	};
 
 	round = (value, precision) => {
 		return Math.round(value * (1 / precision)) / (1 / precision);
 	};
 
-	onSubmit = (ingredient) => {
-		fetch('http://localhost:8080/nutrition/meals/edit/', {
+	onSubmit = async (ingredient) => {
+		//TODO edit ingredient
+		await fetch('http://localhost:8080/nutrition/meals/edit/', {
 			method  : 'POST',
 			headers : {
 				'Content-Type' : 'application/json',
@@ -45,25 +40,17 @@ export default class MealTable extends React.Component {
 				_id    : ingredient._id,
 				weight : ingredient.weight
 			})
-		}).then(() => {
-			this.update();
 		});
-	};
-
-	submitStatus = (ingredient) => {
-		fetch('http://localhost:8080/nutrition/meals/remove/', {
-			method  : 'POST',
-			headers : {
-				'Content-Type' : 'application/json',
-				'auth-token'   : localStorage.getItem('authToken')
-			},
-			body    : JSON.stringify({
-				mealId       : ingredient.mealId,
-				ingredientId : ingredient._id
-			})
-		}).then(() => {
-			this.update();
-		});
+		// this.props.addNutrient({
+		// 	mealId       : ingredient.mealId,
+		// 	_id          : ingredient._id,
+		// 	name         : ingredient.name,
+		// 	weight       : ingredient.weight,
+		// 	fat          : ingredient.fat,
+		// 	carbohydrate : ingredient.carb,
+		// 	protein      : ingredient.prot,
+		// 	ethanol      : ingredient.eth
+		// });
 	};
 
 	changeFocus = async () => {
@@ -71,9 +58,11 @@ export default class MealTable extends React.Component {
 		this.setState({ focus: false });
 	};
 
-	addIngredient = (ingredient) => {
+	addIngredient = async (ingredient) => {
+		if (ingredient.weight === 0) return;
+		let newId = '';
 		if (!ingredient._id) {
-			const requestOptions = {
+			const response = await fetch('http://localhost:8080/nutrition/ingredients/add/', {
 				method  : 'POST',
 				headers : {
 					'Content-Type' : 'application/json',
@@ -86,48 +75,38 @@ export default class MealTable extends React.Component {
 					protein      : ingredient.prot,
 					ethanol      : ingredient.eth
 				})
-			};
-			fetch('http://localhost:8080/nutrition/ingredients/add/', requestOptions)
-				.then((response) => response.json())
-				.then((data) => {
-					const requestOptions = {
-						method  : 'POST',
-						headers : {
-							'Content-Type' : 'application/json',
-							'auth-token'   : localStorage.getItem('authToken')
-						},
-						body    : JSON.stringify({
-							mealId     : ingredient.mealId === '' ? undefined : ingredient.mealId,
-							ingredient : {
-								ingredientId : data._id,
-								weight       : ingredient.weight
-							}
-						})
-					};
-					fetch('http://localhost:8080/nutrition/meals/', requestOptions);
-				})
-				.then(() => {
-					this.update();
-				});
-		} else {
-			const requestOptions = {
-				method  : 'POST',
-				headers : {
-					'Content-Type' : 'application/json',
-					'auth-token'   : localStorage.getItem('authToken')
-				},
-				body    : JSON.stringify({
-					mealId     : ingredient.mealId === '' ? undefined : ingredient.mealId,
-					ingredient : {
-						ingredientId : ingredient._id,
-						weight       : ingredient.weight
-					}
-				})
-			};
-			fetch('http://localhost:8080/nutrition/meals/', requestOptions).then(() => {
-				this.update();
 			});
-		}
+			const data = await response.json();
+			newId = data._id;
+		} else newId = ingredient._id;
+
+		await fetch('http://localhost:8080/nutrition/meals/', {
+			method  : 'POST',
+			headers : {
+				'Content-Type' : 'application/json',
+				'auth-token'   : localStorage.getItem('authToken')
+			},
+			body    : JSON.stringify({
+				mealId     : ingredient.mealId,
+				ingredient : {
+					ingredientId : newId,
+					weight       : ingredient.weight
+				}
+			})
+		});
+		console.log(ingredient);
+		this.props.addNutrient({
+			mealId     : ingredient.mealId,
+			ingredient : {
+				_id          : newId,
+				name         : ingredient.name,
+				weight       : ingredient.weight,
+				fat          : ingredient.fat,
+				carbohydrate : ingredient.carb,
+				protein      : ingredient.prot,
+				ethanol      : ingredient.eth
+			}
+		});
 	};
 
 	render() {
@@ -150,7 +129,7 @@ export default class MealTable extends React.Component {
 					changeFocus={this.changeFocus}
 					focus={this.state.focus}
 					onSubmit={this.onSubmit}
-					submitStatus={this.submitStatus}
+					submitStatus={this.removeIngredient}
 					mealId={this.props.meal._id}
 					hasWeight={true}
 				/>
@@ -163,7 +142,7 @@ export default class MealTable extends React.Component {
 			summary.ethanol += weight * this.props.meal.ingredients[i].ethanol / 100;
 		}
 		return (
-			<table className="centreMe ingredientTable">
+			<table className="ingredientTable">
 				<tbody>
 					<tr className="title">
 						<th />
@@ -211,4 +190,22 @@ export default class MealTable extends React.Component {
 			</table>
 		);
 	}
+
+	removeIngredient = async (ingredient) => {
+		await fetch('http://localhost:8080/nutrition/meals/remove/', {
+			method  : 'POST',
+			headers : {
+				'Content-Type' : 'application/json',
+				'auth-token'   : localStorage.getItem('authToken')
+			},
+			body    : JSON.stringify({
+				mealId       : ingredient.mealId,
+				ingredientId : ingredient._id
+			})
+		});
+		this.props.removeNutrient({
+			mealId : ingredient.mealId,
+			_id    : ingredient._id
+		});
+	};
 }

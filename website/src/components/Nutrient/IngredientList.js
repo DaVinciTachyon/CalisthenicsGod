@@ -1,5 +1,4 @@
 import React from 'react';
-import '../Main.css';
 import IngredientRow from './IngredientRow';
 
 export default class IngredientList extends React.Component {
@@ -170,7 +169,7 @@ export default class IngredientList extends React.Component {
 		if (ingredients.length === 0 && this.props.isUnavailable) return <div />;
 		return (
 			<div className="alignCentre">
-				<table className="centreMe ingredientTable">
+				<table className="ingredientTable">
 					{!this.props.isUnavailable && <caption>Available</caption>}
 					{this.props.isUnavailable && <caption>Unavailable</caption>}
 					<tbody>
