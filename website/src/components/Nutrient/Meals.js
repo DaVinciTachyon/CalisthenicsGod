@@ -37,11 +37,9 @@ export default class Meals extends React.Component {
 		fetch('http://localhost:8080/nutrition/meals/preset/names/', requestOptions)
 			.then((response) => response.json())
 			.then((data) => {
-				this.setState((state) => {
-					let meals = Object.assign({}, state.meals);
-					meals = data.names;
-					return { meals };
-				});
+				let meals = Object.assign({}, this.state.meals);
+				meals = data.names;
+				this.setState({ meals: meals });
 			});
 	};
 

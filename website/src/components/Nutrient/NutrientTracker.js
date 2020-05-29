@@ -43,7 +43,8 @@ export default class NutrientTracker extends React.Component {
 	}
 
 	update = (currentMacros) => {
-		this.setState({ currentMacros: currentMacros });
+		if (currentMacros) this.setState({ currentMacros: currentMacros });
+		this.setState({ update: !this.state.update });
 	};
 
 	render() {
@@ -62,7 +63,7 @@ export default class NutrientTracker extends React.Component {
 					updateNutrients={this.update}
 					update={this.state.update}
 				/>
-				{/* <div id="floatingButtons">
+				<div id="floatingButtons">
 					<button onClick={this.showIngredients}>I</button>
 					<Modal isOpen={this.state.showIngredients} toggle={this.showIngredients}>
 						<div className="alignCentre">
@@ -77,7 +78,7 @@ export default class NutrientTracker extends React.Component {
 							<button onClick={this.showMeals}>Exit</button>
 						</div>
 					</Modal>
-				</div> */}
+				</div>
 			</div>
 		);
 	}

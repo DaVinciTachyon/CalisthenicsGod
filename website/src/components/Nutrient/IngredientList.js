@@ -40,11 +40,9 @@ export default class IngredientList extends React.Component {
 		if (this.props.isUnavailable)
 			url = 'http://localhost:8080/nutrition/ingredients/unavailable';
 		fetch(url, requestOptions).then((response) => response.json()).then((data) => {
-			this.setState((state) => {
-				let ingredients = Object.assign({}, state.ingredients);
-				ingredients = data.ingredients;
-				return { ingredients };
-			});
+			let ingredients = Object.assign({}, this.state.ingredients);
+			ingredients = data.ingredients;
+			this.setState({ ingredients: ingredients });
 		});
 	};
 

@@ -29,11 +29,9 @@ export default class MealEditor extends React.Component {
 		fetch('http://localhost:8080/nutrition/meals/preset/ingredients/', requestOptions)
 			.then((response) => response.json())
 			.then((data) => {
-				this.setState((state) => {
-					let ingredients = Object.assign({}, state.ingredients);
-					ingredients = data.ingredients;
-					return { ingredients };
-				});
+				let ingredients = Object.assign({}, this.state.ingredients);
+				ingredients = data.ingredients;
+				this.setState({ ingredients: ingredients });
 			});
 	};
 

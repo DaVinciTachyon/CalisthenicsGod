@@ -28,18 +28,16 @@ export default class IngredientRow extends React.Component {
 					weight : Math.round(this.props.ingredient.weight * 10) / 10
 				});
 			this.setState({
-				fat  : Math.round(this.props.ingredient.fat * 10) / 10,
-				carb : Math.round(this.props.ingredient.carbohydrate * 10) / 10,
-				prot : Math.round(this.props.ingredient.protein * 10) / 10,
-				eth  : Math.round(this.props.ingredient.ethanol * 10) / 10
-			});
-			this.setState({
 				name    : this.props.ingredient.name,
 				name_og : this.props.ingredient.name,
 				fat_og  : this.props.ingredient.fat,
 				carb_og : this.props.ingredient.carbohydrate,
 				prot_og : this.props.ingredient.protein,
-				eth_og  : this.props.ingredient.ethanol
+				eth_og  : this.props.ingredient.ethanol,
+				fat     : Math.round(this.props.ingredient.fat * 10) / 10,
+				carb    : Math.round(this.props.ingredient.carbohydrate * 10) / 10,
+				prot    : Math.round(this.props.ingredient.protein * 10) / 10,
+				eth     : Math.round(this.props.ingredient.ethanol * 10) / 10
 			});
 		} else if (!this.props.isNew) {
 			if (this.props.hasWeight) {
@@ -98,6 +96,10 @@ export default class IngredientRow extends React.Component {
 			});
 			this.getIngredients();
 		}
+		if (this.props.noToggle)
+			this.setState({
+				edit : true
+			});
 	}
 
 	ingredientChange = (evt) => {
@@ -143,11 +145,9 @@ export default class IngredientRow extends React.Component {
 		fetch('http://localhost:8080/nutrition/ingredients/', requestOptions)
 			.then((response) => response.json())
 			.then((data) => {
-				this.setState((state) => {
-					let ingredients = Object.assign({}, state.ingredients);
-					ingredients = data.ingredients;
-					return { ingredients };
-				});
+				let ingredients = Object.assign({}, this.state.ingredients);
+				ingredients = data.ingredients;
+				this.setState({ ingredients: ingredients });
 			});
 	};
 
@@ -207,31 +207,31 @@ export default class IngredientRow extends React.Component {
 			if (this.state.isNew) {
 				ingredient = {
 					name : this.state.name,
-					fat  : this.state.fat_base,
-					carb : this.state.carb_base,
-					prot : this.state.prot_base,
-					eth  : this.state.eth_base
+					fat  : parseFloat(this.state.fat_base),
+					carb : parseFloat(this.state.carb_base),
+					prot : parseFloat(this.state.prot_base),
+					eth  : parseFloat(this.state.eth_base)
 				};
 			} else {
 				ingredient = {
 					_id  : this.state.ingredient,
 					name : this.state.name,
-					fat  : this.state.fat_base,
-					carb : this.state.carb_base,
-					prot : this.state.prot_base,
-					eth  : this.state.eth_base
+					fat  : parseFloat(this.state.fat_base),
+					carb : parseFloat(this.state.carb_base),
+					prot : parseFloat(this.state.prot_base),
+					eth  : parseFloat(this.state.eth_base)
 				};
 			}
 			ingredient.mealId = this.props.mealId;
-			ingredient.weight = this.state.weight;
+			ingredient.weight = parseFloat(this.state.weight);
 		} else {
 			ingredient = {
 				name   : this.state.name,
-				weight : this.state.weight,
-				fat    : this.state.fat,
-				carb   : this.state.carb,
-				prot   : this.state.prot,
-				eth    : this.state.eth
+				weight : parseFloat(this.state.weight),
+				fat    : parseFloat(this.state.fat),
+				carb   : parseFloat(this.state.carb),
+				prot   : parseFloat(this.state.prot),
+				eth    : parseFloat(this.state.eth)
 			};
 			if (!this.props.isNew) ingredient._id = this.props.ingredient._id;
 		}
@@ -355,7 +355,7 @@ export default class IngredientRow extends React.Component {
 	};
 
 	render() {
-		if (this.props.isNew && !this.state.edit) {
+		if (!this.props.noToggle && this.props.isNew && !this.state.edit) {
 			return (
 				<tr>
 					<td colSpan="9">

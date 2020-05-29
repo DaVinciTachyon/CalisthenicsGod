@@ -36,27 +36,25 @@ export default class MeasurementHistory extends React.Component {
 		const requestOptions = {
 			method  : 'GET',
 			headers : {
-				'Content-Type': 'application/json',
-				'auth-token': localStorage.getItem('authToken')
+				'Content-Type' : 'application/json',
+				'auth-token'   : localStorage.getItem('authToken')
 			}
 		};
 		fetch('http://localhost:8080/measurement/weight/history', requestOptions)
 			.then((response) => response.json())
 			.then((data) => {
-				this.setState((state) => {
-					let chart = Object.assign({}, state.chart);
-					chart.labels = [];
-					chart.datasets[0].data = [];
-					for (let i = 0; i < data.weight.length; i++) {
-						chart.labels.unshift(
-							`${new Date(data.weight[i].date).getDate()}/${new Date(
-								data.weight[i].date
-							).getMonth()}/${new Date(data.weight[i].date).getFullYear()}`
-						);
-						chart.datasets[0].data.unshift(data.weight[i].value);
-					}
-					return { chart };
-				});
+				let chart = Object.assign({}, this.state.chart);
+				chart.labels = [];
+				chart.datasets[0].data = [];
+				for (let i = 0; i < data.weight.length; i++) {
+					chart.labels.unshift(
+						`${new Date(data.weight[i].date).getDate()}/${new Date(
+							data.weight[i].date
+						).getMonth()}/${new Date(data.weight[i].date).getFullYear()}`
+					);
+					chart.datasets[0].data.unshift(data.weight[i].value);
+				}
+				this.setState({ chart: chart });
 			});
 	};
 

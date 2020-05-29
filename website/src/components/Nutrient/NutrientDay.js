@@ -38,6 +38,7 @@ export default class NutrientDay extends React.Component {
 					macroDensities={this.props.macroDensities}
 					addNutrient={this.addIngredientToMeal}
 					removeNutrient={this.removeIngredientFromMeal}
+					editNutrient={this.editIngredientInMeal}
 					update={this.state.update}
 				/>
 			);
@@ -82,6 +83,7 @@ export default class NutrientDay extends React.Component {
 							isNew={true}
 							hasWeight={true}
 							isNewMeal={true}
+							noToggle={true}
 							cancel={this.flipNewMeal}
 						/>
 					</div>
@@ -135,7 +137,6 @@ export default class NutrientDay extends React.Component {
 				ethanol      : ingredient.eth
 			}
 		});
-		this.flipNewMeal();
 		this.update();
 	};
 
@@ -146,38 +147,48 @@ export default class NutrientDay extends React.Component {
 	};
 
 	addIngredientToMeal = (ingredient) => {
-		this.setState((state) => {
-			let meals = Array.from(state.meals);
-			const mealI = meals.findIndex((val) => val._id === ingredient.mealId);
-			if (mealI === -1)
-				meals.push({
-					ingredients : [
-						ingredient.ingredient
-					]
-				});
-			else {
-				let ingredients = Array.from(meals[mealI].ingredients);
-				ingredients.push(ingredient.ingredient);
-				meals[mealI].ingredients = ingredients;
-			}
-			return { meals };
-		});
+		let meals = Array.from(this.state.meals);
+		const mealI = meals.findIndex((val) => val._id === ingredient.mealId);
+		if (mealI === -1)
+			meals.push({
+				ingredients : [
+					ingredient.ingredient
+				]
+			});
+		else {
+			let ingredients = Array.from(meals[mealI].ingredients);
+			ingredients.push(ingredient.ingredient);
+			meals[mealI].ingredients = ingredients;
+		}
+		this.setState({ meals: meals });
 		this.updateOverallMacros();
 	};
 
 	removeIngredientFromMeal = (ingredient) => {
-		this.setState((state) => {
-			let meals = Array.from(state.meals);
-			const mealI = meals.findIndex((val) => val._id === ingredient.mealId);
+		let meals = Array.from(this.state.meals);
+		const mealI = meals.findIndex((val) => val._id === ingredient.mealId);
+		if (meals[mealI].ingredients.length === 1) {
+			meals = meals.filter((val) => val._id !== ingredient.mealId);
+		} else {
 			let ingredients = Array.from(meals[mealI].ingredients);
 			ingredients = ingredients.filter((val) => val._id !== ingredient._id);
 			meals[mealI].ingredients = ingredients;
-			return { meals };
-		});
+		}
+		this.setState({ meals: meals });
 		this.updateOverallMacros();
 	};
 
-	//TODO edit ingredient
+	editIngredientInMeal = (ingredient) => {
+		console.log(ingredient);
+		let meals = Array.from(this.state.meals);
+		const mealI = meals.findIndex((val) => val._id === ingredient.mealId);
+		let ingredients = Array.from(meals[mealI].ingredients);
+		const ingredientI = ingredients.findIndex((val) => val._id === ingredient.ingredient._id);
+		ingredients[ingredientI].weight = ingredient.ingredient.weight;
+		meals[mealI].ingredients = ingredients;
+		this.setState({ meals: meals });
+		this.updateOverallMacros();
+	};
 
 	updateOverallMacros = () => {
 		let currentMacros = {
@@ -208,11 +219,9 @@ export default class NutrientDay extends React.Component {
 			}
 		});
 		const data = await response.json();
-		this.setState((state) => {
-			let meals = Object.assign({}, state.meals);
-			meals = data.meals;
-			return { meals };
-		});
+		let meals = Object.assign({}, this.state.meals);
+		meals = data.meals;
+		this.setState({ meals: meals });
 		this.updateOverallMacros();
 	};
 
@@ -225,11 +234,9 @@ export default class NutrientDay extends React.Component {
 			}
 		});
 		const data = await response.json();
-		this.setState((state) => {
-			let presetMeals = Object.assign({}, state.presetMeals);
-			presetMeals = data.names;
-			return { presetMeals };
-		});
+		let presetMeals = Object.assign({}, this.state.presetMeals);
+		presetMeals = data.names;
+		this.setState({ presetMeals: presetMeals });
 	};
 
 	flipNewMeal = () => {
@@ -258,6 +265,7 @@ export default class NutrientDay extends React.Component {
 				})
 			});
 			this.update();
+			this.getMeals();
 		}
 	};
 }
