@@ -137,6 +137,10 @@
     display: none;
   }
 
+  .signedout .logo {
+    display: block;
+  }
+
   body {
     padding-top: 5rem;
     padding-left: 0;
@@ -187,4 +191,41 @@
   body {
     padding-left: 5rem;
   }
+}
+
+.signedout {
+  top: 0;
+  left: 0;
+  height: 5rem;
+  width: 100vw;
+}
+
+.signedout .logo {
+  background: var(--primaryColour);
+  margin: 0;
+  padding: 0;
+}
+
+.signedout.navbar:hover {
+  top: 0;
+  left: 0;
+  height: 5rem;
+  width: 100vw;
+}
+
+.signedout .nav-link:hover {
+  background: var(--primaryColour);
+  transition: 0;
+  filter: greyscale(0) opacity(0);
+}
+
+.signedout .nav-link {
+  height: 5rem;
+  width: 100vw;
+  display: flex;
+  justify-content: center;
+}
+
+.signedout .link-text {
+  display: block;
 }
