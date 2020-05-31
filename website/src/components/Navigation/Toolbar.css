@@ -16,6 +16,10 @@
   height: 100%;
 }
 
+.nav-item {
+  width: 100%;
+}
+
 .nav-item:last-child {
   margin-top: auto;
 }
@@ -85,6 +89,7 @@
   letter-spacing: 0.3ch;
   display: flex;
   justify-content: center;
+  width: 100%;
 }
 
 .logo svg {
@@ -183,7 +188,7 @@
 
   body {
     padding-left: 5rem;
-    padding-top: 5rem;
+    padding-top: 2rem;
   }
 }
 

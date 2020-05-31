@@ -1,5 +1,4 @@
 import React from "react";
-import Modal from "../Modal";
 import IngredientRow from "./IngredientRow";
 import "./Main.css";
 
@@ -200,8 +199,10 @@ export default class MealEditor extends React.Component {
       summary.ethanol += (weight * this.state.ingredients[i].ethanol) / 100;
     }
     return (
-      <div>
-        <button onClick={this.showMeal}>{this.props.meal.name}</button>
+      <div className="meal">
+        <button className="secondaryButton button" onClick={this.showMeal}>
+          {this.props.meal.name}
+        </button>
         {this.state.showMeal && (
           <div className="table">
             <div className="row">
@@ -260,8 +261,18 @@ export default class MealEditor extends React.Component {
               hasWeight={true}
               isSummary={true}
             />
-            <button onClick={this.removeMeal}>Delete</button>
-            <button onClick={this.showMeal}>Exit</button>
+            <button
+              className="exit deleteButton button"
+              onClick={this.showMeal}
+            >
+              Exit
+            </button>
+            <button
+              className="delete errorButton button"
+              onClick={this.removeMeal}
+            >
+              Delete
+            </button>
           </div>
         )}
       </div>

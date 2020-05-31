@@ -1,5 +1,6 @@
 import React from "react";
 import IngredientList from "./IngredientList";
+import "./Main.css";
 
 export default class Ingredients extends React.Component {
   constructor() {
@@ -38,7 +39,7 @@ export default class Ingredients extends React.Component {
 
   render() {
     return (
-      <div>
+      <div className="page">
         <IngredientList
           colours={this.state.colours}
           update={this.state.update}

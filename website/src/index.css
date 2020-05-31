@@ -42,7 +42,6 @@
     sans-serif;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
-  width: 100%;
 }
 
 body {
@@ -56,6 +55,7 @@ body {
 
 #root {
   height: 100%;
+  width: 100%;
   display: flex;
   align-items: center;
   justify-content: center;
@@ -67,7 +67,7 @@ body {
   margin: 0.8rem;
   border-radius: 1rem;
   text-align: center;
-  border: var(--primaryBorder);
+  border: 0.1rem solid var(--primaryBackgroundColour);
   color: var(--primaryBackgroundColour);
   background: var(--primaryColour);
   font-size: 1.1rem;
@@ -75,7 +75,7 @@ body {
 }
 
 .button:hover {
-  border: var(--primaryBorder);
+  border: 0.1rem solid var(--primaryBackgroundColour);
   color: var(--primaryBackgroundColour);
   background: var(--primarySuccessColour);
 }
@@ -126,6 +126,24 @@ body {
   background: var(--primaryBackgroundColour);
 }
 
+.deleteButton {
+  border: 0.1rem solid var(--primaryBackgroundColour);
+  color: var(--primaryBackgroundColour);
+  background: var(--primaryErrorColour);
+}
+
+.deleteButton:hover {
+  border: 0.1rem solid var(--primaryErrorColour);
+  color: var(--primaryErrorColour);
+  background: var(--primaryBackgroundColour);
+}
+
+.deleteButton:active {
+  border: 0.1rem solid var(--primaryBackgroundColour);
+  color: var(--primaryBackgroundColour);
+  background: var(--secondaryErrorColour);
+}
+
 .successButton {
   border: var(--primaryBorder);
   color: var(--primaryBackgroundColour);
@@ -165,4 +183,15 @@ body {
   flex-direction: column;
   justify-content: center;
   align-items: center;
+  width: 100%;
+}
+
+input[type="number"] {
+  -moz-appearance: textfield;
+  text-align: center;
+}
+
+input[type="number"]:hover,
+input[type="number"]:focus {
+  -moz-appearance: number-input;
 }

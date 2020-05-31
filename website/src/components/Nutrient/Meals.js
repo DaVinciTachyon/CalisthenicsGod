@@ -1,5 +1,6 @@
 import React from "react";
 import MealEditor from "./MealEditor";
+import "./Main.css";
 
 export default class Meals extends React.Component {
   constructor() {
@@ -73,7 +74,6 @@ export default class Meals extends React.Component {
       this.flipNewMeal();
       this.setState({ name: "" });
       this.getMealNames();
-      this.props.update();
     });
   };
 
@@ -97,27 +97,34 @@ export default class Meals extends React.Component {
       );
     }
     return (
-      <div>
-        {!this.state.newMeal && (
-          <button onClick={this.flipNewMeal}>New Meal</button>
-        )}
-        {this.state.newMeal && (
-          <div>
+      <div className="page">
+        <div className="createMeal">
+          {!this.state.newMeal && (
+            <button className="mainButton button" onClick={this.flipNewMeal}>
+              New Meal
+            </button>
+          )}
+          {this.state.newMeal && (
             <form onSubmit={this.newMeal.bind(this)}>
-              <input
-                name="name"
-                type="text"
-                value={this.state.name}
-                onChange={this.nameChange.bind(this)}
-                className="input"
-                required
-              />
-              <input type="submit" value="Add" />
+              <div className="input-pair col">
+                <label for="name">Meal Name</label>
+                <input
+                  name="name"
+                  type="text"
+                  value={this.state.name}
+                  placeholder="Meal Name"
+                  onChange={this.nameChange.bind(this)}
+                  className="input"
+                  required
+                />
+              </div>
+              <input className="button" type="submit" value="Add" />
+              <button className="errorButton button" onClick={this.flipNewMeal}>
+                Cancel
+              </button>
             </form>
-            <button onClick={this.flipNewMeal}>Cancel</button>
-          </div>
-        )}
-
+          )}
+        </div>
         {meals}
       </div>
     );

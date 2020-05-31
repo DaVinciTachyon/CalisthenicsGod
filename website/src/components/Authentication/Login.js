@@ -63,33 +63,39 @@ export default class Login extends React.Component {
 
   render() {
     return (
-      <form onSubmit={this.handleSubmit} className="card">
-        {this.state.error && (
-          <h3 data-test="error" onClick={this.dismissError}>
-            <button onClick={this.dismissError}>✖</button>
-            {this.state.error}
-          </h3>
-        )}
-        <label for="email">Email</label>
-        <input
-          name="email"
-          type="text"
-          value={this.state.email}
-          onChange={this.handleEmailChange}
-          placeholder="Email"
-        />
-        <label for="email">Password</label>
-        <input
-          type="password"
-          value={this.state.password}
-          onChange={this.handlePasswordChange}
-          placeholder="Password"
-        />
-        <input className="primaryButton button" type="submit" value="Sign In" />
-        <a className="secondaryButton button" href="/register">
-          Register
-        </a>
-      </form>
+      <div className="page">
+        <form onSubmit={this.handleSubmit} className="card">
+          {this.state.error && (
+            <h3 data-test="error" onClick={this.dismissError}>
+              <button onClick={this.dismissError}>✖</button>
+              {this.state.error}
+            </h3>
+          )}
+          <label for="email">Email</label>
+          <input
+            name="email"
+            type="text"
+            value={this.state.email}
+            onChange={this.handleEmailChange}
+            placeholder="Email"
+          />
+          <label for="email">Password</label>
+          <input
+            type="password"
+            value={this.state.password}
+            onChange={this.handlePasswordChange}
+            placeholder="Password"
+          />
+          <input
+            className="primaryButton button"
+            type="submit"
+            value="Sign In"
+          />
+          <a className="secondaryButton button" href="/register">
+            Register
+          </a>
+        </form>
+      </div>
     );
   }
 }

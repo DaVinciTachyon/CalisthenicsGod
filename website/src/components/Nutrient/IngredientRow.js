@@ -420,7 +420,7 @@ export default class IngredientRow extends React.Component {
               {ingredients}
             </select>
           )}
-          {this.state.isNew && (
+          {(this.props.isNew || this.state.isNew) && (
             <input
               name="name"
               type="text"

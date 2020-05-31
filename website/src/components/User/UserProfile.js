@@ -1,27 +1,27 @@
-import React from 'react';
-import ProfileEditor from './ProfileEditor';
+import React from "react";
+import ProfileEditor from "./ProfileEditor";
 
 export default class UserProfile extends React.Component {
-	constructor() {
-		super();
-		this.state = {
-			update : false
-		};
-	}
+  constructor() {
+    super();
+    this.state = {
+      update: false,
+    };
+  }
 
-	async componentDidMount() {
-		if (!localStorage.getItem('authToken')) window.location = '/login';
-	}
+  async componentDidMount() {
+    if (!localStorage.getItem("authToken")) window.location = "/login";
+  }
 
-	editProfile = () => {
-		this.setState({ update: !this.state.update });
-	};
+  editProfile = () => {
+    this.setState({ update: !this.state.update });
+  };
 
-	render() {
-		return (
-			<div>
-				<ProfileEditor editProfile={this.editProfile} />
-			</div>
-		);
-	}
+  render() {
+    return (
+      <div className="page">
+        <ProfileEditor editProfile={this.editProfile} />
+      </div>
+    );
+  }
 }

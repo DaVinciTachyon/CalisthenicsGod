@@ -45,7 +45,7 @@ export default class Exercises extends React.Component {
         </tr>
       );
     return (
-      <div>
+      <div className="page">
         <table>
           <tbody>
             <tr className="title exercise">
