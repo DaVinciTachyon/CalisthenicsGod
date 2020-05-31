@@ -103,7 +103,7 @@ body {
 }
 
 .secondaryButton:active {
-  border: var(--primaryBorder);
+  border: 0.1rem solid var(--primaryBackgroundColour);
   color: var(--primaryBackgroundColour);
   background: var(--primarySuccessColour);
 }
@@ -115,7 +115,7 @@ body {
 }
 
 .errorButton:hover {
-  border: var(--primaryBorder);
+  border: 0.1rem solid var(--primaryBackgroundColour);
   color: var(--primaryBackgroundColour);
   background: var(--primaryErrorColour);
 }
@@ -145,7 +145,7 @@ body {
 }
 
 .successButton {
-  border: var(--primaryBorder);
+  border: 0.1rem solid var(--primaryBackgroundColour);
   color: var(--primaryBackgroundColour);
   background: var(--primarySuccessColour);
 }
@@ -157,7 +157,7 @@ body {
 }
 
 .successButton:active {
-  border: var(--primaryBorder);
+  border: 0.1rem solid var(--primaryBackgroundColour);
   color: var(--primaryBackgroundColour);
   background: var(--secondarySuccessColour);
 }

@@ -20,8 +20,14 @@ export default class Meals extends React.Component {
       newMeal: false,
       meals: [],
       name: "",
+      focus: false,
     };
   }
+
+  changeFocus = async () => {
+    await this.setState({ focus: false });
+    this.setState({ focus: true });
+  };
 
   async componentDidMount() {
     if (!localStorage.getItem("authToken")) window.location = "/login";
@@ -93,6 +99,8 @@ export default class Meals extends React.Component {
           update={this.update}
           meal={this.state.meals[i]}
           colours={this.state.colours}
+          focus={this.state.focus}
+          changeFocus={this.changeFocus}
         />
       );
     }

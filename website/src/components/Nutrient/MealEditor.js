@@ -13,6 +13,24 @@ export default class MealEditor extends React.Component {
     };
   }
 
+  componentDidUpdate(prevProps) {
+    if (prevProps.focus !== this.props.focus) {
+      this.setState({
+        focus: !this.state.focus,
+      });
+    }
+  }
+
+  changeFocus = async () => {
+    this.setState({ focus: false });
+    await this.props.changeFocus();
+    this.setState({ focus: true });
+  };
+
+  showMeal = () => {
+    this.setState({ showMeal: !this.state.showMeal });
+  };
+
   componentDidMount() {
     this.getMeal();
   }
@@ -54,10 +72,6 @@ export default class MealEditor extends React.Component {
       this.showMeal();
       this.props.update();
     });
-  };
-
-  showMeal = () => {
-    this.setState({ showMeal: !this.state.showMeal });
   };
 
   addIngredient = (ingredient) => {
@@ -123,11 +137,6 @@ export default class MealEditor extends React.Component {
     }
   };
 
-  changeFocus = async () => {
-    await this.setState({ focus: false });
-    this.setState({ focus: true });
-  };
-
   onSubmit = (ingredient) => {
     fetch("http://localhost:8080/nutrition/meals/preset/editIngredient/", {
       method: "POST",
@@ -182,7 +191,6 @@ export default class MealEditor extends React.Component {
           colours={this.props.colours}
           ingredient={this.state.ingredients[i]}
           mealId={this.props.meal._id}
-          update={this.update}
           changeFocus={this.changeFocus}
           focus={this.state.focus}
           onSubmit={this.onSubmit}
@@ -239,7 +247,7 @@ export default class MealEditor extends React.Component {
               colours={this.props.colours}
               update={() => {
                 this.update();
-                this.flipNewMeal();
+                this.showMeal();
               }}
               changeFocus={this.changeFocus}
               mealId={this.props.meal._id}
@@ -254,10 +262,7 @@ export default class MealEditor extends React.Component {
               key={"summary"}
               colours={this.props.colours}
               ingredient={summary}
-              update={() => {
-                this.update();
-                this.flipNewMeal();
-              }}
+              update={() => {}}
               hasWeight={true}
               isSummary={true}
             />
