@@ -1,6 +1,7 @@
 import React from "react";
 import MealTable from "./MealTable";
 import IngredientRow from "./IngredientRow";
+import "./Main.css";
 
 export default class NutrientDay extends React.Component {
   constructor() {
@@ -10,6 +11,7 @@ export default class NutrientDay extends React.Component {
       mealId: "",
       presetMeals: [],
       newMeal: false,
+      focus: false,
     };
   }
 
@@ -24,12 +26,13 @@ export default class NutrientDay extends React.Component {
       meals.push(
         <MealTable
           key={i}
-          colours={this.props.colours}
           meal={this.state.meals[i]}
           macroDensities={this.props.macroDensities}
           addNutrient={this.addIngredientToMeal}
           removeNutrient={this.removeIngredientFromMeal}
           editNutrient={this.editIngredientInMeal}
+          focus={this.state.focus}
+          changeFocus={this.changeFocus}
         />
       );
     }
@@ -45,31 +48,27 @@ export default class NutrientDay extends React.Component {
       );
     }
     return (
-      <div className="alignCentre">
-        {meals}
-        {!this.state.newMeal && (
-          <div>
-            <form onSubmit={this.selectMeal.bind(this)}>
-              <select name="meal" onChange={this.mealChange.bind(this)}>
+      <div className="container">
+        <div className="newMealContainer">
+          {!this.state.newMeal && (
+            <form className="newMeal" onSubmit={this.selectMeal.bind(this)}>
+              <select onChange={this.mealChange.bind(this)}>
                 <option value="" selected={this.state.mealId === ""}>
                   New Meal
                 </option>
                 {presetMeals}
               </select>
-              <input type="submit" value="Select" />
+              <input class="button" type="submit" value="Select" />
             </form>
-          </div>
-        )}
-        {this.state.newMeal && (
-          <div class="ingredientTable">
+          )}
+          {this.state.newMeal && !this.state.focus && (
             <IngredientRow
               key={"adder"}
-              colours={this.props.colours}
               update={() => {
                 this.update();
                 this.flipNewMeal();
               }}
-              changeFocus={() => {}}
+              changeFocus={this.changeFocus}
               focus={this.state.focus}
               onSubmit={this.addIngredient}
               macroDensities={this.props.macroDensities}
@@ -79,11 +78,17 @@ export default class NutrientDay extends React.Component {
               noToggle={true}
               cancel={this.flipNewMeal}
             />
-          </div>
-        )}
+          )}
+        </div>
+        {meals}
       </div>
     );
   }
+
+  changeFocus = async () => {
+    await this.setState({ newMeal: false, focus: true });
+    this.setState({ focus: false });
+  };
 
   addIngredient = async (ingredient) => {
     let newId = "";
@@ -243,9 +248,13 @@ export default class NutrientDay extends React.Component {
     this.setState({ presetMeals: presetMeals });
   };
 
-  flipNewMeal = () => {
-    this.setState({
+  flipNewMeal = async () => {
+    await this.setState({
       newMeal: !this.state.newMeal,
+      focus: true,
+    });
+    this.setState({
+      focus: false,
     });
   };
 

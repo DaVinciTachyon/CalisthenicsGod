@@ -1,5 +1,6 @@
 import React from "react";
 import IngredientRow from "./IngredientRow";
+import "./Main.css";
 
 export default class MealTable extends React.Component {
   constructor() {
@@ -8,6 +9,12 @@ export default class MealTable extends React.Component {
       add: false,
       focus: false,
     };
+  }
+
+  componentDidUpdate(prevProps) {
+    if (prevProps.focus !== this.props.focus) {
+      this.setState({ focus: !this.state.focus });
+    }
   }
 
   render() {
@@ -24,7 +31,6 @@ export default class MealTable extends React.Component {
       meal.push(
         <IngredientRow
           key={this.props.meal.ingredients[i]._id}
-          colours={this.props.colours}
           ingredient={this.props.meal.ingredients[i]}
           changeFocus={this.changeFocus}
           focus={this.state.focus}
@@ -45,57 +51,62 @@ export default class MealTable extends React.Component {
         (weight * this.props.meal.ingredients[i].ethanol) / 100;
     }
     return (
-      <table className="ingredientTable">
-        <tbody>
-          <tr className="title">
-            <th />
-            <th>Calories</th>
-            <th>Weight</th>
-            <th>Fat</th>
-            <th>Carbohydrate</th>
-            <th>Protein</th>
-            <th>Ethanol</th>
-            <th />
-          </tr>
-          <tr className="subtitle">
-            <th />
-            <th>kcal</th>
-            <th>grams</th>
-            <th>grams</th>
-            <th>grams</th>
-            <th>grams</th>
-            <th>grams</th>
-            <th />
-          </tr>
-          {meal}
-          <IngredientRow
-            key={"adder"}
-            colours={this.props.colours}
-            update={this.flipAdd}
-            changeFocus={this.changeFocus}
-            mealId={this.props.meal._id}
-            focus={this.state.focus}
-            onSubmit={this.addIngredient}
-            isNew={true}
-            hasWeight={true}
-            isNewMeal={true}
-            cancel={this.flipAdd}
-          />
-          <IngredientRow
-            key={"summary"}
-            colours={this.props.colours}
-            ingredient={summary}
-            update={this.update}
-            hasWeight={true}
-            isSummary={true}
-          />
-        </tbody>
-      </table>
+      <div className="table">
+        <div className="row">
+          <div className="name-col col"></div>
+          <div className="calories-col col">
+            <div className="title">Calories</div>
+            <div className="subtitle">kcal</div>
+          </div>
+          <div className="weight-col col">
+            <div className="title">Weight</div>
+            <div className="subtitle">grams</div>
+          </div>
+          <div className="fat-col col">
+            <div className="title">Fat</div>
+            <div className="subtitle">grams</div>
+          </div>
+          <div className="carbohydrate-col col">
+            <div className="title">Carbs</div>
+            <div className="subtitle">grams</div>
+          </div>
+          <div className="protein-col col">
+            <div className="title">Protein</div>
+            <div className="subtitle">grams</div>
+          </div>
+          <div className="ethanol-col col">
+            <div className="title">Ethanol</div>
+            <div className="subtitle">grams</div>
+          </div>
+          <div className="status-col col"></div>
+        </div>
+        {meal}
+        <IngredientRow
+          key={"adder"}
+          update={this.flipAdd}
+          changeFocus={this.changeFocus}
+          mealId={this.props.meal._id}
+          focus={this.state.focus}
+          onSubmit={this.addIngredient}
+          isNew={true}
+          hasWeight={true}
+          isNewMeal={true}
+          cancel={this.flipAdd}
+        />
+        <IngredientRow
+          key={"summary"}
+          ingredient={summary}
+          update={this.update}
+          hasWeight={true}
+          isSummary={true}
+        />
+      </div>
     );
   }
 
   changeFocus = async () => {
-    await this.setState({ focus: true });
+    this.setState({ focus: true });
+    await this.props.changeFocus();
     this.setState({ focus: false });
   };
 

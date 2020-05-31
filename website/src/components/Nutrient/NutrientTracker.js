@@ -6,16 +6,6 @@ export default class NutrientTracker extends React.Component {
   constructor() {
     super();
     this.state = {
-      colours: {
-        fatDark: "#ffd433",
-        fatLight: "#ffe582",
-        carbDark: "#ff3f3f",
-        carbLight: "#ff9999",
-        protDark: "#3fafff",
-        protLight: "#99f1ff",
-        ethDark: "#35ff38",
-        ethLight: "#82ff84",
-      },
       currentMacros: {
         fat: 0,
         carbohydrate: 0,
@@ -49,13 +39,11 @@ export default class NutrientTracker extends React.Component {
       <div className="page">
         <div className="card">
           <NutrientSummary
-            colours={this.state.colours}
             currentMacros={this.state.currentMacros}
             macroDensities={this.state.macroDensities}
           />
         </div>
         <NutrientDay
-          colours={this.state.colours}
           macroDensities={this.state.macroDensities}
           updateNutrients={this.update}
         />

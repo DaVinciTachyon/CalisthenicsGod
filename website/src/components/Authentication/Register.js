@@ -1,4 +1,5 @@
 import React from "react";
+import "./Main.css";
 
 export default class Register extends React.Component {
   constructor() {
@@ -116,122 +117,97 @@ export default class Register extends React.Component {
 
   render() {
     return (
-      <div className="center">
-        <form onSubmit={this.handleSubmit.bind(this)} className="signCard card">
-          {this.state.error && (
-            <h3 data-test="error" onClick={this.dismissError.bind(this)}>
-              <button onClick={this.dismissError.bind(this)}>✖</button>
-              {this.state.error}
-            </h3>
-          )}
-          <div className="center">
-            <input
-              id="firstname"
-              className="formElement"
-              type="text"
-              value={this.state.firstname}
-              onChange={this.handleFirstNameChange.bind(this)}
-              placeholder="First Name"
-              required
-            />
-          </div>
-          <div className="center">
-            <input
-              id="middlename"
-              className="formElement"
-              type="text"
-              value={this.state.middlename}
-              onChange={this.handleMiddleNameChange.bind(this)}
-              placeholder="Middle Name"
-            />
-          </div>
-          <div className="center">
-            <input
-              id="lastname"
-              className="formElement"
-              type="text"
-              value={this.state.lastname}
-              onChange={this.handleLastNameChange.bind(this)}
-              placeholder="Last Name"
-              required
-            />
-          </div>
-          <div className="center">
-            <input
-              id="email"
-              className="formElement"
-              type="text"
-              value={this.state.email}
-              onChange={this.handleEmailChange.bind(this)}
-              placeholder="Email"
-              required
-            />
-          </div>
-          <div className="center">
-            <input
-              id="password"
-              className="formElement"
-              type="password"
-              value={this.state.password}
-              onChange={this.handlePasswordChange.bind(this)}
-              placeholder="Password"
-            />
-          </div>
-          <div className="center">
-            <input
-              id="weight"
-              className="formElement"
-              type="number"
-              step="0.1"
-              min="0"
-              value={this.state.weight}
-              onChange={this.handleWeightChange.bind(this)}
-              placeholder="Weight"
-              required
-            />
-          </div>
-          <div className="center">
-            <select
-              name="gender"
-              onChange={this.handleGenderChange.bind(this)}
-              required
-            >
-              <option value="male" defaultValue>
-                Male
-              </option>
-              <option value="female">Female</option>
-            </select>
-          </div>
-          <div className="center">
-            <input
-              id="birthDate"
-              className="formElement"
-              type="text"
-              max={new Date().toISOString().split("T")[0]}
-              onFocus={(e) => (e.target.type = "date")}
-              onBlur={(e) => {
-                if (e.target.value === "") e.target.type = "text";
-              }}
-              placeholder="Date of Birth"
-              value={this.state.birthDate}
-              onChange={this.handleBirthDateChange.bind(this)}
-              required
-            />
-          </div>
-          <div className="center">
-            <input
-              className="primaryButton formElement"
-              type="submit"
-              value="Register"
-            />
-          </div>
-          <div className="center">
-            <a className="secondaryButton formElement" href="/login">
-              Login
-            </a>
-          </div>
-        </form>
-      </div>
+      <form onSubmit={this.handleSubmit.bind(this)} className="card">
+        {this.state.error && (
+          <h3 data-test="error" onClick={this.dismissError.bind(this)}>
+            <button onClick={this.dismissError.bind(this)}>✖</button>
+            {this.state.error}
+          </h3>
+        )}
+        <label for="firstname">First Name</label>
+        <input
+          name="firstname"
+          type="text"
+          value={this.state.firstname}
+          onChange={this.handleFirstNameChange.bind(this)}
+          placeholder="First Name"
+          required
+        />
+        <label for="middlename">Middle Name</label>
+        <input
+          name="middlename"
+          type="text"
+          value={this.state.middlename}
+          onChange={this.handleMiddleNameChange.bind(this)}
+          placeholder="Middle Name"
+        />
+        <label for="lastname">Last Name</label>
+        <input
+          name="lastname"
+          type="text"
+          value={this.state.lastname}
+          onChange={this.handleLastNameChange.bind(this)}
+          placeholder="Last Name"
+          required
+        />
+        <label for="email">Email</label>
+        <input
+          name="email"
+          type="text"
+          value={this.state.email}
+          onChange={this.handleEmailChange.bind(this)}
+          placeholder="Email"
+          required
+        />
+        <label for="password">Password</label>
+        <input
+          name="password"
+          type="password"
+          value={this.state.password}
+          onChange={this.handlePasswordChange.bind(this)}
+          placeholder="Password"
+        />
+        <label for="weight">Weight</label>
+        <input
+          name="weight"
+          type="number"
+          step="0.1"
+          min="0"
+          value={this.state.weight}
+          onChange={this.handleWeightChange.bind(this)}
+          placeholder="Weight"
+          required
+        />
+        <label for="gender">Gender</label>
+        <select
+          name="gender"
+          onChange={this.handleGenderChange.bind(this)}
+          required
+        >
+          <option value="male" defaultValue>
+            Male
+          </option>
+          <option value="female">Female</option>
+        </select>
+        <label for="birthDate">Birth Date</label>
+        <input
+          name="birthDate"
+          type="date"
+          max={new Date().toISOString().split("T")[0]}
+          placeholder="Date of Birth"
+          value={this.state.birthDate}
+          onChange={this.handleBirthDateChange.bind(this)}
+          required
+        />
+        <input
+          className="primaryButton button"
+          type="submit"
+          value="Register"
+        />
+        <a className="secondaryButton button" href="/login">
+          Login
+        </a>
+      </form>
     );
   }
 }

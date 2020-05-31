@@ -1,0 +1,200 @@
+.table {
+  text-align: center;
+  border-radius: 1rem;
+  overflow: hidden;
+  width: 90%;
+  margin-top: 1rem;
+  margin-bottom: 1rem;
+}
+
+.table .title {
+  font-weight: 1000;
+  font-size: 1.8rem;
+  margin: 0.6rem;
+}
+
+.row {
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+  align-items: center;
+  border-radius: 1rem;
+}
+
+.col .title,
+.col .subtitle {
+  font-weight: 800;
+  margin: 0.1rem;
+}
+
+.col .title {
+  color: var(--primaryTitleColour);
+  font-size: 1rem;
+}
+
+.col .subtitle {
+  color: var(--secondaryTitleColour);
+  font-size: 0.8rem;
+}
+
+.lineEmphasis {
+  background: var(--secondaryBackgroundColour);
+  padding-right: 0.5rem;
+  padding-left: 0.5rem;
+}
+
+.inputLineEmphasis {
+  background: var(--secondaryColour);
+}
+
+.inputLineEmphasis .editable {
+  border-width: 0.2rem;
+  border-style: solid;
+  border-color: var(--darkPrimaryColour);
+  background: var(--primaryBackgroundColour);
+}
+
+.fat {
+  background: var(--secondaryFatColour);
+}
+
+.fat.editable {
+  border-color: var(--primaryFatColour);
+}
+
+.carbohydrate {
+  background: var(--secondaryCarbohydrateColour);
+}
+
+.carbohydrate.editable {
+  border-color: var(--primaryCarbohydrateColour);
+}
+
+.protein {
+  background: var(--secondaryProteinColour);
+}
+
+.protein.editable {
+  border-color: var(--primaryProteinColour);
+}
+
+.ethanol {
+  background: var(--secondaryEthanolColour);
+}
+
+.ethanol.editable {
+  border-color: var(--primaryEthanolColour);
+}
+
+.row .readOnly {
+  border: none;
+}
+
+input[type="text"].inheritBackground {
+  background: inherit;
+  border: none;
+  text-align: center;
+}
+
+input[type="number"]:hover.readOnly,
+input[type="number"]:focus.readOnly {
+  -moz-appearance: textfield;
+}
+
+input[type="number"] {
+  -moz-appearance: textfield;
+  width: 3.5rem;
+  text-align: center;
+}
+input[type="number"]:hover,
+input[type="number"]:focus {
+  -moz-appearance: number-input;
+}
+
+.addButton {
+  width: 95%;
+  background: var(--secondaryColour);
+}
+
+.newMeal {
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+}
+
+.newMeal .button,
+.newMeal select {
+  margin: 1rem;
+  padding: 0.5rem;
+  border-radius: 1rem;
+}
+
+.newMeal select {
+  min-width: 15%;
+  width: 15rem;
+}
+
+.newMeal .button {
+  min-width: 10%;
+  width: 7rem;
+}
+
+.col {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  text-align: center;
+  min-width: 2rem;
+}
+
+.col .div,
+.col input {
+  max-width: 95%;
+}
+
+.name-col {
+  width: 15rem;
+}
+
+.calories-col,
+.weight-col,
+.fat-col,
+.carbohydrate-col,
+.protein-col,
+.ethanol-col {
+  width: 6rem;
+}
+
+.status-col {
+  width: 2rem;
+}
+
+.col input {
+  margin: 0.3rem;
+}
+
+.container {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+}
+
+.newMealContainer {
+  max-width: 95%;
+  width: fit-content;
+  margin-top: 1rem;
+  margin-bottom: 1rem;
+}
+
+.errorButton,
+.successButton {
+  margin: 0;
+}
+
+@media only screen and (max-width: 850px) {
+}
+
+@media only screen and (min-width: 850px) {
+}

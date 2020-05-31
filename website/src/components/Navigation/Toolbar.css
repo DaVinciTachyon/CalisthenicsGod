@@ -13,13 +13,7 @@
   display: flex;
   flex-direction: column;
   align-items: center;
-  padding: 0;
-  margin: 0;
   height: 100%;
-}
-
-.nav-item {
-  width: 100%;
 }
 
 .nav-item:last-child {
@@ -89,7 +83,6 @@
   background: var(--darkPrimaryColour);
   font-size: 1.5rem;
   letter-spacing: 0.3ch;
-  width: 100%;
   display: flex;
   justify-content: center;
 }
@@ -112,7 +105,7 @@
   height: 3rem;
 }
 
-@media only screen and (max-width: 750px) {
+@media only screen and (max-width: 850px) {
   .navbar {
     height: 5rem;
     width: 100vw;
@@ -166,7 +159,7 @@
   }
 }
 
-@media only screen and (min-width: 750px) {
+@media only screen and (min-width: 850px) {
   .navbar {
     width: 5rem;
     height: 100vh;
@@ -190,6 +183,7 @@
 
   body {
     padding-left: 5rem;
+    padding-top: 5rem;
   }
 }
 
@@ -202,8 +196,6 @@
 
 .signedout .logo {
   background: var(--primaryColour);
-  margin: 0;
-  padding: 0;
 }
 
 .signedout.navbar:hover {

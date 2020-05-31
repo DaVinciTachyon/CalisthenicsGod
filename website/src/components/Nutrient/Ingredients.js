@@ -20,6 +20,10 @@ export default class Ingredients extends React.Component {
     };
   }
 
+  async componentDidMount() {
+    if (!localStorage.getItem("authToken")) window.location = "/login";
+  }
+
   update = () => {
     this.setState({ update: !this.state.update });
   };

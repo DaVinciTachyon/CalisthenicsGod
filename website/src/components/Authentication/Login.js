@@ -1,4 +1,5 @@
 import React from "react";
+import "./Main.css";
 
 export default class Login extends React.Component {
   constructor() {
@@ -62,48 +63,33 @@ export default class Login extends React.Component {
 
   render() {
     return (
-      <div className="center">
-        <form onSubmit={this.handleSubmit} className="signCard card">
-          {this.state.error && (
-            <h3 data-test="error" onClick={this.dismissError}>
-              <button onClick={this.dismissError}>✖</button>
-              {this.state.error}
-            </h3>
-          )}
-          <div className="center">
-            <input
-              id="email"
-              className="formElement"
-              type="text"
-              value={this.state.email}
-              onChange={this.handleEmailChange}
-              placeholder="Email"
-            />
-          </div>
-          <div className="center">
-            <input
-              id="password"
-              className="formElement"
-              type="password"
-              value={this.state.password}
-              onChange={this.handlePasswordChange}
-              placeholder="Password"
-            />
-          </div>
-          <div className="center">
-            <input
-              className="primaryButton formElement"
-              type="submit"
-              value="Login"
-            />
-          </div>
-          <div className="center">
-            <a className="secondaryButton formElement" href="/register">
-              Register
-            </a>
-          </div>
-        </form>
-      </div>
+      <form onSubmit={this.handleSubmit} className="card">
+        {this.state.error && (
+          <h3 data-test="error" onClick={this.dismissError}>
+            <button onClick={this.dismissError}>✖</button>
+            {this.state.error}
+          </h3>
+        )}
+        <label for="email">Email</label>
+        <input
+          name="email"
+          type="text"
+          value={this.state.email}
+          onChange={this.handleEmailChange}
+          placeholder="Email"
+        />
+        <label for="email">Password</label>
+        <input
+          type="password"
+          value={this.state.password}
+          onChange={this.handlePasswordChange}
+          placeholder="Password"
+        />
+        <input className="primaryButton button" type="submit" value="Sign In" />
+        <a className="secondaryButton button" href="/register">
+          Register
+        </a>
+      </form>
     );
   }
 }

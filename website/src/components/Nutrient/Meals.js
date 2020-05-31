@@ -22,7 +22,8 @@ export default class Meals extends React.Component {
     };
   }
 
-  componentDidMount() {
+  async componentDidMount() {
+    if (!localStorage.getItem("authToken")) window.location = "/login";
     this.getMealNames();
   }
 
