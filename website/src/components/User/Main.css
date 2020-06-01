@@ -1,0 +1,54 @@
+.profile-table {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  max-width: 95%;
+}
+
+.profile-table .row {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+}
+
+.profile-table .col {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  height: 100%;
+  width: 100%;
+  padding: 0.2rem;
+}
+
+.profile-table .label-col {
+  min-width: 8rem;
+  font-weight: 500;
+}
+
+.profile-table .value-col {
+  min-width: 18rem;
+}
+
+.profile-table .value-col select,
+.profile-table .value-col input {
+  width: 100%;
+  text-align: center;
+}
+
+.profile-table .unit-col {
+  min-width: 1rem;
+  width: 2.5rem;
+  padding: 0;
+  margin: 0;
+  color: var(--secondaryTitleColour);
+  font-size: 0.8rem;
+}
+
+.profile-table .submit-col {
+  width: 100%;
+}
