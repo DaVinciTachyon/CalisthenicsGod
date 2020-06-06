@@ -68,78 +68,75 @@ export default class MeasurementSummary extends React.Component {
     return (
       <div>
         <div className="card">
-          <table>
-            <tbody>
-              {this.state.weight > 0 && (
-                <tr>
-                  <td>Weight</td>
-                  <td>{this.state.weight}</td>
-                </tr>
-              )}
-              {this.state.height > 0 && (
-                <tr>
-                  <td>Height</td>
-                  <td>{this.state.height}</td>
-                </tr>
-              )}
-              {this.state.waist > 0 && (
-                <tr>
-                  <td>Waist</td>
-                  <td>{this.state.waist}</td>
-                </tr>
-              )}
-              {this.state.hips > 0 && (
-                <tr>
-                  <td>Hips</td>
-                  <td>{this.state.hips}</td>
-                </tr>
-              )}
-              {this.state.rightBicep > 0 && (
-                <tr>
-                  <td>Right Flexed Bicep</td>
-                  <td>{this.state.rightBicep}</td>
-                </tr>
-              )}
-              {this.state.leftBicep > 0 && (
-                <tr>
-                  <td>Left Flexed Bicep</td>
-                  <td>{this.state.leftBicep}</td>
-                </tr>
-              )}
-              {this.state.rightForearm > 0 && (
-                <tr>
-                  <td>Right Forearm</td>
-                  <td>{this.state.rightForearm}</td>
-                </tr>
-              )}
-              {this.state.leftForearm > 0 && (
-                <tr>
-                  <td>Left Forearm</td>
-                  <td>{this.state.leftForearm}</td>
-                </tr>
-              )}
-              {this.state.shoulders > 0 && (
-                <tr>
-                  <td>Shoulders</td>
-                  <td>{this.state.shoulders}</td>
-                </tr>
-              )}
-              {this.state.chest > 0 && (
-                <tr>
-                  <td>Chest</td>
-                  <td>{this.state.chest}</td>
-                </tr>
-              )}
-              {this.state.neck > 0 && (
-                <tr>
-                  <td>Neck</td>
-                  <td>{this.state.neck}</td>
-                </tr>
-              )}
-            </tbody>
-          </table>
-
-          <button onClick={this.newMeasurements}>New Measurements</button>
+          <div className="measurements">
+            {this.state.weight > 0 && (
+              <div className="measurement">
+                <div className="measureLabel">Weight</div>
+                <div className="measureValue">{this.state.weight}</div>
+              </div>
+            )}
+            {this.state.height > 0 && (
+              <div className="measurement">
+                <div className="measureLabel">Height</div>
+                <div className="measureValue">{this.state.height}</div>
+              </div>
+            )}
+            {this.state.waist > 0 && (
+              <div className="measurement">
+                <div className="measureLabel">Waist</div>
+                <div className="measureValue">{this.state.waist}</div>
+              </div>
+            )}
+            {this.state.hips > 0 && (
+              <div className="measurement">
+                <div className="measureLabel">Hips</div>
+                <div className="measureValue">{this.state.hips}</div>
+              </div>
+            )}
+            {this.state.rightBicep > 0 && (
+              <div className="measurement">
+                <div className="measureLabel">Right Flexed Bicep</div>
+                <div className="measureValue">{this.state.rightBicep}</div>
+              </div>
+            )}
+            {this.state.leftBicep > 0 && (
+              <div className="measurement">
+                <div className="measureLabel">Left Flexed Bicep</div>
+                <div className="measureValue">{this.state.leftBicep}</div>
+              </div>
+            )}
+            {this.state.rightForearm > 0 && (
+              <div className="measurement">
+                <div className="measureLabel">Right Forearm</div>
+                <div className="measureValue">{this.state.rightForearm}</div>
+              </div>
+            )}
+            {this.state.leftForearm > 0 && (
+              <div className="measurement">
+                <div className="measureLabel">Left Forearm</div>
+                <div className="measureValue">{this.state.leftForearm}</div>
+              </div>
+            )}
+            {this.state.shoulders > 0 && (
+              <div className="measurement">
+                <div className="measureLabel">Shoulders</div>
+                <div className="measureValue">{this.state.shoulders}</div>
+              </div>
+            )}
+            {this.state.chest > 0 && (
+              <div className="measurement">
+                <div className="measureLabel">Chest</div>
+                <div className="measureValue">{this.state.chest}</div>
+              </div>
+            )}
+            {this.state.neck > 0 && (
+              <div className="measurement">
+                <div className="measureLabel">Neck</div>
+                <div className="measureValue">{this.state.neck}</div>
+              </div>
+            )}
+            <button onClick={this.newMeasurements}>New Measurements</button>
+          </div>
         </div>
         <Modal
           isOpen={this.state.newMeasurements}

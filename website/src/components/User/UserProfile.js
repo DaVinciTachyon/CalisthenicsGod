@@ -122,7 +122,12 @@ export default class UserProfile extends React.Component {
           <div className="row">
             <div className="label-col col">First Name</div>
             <div className="value-col col">
-              <input type="text" value={this.state.name.first} />
+              <input
+                type="text"
+                value={this.state.name.first}
+                className="readOnly"
+                readOnly
+              />
             </div>
           </div>
           <div className="row">
@@ -132,19 +137,31 @@ export default class UserProfile extends React.Component {
                 type="text"
                 placeholder="Middle Name"
                 value={this.state.name.middle}
+                className="readOnly"
+                readOnly
               />
             </div>
           </div>
           <div className="row">
             <div className="label-col col">Last Name</div>
             <div className="value-col col">
-              <input type="text" value={this.state.name.last} />
+              <input
+                type="text"
+                value={this.state.name.last}
+                className="readOnly"
+                readOnly
+              />
             </div>
           </div>
           <div className="row">
             <div className="label-col col">Email</div>
             <div className="value-col col">
-              <input type="text" value={this.state.email} />
+              <input
+                type="text"
+                value={this.state.email}
+                className="readOnly"
+                readOnly
+              />
             </div>
           </div>
           <div className="row">
@@ -182,6 +199,8 @@ export default class UserProfile extends React.Component {
                 type="number"
                 min="0"
                 value={this.state.maintenanceCalories}
+                className="readOnly"
+                readOnly
               />
               <div className="unit-col">kcal</div>
             </div>
@@ -189,7 +208,13 @@ export default class UserProfile extends React.Component {
           <div className="row">
             <div className="label-col col">Calorie Offset</div>
             <div className="value-col col">
-              <input type="number" step="1" value={this.state.currentOffset} />
+              <input
+                type="number"
+                step="1"
+                value={this.state.currentOffset}
+                className="readOnly"
+                readOnly
+              />
               <div className="unit-col">kcal</div>
             </div>
           </div>
@@ -201,6 +226,8 @@ export default class UserProfile extends React.Component {
                 min="0"
                 step="0.05"
                 value={this.state.proteinAmount}
+                className="readOnly"
+                readOnly
               />
               <div className="unit-col">g/kg</div>
             </div>
@@ -212,6 +239,8 @@ export default class UserProfile extends React.Component {
                 type="number"
                 min="0"
                 value={this.state.fatPartition * 100}
+                className="readOnly"
+                readOnly
               />
               <div className="unit-col">%</div>
             </div>
@@ -235,13 +264,23 @@ export default class UserProfile extends React.Component {
           <div className="row">
             <div className="label-col col">Birth Date</div>
             <div className="value-col col">
-              <input type="date" value={this.state.birthDate} />
+              <input
+                type="date"
+                value={this.state.birthDate}
+                className="readOnly"
+                readOnly
+              />
             </div>
           </div>
           <div className="row">
             <div className="label-col col">Date Joined</div>
             <div className="value-col col">
-              <input type="date" value={this.state.dateJoined} readOnly />
+              <input
+                type="date"
+                value={this.state.dateJoined}
+                className="readOnly"
+                readOnly
+              />
             </div>
           </div>
           <div className="row">
