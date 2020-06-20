@@ -1,7 +1,7 @@
-import React from "react";
-import "./Toolbar.css";
-import { Link } from "react-router-dom";
-import { isMobile } from "react-device-detect";
+import React from 'react';
+import './Toolbar.css';
+import { Link } from 'react-router-dom';
+import { isMobile } from 'react-device-detect';
 
 export default class ToolBar extends React.Component {
   constructor() {
@@ -16,9 +16,9 @@ export default class ToolBar extends React.Component {
   };
 
   render() {
-    if (localStorage.getItem("authToken"))
+    if (localStorage.getItem('authToken'))
       return (
-        <nav className={isMobile ? "mobile navbar" : "navbar"}>
+        <nav className={isMobile ? 'mobile navbar' : 'navbar'}>
           <ul onClick={this.updateUrl} className="navbar-nav">
             <li className="logo">
               <Link to="/" className="nav-link">
@@ -32,7 +32,7 @@ export default class ToolBar extends React.Component {
                   xmlns="http://www.w3.org/2000/svg"
                   viewBox="0 0 640 512"
                   class="svg-inline--fa fa-dumbbell fa-w-20"
-                  style={{ "--fa-secondary-opacity": 0.1 }}
+                  style={{ '--fa-secondary-opacity': 0.1 }}
                 >
                   <g class="fa-group">
                     <path
@@ -51,10 +51,10 @@ export default class ToolBar extends React.Component {
             </li>
             <li
               className={
-                this.state.path === "/" ||
-                this.state.path.includes("/nutrientTracker")
-                  ? "nav-current nav-item"
-                  : "nav-item"
+                this.state.path === '/' ||
+                this.state.path.includes('/nutrientTracker')
+                  ? 'nav-current nav-item'
+                  : 'nav-item'
               }
             >
               <Link to="/nutrientTracker" className="nav-link">
@@ -67,7 +67,7 @@ export default class ToolBar extends React.Component {
                   xmlns="http://www.w3.org/2000/svg"
                   viewBox="0 0 576 512"
                   class="svg-inline--fa fa-utensils-alt fa-w-18"
-                  style={{ "--fa-secondary-opacity": 0.1 }}
+                  style={{ '--fa-secondary-opacity': 0.1 }}
                 >
                   <g class="fa-group">
                     <path
@@ -97,7 +97,7 @@ export default class ToolBar extends React.Component {
                 </li>
               </ul>
             </li>
-            <li
+            {/* <li
               className={
                 this.state.path.includes("/workoutTracker")
                   ? "nav-current nav-item"
@@ -131,12 +131,12 @@ export default class ToolBar extends React.Component {
                 </svg>
                 <span className="link-text">Workouts</span>
               </Link>
-            </li>
+            </li> */}
             <li
               className={
-                this.state.path.includes("/measurementTracker")
-                  ? "nav-current nav-item"
-                  : "nav-item"
+                this.state.path.includes('/measurementTracker')
+                  ? 'nav-current nav-item'
+                  : 'nav-item'
               }
             >
               <Link to="/measurementTracker" className="nav-link">
@@ -149,7 +149,7 @@ export default class ToolBar extends React.Component {
                   xmlns="http://www.w3.org/2000/svg"
                   viewBox="0 0 640 512"
                   class="svg-inline--fa fa-ruler fa-w-20"
-                  style={{ "--fa-secondary-opacity": 0.1 }}
+                  style={{ '--fa-secondary-opacity': 0.1 }}
                 >
                   <g class="fa-group">
                     <path
@@ -169,9 +169,9 @@ export default class ToolBar extends React.Component {
             </li>
             <li
               className={
-                this.state.path.includes("/userProfile")
-                  ? "nav-current nav-item"
-                  : "nav-item"
+                this.state.path.includes('/userProfile')
+                  ? 'nav-current nav-item'
+                  : 'nav-item'
               }
             >
               <Link to="/userProfile" className="nav-link">
@@ -184,7 +184,7 @@ export default class ToolBar extends React.Component {
                   xmlns="http://www.w3.org/2000/svg"
                   viewBox="0 0 448 512"
                   class="svg-inline--fa fa-user fa-w-14"
-                  style={{ "--fa-secondary-opacity": 0.1 }}
+                  style={{ '--fa-secondary-opacity': 0.1 }}
                 >
                   <g class="fa-group">
                     <path
@@ -213,7 +213,7 @@ export default class ToolBar extends React.Component {
                   xmlns="http://www.w3.org/2000/svg"
                   viewBox="0 0 512 512"
                   class="svg-inline--fa fa-sign-out-alt fa-w-16"
-                  style={{ "--fa-secondary-opacity": 0.1 }}
+                  style={{ '--fa-secondary-opacity': 0.1 }}
                 >
                   <g class="fa-group">
                     <path
@@ -234,10 +234,10 @@ export default class ToolBar extends React.Component {
           </ul>
         </nav>
       );
-    document.querySelector("body").style.padding = "5rem 0 0 0";
+    document.querySelector('body').style.padding = '5rem 0 0 0';
     return (
       <nav
-        className={isMobile ? "mobile signedout navbar" : "signedout navbar"}
+        className={isMobile ? 'mobile signedout navbar' : 'signedout navbar'}
       >
         <ul className="navbar-nav">
           <li className="logo">
@@ -252,7 +252,7 @@ export default class ToolBar extends React.Component {
                 xmlns="http://www.w3.org/2000/svg"
                 viewBox="0 0 640 512"
                 class="svg-inline--fa fa-dumbbell fa-w-20"
-                style={{ "--fa-secondary-opacity": 0.1 }}
+                style={{ '--fa-secondary-opacity': 0.1 }}
               >
                 <g class="fa-group">
                   <path
@@ -275,7 +275,7 @@ export default class ToolBar extends React.Component {
   }
 
   logOut = () => {
-    localStorage.removeItem("authToken");
+    localStorage.removeItem('authToken');
     window.location.reload(false);
   };
 }
