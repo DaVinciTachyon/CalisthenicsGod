@@ -8,10 +8,10 @@ services:
     volumes:
       - ./data:/data/db
     ports:
-      - "27017:27017"
+      - '27017:27017'
     networks:
       - app-network
-  nodejs:
+  backend:
     build:
       context: ./backend
       dockerfile: Dockerfile
@@ -19,7 +19,7 @@ services:
     container_name: calisthenicsGodBackend
     restart: unless-stopped
     ports:
-      - "8080:8080"
+      - '8080:8080'
     expose:
       - 8080
     volumes:
@@ -36,7 +36,7 @@ services:
 
 volumes:
   dbdata:
-  node_modules:  
+  node_modules:
 
 networks:
   app-network:
