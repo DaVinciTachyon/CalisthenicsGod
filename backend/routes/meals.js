@@ -32,6 +32,7 @@ router.use(verify, (req, res, next) => {
 });
 
 router.post('/edit', async (req, res) => {
+  //FIXME?
   if (!req.body.mealId)
     return res.status(400).send({ error: 'Meal ID Required' });
   if (!req.body._id)
@@ -90,10 +91,11 @@ router.get('/today', async (req, res) => {
           _id: nutrients.history[0].meals[i].ingredients[j]._id,
           name: ingredient.name,
           weight: nutrients.history[0].meals[i].ingredients[j].weight,
-          fat: ingredient.fat,
-          carbohydrate: ingredient.carbohydrate,
-          protein: ingredient.protein,
-          ethanol: ingredient.ethanol,
+          fat: nutrients.history[0].meals[i].ingredients[j].fat,
+          carbohydrate:
+            nutrients.history[0].meals[i].ingredients[j].carbohydrate,
+          protein: nutrients.history[0].meals[i].ingredients[j].protein,
+          ethanol: nutrients.history[0].meals[i].ingredients[j].ethanol,
         });
       }
       meals.push(meal);
@@ -104,7 +106,6 @@ router.get('/today', async (req, res) => {
   });
 });
 
-//FIXME separate
 router.post('/', async (req, res) => {
   if (!req.body.ingredient)
     return res.status(400).send({ error: 'Ingredient Required' });
@@ -113,6 +114,22 @@ router.post('/', async (req, res) => {
   if (error) return res.status(400).send({ error: error.details[0].message });
 
   const nutrients = await Nutrients.findOne({ userId: req.user._id });
+
+  const ogIngredient = await Ingredients.findOne({
+    userId: req.user._id,
+    _id: req.body.ingredient.ingredientId,
+  });
+  if (!ogIngredient)
+    return res.status(400).send({ error: 'Invalid Ingredient ID' });
+
+  const ingredient = {
+    ingredientId: req.body.ingredient.ingredientId,
+    weight: req.body.ingredient.weight,
+    fat: ogIngredient.fat,
+    carbohydrate: ogIngredient.carbohydrate,
+    protein: ogIngredient.protein,
+    ethanol: ogIngredient.ethanol,
+  };
 
   if (
     req.body.mealId &&
@@ -126,7 +143,7 @@ router.post('/', async (req, res) => {
     );
     if (meal === -1)
       return res.status(400).send({ error: 'Incorrect Meal ID' });
-    nutrients.history[0].meals[meal].ingredients.push(req.body.ingredient);
+    nutrients.history[0].meals[meal].ingredients.push(ingredient);
   } else {
     if (
       nutrients.history !== undefined &&
@@ -134,13 +151,13 @@ router.post('/', async (req, res) => {
       isToday(nutrients.history[0].date)
     ) {
       nutrients.history[0].meals.push({
-        ingredients: [req.body.ingredient],
+        ingredients: [ingredient],
       });
     } else {
       nutrients.history.unshift({
         meals: [
           {
-            ingredients: [req.body.ingredient],
+            ingredients: [ingredient],
           },
         ],
       });
@@ -199,18 +216,36 @@ router.post('/addPreset', async (req, res) => {
 
   if (meal.ingredients.length === 0)
     return res.status(400).send('No Ingredients');
+  let ingredients = [];
+  for (const ingredient of meal.ingredients) {
+    const ogIngredient = await Ingredients.findOne({
+      userId: req.user._id,
+      _id: ingredient.ingredientId,
+    });
+    if (!ogIngredient)
+      return res.status(400).send({ error: 'Invalid Ingredient ID' });
+
+    ingredients.push({
+      ingredientId: ingredient.ingredientId,
+      weight: ingredient.weight,
+      fat: ogIngredient.fat,
+      carbohydrate: ogIngredient.carbohydrate,
+      protein: ogIngredient.protein,
+      ethanol: ogIngredient.ethanol,
+    });
+  }
 
   if (
     nutrients.history !== undefined &&
     nutrients.history.length > 0 &&
     isToday(nutrients.history[0].date)
   )
-    nutrients.history[0].meals.push({ ingredients: meal.ingredients });
+    nutrients.history[0].meals.push({ ingredients: ingredients });
   else
     nutrients.history.unshift({
       meals: [
         {
-          ingredients: meal.ingredients,
+          ingredients: ingredients,
         },
       ],
     });
