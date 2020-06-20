@@ -1,14 +1,14 @@
-import React from "react";
-import MealTable from "./MealTable";
-import IngredientRow from "./IngredientRow";
-import "./Main.css";
+import React from 'react';
+import MealTable from './MealTable';
+import IngredientRow from './IngredientRow';
+import './Main.css';
 
 export default class NutrientDay extends React.Component {
   constructor() {
     super();
     this.state = {
       meals: [],
-      mealId: "",
+      mealId: '',
       presetMeals: [],
       newMeal: false,
       focus: false,
@@ -53,7 +53,7 @@ export default class NutrientDay extends React.Component {
           {!this.state.newMeal && (
             <form className="newMeal" onSubmit={this.selectMeal.bind(this)}>
               <select onChange={this.mealChange.bind(this)}>
-                <option value="" selected={this.state.mealId === ""}>
+                <option value="" selected={this.state.mealId === ''}>
                   New Meal
                 </option>
                 {presetMeals}
@@ -63,7 +63,7 @@ export default class NutrientDay extends React.Component {
           )}
           {this.state.newMeal && !this.state.focus && (
             <IngredientRow
-              key={"adder"}
+              key={'adder'}
               update={() => {
                 this.update();
                 this.flipNewMeal();
@@ -91,15 +91,15 @@ export default class NutrientDay extends React.Component {
   };
 
   addIngredient = async (ingredient) => {
-    let newId = "";
+    let newId = '';
     if (!ingredient._id) {
       const response = await fetch(
-        "http://localhost:8080/nutrition/ingredients/add/",
+        'http://ec2-54-246-187-137.eu-west-1.compute.amazonaws.com:8080/nutrition/ingredients/add/',
         {
-          method: "POST",
+          method: 'POST',
           headers: {
-            "Content-Type": "application/json",
-            "auth-token": localStorage.getItem("authToken"),
+            'Content-Type': 'application/json',
+            'auth-token': localStorage.getItem('authToken'),
           },
           body: JSON.stringify({
             name: ingredient.name,
@@ -114,19 +114,22 @@ export default class NutrientDay extends React.Component {
       newId = data._id;
     } else newId = ingredient._id;
 
-    await fetch("http://localhost:8080/nutrition/meals/", {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-        "auth-token": localStorage.getItem("authToken"),
-      },
-      body: JSON.stringify({
-        ingredient: {
-          ingredientId: newId,
-          weight: ingredient.weight,
+    await fetch(
+      'http://ec2-54-246-187-137.eu-west-1.compute.amazonaws.com:8080/nutrition/meals/',
+      {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          'auth-token': localStorage.getItem('authToken'),
         },
-      }),
-    });
+        body: JSON.stringify({
+          ingredient: {
+            ingredientId: newId,
+            weight: ingredient.weight,
+          },
+        }),
+      }
+    );
     this.addIngredientToMeal({
       ingredient: {
         _id: newId,
@@ -143,7 +146,7 @@ export default class NutrientDay extends React.Component {
 
   update = () => {
     this.setState({
-      mealId: "",
+      mealId: '',
     });
   };
 
@@ -215,12 +218,12 @@ export default class NutrientDay extends React.Component {
 
   getMeals = async () => {
     const response = await fetch(
-      "http://localhost:8080/nutrition/meals/today/",
+      'http://ec2-54-246-187-137.eu-west-1.compute.amazonaws.com:8080/nutrition/meals/today/',
       {
-        method: "GET",
+        method: 'GET',
         headers: {
-          "Content-Type": "application/json",
-          "auth-token": localStorage.getItem("authToken"),
+          'Content-Type': 'application/json',
+          'auth-token': localStorage.getItem('authToken'),
         },
       }
     );
@@ -233,12 +236,12 @@ export default class NutrientDay extends React.Component {
 
   getPresetMeals = async () => {
     const response = await fetch(
-      "http://localhost:8080/nutrition/meals/preset/names/",
+      'http://ec2-54-246-187-137.eu-west-1.compute.amazonaws.com:8080/nutrition/meals/preset/names/',
       {
-        method: "GET",
+        method: 'GET',
         headers: {
-          "Content-Type": "application/json",
-          "auth-token": localStorage.getItem("authToken"),
+          'Content-Type': 'application/json',
+          'auth-token': localStorage.getItem('authToken'),
         },
       }
     );
@@ -267,18 +270,21 @@ export default class NutrientDay extends React.Component {
 
   selectMeal = async (evt) => {
     evt.preventDefault();
-    if (this.state.mealId === "") this.flipNewMeal();
+    if (this.state.mealId === '') this.flipNewMeal();
     else {
-      await fetch("http://localhost:8080/nutrition/meals/addPreset/", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-          "auth-token": localStorage.getItem("authToken"),
-        },
-        body: JSON.stringify({
-          _id: this.state.mealId,
-        }),
-      });
+      await fetch(
+        'http://ec2-54-246-187-137.eu-west-1.compute.amazonaws.com:8080/nutrition/meals/addPreset/',
+        {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+            'auth-token': localStorage.getItem('authToken'),
+          },
+          body: JSON.stringify({
+            _id: this.state.mealId,
+          }),
+        }
+      );
       this.update();
       this.getMeals();
     }

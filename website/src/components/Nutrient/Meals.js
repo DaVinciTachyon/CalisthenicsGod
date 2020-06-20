@@ -1,25 +1,25 @@
-import React from "react";
-import MealEditor from "./MealEditor";
-import "./Main.css";
+import React from 'react';
+import MealEditor from './MealEditor';
+import './Main.css';
 
 export default class Meals extends React.Component {
   constructor() {
     super();
     this.state = {
       colours: {
-        fatDark: "#ffd433",
-        fatLight: "#ffe582",
-        carbDark: "#ff3f3f",
-        carbLight: "#ff9999",
-        protDark: "#3fafff",
-        protLight: "#99f1ff",
-        ethDark: "#35ff38",
-        ethLight: "#82ff84",
+        fatDark: '#ffd433',
+        fatLight: '#ffe582',
+        carbDark: '#ff3f3f',
+        carbLight: '#ff9999',
+        protDark: '#3fafff',
+        protLight: '#99f1ff',
+        ethDark: '#35ff38',
+        ethLight: '#82ff84',
       },
       update: false,
       newMeal: false,
       meals: [],
-      name: "",
+      name: '',
       focus: false,
     };
   }
@@ -30,7 +30,7 @@ export default class Meals extends React.Component {
   };
 
   async componentDidMount() {
-    if (!localStorage.getItem("authToken")) window.location = "/login";
+    if (!localStorage.getItem('authToken')) window.location = '/login';
     this.getMealNames();
   }
 
@@ -45,13 +45,16 @@ export default class Meals extends React.Component {
 
   getMealNames = () => {
     const requestOptions = {
-      method: "GET",
+      method: 'GET',
       headers: {
-        "Content-Type": "application/json",
-        "auth-token": localStorage.getItem("authToken"),
+        'Content-Type': 'application/json',
+        'auth-token': localStorage.getItem('authToken'),
       },
     };
-    fetch("http://localhost:8080/nutrition/meals/preset/names/", requestOptions)
+    fetch(
+      'http://ec2-54-246-187-137.eu-west-1.compute.amazonaws.com:8080/nutrition/meals/preset/names/',
+      requestOptions
+    )
       .then((response) => response.json())
       .then((data) => {
         let meals = Object.assign({}, this.state.meals);
@@ -63,10 +66,10 @@ export default class Meals extends React.Component {
   newMeal = (evt) => {
     evt.preventDefault();
     const requestOptions = {
-      method: "POST",
+      method: 'POST',
       headers: {
-        "Content-Type": "application/json",
-        "auth-token": localStorage.getItem("authToken"),
+        'Content-Type': 'application/json',
+        'auth-token': localStorage.getItem('authToken'),
       },
       body: JSON.stringify({
         name: this.state.name,
@@ -74,11 +77,11 @@ export default class Meals extends React.Component {
       }),
     };
     fetch(
-      "http://localhost:8080/nutrition/meals/preset/add/",
+      'http://ec2-54-246-187-137.eu-west-1.compute.amazonaws.com:8080/nutrition/meals/preset/add/',
       requestOptions
     ).then(() => {
       this.flipNewMeal();
-      this.setState({ name: "" });
+      this.setState({ name: '' });
       this.getMealNames();
     });
   };

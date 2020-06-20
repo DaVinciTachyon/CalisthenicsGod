@@ -1,5 +1,5 @@
-import React from "react";
-import { Line } from "react-chartjs-2";
+import React from 'react';
+import { Line } from 'react-chartjs-2';
 
 export default class MeasurementHistory extends React.Component {
   constructor() {
@@ -9,11 +9,11 @@ export default class MeasurementHistory extends React.Component {
         labels: [],
         datasets: [
           {
-            label: "Weight",
+            label: 'Weight',
             fill: false,
             lineTension: 0.5,
-            backgroundColor: "rgba(75,192,192,1)",
-            borderColor: "rgba(0,0,0,1)",
+            backgroundColor: 'rgba(75,192,192,1)',
+            borderColor: 'rgba(0,0,0,1)',
             borderWidth: 2,
             data: [],
           },
@@ -34,13 +34,16 @@ export default class MeasurementHistory extends React.Component {
 
   getWeightHistory = () => {
     const requestOptions = {
-      method: "GET",
+      method: 'GET',
       headers: {
-        "Content-Type": "application/json",
-        "auth-token": localStorage.getItem("authToken"),
+        'Content-Type': 'application/json',
+        'auth-token': localStorage.getItem('authToken'),
       },
     };
-    fetch("http://localhost:8080/measurement/weight/history", requestOptions)
+    fetch(
+      'http://ec2-54-246-187-137.eu-west-1.compute.amazonaws.com:8080/measurement/weight/history',
+      requestOptions
+    )
       .then((response) => response.json())
       .then((data) => {
         let chart = Object.assign({}, this.state.chart);
@@ -81,12 +84,12 @@ export default class MeasurementHistory extends React.Component {
           options={{
             title: {
               display: true,
-              text: "Weight History",
+              text: 'Weight History',
               fontSize: 20,
             },
             legend: {
               display: false,
-              position: "right",
+              position: 'right',
             },
           }}
         />

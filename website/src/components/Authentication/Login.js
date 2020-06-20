@@ -1,13 +1,13 @@
-import React from "react";
-import "./Main.css";
+import React from 'react';
+import './Main.css';
 
 export default class Login extends React.Component {
   constructor() {
     super();
     this.state = {
-      email: "",
-      password: "",
-      error: "",
+      email: '',
+      password: '',
+      error: '',
     };
 
     this.handleEmailChange = this.handleEmailChange.bind(this);
@@ -17,27 +17,30 @@ export default class Login extends React.Component {
   }
 
   componentDidMount() {
-    if (localStorage.getItem("authToken")) window.location = "/";
+    if (localStorage.getItem('authToken')) window.location = '/';
   }
 
   handleSubmit(evt) {
     evt.preventDefault();
-    if (!this.state.email) return this.setState({ error: "Email is required" });
+    if (!this.state.email) return this.setState({ error: 'Email is required' });
     if (!this.state.password)
-      return this.setState({ error: "Password is required" });
+      return this.setState({ error: 'Password is required' });
     const requestOptions = {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({
         email: this.state.email,
         password: this.state.password,
       }),
     };
-    fetch("http://localhost:8080/auth/login", requestOptions)
+    fetch(
+      'http://ec2-54-246-187-137.eu-west-1.compute.amazonaws.com:8080/auth/login',
+      requestOptions
+    )
       .then((response) => response.json())
       .then((data) => {
-        if (data["auth-token"]) {
-          localStorage.setItem("authToken", data["auth-token"]);
+        if (data['auth-token']) {
+          localStorage.setItem('authToken', data['auth-token']);
           window.location.reload(false);
         }
         this.setState({ error: data.error });
@@ -58,7 +61,7 @@ export default class Login extends React.Component {
   }
 
   dismissError() {
-    this.setState({ error: "" });
+    this.setState({ error: '' });
   }
 
   render() {

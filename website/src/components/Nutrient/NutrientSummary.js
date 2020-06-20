@@ -1,6 +1,6 @@
-import React from "react";
-import IngredientRow from "./IngredientRow";
-import "./Main.css";
+import React from 'react';
+import IngredientRow from './IngredientRow';
+import './Main.css';
 
 export default class NutrientSummary extends React.Component {
   constructor() {
@@ -47,9 +47,9 @@ export default class NutrientSummary extends React.Component {
           </div>
         </div>
         <IngredientRow
-          key={"goal"}
+          key={'goal'}
           ingredient={{
-            name: "Goal",
+            name: 'Goal',
             fat: this.state.macros.fat,
             carbohydrate: this.state.macros.carbohydrate,
             protein: this.state.macros.protein,
@@ -59,9 +59,9 @@ export default class NutrientSummary extends React.Component {
           isSummary={true}
         />
         <IngredientRow
-          key={"current"}
+          key={'current'}
           ingredient={{
-            name: "Current",
+            name: 'Current',
             fat: this.props.currentMacros.fat,
             carbohydrate: this.props.currentMacros.carbohydrate,
             protein: this.props.currentMacros.protein,
@@ -71,9 +71,9 @@ export default class NutrientSummary extends React.Component {
           isSummary={true}
         />
         <IngredientRow
-          key={"left"}
+          key={'left'}
           ingredient={{
-            name: "Left",
+            name: 'Left',
             fat: this.state.macros.fat - this.props.currentMacros.fat,
             carbohydrate:
               this.state.macros.carbohydrate -
@@ -92,13 +92,16 @@ export default class NutrientSummary extends React.Component {
 
   getUserGoals = () => {
     const requestOptions = {
-      method: "GET",
+      method: 'GET',
       headers: {
-        "Content-Type": "application/json",
-        "auth-token": localStorage.getItem("authToken"),
+        'Content-Type': 'application/json',
+        'auth-token': localStorage.getItem('authToken'),
       },
     };
-    fetch("http://localhost:8080/nutrition/goals", requestOptions)
+    fetch(
+      'http://ec2-54-246-187-137.eu-west-1.compute.amazonaws.com:8080/nutrition/goals',
+      requestOptions
+    )
       .then((response) => response.json())
       .then((data) =>
         this.setState({

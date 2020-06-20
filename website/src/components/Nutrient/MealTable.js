@@ -1,6 +1,6 @@
-import React from "react";
-import IngredientRow from "./IngredientRow";
-import "./Main.css";
+import React from 'react';
+import IngredientRow from './IngredientRow';
+import './Main.css';
 
 export default class MealTable extends React.Component {
   constructor() {
@@ -20,7 +20,7 @@ export default class MealTable extends React.Component {
   render() {
     let meal = [];
     let summary = {
-      name: "Total",
+      name: 'Total',
       weight: 0,
       fat: 0,
       carbohydrate: 0,
@@ -82,7 +82,7 @@ export default class MealTable extends React.Component {
         </div>
         {meal}
         <IngredientRow
-          key={"adder"}
+          key={'adder'}
           update={this.flipAdd}
           changeFocus={this.changeFocus}
           mealId={this.props.meal._id}
@@ -94,7 +94,7 @@ export default class MealTable extends React.Component {
           cancel={this.flipAdd}
         />
         <IngredientRow
-          key={"summary"}
+          key={'summary'}
           ingredient={summary}
           update={this.update}
           hasWeight={true}
@@ -112,15 +112,15 @@ export default class MealTable extends React.Component {
 
   addIngredient = async (ingredient) => {
     if (ingredient.weight === 0) return;
-    let newId = "";
+    let newId = '';
     if (!ingredient._id) {
       const response = await fetch(
-        "http://localhost:8080/nutrition/ingredients/add/",
+        'http://ec2-54-246-187-137.eu-west-1.compute.amazonaws.com:8080/nutrition/ingredients/add/',
         {
-          method: "POST",
+          method: 'POST',
           headers: {
-            "Content-Type": "application/json",
-            "auth-token": localStorage.getItem("authToken"),
+            'Content-Type': 'application/json',
+            'auth-token': localStorage.getItem('authToken'),
           },
           body: JSON.stringify({
             name: ingredient.name,
@@ -135,20 +135,23 @@ export default class MealTable extends React.Component {
       newId = data._id;
     } else newId = ingredient._id;
 
-    await fetch("http://localhost:8080/nutrition/meals/", {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-        "auth-token": localStorage.getItem("authToken"),
-      },
-      body: JSON.stringify({
-        mealId: ingredient.mealId,
-        ingredient: {
-          ingredientId: newId,
-          weight: ingredient.weight,
+    await fetch(
+      'http://ec2-54-246-187-137.eu-west-1.compute.amazonaws.com:8080/nutrition/meals/',
+      {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          'auth-token': localStorage.getItem('authToken'),
         },
-      }),
-    });
+        body: JSON.stringify({
+          mealId: ingredient.mealId,
+          ingredient: {
+            ingredientId: newId,
+            weight: ingredient.weight,
+          },
+        }),
+      }
+    );
     this.props.addNutrient({
       mealId: ingredient.mealId,
       ingredient: {
@@ -164,17 +167,20 @@ export default class MealTable extends React.Component {
   };
 
   removeIngredient = async (ingredient) => {
-    await fetch("http://localhost:8080/nutrition/meals/remove/", {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-        "auth-token": localStorage.getItem("authToken"),
-      },
-      body: JSON.stringify({
-        mealId: ingredient.mealId,
-        ingredientId: ingredient._id,
-      }),
-    });
+    await fetch(
+      'http://ec2-54-246-187-137.eu-west-1.compute.amazonaws.com:8080/nutrition/meals/remove/',
+      {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          'auth-token': localStorage.getItem('authToken'),
+        },
+        body: JSON.stringify({
+          mealId: ingredient.mealId,
+          ingredientId: ingredient._id,
+        }),
+      }
+    );
     this.props.removeNutrient({
       mealId: ingredient.mealId,
       _id: ingredient._id,
@@ -182,18 +188,21 @@ export default class MealTable extends React.Component {
   };
 
   editIngredient = async (ingredient) => {
-    await fetch("http://localhost:8080/nutrition/meals/edit/", {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-        "auth-token": localStorage.getItem("authToken"),
-      },
-      body: JSON.stringify({
-        mealId: ingredient.mealId,
-        _id: ingredient._id,
-        weight: ingredient.weight,
-      }),
-    });
+    await fetch(
+      'http://ec2-54-246-187-137.eu-west-1.compute.amazonaws.com:8080/nutrition/meals/edit/',
+      {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          'auth-token': localStorage.getItem('authToken'),
+        },
+        body: JSON.stringify({
+          mealId: ingredient.mealId,
+          _id: ingredient._id,
+          weight: ingredient.weight,
+        }),
+      }
+    );
     this.props.editNutrient({
       mealId: ingredient.mealId,
       ingredient: {

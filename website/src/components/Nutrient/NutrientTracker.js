@@ -1,6 +1,6 @@
-import React from "react";
-import NutrientSummary from "./NutrientSummary";
-import NutrientDay from "./NutrientDay";
+import React from 'react';
+import NutrientSummary from './NutrientSummary';
+import NutrientDay from './NutrientDay';
 
 export default class NutrientTracker extends React.Component {
   constructor() {
@@ -25,7 +25,7 @@ export default class NutrientTracker extends React.Component {
   }
 
   async componentDidMount() {
-    if (!localStorage.getItem("authToken")) window.location = "/login";
+    if (!localStorage.getItem('authToken')) window.location = '/login';
     this.getMacronutrientDensities();
   }
 
@@ -61,14 +61,14 @@ export default class NutrientTracker extends React.Component {
 
   getMacronutrientDensities = () => {
     const requestOptions = {
-      method: "GET",
+      method: 'GET',
       headers: {
-        "Content-Type": "application/json",
-        "auth-token": localStorage.getItem("authToken"),
+        'Content-Type': 'application/json',
+        'auth-token': localStorage.getItem('authToken'),
       },
     };
     fetch(
-      "http://localhost:8080/nutrition/macronutrientDensities",
+      'http://ec2-54-246-187-137.eu-west-1.compute.amazonaws.com:8080/nutrition/macronutrientDensities',
       requestOptions
     )
       .then((response) => response.json())

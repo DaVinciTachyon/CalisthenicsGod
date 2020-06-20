@@ -1,5 +1,5 @@
-import React from "react";
-import "./Main.css";
+import React from 'react';
+import './Main.css';
 
 export default class UserProfile extends React.Component {
   constructor() {
@@ -7,12 +7,12 @@ export default class UserProfile extends React.Component {
     this.state = {
       calorieOffset: 0,
       currentOffset: 0,
-      calorieMode: "maintenance",
-      name: "",
-      email: "",
-      dateJoined: "",
-      birthDate: "",
-      gender: "",
+      calorieMode: 'maintenance',
+      name: '',
+      email: '',
+      dateJoined: '',
+      birthDate: '',
+      gender: '',
       maintenanceCalories: 0,
       proteinAmount: 0,
       fatPartition: 0,
@@ -24,15 +24,18 @@ export default class UserProfile extends React.Component {
   };
 
   componentDidMount() {
-    if (!localStorage.getItem("authToken")) window.location = "/login";
+    if (!localStorage.getItem('authToken')) window.location = '/login';
     const requestOptions = {
-      method: "GET",
+      method: 'GET',
       headers: {
-        "Content-Type": "application/json",
-        "auth-token": localStorage.getItem("authToken"),
+        'Content-Type': 'application/json',
+        'auth-token': localStorage.getItem('authToken'),
       },
     };
-    fetch("http://localhost:8080/user/", requestOptions)
+    fetch(
+      'http://ec2-54-246-187-137.eu-west-1.compute.amazonaws.com:8080/user/',
+      requestOptions
+    )
       .then((response) => response.json())
       .then((data) => {
         let dateJoined = new Date(data.dateJoined);
@@ -43,20 +46,20 @@ export default class UserProfile extends React.Component {
           dateJoined: `${dateJoined
             .getFullYear()
             .toString()
-            .padStart(4, "0")}-${(dateJoined.getMonth() + 1)
+            .padStart(4, '0')}-${(dateJoined.getMonth() + 1)
             .toString()
-            .padStart(2, "0")}-${dateJoined
+            .padStart(2, '0')}-${dateJoined
             .getDate()
             .toString()
-            .padStart(2, "0")}`,
-          birthDate: `${birthDate.getFullYear().toString().padStart(4, "0")}-${(
+            .padStart(2, '0')}`,
+          birthDate: `${birthDate.getFullYear().toString().padStart(4, '0')}-${(
             birthDate.getMonth() + 1
           )
             .toString()
-            .padStart(2, "0")}-${birthDate
+            .padStart(2, '0')}-${birthDate
             .getDate()
             .toString()
-            .padStart(2, "0")}`,
+            .padStart(2, '0')}`,
           gender: data.gender,
           maintenanceCalories: data.maintenanceCalories,
           proteinAmount: data.proteinAmount,
@@ -66,13 +69,13 @@ export default class UserProfile extends React.Component {
           this.setState({
             calorieOffset: data.calorieOffset,
             currentOffset: data.calorieOffset,
-            calorieMode: "bulk",
+            calorieMode: 'bulk',
           });
         else if (data.calorieOffset < 0)
           this.setState({
             calorieOffset: -1 * data.calorieOffset,
             currentOffset: data.calorieOffset,
-            calorieMode: "deficit",
+            calorieMode: 'deficit',
           });
       });
   }
@@ -82,33 +85,36 @@ export default class UserProfile extends React.Component {
       ? evt.target.value
       : this.state.calorieMode;
     this.setState({ calorieMode: input });
-    if (this.state.currentOffset < 0 && input === "deficit")
+    if (this.state.currentOffset < 0 && input === 'deficit')
       this.setState({ calorieOffset: -1 * this.state.currentOffset });
-    else if (input === "deficit") this.setState({ calorieOffset: 300 });
-    else if (this.state.currentOffset > 0 && input === "bulk")
+    else if (input === 'deficit') this.setState({ calorieOffset: 300 });
+    else if (this.state.currentOffset > 0 && input === 'bulk')
       this.setState({ calorieOffset: this.state.currentOffset });
-    else if (input === "bulk") this.setState({ calorieOffset: 200 });
+    else if (input === 'bulk') this.setState({ calorieOffset: 200 });
     else this.setState({ calorieOffset: 0 });
   };
 
   editProfile = (evt) => {
     evt.preventDefault();
-    fetch("http://localhost:8080/nutrition/calorieOffset", {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-        "auth-token": localStorage.getItem("authToken"),
-      },
-      body: JSON.stringify({
-        calorieOffset:
-          this.state.calorieMode === "deficit"
-            ? -1 * this.state.calorieOffset
-            : this.state.calorieOffset,
-      }),
-    }).then(() => {
+    fetch(
+      'http://ec2-54-246-187-137.eu-west-1.compute.amazonaws.com:8080/nutrition/calorieOffset',
+      {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          'auth-token': localStorage.getItem('authToken'),
+        },
+        body: JSON.stringify({
+          calorieOffset:
+            this.state.calorieMode === 'deficit'
+              ? -1 * this.state.calorieOffset
+              : this.state.calorieOffset,
+        }),
+      }
+    ).then(() => {
       this.setState({
         currentOffset:
-          this.state.calorieMode === "deficit"
+          this.state.calorieMode === 'deficit'
             ? -1 * this.state.calorieOffset
             : this.state.calorieOffset,
       });
@@ -249,12 +255,12 @@ export default class UserProfile extends React.Component {
             <div className="label-col col">Gender</div>
             <div className="value-col col">
               <select id="gender">
-                <option value="male" selected={this.state.gender === "male"}>
+                <option value="male" selected={this.state.gender === 'male'}>
                   Male
                 </option>
                 <option
                   value="female"
-                  selected={this.state.gender === "female"}
+                  selected={this.state.gender === 'female'}
                 >
                   Female
                 </option>

@@ -1,6 +1,6 @@
-import React from "react";
-import IngredientRow from "./IngredientRow";
-import "./Main.css";
+import React from 'react';
+import IngredientRow from './IngredientRow';
+import './Main.css';
 
 export default class IngredientList extends React.Component {
   constructor() {
@@ -12,7 +12,7 @@ export default class IngredientList extends React.Component {
       carb: 0,
       prot: 0,
       eth: 0,
-      name: "",
+      name: '',
     };
   }
 
@@ -31,15 +31,17 @@ export default class IngredientList extends React.Component {
 
   getIngredients = () => {
     const requestOptions = {
-      method: "GET",
+      method: 'GET',
       headers: {
-        "Content-Type": "application/json",
-        "auth-token": localStorage.getItem("authToken"),
+        'Content-Type': 'application/json',
+        'auth-token': localStorage.getItem('authToken'),
       },
     };
-    let url = "http://localhost:8080/nutrition/ingredients/";
+    let url =
+      'http://ec2-54-246-187-137.eu-west-1.compute.amazonaws.com:8080/nutrition/ingredients/';
     if (this.props.isUnavailable)
-      url = "http://localhost:8080/nutrition/ingredients/unavailable";
+      url =
+        'http://ec2-54-246-187-137.eu-west-1.compute.amazonaws.com:8080/nutrition/ingredients/unavailable';
     fetch(url, requestOptions)
       .then((response) => response.json())
       .then((data) => {
@@ -70,83 +72,91 @@ export default class IngredientList extends React.Component {
   fatChange = (evt) => {
     let input = evt.target.validity.valid ? evt.target.value : this.state.fat;
     if (!input || !isFinite(String(input))) input = 0;
-    if (input > 0) input = input.replace(/^0+/, "");
+    if (input > 0) input = input.replace(/^0+/, '');
     this.setState({ fat: input });
   };
 
   carbChange = (evt) => {
     let input = evt.target.validity.valid ? evt.target.value : this.state.carb;
     if (!input || !isFinite(String(input))) input = 0;
-    if (input > 0) input = input.replace(/^0+/, "");
+    if (input > 0) input = input.replace(/^0+/, '');
     this.setState({ carb: input });
   };
 
   protChange = (evt) => {
     let input = evt.target.validity.valid ? evt.target.value : this.state.prot;
     if (!input || !isFinite(String(input))) input = 0;
-    if (input > 0) input = input.replace(/^0+/, "");
+    if (input > 0) input = input.replace(/^0+/, '');
     this.setState({ prot: input });
   };
 
   ethChange = (evt) => {
     let input = evt.target.validity.valid ? evt.target.value : this.state.eth;
     if (!input || !isFinite(String(input))) input = 0;
-    if (input > 0) input = input.replace(/^0+/, "");
+    if (input > 0) input = input.replace(/^0+/, '');
     this.setState({ eth: input });
   };
 
   addIngredient = (ingredient) => {
-    fetch("http://localhost:8080/nutrition/ingredients/add/", {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-        "auth-token": localStorage.getItem("authToken"),
-      },
-      body: JSON.stringify({
-        name: ingredient.name,
-        fat: ingredient.fat,
-        carbohydrate: ingredient.carb,
-        protein: ingredient.prot,
-        ethanol: ingredient.eth,
-      }),
-    }).then(() => {
+    fetch(
+      'http://ec2-54-246-187-137.eu-west-1.compute.amazonaws.com:8080/nutrition/ingredients/add/',
+      {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          'auth-token': localStorage.getItem('authToken'),
+        },
+        body: JSON.stringify({
+          name: ingredient.name,
+          fat: ingredient.fat,
+          carbohydrate: ingredient.carb,
+          protein: ingredient.prot,
+          ethanol: ingredient.eth,
+        }),
+      }
+    ).then(() => {
       this.update();
     });
   };
 
   onSubmit = async (ingredient) => {
-    await fetch("http://localhost:8080/nutrition/ingredients/edit/", {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-        "auth-token": localStorage.getItem("authToken"),
-      },
-      body: JSON.stringify({
-        _id: ingredient._id,
-        name: ingredient.name,
-        fat: ingredient.fat,
-        carbohydrate: ingredient.carb,
-        protein: ingredient.prot,
-        ethanol: ingredient.eth,
-      }),
-    });
+    await fetch(
+      'http://ec2-54-246-187-137.eu-west-1.compute.amazonaws.com:8080/nutrition/ingredients/edit/',
+      {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          'auth-token': localStorage.getItem('authToken'),
+        },
+        body: JSON.stringify({
+          _id: ingredient._id,
+          name: ingredient.name,
+          fat: ingredient.fat,
+          carbohydrate: ingredient.carb,
+          protein: ingredient.prot,
+          ethanol: ingredient.eth,
+        }),
+      }
+    );
     this.update();
   };
 
   submitStatus = (ingredient) => {
     const requestOptions = {
-      method: "POST",
+      method: 'POST',
       headers: {
-        "Content-Type": "application/json",
-        "auth-token": localStorage.getItem("authToken"),
+        'Content-Type': 'application/json',
+        'auth-token': localStorage.getItem('authToken'),
       },
       body: JSON.stringify({
         _id: ingredient._id,
       }),
     };
-    let url = "http://localhost:8080/nutrition/ingredients/makeUnavailable/";
+    let url =
+      'http://ec2-54-246-187-137.eu-west-1.compute.amazonaws.com:8080/nutrition/ingredients/makeUnavailable/';
     if (this.props.isUnavailable)
-      url = "http://localhost:8080/nutrition/ingredients/makeAvailable/";
+      url =
+        'http://ec2-54-246-187-137.eu-west-1.compute.amazonaws.com:8080/nutrition/ingredients/makeAvailable/';
     fetch(url, requestOptions).then(() => {
       this.update();
     });
@@ -200,7 +210,7 @@ export default class IngredientList extends React.Component {
         </div>
         {!this.props.isUnavailable && (
           <IngredientRow
-            key={"adder"}
+            key={'adder'}
             colours={this.props.colours}
             update={this.update}
             changeFocus={this.changeFocus}

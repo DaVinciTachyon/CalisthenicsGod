@@ -1,6 +1,6 @@
-import React from "react";
-import IngredientRow from "./IngredientRow";
-import "./Main.css";
+import React from 'react';
+import IngredientRow from './IngredientRow';
+import './Main.css';
 
 export default class MealEditor extends React.Component {
   constructor() {
@@ -37,15 +37,15 @@ export default class MealEditor extends React.Component {
 
   getMeal = () => {
     const requestOptions = {
-      method: "POST",
+      method: 'POST',
       headers: {
-        "Content-Type": "application/json",
-        "auth-token": localStorage.getItem("authToken"),
+        'Content-Type': 'application/json',
+        'auth-token': localStorage.getItem('authToken'),
       },
       body: JSON.stringify({ _id: this.props.meal._id }),
     };
     fetch(
-      "http://localhost:8080/nutrition/meals/preset/ingredients/",
+      'http://ec2-54-246-187-137.eu-west-1.compute.amazonaws.com:8080/nutrition/meals/preset/ingredients/',
       requestOptions
     )
       .then((response) => response.json())
@@ -58,15 +58,15 @@ export default class MealEditor extends React.Component {
 
   removeMeal = () => {
     const requestOptions = {
-      method: "POST",
+      method: 'POST',
       headers: {
-        "Content-Type": "application/json",
-        "auth-token": localStorage.getItem("authToken"),
+        'Content-Type': 'application/json',
+        'auth-token': localStorage.getItem('authToken'),
       },
       body: JSON.stringify({ _id: this.props.meal._id }),
     };
     fetch(
-      "http://localhost:8080/nutrition/meals/preset/remove/",
+      'http://ec2-54-246-187-137.eu-west-1.compute.amazonaws.com:8080/nutrition/meals/preset/remove/',
       requestOptions
     ).then(() => {
       this.showMeal();
@@ -76,29 +76,32 @@ export default class MealEditor extends React.Component {
 
   addIngredient = (ingredient) => {
     if (!ingredient._id) {
-      fetch("http://localhost:8080/nutrition/ingredients/add/", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-          "auth-token": localStorage.getItem("authToken"),
-        },
-        body: JSON.stringify({
-          name: ingredient.name,
-          fat: ingredient.fat,
-          carbohydrate: ingredient.carb,
-          protein: ingredient.prot,
-          ethanol: ingredient.eth,
-        }),
-      })
+      fetch(
+        'http://ec2-54-246-187-137.eu-west-1.compute.amazonaws.com:8080/nutrition/ingredients/add/',
+        {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+            'auth-token': localStorage.getItem('authToken'),
+          },
+          body: JSON.stringify({
+            name: ingredient.name,
+            fat: ingredient.fat,
+            carbohydrate: ingredient.carb,
+            protein: ingredient.prot,
+            ethanol: ingredient.eth,
+          }),
+        }
+      )
         .then((response) => response.json())
         .then(async (data) => {
           await fetch(
-            "http://localhost:8080/nutrition/meals/preset/addIngredient/",
+            'http://ec2-54-246-187-137.eu-west-1.compute.amazonaws.com:8080/nutrition/meals/preset/addIngredient/',
             {
-              method: "POST",
+              method: 'POST',
               headers: {
-                "Content-Type": "application/json",
-                "auth-token": localStorage.getItem("authToken"),
+                'Content-Type': 'application/json',
+                'auth-token': localStorage.getItem('authToken'),
               },
               body: JSON.stringify({
                 _id: ingredient.mealId,
@@ -115,10 +118,10 @@ export default class MealEditor extends React.Component {
         });
     } else {
       const requestOptions = {
-        method: "POST",
+        method: 'POST',
         headers: {
-          "Content-Type": "application/json",
-          "auth-token": localStorage.getItem("authToken"),
+          'Content-Type': 'application/json',
+          'auth-token': localStorage.getItem('authToken'),
         },
         body: JSON.stringify({
           _id: ingredient.mealId,
@@ -129,7 +132,7 @@ export default class MealEditor extends React.Component {
         }),
       };
       fetch(
-        "http://localhost:8080/nutrition/meals/preset/addIngredient/",
+        'http://ec2-54-246-187-137.eu-west-1.compute.amazonaws.com:8080/nutrition/meals/preset/addIngredient/',
         requestOptions
       ).then(() => {
         this.getMeal();
@@ -138,34 +141,40 @@ export default class MealEditor extends React.Component {
   };
 
   onSubmit = (ingredient) => {
-    fetch("http://localhost:8080/nutrition/meals/preset/editIngredient/", {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-        "auth-token": localStorage.getItem("authToken"),
-      },
-      body: JSON.stringify({
-        ingredientId: ingredient._id,
-        _id: ingredient.mealId,
-        weight: ingredient.weight,
-      }),
-    }).then(() => {
+    fetch(
+      'http://ec2-54-246-187-137.eu-west-1.compute.amazonaws.com:8080/nutrition/meals/preset/editIngredient/',
+      {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          'auth-token': localStorage.getItem('authToken'),
+        },
+        body: JSON.stringify({
+          ingredientId: ingredient._id,
+          _id: ingredient.mealId,
+          weight: ingredient.weight,
+        }),
+      }
+    ).then(() => {
       this.getMeal();
     });
   };
 
   submitStatus = (ingredient) => {
-    fetch("http://localhost:8080/nutrition/meals/preset/removeIngredient/", {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-        "auth-token": localStorage.getItem("authToken"),
-      },
-      body: JSON.stringify({
-        ingredientId: ingredient._id,
-        _id: ingredient.mealId,
-      }),
-    }).then(() => {
+    fetch(
+      'http://ec2-54-246-187-137.eu-west-1.compute.amazonaws.com:8080/nutrition/meals/preset/removeIngredient/',
+      {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          'auth-token': localStorage.getItem('authToken'),
+        },
+        body: JSON.stringify({
+          ingredientId: ingredient._id,
+          _id: ingredient.mealId,
+        }),
+      }
+    ).then(() => {
       this.getMeal();
     });
   };
@@ -177,7 +186,7 @@ export default class MealEditor extends React.Component {
   render() {
     let ingredients = [];
     let summary = {
-      name: "Total",
+      name: 'Total',
       weight: 0,
       fat: 0,
       carbohydrate: 0,
@@ -243,7 +252,7 @@ export default class MealEditor extends React.Component {
             </div>
             {ingredients}
             <IngredientRow
-              key={"adder"}
+              key={'adder'}
               colours={this.props.colours}
               update={() => {
                 this.update();
@@ -259,7 +268,7 @@ export default class MealEditor extends React.Component {
               cancel={this.flipNewIngredient}
             />
             <IngredientRow
-              key={"summary"}
+              key={'summary'}
               colours={this.props.colours}
               ingredient={summary}
               update={() => {}}

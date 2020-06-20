@@ -1,17 +1,17 @@
-import React from "react";
-import "./Main.css";
+import React from 'react';
+import './Main.css';
 
 export default class IngredientRow extends React.Component {
   constructor() {
     super();
     this.state = {
       edit: false,
-      name: "",
+      name: '',
       fat: 0,
       carb: 0,
       prot: 0,
       eth: 0,
-      name_og: "",
+      name_og: '',
       fat_og: 0,
       carb_og: 0,
       prot_og: 0,
@@ -99,7 +99,7 @@ export default class IngredientRow extends React.Component {
         carb_base: 0,
         prot_base: 0,
         eth_base: 0,
-        ingredient: "",
+        ingredient: '',
       });
       this.getIngredients();
     }
@@ -113,9 +113,9 @@ export default class IngredientRow extends React.Component {
     const input = evt.target.validity.valid
       ? evt.target.value
       : this.state.ingredient;
-    if (input === "")
+    if (input === '')
       this.setState({
-        name: "",
+        name: '',
         fat_base: 0,
         carb_base: 0,
         prot_base: 0,
@@ -147,13 +147,16 @@ export default class IngredientRow extends React.Component {
 
   getIngredients = () => {
     const requestOptions = {
-      method: "GET",
+      method: 'GET',
       headers: {
-        "Content-Type": "application/json",
-        "auth-token": localStorage.getItem("authToken"),
+        'Content-Type': 'application/json',
+        'auth-token': localStorage.getItem('authToken'),
       },
     };
-    fetch("http://localhost:8080/nutrition/ingredients/", requestOptions)
+    fetch(
+      'http://ec2-54-246-187-137.eu-west-1.compute.amazonaws.com:8080/nutrition/ingredients/',
+      requestOptions
+    )
       .then((response) => response.json())
       .then((data) => {
         let ingredients = Object.assign({}, this.state.ingredients);
@@ -249,7 +252,7 @@ export default class IngredientRow extends React.Component {
     }
     if (this.props.mealId) ingredient.mealId = this.props.mealId;
 
-    if (this.state.name === "")
+    if (this.state.name === '')
       this.setState({
         name: this.state.name_og,
         weight: this.state.weight_og,
@@ -405,16 +408,16 @@ export default class IngredientRow extends React.Component {
       <div
         className={
           this.props.isSummary
-            ? "lineEmphasis row"
+            ? 'lineEmphasis row'
             : this.props.isNew && this.state.edit
-            ? "inputLineEmphasis lineEmphasis row"
-            : "row"
+            ? 'inputLineEmphasis lineEmphasis row'
+            : 'row'
         }
       >
         <div className="name-col col">
           {this.props.isNew && this.props.hasWeight && (
             <select onChange={this.ingredientChange.bind(this)}>
-              <option value="" selected={this.state.ingredient === ""}>
+              <option value="" selected={this.state.ingredient === ''}>
                 New
               </option>
               {ingredients}
@@ -427,11 +430,11 @@ export default class IngredientRow extends React.Component {
               value={this.state.name}
               onChange={this.nameChange}
               className={
-                "name input" +
+                'name input' +
                 ((this.props.hasWeight && !this.props.isNew) ||
                 this.props.isSummary
-                  ? " readOnly inheritBackground"
-                  : " editable")
+                  ? ' readOnly inheritBackground'
+                  : ' editable')
               }
               required
               readOnly={
@@ -465,8 +468,8 @@ export default class IngredientRow extends React.Component {
               value={this.state.weight}
               onChange={this.weightChange}
               className={
-                "weight input" +
-                (this.props.isSummary ? " readOnly" : " editable")
+                'weight input' +
+                (this.props.isSummary ? ' readOnly' : ' editable')
               }
               readOnly={!this.state.edit || this.props.isSummary}
               onDoubleClick={this.props.isSummary ? () => {} : this.changeFocus}
@@ -491,15 +494,15 @@ export default class IngredientRow extends React.Component {
             name="fat"
             type="number"
             min="0"
-            max={this.props.isNew && this.props.hasWeight ? "" : "100"}
+            max={this.props.isNew && this.props.hasWeight ? '' : '100'}
             step="0.1"
             value={this.state.fat}
             onChange={this.fatChange}
             className={
-              "fat input" +
+              'fat input' +
               (this.props.hasWeight || this.props.isSummary
-                ? " readOnly"
-                : " editable")
+                ? ' readOnly'
+                : ' editable')
             }
             readOnly={
               !this.state.edit || this.props.hasWeight || this.props.isSummary
@@ -516,16 +519,16 @@ export default class IngredientRow extends React.Component {
               value={this.state.fat_base}
               onChange={this.fatBaseChange}
               className={
-                "fat input" +
+                'fat input' +
                 (!this.state.isNew ||
                 !(
                   (this.props.isNew &&
                     this.props.hasWeight &&
-                    this.state.ingredient === "") ||
+                    this.state.ingredient === '') ||
                   this.props.isSummary
                 )
-                  ? " readOnly"
-                  : " editable")
+                  ? ' readOnly'
+                  : ' editable')
               }
               readOnly={
                 !this.state.edit ||
@@ -533,7 +536,7 @@ export default class IngredientRow extends React.Component {
                 !(
                   this.props.isNew &&
                   this.props.hasWeight &&
-                  this.state.ingredient === ""
+                  this.state.ingredient === ''
                 ) ||
                 this.props.isSummary
               }
@@ -551,10 +554,10 @@ export default class IngredientRow extends React.Component {
             value={this.state.carb}
             onChange={this.carbChange}
             className={
-              "carbohydrate input" +
+              'carbohydrate input' +
               (this.props.hasWeight || this.props.isSummary
-                ? " readOnly"
-                : " editable")
+                ? ' readOnly'
+                : ' editable')
             }
             readOnly={
               !this.state.edit || this.props.hasWeight || this.props.isSummary
@@ -571,16 +574,16 @@ export default class IngredientRow extends React.Component {
               value={this.state.carb_base}
               onChange={this.carbBaseChange}
               className={
-                "carbohydrate input" +
+                'carbohydrate input' +
                 (!this.state.isNew ||
                 !(
                   (this.props.isNew &&
                     this.props.hasWeight &&
-                    this.state.ingredient === "") ||
+                    this.state.ingredient === '') ||
                   this.props.isSummary
                 )
-                  ? " readOnly"
-                  : " editable")
+                  ? ' readOnly'
+                  : ' editable')
               }
               readOnly={
                 !this.state.edit ||
@@ -588,7 +591,7 @@ export default class IngredientRow extends React.Component {
                 !(
                   this.props.isNew &&
                   this.props.hasWeight &&
-                  this.state.ingredient === ""
+                  this.state.ingredient === ''
                 ) ||
                 this.props.isSummary
               }
@@ -606,10 +609,10 @@ export default class IngredientRow extends React.Component {
             value={this.state.prot}
             onChange={this.protChange}
             className={
-              "protein input" +
+              'protein input' +
               (this.props.hasWeight || this.props.isSummary
-                ? " readOnly"
-                : " editable")
+                ? ' readOnly'
+                : ' editable')
             }
             readOnly={
               !this.state.edit || this.props.hasWeight || this.props.isSummary
@@ -626,16 +629,16 @@ export default class IngredientRow extends React.Component {
               value={this.state.prot_base}
               onChange={this.protBaseChange}
               className={
-                "protein input" +
+                'protein input' +
                 (!this.state.isNew ||
                 !(
                   this.props.isNew &&
                   this.props.hasWeight &&
-                  this.state.ingredient === ""
+                  this.state.ingredient === ''
                 ) ||
                 this.props.isSummary
-                  ? " readOnly"
-                  : " editable")
+                  ? ' readOnly'
+                  : ' editable')
               }
               readOnly={
                 !this.state.edit ||
@@ -643,7 +646,7 @@ export default class IngredientRow extends React.Component {
                 !(
                   this.props.isNew &&
                   this.props.hasWeight &&
-                  this.state.ingredient === ""
+                  this.state.ingredient === ''
                 ) ||
                 this.props.isSummary
               }
@@ -661,10 +664,10 @@ export default class IngredientRow extends React.Component {
             value={this.state.eth}
             onChange={this.ethChange}
             className={
-              "ethanol input" +
+              'ethanol input' +
               (this.props.hasWeight || this.props.isSummary
-                ? " readOnly"
-                : " editable")
+                ? ' readOnly'
+                : ' editable')
             }
             readOnly={
               !this.state.edit || this.props.hasWeight || this.props.isSummary
@@ -681,16 +684,16 @@ export default class IngredientRow extends React.Component {
               value={this.state.eth_base}
               onChange={this.ethBaseChange}
               className={
-                "ethanol input" +
+                'ethanol input' +
                 (!this.state.isNew ||
                 !(
                   this.props.isNew &&
                   this.props.hasWeight &&
-                  this.state.ingredient === ""
+                  this.state.ingredient === ''
                 ) ||
                 this.props.isSummary
-                  ? " readOnly"
-                  : " editable")
+                  ? ' readOnly'
+                  : ' editable')
               }
               readOnly={
                 !this.state.edit ||
@@ -698,7 +701,7 @@ export default class IngredientRow extends React.Component {
                 !(
                   this.props.isNew &&
                   this.props.hasWeight &&
-                  this.state.ingredient === ""
+                  this.state.ingredient === ''
                 ) ||
                 this.props.isSummary
               }

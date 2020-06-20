@@ -1,4 +1,4 @@
-import React from "react";
+import React from 'react';
 
 export default class MeasurementAdder extends React.Component {
   constructor() {
@@ -98,10 +98,10 @@ export default class MeasurementAdder extends React.Component {
   submitMeasurement = (evt) => {
     evt.preventDefault();
     const requestOptions = {
-      method: "POST",
+      method: 'POST',
       headers: {
-        "Content-Type": "application/json",
-        "auth-token": localStorage.getItem("authToken"),
+        'Content-Type': 'application/json',
+        'auth-token': localStorage.getItem('authToken'),
       },
       body: JSON.stringify({
         weight: this.state.weight > 0 ? this.state.weight : undefined,
@@ -120,7 +120,10 @@ export default class MeasurementAdder extends React.Component {
         neck: this.state.neck > 0 ? this.state.neck : undefined,
       }),
     };
-    fetch("http://localhost:8080/measurement/", requestOptions).then(() => {
+    fetch(
+      'http://ec2-54-246-187-137.eu-west-1.compute.amazonaws.com:8080/measurement/',
+      requestOptions
+    ).then(() => {
       this.props.addMeasurement();
     });
   };

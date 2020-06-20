@@ -1,6 +1,6 @@
-import React from "react";
-import Modal from "../Modal";
-import MeasurementAdder from "./MeasurementAdder";
+import React from 'react';
+import Modal from '../Modal';
+import MeasurementAdder from './MeasurementAdder';
 
 export default class MeasurementSummary extends React.Component {
   constructor() {
@@ -39,13 +39,16 @@ export default class MeasurementSummary extends React.Component {
 
   getMeasurements = () => {
     const requestOptions = {
-      method: "GET",
+      method: 'GET',
       headers: {
-        "Content-Type": "application/json",
-        "auth-token": localStorage.getItem("authToken"),
+        'Content-Type': 'application/json',
+        'auth-token': localStorage.getItem('authToken'),
       },
     };
-    fetch("http://localhost:8080/measurement/", requestOptions)
+    fetch(
+      'http://ec2-54-246-187-137.eu-west-1.compute.amazonaws.com:8080/measurement/',
+      requestOptions
+    )
       .then((response) => response.json())
       .then((data) =>
         this.setState({

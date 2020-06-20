@@ -1,44 +1,44 @@
-import React from "react";
-import "./Main.css";
+import React from 'react';
+import './Main.css';
 
 export default class Register extends React.Component {
   constructor() {
     super();
     this.state = {
-      firstname: "",
-      middlename: "",
-      lastname: "",
-      email: "",
-      password: "",
-      weight: "",
-      gender: "male",
-      birthDate: "",
-      error: "",
+      firstname: '',
+      middlename: '',
+      lastname: '',
+      email: '',
+      password: '',
+      weight: '',
+      gender: 'male',
+      birthDate: '',
+      error: '',
     };
   }
 
   componentDidMount() {
-    if (localStorage.getItem("authToken")) window.location = "/";
+    if (localStorage.getItem('authToken')) window.location = '/';
   }
 
   handleSubmit(evt) {
     evt.preventDefault();
     if (!this.state.firstname)
-      return this.setState({ error: "First Name is required" });
+      return this.setState({ error: 'First Name is required' });
     if (!this.state.lastname)
-      return this.setState({ error: "Last Name is required" });
-    if (!this.state.email) return this.setState({ error: "Email is required" });
+      return this.setState({ error: 'Last Name is required' });
+    if (!this.state.email) return this.setState({ error: 'Email is required' });
     if (!this.state.password)
-      return this.setState({ error: "Password is required" });
+      return this.setState({ error: 'Password is required' });
     if (!this.state.weight)
-      return this.setState({ error: "Weight is required" });
+      return this.setState({ error: 'Weight is required' });
     if (!this.state.gender)
-      return this.setState({ error: "Gender is required" });
+      return this.setState({ error: 'Gender is required' });
     if (!this.state.birthDate)
-      return this.setState({ error: "Birth Date is required" });
+      return this.setState({ error: 'Birth Date is required' });
     const requestOptions = {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({
         name: {
           first: this.state.firstname,
@@ -52,10 +52,13 @@ export default class Register extends React.Component {
         birthDate: this.state.birthDate,
       }),
     };
-    fetch("http://localhost:8080/auth/register", requestOptions)
+    fetch(
+      'http://ec2-54-246-187-137.eu-west-1.compute.amazonaws.com:8080/auth/register',
+      requestOptions
+    )
       .then((response) => response.json())
       .then((data) => {
-        if (data.user) window.location = "/login";
+        if (data.user) window.location = '/login';
         this.setState({ error: data.error });
       })
       .catch((err) => {
@@ -112,7 +115,7 @@ export default class Register extends React.Component {
   }
 
   dismissError() {
-    this.setState({ error: "" });
+    this.setState({ error: '' });
   }
 
   render() {
@@ -194,7 +197,7 @@ export default class Register extends React.Component {
           <input
             name="birthDate"
             type="date"
-            max={new Date().toISOString().split("T")[0]}
+            max={new Date().toISOString().split('T')[0]}
             placeholder="Date of Birth"
             value={this.state.birthDate}
             onChange={this.handleBirthDateChange.bind(this)}
