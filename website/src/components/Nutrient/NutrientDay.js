@@ -58,7 +58,7 @@ export default class NutrientDay extends React.Component {
                 </option>
                 {presetMeals}
               </select>
-              <input class="button" type="submit" value="Select" />
+              <input className="button" type="submit" value="Select" />
             </form>
           )}
           {this.state.newMeal && !this.state.focus && (

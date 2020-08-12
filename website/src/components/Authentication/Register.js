@@ -36,7 +36,7 @@ export default class Register extends React.Component {
       return this.setState({ error: 'Gender is required' });
     if (!this.state.birthDate)
       return this.setState({ error: 'Birth Date is required' });
-    const requestOptions = {
+    fetch(`${process.env.REACT_APP_URL}/auth/register`, {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({
@@ -51,8 +51,7 @@ export default class Register extends React.Component {
         gender: this.state.gender,
         birthDate: this.state.birthDate,
       }),
-    };
-    fetch(`${process.env.REACT_APP_URL}/auth/register`, requestOptions)
+    })
       .then((response) => response.json())
       .then((data) => {
         if (data.user) window.location = '/login';
