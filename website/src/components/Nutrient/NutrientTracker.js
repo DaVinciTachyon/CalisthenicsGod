@@ -68,7 +68,7 @@ export default class NutrientTracker extends React.Component {
       },
     };
     fetch(
-      'http://ec2-54-246-187-137.eu-west-1.compute.amazonaws.com:8080/nutrition/macronutrientDensities',
+      `${process.env.REACT_APP_URL}/nutrition/macronutrientDensities`,
       requestOptions
     )
       .then((response) => response.json())

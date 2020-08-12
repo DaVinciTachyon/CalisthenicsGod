@@ -52,7 +52,7 @@ export default class Meals extends React.Component {
       },
     };
     fetch(
-      'http://ec2-54-246-187-137.eu-west-1.compute.amazonaws.com:8080/nutrition/meals/preset/names/',
+      `${process.env.REACT_APP_URL}/nutrition/meals/preset/names/`,
       requestOptions
     )
       .then((response) => response.json())
@@ -77,7 +77,7 @@ export default class Meals extends React.Component {
       }),
     };
     fetch(
-      'http://ec2-54-246-187-137.eu-west-1.compute.amazonaws.com:8080/nutrition/meals/preset/add/',
+      `${process.env.REACT_APP_URL}/nutrition/meals/preset/add/`,
       requestOptions
     ).then(() => {
       this.flipNewMeal();

@@ -52,10 +52,7 @@ export default class Register extends React.Component {
         birthDate: this.state.birthDate,
       }),
     };
-    fetch(
-      'http://ec2-54-246-187-137.eu-west-1.compute.amazonaws.com:8080/auth/register',
-      requestOptions
-    )
+    fetch(`${process.env.REACT_APP_URL}/auth/register`, requestOptions)
       .then((response) => response.json())
       .then((data) => {
         if (data.user) window.location = '/login';

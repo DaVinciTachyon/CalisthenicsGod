@@ -94,7 +94,7 @@ export default class NutrientDay extends React.Component {
     let newId = '';
     if (!ingredient._id) {
       const response = await fetch(
-        'http://ec2-54-246-187-137.eu-west-1.compute.amazonaws.com:8080/nutrition/ingredients/add/',
+        `${process.env.REACT_APP_URL}/nutrition/ingredients/add/`,
         {
           method: 'POST',
           headers: {
@@ -114,8 +114,8 @@ export default class NutrientDay extends React.Component {
       newId = data._id;
     } else newId = ingredient._id;
 
-    await fetch(
-      'http://ec2-54-246-187-137.eu-west-1.compute.amazonaws.com:8080/nutrition/meals/',
+    const mealRes = await fetch(
+      `${process.env.REACT_APP_URL}/nutrition/meals/`,
       {
         method: 'POST',
         headers: {
@@ -130,6 +130,13 @@ export default class NutrientDay extends React.Component {
         }),
       }
     );
+    // const mealData = await mealRes.json();
+
+    console.log({
+      //d: mealData,
+      r: process.env.REACT_APP_URL,
+    });
+
     this.addIngredientToMeal({
       ingredient: {
         _id: newId,
@@ -218,7 +225,7 @@ export default class NutrientDay extends React.Component {
 
   getMeals = async () => {
     const response = await fetch(
-      'http://ec2-54-246-187-137.eu-west-1.compute.amazonaws.com:8080/nutrition/meals/today/',
+      `${process.env.REACT_APP_URL}/nutrition/meals/today/`,
       {
         method: 'GET',
         headers: {
@@ -236,7 +243,7 @@ export default class NutrientDay extends React.Component {
 
   getPresetMeals = async () => {
     const response = await fetch(
-      'http://ec2-54-246-187-137.eu-west-1.compute.amazonaws.com:8080/nutrition/meals/preset/names/',
+      `${process.env.REACT_APP_URL}/nutrition/meals/preset/names/`,
       {
         method: 'GET',
         headers: {
@@ -272,19 +279,16 @@ export default class NutrientDay extends React.Component {
     evt.preventDefault();
     if (this.state.mealId === '') this.flipNewMeal();
     else {
-      await fetch(
-        'http://ec2-54-246-187-137.eu-west-1.compute.amazonaws.com:8080/nutrition/meals/addPreset/',
-        {
-          method: 'POST',
-          headers: {
-            'Content-Type': 'application/json',
-            'auth-token': localStorage.getItem('authToken'),
-          },
-          body: JSON.stringify({
-            _id: this.state.mealId,
-          }),
-        }
-      );
+      await fetch(`${process.env.REACT_APP_URL}/nutrition/meals/addPreset/`, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          'auth-token': localStorage.getItem('authToken'),
+        },
+        body: JSON.stringify({
+          _id: this.state.mealId,
+        }),
+      });
       this.update();
       this.getMeals();
     }

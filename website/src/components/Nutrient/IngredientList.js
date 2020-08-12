@@ -37,11 +37,9 @@ export default class IngredientList extends React.Component {
         'auth-token': localStorage.getItem('authToken'),
       },
     };
-    let url =
-      'http://ec2-54-246-187-137.eu-west-1.compute.amazonaws.com:8080/nutrition/ingredients/';
+    let url = `${process.env.REACT_APP_URL}/nutrition/ingredients/`;
     if (this.props.isUnavailable)
-      url =
-        'http://ec2-54-246-187-137.eu-west-1.compute.amazonaws.com:8080/nutrition/ingredients/unavailable';
+      url = `${process.env.REACT_APP_URL}/nutrition/ingredients/unavailable`;
     fetch(url, requestOptions)
       .then((response) => response.json())
       .then((data) => {
@@ -98,46 +96,40 @@ export default class IngredientList extends React.Component {
   };
 
   addIngredient = (ingredient) => {
-    fetch(
-      'http://ec2-54-246-187-137.eu-west-1.compute.amazonaws.com:8080/nutrition/ingredients/add/',
-      {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-          'auth-token': localStorage.getItem('authToken'),
-        },
-        body: JSON.stringify({
-          name: ingredient.name,
-          fat: ingredient.fat,
-          carbohydrate: ingredient.carb,
-          protein: ingredient.prot,
-          ethanol: ingredient.eth,
-        }),
-      }
-    ).then(() => {
+    fetch(`${process.env.REACT_APP_URL}/nutrition/ingredients/add/`, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+        'auth-token': localStorage.getItem('authToken'),
+      },
+      body: JSON.stringify({
+        name: ingredient.name,
+        fat: ingredient.fat,
+        carbohydrate: ingredient.carb,
+        protein: ingredient.prot,
+        ethanol: ingredient.eth,
+      }),
+    }).then(() => {
       this.update();
     });
   };
 
   onSubmit = async (ingredient) => {
-    await fetch(
-      'http://ec2-54-246-187-137.eu-west-1.compute.amazonaws.com:8080/nutrition/ingredients/edit/',
-      {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-          'auth-token': localStorage.getItem('authToken'),
-        },
-        body: JSON.stringify({
-          _id: ingredient._id,
-          name: ingredient.name,
-          fat: ingredient.fat,
-          carbohydrate: ingredient.carb,
-          protein: ingredient.prot,
-          ethanol: ingredient.eth,
-        }),
-      }
-    );
+    await fetch(`${process.env.REACT_APP_URL}/nutrition/ingredients/edit/`, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+        'auth-token': localStorage.getItem('authToken'),
+      },
+      body: JSON.stringify({
+        _id: ingredient._id,
+        name: ingredient.name,
+        fat: ingredient.fat,
+        carbohydrate: ingredient.carb,
+        protein: ingredient.prot,
+        ethanol: ingredient.eth,
+      }),
+    });
     this.update();
   };
 
@@ -152,11 +144,9 @@ export default class IngredientList extends React.Component {
         _id: ingredient._id,
       }),
     };
-    let url =
-      'http://ec2-54-246-187-137.eu-west-1.compute.amazonaws.com:8080/nutrition/ingredients/makeUnavailable/';
+    let url = `${process.env.REACT_APP_URL}/nutrition/ingredients/makeUnavailable/`;
     if (this.props.isUnavailable)
-      url =
-        'http://ec2-54-246-187-137.eu-west-1.compute.amazonaws.com:8080/nutrition/ingredients/makeAvailable/';
+      url = `${process.env.REACT_APP_URL}/nutrition/ingredients/makeAvailable/`;
     fetch(url, requestOptions).then(() => {
       this.update();
     });

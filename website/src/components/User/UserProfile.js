@@ -32,10 +32,7 @@ export default class UserProfile extends React.Component {
         'auth-token': localStorage.getItem('authToken'),
       },
     };
-    fetch(
-      'http://ec2-54-246-187-137.eu-west-1.compute.amazonaws.com:8080/user/',
-      requestOptions
-    )
+    fetch(`${process.env.REACT_APP_URL}/user/`, requestOptions)
       .then((response) => response.json())
       .then((data) => {
         let dateJoined = new Date(data.dateJoined);
@@ -96,22 +93,19 @@ export default class UserProfile extends React.Component {
 
   editProfile = (evt) => {
     evt.preventDefault();
-    fetch(
-      'http://ec2-54-246-187-137.eu-west-1.compute.amazonaws.com:8080/nutrition/calorieOffset',
-      {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-          'auth-token': localStorage.getItem('authToken'),
-        },
-        body: JSON.stringify({
-          calorieOffset:
-            this.state.calorieMode === 'deficit'
-              ? -1 * this.state.calorieOffset
-              : this.state.calorieOffset,
-        }),
-      }
-    ).then(() => {
+    fetch(`${process.env.REACT_APP_URL}/nutrition/calorieOffset`, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+        'auth-token': localStorage.getItem('authToken'),
+      },
+      body: JSON.stringify({
+        calorieOffset:
+          this.state.calorieMode === 'deficit'
+            ? -1 * this.state.calorieOffset
+            : this.state.calorieOffset,
+      }),
+    }).then(() => {
       this.setState({
         currentOffset:
           this.state.calorieMode === 'deficit'

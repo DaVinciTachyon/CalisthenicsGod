@@ -33,10 +33,7 @@ export default class Login extends React.Component {
         password: this.state.password,
       }),
     };
-    fetch(
-      'http://ec2-54-246-187-137.eu-west-1.compute.amazonaws.com:8080/auth/login',
-      requestOptions
-    )
+    fetch(`${process.env.REACT_APP_URL}/auth/login`, requestOptions)
       .then((response) => response.json())
       .then((data) => {
         if (data['auth-token']) {

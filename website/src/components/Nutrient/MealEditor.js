@@ -45,7 +45,7 @@ export default class MealEditor extends React.Component {
       body: JSON.stringify({ _id: this.props.meal._id }),
     };
     fetch(
-      'http://ec2-54-246-187-137.eu-west-1.compute.amazonaws.com:8080/nutrition/meals/preset/ingredients/',
+      `${process.env.REACT_APP_URL}/nutrition/meals/preset/ingredients/`,
       requestOptions
     )
       .then((response) => response.json())
@@ -66,7 +66,7 @@ export default class MealEditor extends React.Component {
       body: JSON.stringify({ _id: this.props.meal._id }),
     };
     fetch(
-      'http://ec2-54-246-187-137.eu-west-1.compute.amazonaws.com:8080/nutrition/meals/preset/remove/',
+      `${process.env.REACT_APP_URL}/nutrition/meals/preset/remove/`,
       requestOptions
     ).then(() => {
       this.showMeal();
@@ -76,27 +76,24 @@ export default class MealEditor extends React.Component {
 
   addIngredient = (ingredient) => {
     if (!ingredient._id) {
-      fetch(
-        'http://ec2-54-246-187-137.eu-west-1.compute.amazonaws.com:8080/nutrition/ingredients/add/',
-        {
-          method: 'POST',
-          headers: {
-            'Content-Type': 'application/json',
-            'auth-token': localStorage.getItem('authToken'),
-          },
-          body: JSON.stringify({
-            name: ingredient.name,
-            fat: ingredient.fat,
-            carbohydrate: ingredient.carb,
-            protein: ingredient.prot,
-            ethanol: ingredient.eth,
-          }),
-        }
-      )
+      fetch(`${process.env.REACT_APP_URL}/nutrition/ingredients/add/`, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          'auth-token': localStorage.getItem('authToken'),
+        },
+        body: JSON.stringify({
+          name: ingredient.name,
+          fat: ingredient.fat,
+          carbohydrate: ingredient.carb,
+          protein: ingredient.prot,
+          ethanol: ingredient.eth,
+        }),
+      })
         .then((response) => response.json())
         .then(async (data) => {
           await fetch(
-            'http://ec2-54-246-187-137.eu-west-1.compute.amazonaws.com:8080/nutrition/meals/preset/addIngredient/',
+            `${process.env.REACT_APP_URL}/nutrition/meals/preset/addIngredient/`,
             {
               method: 'POST',
               headers: {
@@ -132,7 +129,7 @@ export default class MealEditor extends React.Component {
         }),
       };
       fetch(
-        'http://ec2-54-246-187-137.eu-west-1.compute.amazonaws.com:8080/nutrition/meals/preset/addIngredient/',
+        `${process.env.REACT_APP_URL}/nutrition/meals/preset/addIngredient/`,
         requestOptions
       ).then(() => {
         this.getMeal();
@@ -142,7 +139,7 @@ export default class MealEditor extends React.Component {
 
   onSubmit = (ingredient) => {
     fetch(
-      'http://ec2-54-246-187-137.eu-west-1.compute.amazonaws.com:8080/nutrition/meals/preset/editIngredient/',
+      `${process.env.REACT_APP_URL}/nutrition/meals/preset/editIngredient/`,
       {
         method: 'POST',
         headers: {
@@ -162,7 +159,7 @@ export default class MealEditor extends React.Component {
 
   submitStatus = (ingredient) => {
     fetch(
-      'http://ec2-54-246-187-137.eu-west-1.compute.amazonaws.com:8080/nutrition/meals/preset/removeIngredient/',
+      `${process.env.REACT_APP_URL}/nutrition/meals/preset/removeIngredient/`,
       {
         method: 'POST',
         headers: {

@@ -120,12 +120,11 @@ export default class MeasurementAdder extends React.Component {
         neck: this.state.neck > 0 ? this.state.neck : undefined,
       }),
     };
-    fetch(
-      'http://ec2-54-246-187-137.eu-west-1.compute.amazonaws.com:8080/measurement/',
-      requestOptions
-    ).then(() => {
-      this.props.addMeasurement();
-    });
+    fetch(`${process.env.REACT_APP_URL}/measurement/`, requestOptions).then(
+      () => {
+        this.props.addMeasurement();
+      }
+    );
   };
 
   render() {
