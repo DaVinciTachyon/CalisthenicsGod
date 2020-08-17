@@ -150,7 +150,7 @@ router.post('/', async (req, res) => {
       nutrients.history.length > 0 &&
       isToday(nutrients.history[0].date)
     ) {
-      nutrients.history[0].meals.push({
+      nutrients.history[0].meals.unshift({
         ingredients: [ingredient],
       });
     } else {
@@ -166,7 +166,11 @@ router.post('/', async (req, res) => {
 
   try {
     await nutrients.save();
-    res.sendStatus(200);
+    res.status(200).send({
+      mealId: req.body.mealId
+        ? req.body.mealId
+        : nutrients.history[0].meals[0]._id,
+    });
   } catch (err) {
     res.status(400).send({ error: err });
   }

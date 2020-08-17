@@ -130,14 +130,10 @@ export default class NutrientDay extends React.Component {
         }),
       }
     );
-    // const mealData = await mealRes.json();
-
-    console.log({
-      //d: mealData,
-      r: process.env.REACT_APP_URL,
-    });
+    const mealData = await mealRes.json();
 
     this.addIngredientToMeal({
+      mealId: mealData.mealId,
       ingredient: {
         _id: newId,
         name: ingredient.name,
@@ -161,7 +157,8 @@ export default class NutrientDay extends React.Component {
     let meals = Array.from(this.state.meals);
     const mealI = meals.findIndex((val) => val._id === ingredient.mealId);
     if (mealI === -1)
-      meals.push({
+      meals.unshift({
+        _id: ingredient.mealId,
         ingredients: [ingredient.ingredient],
       });
     else {
