@@ -33,6 +33,22 @@ services:
       - TOKEN_SECRET=${TOKEN_SECRET}
     networks:
       - app-network
+  website:
+    build:
+      context: ./website
+      dockerfile: Dockerfile
+    image: website
+    container_name: calisthenicsGodWebsite
+    restart: unless-stopped
+    ports:
+      - '3000:3000'
+    expose:
+      - 3000
+    volumes:
+      - .:/home/node/app
+      - node_modules:/home/node/app/node_modules
+    networks:
+      - app-network
 
 volumes:
   dbdata:

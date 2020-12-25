@@ -71,7 +71,7 @@ export default class Login extends React.Component {
               {this.state.error}
             </h3>
           )}
-          <label for="email">Email</label>
+          <label htmlFor="email">Email</label>
           <input
             name="email"
             type="text"
@@ -79,7 +79,7 @@ export default class Login extends React.Component {
             onChange={this.handleEmailChange}
             placeholder="Email"
           />
-          <label for="email">Password</label>
+          <label htmlFor="email">Password</label>
           <input
             type="password"
             value={this.state.password}
