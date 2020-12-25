@@ -1,4 +1,4 @@
-name: Build, Test API on Push
+name: Build, Test on Push
 on: push
 jobs:
   buildAPI:
@@ -27,7 +27,7 @@ jobs:
       run: sudo docker-compose up -d website
   testAPI:
     name: Test API
-    needs: build
+    needs: buildAPI
     runs-on: ubuntu-latest
     defaults:
       run:
