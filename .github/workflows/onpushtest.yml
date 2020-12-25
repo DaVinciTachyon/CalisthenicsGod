@@ -1,7 +1,7 @@
 name: Build, Test API on Push
 on: push
 jobs:
-  build:
+  buildAPI:
     name: Build API
     runs-on: ubuntu-latest
     defaults:
@@ -10,10 +10,22 @@ jobs:
     steps:
     - uses: actions/checkout@v1
     - name: build
-      run: sudo docker-compose build
+      run: sudo docker-compose build backend
     - name: deploy
-      run: sudo docker-compose up -d
-  test:
+      run: sudo docker-compose up -d backend
+  buildWebsite:
+    name: Build Website
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: .
+    steps:
+    - uses: actions/checkout@v1
+    - name: build
+      run: sudo docker-compose build website
+    - name: deploy
+      run: sudo docker-compose up -d website
+  testAPI:
     name: Test API
     needs: build
     runs-on: ubuntu-latest
@@ -23,7 +35,7 @@ jobs:
     steps:
     - uses: actions/checkout@v1
     - name: deploy for test
-      run: sudo docker-compose up -d
+      run: sudo docker-compose up -d backend
     - name: test
       run: |
         cd backend/
