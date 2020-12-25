@@ -12,7 +12,7 @@ jobs:
     - name: backend build
       run: sudo docker-compose build
     - name: backend up
-      run: sudo docker-compose up
+      run: sudo docker-compose up -d
   test:
     name: Test API
     needs: build
