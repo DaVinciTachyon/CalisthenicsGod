@@ -21,10 +21,9 @@ jobs:
     - name: backend build
       run: sudo docker-compose build
     - name: backend up
-      run: sudo docker-compose up
-    - name: backend test
       run: |
-        cd backend/
+        sudo docker-compose up &
+        sleep 15
         npm run test
     # - name: Failure Slack Notification
     #   if: ${{ failure() }}
