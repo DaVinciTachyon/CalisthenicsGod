@@ -2,7 +2,6 @@ name: Build, Test API on Push
 on: push
 jobs:
   build:
-    needs: setup
     name: Build and Run API
     runs-on: ubuntu-latest
     defaults:
@@ -13,8 +12,7 @@ jobs:
     - name: backend build
       run: sudo docker-compose build
     - name: backend up
-      run: |
-        sudo docker-compose up
+      run: sudo docker-compose up
   test:
     name: Test API
     needs: build
