@@ -4,13 +4,11 @@ jobs:
   build:
     name: Build and Test API on Push
     runs-on: ubuntu-latest
-    strategy:
-      matrix:
-        node-version: ['10.x']
     defaults:
       run:
         working-directory: .
     steps:
+    - uses: actions/checkout@v1
     - name: backend build
       run: sudo docker-compose build
     - name: backend up
