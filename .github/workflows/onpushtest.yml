@@ -13,9 +13,8 @@ jobs:
       run: sudo docker-compose build
     - name: backend up
       run: sudo docker-compose up -d
-    - name: change directory
-      run: cd backend/
     - name: install npm dependencies
-      run: npm install
-    - name: test backend
-      run: npm run test
+      run: |
+        cd backend/
+        npm install
+        npm run test
