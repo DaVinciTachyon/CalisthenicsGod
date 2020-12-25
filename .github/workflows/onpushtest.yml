@@ -2,7 +2,7 @@ name: Build, Test API on Push
 on: push
 jobs:
   build:
-    name: Build and Run API
+    name: Build, Run and Test API
     runs-on: ubuntu-latest
     defaults:
       run:
@@ -13,15 +13,6 @@ jobs:
       run: sudo docker-compose build
     - name: backend up
       run: sudo docker-compose up -d
-  test:
-    name: Test API
-    needs: build
-    runs-on: ubuntu-latest
-    defaults:
-      run:
-        working-directory: ./backend
-    steps:
-    - uses: actions/checkout@v1
     - name: install npm dependencies
       run: npm install
     - name: test backend

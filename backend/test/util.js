@@ -1,7 +1,7 @@
 const chai = require('chai');
 const chaiHttp = require('chai-http');
 const supertest = require('supertest');
-const appUrl = process.env.APP_URL || "http://localhost:8080";
+const appUrl = process.env.APP_URL || "http://127.0.0.1:8080";
 const app = supertest(appUrl);
 
 chai.use(chaiHttp);
