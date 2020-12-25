@@ -1,0 +1,36 @@
+name: Build, Test API on Push
+on: push
+jobs:
+  build:
+    name: Build and Test API on Push
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        node-version: ['10.x']
+    defaults:
+      run:
+        working-directory: .
+    steps:
+    - uses: actions/checkout@v1
+    - name: Shutdown Ubuntu MySQL (SUDO)
+      run: sudo service mysql stop
+    - name: Use Node.js ${{ matrix.node-version }}
+      uses: actions/setup-node@v1
+      with:
+        node-version: ${{ matrix.node-version }}
+    - name: backend build
+      run: sudo docker-compose build
+    - name: backend up
+      run: sudo docker-compose up
+    - name: backend test
+      run: |
+        cd backend/
+        npm run test
+    # - name: Failure Slack Notification
+    #   if: ${{ failure() }}
+    #   uses: rtCamp/action-slack-notify@v2.0.2
+    #   env:
+    #     SLACK_WEBHOOK: 'https://hooks.slack.com/services/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'
+    #     SLACK_USERNAME: 'Microservices API Test Frontend Tester'
+    #     SLACK_TITLE: 'Test Failed'
+    #     SLACK_MESSAGE: ‘Please review failed tests.’
