@@ -11,19 +11,13 @@ jobs:
       run:
         working-directory: .
     steps:
-    - uses: actions/checkout@v1
-    - name: Shutdown Ubuntu MySQL (SUDO)
-      run: sudo service mysql stop
-    - name: Use Node.js ${{ matrix.node-version }}
-      uses: actions/setup-node@v1
-      with:
-        node-version: ${{ matrix.node-version }}
     - name: backend build
       run: sudo docker-compose build
     - name: backend up
       run: |
         sudo docker-compose up &
         sleep 15
+        cd backend/
         npm run test
     # - name: Failure Slack Notification
     #   if: ${{ failure() }}
