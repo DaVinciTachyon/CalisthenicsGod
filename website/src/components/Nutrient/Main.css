@@ -1,51 +1,53 @@
-.table {
-  text-align: center;
-  border-radius: 1rem;
-  overflow: hidden;
-  max-width: 90%;
-  margin-top: 1rem;
-  margin-bottom: 1rem;
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-  align-items: center;
+.ingredients {
+  --numberOfColumns: 8;
 }
 
-.table .title {
-  font-weight: 1000;
+.meals {
+  --numberOfColumns: 9;
+}
+
+.mealSummary {
+  --numberOfColumns: 9;
+}
+
+.calorieSummary {
+  --numberOfColumns: 7;
+}
+
+.column {
+  grid-column: span 1;
+}
+
+.name-column {
+  grid-column: span 2;
+}
+
+.title {
+  font-weight: bold;
+}
+
+.bigTitle {
   font-size: 1.8rem;
   margin: 0.6rem;
 }
 
+.fullWidth {
+  grid-column: span var(--numberOfColumns);
+}
+
 .row {
-  display: flex;
-  flex-direction: row;
-  justify-content: center;
-  align-items: center;
-  border-radius: 1rem;
-  width: 100%;
+  display: grid;
+  grid-template-columns: repeat(var(--numberOfColumns), 1fr);
+  text-align: center;
 }
 
-.col .title,
-.col .subtitle {
-  font-weight: 800;
-  margin: 0.1rem;
-}
-
-.col .title {
-  color: var(--primaryTitleColour);
-  font-size: 1rem;
-}
-
-.col .subtitle {
+.subtitle {
   color: var(--secondaryTitleColour);
   font-size: 0.8rem;
 }
 
 .lineEmphasis {
   background: var(--secondaryBackgroundColour);
-  padding-right: 0.5rem;
-  padding-left: 0.5rem;
 }
 
 .inputLineEmphasis {
@@ -101,23 +103,22 @@ input[type="text"].inheritBackground {
   text-align: center;
 }
 
+input[type="number"] {
+  width: 1rem;
+}
+
 input[type="number"]:hover.readOnly,
 input[type="number"]:focus.readOnly {
   -moz-appearance: textfield;
   cursor: default;
 }
 
-input[type="number"] {
-  width: 3.5rem;
+.tinyButton {
+  width: 0.5rem;
 }
 
 select {
   cursor: pointer;
-}
-
-.addButton {
-  width: 95%;
-  background: var(--secondaryColour);
 }
 
 .newMeal {
@@ -143,41 +144,6 @@ select {
   width: 7rem;
 }
 
-.col {
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-  align-items: center;
-  text-align: center;
-  min-width: 2rem;
-}
-
-.col .div,
-.col input {
-  max-width: 95%;
-}
-
-.name-col {
-  width: 15rem;
-}
-
-.calories-col,
-.weight-col,
-.fat-col,
-.carbohydrate-col,
-.protein-col,
-.ethanol-col {
-  width: 6rem;
-}
-
-.status-col {
-  width: 2rem;
-}
-
-.col input {
-  margin: 0.3rem;
-}
-
 .container {
   display: flex;
   flex-direction: column;
@@ -191,17 +157,6 @@ select {
   width: fit-content;
   margin-top: 1rem;
   margin-bottom: 1rem;
-}
-
-.errorButton,
-.successButton {
-  margin: 0;
-}
-
-@media only screen and (max-width: 850px) {
-}
-
-@media only screen and (min-width: 850px) {
 }
 
 .createMeal form {
@@ -222,9 +177,8 @@ select {
 }
 
 .input-pair {
-  display: flex;
-  flex-direction: column;
-  align-items: flex-start;
+  display: grid;
+  grid-template-columns: 1fr;
 }
 
 .input-pair label {

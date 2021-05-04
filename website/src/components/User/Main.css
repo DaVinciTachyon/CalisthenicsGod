@@ -14,7 +14,7 @@
   width: 100%;
 }
 
-.profile-table .col {
+.profile-table .column {
   display: flex;
   flex-direction: row;
   align-items: center;
@@ -25,22 +25,22 @@
   padding: 0.2rem;
 }
 
-.profile-table .label-col {
+.profile-table .label-column {
   min-width: 8rem;
   font-weight: 500;
 }
 
-.profile-table .value-col {
+.profile-table .value-column {
   min-width: 18rem;
 }
 
-.profile-table .value-col select,
-.profile-table .value-col input {
+.profile-table .value-column select,
+.profile-table .value-column input {
   width: 100%;
   text-align: center;
 }
 
-.profile-table .unit-col {
+.profile-table .unit-column {
   min-width: 1rem;
   width: 2.5rem;
   padding: 0;
@@ -49,6 +49,6 @@
   font-size: 0.8rem;
 }
 
-.profile-table .submit-col {
+.profile-table .submit-column {
   width: 100%;
 }

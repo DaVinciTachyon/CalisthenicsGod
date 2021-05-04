@@ -24,7 +24,6 @@ export default class UserProfile extends React.Component {
   };
 
   componentDidMount() {
-    if (!localStorage.getItem('authToken')) window.location = '/login';
     const requestOptions = {
       method: 'GET',
       headers: {
@@ -117,183 +116,181 @@ export default class UserProfile extends React.Component {
 
   render() {
     return (
-      <div className="page">
-        <form className="profile-table" onSubmit={this.editProfile}>
-          <div className="row">
-            <div className="label-col col">First Name</div>
-            <div className="value-col col">
-              <input
-                type="text"
-                value={this.state.name.first}
-                className="readOnly"
-                readOnly
-              />
-            </div>
+      <form className="profile-table" onSubmit={this.editProfile}>
+        <div className="row">
+          <div className="label-column column">First Name</div>
+          <div className="value-column column">
+            <input
+              type="text"
+              value={this.state.name.first}
+              className="readOnly"
+              readOnly
+            />
           </div>
-          <div className="row">
-            <div className="label-col col">Middle Name</div>
-            <div className="value-col col">
-              <input
-                type="text"
-                placeholder="Middle Name"
-                value={this.state.name.middle}
-                className="readOnly"
-                readOnly
-              />
-            </div>
+        </div>
+        <div className="row">
+          <div className="label-column column">Middle Name</div>
+          <div className="value-column column">
+            <input
+              type="text"
+              placeholder="Middle Name"
+              value={this.state.name.middle}
+              className="readOnly"
+              readOnly
+            />
           </div>
-          <div className="row">
-            <div className="label-col col">Last Name</div>
-            <div className="value-col col">
-              <input
-                type="text"
-                value={this.state.name.last}
-                className="readOnly"
-                readOnly
-              />
-            </div>
+        </div>
+        <div className="row">
+          <div className="label-column column">Last Name</div>
+          <div className="value-column column">
+            <input
+              type="text"
+              value={this.state.name.last}
+              className="readOnly"
+              readOnly
+            />
           </div>
-          <div className="row">
-            <div className="label-col col">Email</div>
-            <div className="value-col col">
-              <input
-                type="text"
-                value={this.state.email}
-                className="readOnly"
-                readOnly
-              />
-            </div>
+        </div>
+        <div className="row">
+          <div className="label-column column">Email</div>
+          <div className="value-column column">
+            <input
+              type="text"
+              value={this.state.email}
+              className="readOnly"
+              readOnly
+            />
           </div>
-          <div className="row">
-            <div className="label-col col">Calorie Mode</div>
-            <div className="value-col col">
-              <select id="calorieMode" onChange={this.calorieModeChange}>
-                <option
-                  value="maintenance"
-                  selected={this.state.currentOffset === 0}
-                >
-                  Maintenance
-                </option>
-                <option value="deficit" selected={this.state.currentOffset < 0}>
-                  Deficit
-                </option>
-                <option value="bulk" selected={this.state.currentOffset > 0}>
-                  Bulk
-                </option>
-              </select>
-              {this.state.calorieOffset !== 0 && (
-                <input
-                  type="number"
-                  value={this.state.calorieOffset}
-                  min="0"
-                  step="1"
-                  onChange={this.calorieOffsetChange}
-                />
-              )}
-            </div>
-          </div>
-          <div className="row">
-            <div className="label-col col">Maintenance Calories</div>
-            <div className="value-col col">
+        </div>
+        <div className="row">
+          <div className="label-column column">Calorie Mode</div>
+          <div className="value-column column">
+            <select id="calorieMode" onChange={this.calorieModeChange}>
+              <option
+                value="maintenance"
+                selected={this.state.currentOffset === 0}
+              >
+                Maintenance
+              </option>
+              <option value="deficit" selected={this.state.currentOffset < 0}>
+                Deficit
+              </option>
+              <option value="bulk" selected={this.state.currentOffset > 0}>
+                Bulk
+              </option>
+            </select>
+            {this.state.calorieOffset !== 0 && (
               <input
                 type="number"
+                value={this.state.calorieOffset}
                 min="0"
-                value={this.state.maintenanceCalories}
-                className="readOnly"
-                readOnly
-              />
-              <div className="unit-col">kcal</div>
-            </div>
-          </div>
-          <div className="row">
-            <div className="label-col col">Calorie Offset</div>
-            <div className="value-col col">
-              <input
-                type="number"
                 step="1"
-                value={this.state.currentOffset}
-                className="readOnly"
-                readOnly
+                onChange={this.calorieOffsetChange}
               />
-              <div className="unit-col">kcal</div>
-            </div>
+            )}
           </div>
-          <div className="row">
-            <div className="label-col col">Protein Amount</div>
-            <div className="value-col col">
-              <input
-                type="number"
-                min="0"
-                step="0.05"
-                value={this.state.proteinAmount}
-                className="readOnly"
-                readOnly
-              />
-              <div className="unit-col">g/kg</div>
-            </div>
+        </div>
+        <div className="row">
+          <div className="label-column column">Maintenance Calories</div>
+          <div className="value-column column">
+            <input
+              type="number"
+              min="0"
+              value={this.state.maintenanceCalories}
+              className="readOnly"
+              readOnly
+            />
+            <div className="unit-col">kcal</div>
           </div>
-          <div className="row">
-            <div className="label-col col">Fat Partition</div>
-            <div className="value-col col">
-              <input
-                type="number"
-                min="0"
-                value={this.state.fatPartition * 100}
-                className="readOnly"
-                readOnly
-              />
-              <div className="unit-col">%</div>
-            </div>
+        </div>
+        <div className="row">
+          <div className="label-column column">Calorie Offset</div>
+          <div className="value-column column">
+            <input
+              type="number"
+              step="1"
+              value={this.state.currentOffset}
+              className="readOnly"
+              readOnly
+            />
+            <div className="unit-col">kcal</div>
           </div>
-          <div className="row">
-            <div className="label-col col">Gender</div>
-            <div className="value-col col">
-              <select id="gender">
-                <option value="male" selected={this.state.gender === 'male'}>
-                  Male
-                </option>
-                <option
-                  value="female"
-                  selected={this.state.gender === 'female'}
-                >
-                  Female
-                </option>
-              </select>
-            </div>
+        </div>
+        <div className="row">
+          <div className="label-column column">Protein Amount</div>
+          <div className="value-column column">
+            <input
+              type="number"
+              min="0"
+              step="0.05"
+              value={this.state.proteinAmount}
+              className="readOnly"
+              readOnly
+            />
+            <div className="unit-col">g/kg</div>
           </div>
-          <div className="row">
-            <div className="label-col col">Birth Date</div>
-            <div className="value-col col">
-              <input
-                type="date"
-                value={this.state.birthDate}
-                className="readOnly"
-                readOnly
-              />
-            </div>
+        </div>
+        <div className="row">
+          <div className="label-column column">Fat Partition</div>
+          <div className="value-column column">
+            <input
+              type="number"
+              min="0"
+              value={this.state.fatPartition * 100}
+              className="readOnly"
+              readOnly
+            />
+            <div className="unit-col">%</div>
           </div>
-          <div className="row">
-            <div className="label-col col">Date Joined</div>
-            <div className="value-col col">
-              <input
-                type="date"
-                value={this.state.dateJoined}
-                className="readOnly"
-                readOnly
-              />
-            </div>
+        </div>
+        <div className="row">
+          <div className="label-column column">Gender</div>
+          <div className="value-column column">
+            <select id="gender">
+              <option value="male" selected={this.state.gender === 'male'}>
+                Male
+              </option>
+              <option
+                value="female"
+                selected={this.state.gender === 'female'}
+              >
+                Female
+              </option>
+            </select>
           </div>
-          <div className="row">
-            <div className="submit-col col">
-              <input
-                className="submitButton button"
-                type="submit"
-                value="Edit Profile"
-              />
-            </div>
+        </div>
+        <div className="row">
+          <div className="label-column column">Birth Date</div>
+          <div className="value-column column">
+            <input
+              type="date"
+              value={this.state.birthDate}
+              className="readOnly"
+              readOnly
+            />
           </div>
-        </form>
-      </div>
+        </div>
+        <div className="row">
+          <div className="label-column column">Date Joined</div>
+          <div className="value-column column">
+            <input
+              type="date"
+              value={this.state.dateJoined}
+              className="readOnly"
+              readOnly
+            />
+          </div>
+        </div>
+        <div className="row">
+          <div className="submit-column column">
+            <input
+              className="submitButton button"
+              type="submit"
+              value="Edit Profile"
+            />
+          </div>
+        </div>
+      </form>
     );
   }
 

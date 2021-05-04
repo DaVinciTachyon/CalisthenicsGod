@@ -8,17 +8,13 @@ export default class MeasurementTracker extends React.Component {
     this.state = { update: false };
   }
 
-  async componentDidMount() {
-    if (!localStorage.getItem("authToken")) window.location = "/login";
-  }
-
   addMeasurement = () => {
     this.setState({ update: !this.state.update });
   };
 
   render() {
     return (
-      <div className="page">
+      <div>
         <MeasurementSummary addMeasurement={this.addMeasurement} />
         <MeasurementHistory update={this.state.update} />
       </div>

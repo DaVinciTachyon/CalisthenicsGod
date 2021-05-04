@@ -382,9 +382,11 @@ export default class IngredientRow extends React.Component {
   render() {
     if (!this.props.noToggle && this.props.isNew && !this.state.edit) {
       return (
-        <button onClick={this.changeFocus} className="addButton button">
-          +
-        </button>
+        <div className="row">
+          <div onClick={this.changeFocus} className="fullWidth button">
+            +
+          </div>
+        </div>
       );
     }
 
@@ -411,7 +413,7 @@ export default class IngredientRow extends React.Component {
             : 'row'
         }
       >
-        <div className="name-col col">
+        <div className="name-column column">
           {this.props.isNew && this.props.hasWeight && (
             <select onChange={this.ingredientChange.bind(this)}>
               <option value="" selected={this.state.ingredient === ''}>
@@ -443,7 +445,7 @@ export default class IngredientRow extends React.Component {
             />
           )}
         </div>
-        <div className="calories-col col">
+        <div className="calories-column column">
           <input
             name="calories"
             type="number"
@@ -456,7 +458,7 @@ export default class IngredientRow extends React.Component {
           />
         </div>
         {this.props.hasWeight && (
-          <div className="weight-col col">
+          <div className="weight-column column">
             <input
               name="weight"
               type="number"
@@ -486,7 +488,7 @@ export default class IngredientRow extends React.Component {
             )}
           </div>
         )}
-        <div className="fat-col col">
+        <div className="fat-column column">
           <input
             name="fat"
             type="number"
@@ -541,7 +543,7 @@ export default class IngredientRow extends React.Component {
             />
           )}
         </div>
-        <div className="carbohydrate-col col">
+        <div className="carbohydrate-column column">
           <input
             name="carb"
             type="number"
@@ -596,7 +598,7 @@ export default class IngredientRow extends React.Component {
             />
           )}
         </div>
-        <div className="protein-col col">
+        <div className="protein-column column">
           <input
             name="prot"
             type="number"
@@ -651,7 +653,7 @@ export default class IngredientRow extends React.Component {
             />
           )}
         </div>
-        <div className="ethanol-col col">
+        <div className="ethanol-column column">
           <input
             name="eth"
             type="number"
@@ -707,33 +709,33 @@ export default class IngredientRow extends React.Component {
           )}
         </div>
         {!this.props.isSummary && !this.state.edit && !this.props.isNew && (
-          <div className="status-col col">
+          <div className="status-column column">
             {this.props.isUnavailable && (
-              <button
-                className="successButton button"
+              <div
+                className="tinyButton successButton button"
                 onClick={this.submitStatus}
               >
                 +
-              </button>
+              </div>
             )}
             {!this.props.isUnavailable && (
-              <button
-                className="errorButton button"
+              <div
+                className="tinyButton errorButton button"
                 onClick={this.submitStatus}
               >
                 ×
-              </button>
+              </div>
             )}
           </div>
         )}
         {this.state.edit && (
-          <div className="status-col col">
-            <button className="successButton button" onClick={this.submit}>
+          <div className="status-column column">
+            <div className="tinyButton successButton button" onClick={this.submit}>
               +
-            </button>
-            <button className="errorButton button" onClick={this.cancel}>
+            </div>
+            <div className="tinyButton errorButton button" onClick={this.cancel}>
               ×
-            </button>
+            </div>
           </div>
         )}
       </div>

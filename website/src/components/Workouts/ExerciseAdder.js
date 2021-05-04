@@ -1,7 +1,6 @@
 import React from "react";
-import Exercises from "./Exercises";
 
-export default class WorkoutTracker extends React.Component {
+export default class Exercises extends React.Component {
   constructor() {
     super();
     this.state = {};
@@ -9,7 +8,9 @@ export default class WorkoutTracker extends React.Component {
 
   render() {
     return (
-      <Exercises />
+      <div>
+        adder
+      </div>
     );
   }
 }

@@ -97,7 +97,7 @@ export default class ToolBar extends React.Component {
                 </li>
               </ul>
             </li>
-            {/* <li
+            <li
               className={
                 this.state.path.includes("/workoutTracker")
                   ? "nav-current nav-item"
@@ -131,7 +131,14 @@ export default class ToolBar extends React.Component {
                 </svg>
                 <span className="link-text">Workouts</span>
               </Link>
-            </li> */}
+              <ul className="navbar-sub">
+                <li className="nav-item">
+                  <Link to="/workoutTracker/exercises" className="nav-link">
+                    <span className="link-text">Exercises</span>
+                  </Link>
+                </li>
+              </ul>
+            </li>
             <li
               className={
                 this.state.path.includes('/measurementTracker')

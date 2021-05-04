@@ -20,11 +20,7 @@ export default class Ingredients extends React.Component {
       newIngredient: false,
     };
   }
-
-  async componentDidMount() {
-    if (!localStorage.getItem("authToken")) window.location = "/login";
-  }
-
+  
   update = () => {
     this.setState({ update: !this.state.update });
   };
@@ -39,7 +35,7 @@ export default class Ingredients extends React.Component {
 
   render() {
     return (
-      <div className="page">
+      <div>
         <IngredientList
           colours={this.state.colours}
           update={this.state.update}
