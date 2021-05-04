@@ -1,7 +1,6 @@
 import React from 'react';
 import NutrientSummary from './NutrientSummary';
 import NutrientDay from './NutrientDay';
-import env from "react-dotenv";
 
 export default class NutrientTracker extends React.Component {
   constructor() {
@@ -69,7 +68,7 @@ export default class NutrientTracker extends React.Component {
       },
     };
     fetch(
-      `${env.API_URL}/nutrition/macronutrientDensities`,
+      `${window.env.API_URL}/nutrition/macronutrientDensities`,
       requestOptions
     )
       .then((response) => response.json())

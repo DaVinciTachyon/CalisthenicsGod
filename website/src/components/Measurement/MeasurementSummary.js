@@ -1,7 +1,6 @@
 import React from 'react';
 import Modal from '../Modal';
 import MeasurementAdder from './MeasurementAdder';
-import env from "react-dotenv";
 
 export default class MeasurementSummary extends React.Component {
   constructor() {
@@ -46,7 +45,7 @@ export default class MeasurementSummary extends React.Component {
         'auth-token': localStorage.getItem('authToken'),
       },
     };
-    fetch(`${env.API_URL}/measurement/`, requestOptions)
+    fetch(`${window.env.API_URL}/measurement/`, requestOptions)
       .then((response) => response.json())
       .then((data) =>
         this.setState({

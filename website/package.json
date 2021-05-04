@@ -23,7 +23,7 @@
 		"build": "react-dotenv && react-scripts build",
 		"serve": "react-dotenv && serve -s build",
 		"serve:build": "npm run build && npm run serve",
-		"test": "react-scripts test",
+		"test": "react-dotenv && react-scripts test",
 		"eject": "react-scripts eject"
 	},
 	"eslintConfig": {

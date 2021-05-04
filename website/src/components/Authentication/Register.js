@@ -1,6 +1,5 @@
 import React from 'react';
 import './Main.css';
-import env from "react-dotenv";
 
 export default class Register extends React.Component {
   constructor() {
@@ -37,7 +36,7 @@ export default class Register extends React.Component {
       return this.setState({ error: 'Gender is required' });
     if (!this.state.birthDate)
       return this.setState({ error: 'Birth Date is required' });
-    fetch(`${env.API_URL}/auth/register`, {
+    fetch(`${window.env.API_URL}/auth/register`, {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({

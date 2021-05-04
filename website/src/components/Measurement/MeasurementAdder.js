@@ -1,5 +1,4 @@
 import React from 'react';
-import env from "react-dotenv";
 
 export default class MeasurementAdder extends React.Component {
   constructor() {
@@ -121,7 +120,7 @@ export default class MeasurementAdder extends React.Component {
         neck: this.state.neck > 0 ? this.state.neck : undefined,
       }),
     };
-    fetch(`${env.API_URL}/measurement/`, requestOptions).then(
+    fetch(`${window.env.API_URL}/measurement/`, requestOptions).then(
       () => {
         this.props.addMeasurement();
       }

@@ -1,7 +1,6 @@
 import React from 'react';
 import MealEditor from './MealEditor';
 import './Main.css';
-import env from "react-dotenv";
 
 export default class Meals extends React.Component {
   constructor() {
@@ -53,7 +52,7 @@ export default class Meals extends React.Component {
       },
     };
     fetch(
-      `${env.API_URL}/nutrition/meals/preset/names/`,
+      `${window.env.API_URL}/nutrition/meals/preset/names/`,
       requestOptions
     )
       .then((response) => response.json())
@@ -78,7 +77,7 @@ export default class Meals extends React.Component {
       }),
     };
     fetch(
-      `${env.API_URL}/nutrition/meals/preset/add/`,
+      `${window.env.API_URL}/nutrition/meals/preset/add/`,
       requestOptions
     ).then(() => {
       this.flipNewMeal();

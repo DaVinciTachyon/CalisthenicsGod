@@ -1,7 +1,6 @@
 import React from 'react';
 import IngredientRow from './IngredientRow';
 import './Main.css';
-import env from "react-dotenv";
 
 export default class MealTable extends React.Component {
   constructor() {
@@ -116,7 +115,7 @@ export default class MealTable extends React.Component {
     let newId = '';
     if (!ingredient._id) {
       const response = await fetch(
-        `${env.API_URL}/nutrition/ingredients/add/`,
+        `${window.env.API_URL}/nutrition/ingredients/add/`,
         {
           method: 'POST',
           headers: {
@@ -136,7 +135,7 @@ export default class MealTable extends React.Component {
       newId = data._id;
     } else newId = ingredient._id;
 
-    await fetch(`${env.API_URL}/nutrition/meals/`, {
+    await fetch(`${window.env.API_URL}/nutrition/meals/`, {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
@@ -165,7 +164,7 @@ export default class MealTable extends React.Component {
   };
 
   removeIngredient = async (ingredient) => {
-    await fetch(`${env.API_URL}/nutrition/meals/remove/`, {
+    await fetch(`${window.env.API_URL}/nutrition/meals/remove/`, {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
@@ -183,7 +182,7 @@ export default class MealTable extends React.Component {
   };
 
   editIngredient = async (ingredient) => {
-    await fetch(`${env.API_URL}/nutrition/meals/edit/`, {
+    await fetch(`${window.env.API_URL}/nutrition/meals/edit/`, {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',

@@ -2,7 +2,6 @@ import React from 'react';
 import MealTable from './MealTable';
 import IngredientRow from './IngredientRow';
 import './Main.css';
-import env from "react-dotenv";
 
 export default class NutrientDay extends React.Component {
   constructor() {
@@ -95,7 +94,7 @@ export default class NutrientDay extends React.Component {
     let newId = '';
     if (!ingredient._id) {
       const response = await fetch(
-        `${env.API_URL}/nutrition/ingredients/add/`,
+        `${window.env.API_URL}/nutrition/ingredients/add/`,
         {
           method: 'POST',
           headers: {
@@ -116,7 +115,7 @@ export default class NutrientDay extends React.Component {
     } else newId = ingredient._id;
 
     const mealRes = await fetch(
-      `${env.API_URL}/nutrition/meals/`,
+      `${window.env.API_URL}/nutrition/meals/`,
       {
         method: 'POST',
         headers: {
@@ -223,7 +222,7 @@ export default class NutrientDay extends React.Component {
 
   getMeals = async () => {
     const response = await fetch(
-      `${env.API_URL}/nutrition/meals/today/`,
+      `${window.env.API_URL}/nutrition/meals/today/`,
       {
         method: 'GET',
         headers: {
@@ -241,7 +240,7 @@ export default class NutrientDay extends React.Component {
 
   getPresetMeals = async () => {
     const response = await fetch(
-      `${env.API_URL}/nutrition/meals/preset/names/`,
+      `${window.env.API_URL}/nutrition/meals/preset/names/`,
       {
         method: 'GET',
         headers: {
@@ -277,7 +276,7 @@ export default class NutrientDay extends React.Component {
     evt.preventDefault();
     if (this.state.mealId === '') this.flipNewMeal();
     else {
-      await fetch(`${env.API_URL}/nutrition/meals/addPreset/`, {
+      await fetch(`${window.env.API_URL}/nutrition/meals/addPreset/`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
