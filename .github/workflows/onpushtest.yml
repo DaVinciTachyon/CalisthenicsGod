@@ -25,6 +25,44 @@ jobs:
       run: sudo docker-compose build website
     - name: deploy
       run: sudo docker-compose up -d website
+  buildAPK:
+    name: Build APK
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: ./CGod
+    steps:
+      - uses: actions/checkout@v1
+      - uses: actions/setup-java@v1
+        with:
+          java-version: '12.x'
+      - uses: subosito/flutter-action@v1.4.0
+      - run: flutter pub get
+      - run: flutter build apk --debug --split-per-abi
+      # - name: Create a Release APK
+      #   uses: ncipollo/release-action@v1
+      #   with:
+      #     artifacts: "build/app/outputs/apk/debug/*.apk"
+      #     token: "mqiwowEVmewmvoiw9238u498u43g£F£$39034093#;][."
+  buildIOS:
+    name: Build IOS
+    runs-on: macos-latest
+    defaults:
+      run:
+        working-directory: ./CGod
+    steps:
+      - uses: actions/checkout@v1
+      - uses: actions/setup-java@v1
+        with:
+          java-version: '12.x'
+      - uses: subosito/flutter-action@v1.4.0
+      - run: flutter pub get
+      - run: flutter build ios --release --no-codesign
+      # - name: Create a Release APK
+      #   uses: ncipollo/release-action@v1
+      #   with:
+      #     artifacts: "build/app/outputs/apk/debug/*.apk"
+      #     token: "mqiwowEVmewmvoiw9238u498u43g£F£$39034093#;][."
   testAPI:
     name: Test API
     needs: buildAPI
@@ -57,3 +95,18 @@ jobs:
         cd website/
         npm install
         npm run test
+  testApp:
+    name: Test App
+    needs: [ buildIOS, buildAPK, buildAPI ]
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: ./CGod
+    steps:
+      - uses: actions/checkout@v1
+      - uses: actions/setup-java@v1
+        with:
+          java-version: '12.x'
+      - uses: subosito/flutter-action@v1.4.0
+      - run: flutter pub get
+      - run: flutter test
