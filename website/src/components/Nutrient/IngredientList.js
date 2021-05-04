@@ -1,6 +1,7 @@
 import React from 'react';
 import IngredientRow from './IngredientRow';
 import './Main.css';
+import env from "react-dotenv";
 
 export default class IngredientList extends React.Component {
   constructor() {
@@ -37,9 +38,9 @@ export default class IngredientList extends React.Component {
         'auth-token': localStorage.getItem('authToken'),
       },
     };
-    let url = `${process.env.REACT_APP_URL}/nutrition/ingredients/`;
+    let url = `${env.API_URL}/nutrition/ingredients/`;
     if (this.props.isUnavailable)
-      url = `${process.env.REACT_APP_URL}/nutrition/ingredients/unavailable`;
+      url = `${env.API_URL}/nutrition/ingredients/unavailable`;
     fetch(url, requestOptions)
       .then((response) => response.json())
       .then((data) => {
@@ -96,7 +97,7 @@ export default class IngredientList extends React.Component {
   };
 
   addIngredient = (ingredient) => {
-    fetch(`${process.env.REACT_APP_URL}/nutrition/ingredients/add/`, {
+    fetch(`${env.API_URL}/nutrition/ingredients/add/`, {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
@@ -115,7 +116,7 @@ export default class IngredientList extends React.Component {
   };
 
   onSubmit = async (ingredient) => {
-    await fetch(`${process.env.REACT_APP_URL}/nutrition/ingredients/edit/`, {
+    await fetch(`${env.API_URL}/nutrition/ingredients/edit/`, {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
@@ -144,9 +145,9 @@ export default class IngredientList extends React.Component {
         _id: ingredient._id,
       }),
     };
-    let url = `${process.env.REACT_APP_URL}/nutrition/ingredients/makeUnavailable/`;
+    let url = `${env.API_URL}/nutrition/ingredients/makeUnavailable/`;
     if (this.props.isUnavailable)
-      url = `${process.env.REACT_APP_URL}/nutrition/ingredients/makeAvailable/`;
+      url = `${env.API_URL}/nutrition/ingredients/makeAvailable/`;
     fetch(url, requestOptions).then(() => {
       this.update();
     });

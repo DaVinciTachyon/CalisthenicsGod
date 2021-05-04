@@ -1,6 +1,7 @@
 import React from 'react';
 import IngredientRow from './IngredientRow';
 import './Main.css';
+import env from "react-dotenv";
 
 export default class NutrientSummary extends React.Component {
   constructor() {
@@ -98,7 +99,7 @@ export default class NutrientSummary extends React.Component {
         'auth-token': localStorage.getItem('authToken'),
       },
     };
-    fetch(`${process.env.REACT_APP_URL}/nutrition/goals`, requestOptions)
+    fetch(`${env.API_URL}/nutrition/goals`, requestOptions)
       .then((response) => response.json())
       .then((data) =>
         this.setState({

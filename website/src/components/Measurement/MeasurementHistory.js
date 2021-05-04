@@ -1,5 +1,6 @@
 import React from 'react';
 import { Line } from 'react-chartjs-2';
+import env from "react-dotenv";
 
 export default class MeasurementHistory extends React.Component {
   constructor() {
@@ -41,7 +42,7 @@ export default class MeasurementHistory extends React.Component {
       },
     };
     fetch(
-      `${process.env.REACT_APP_URL}/measurement/weight/history`,
+      `${env.API_URL}/measurement/weight/history`,
       requestOptions
     )
       .then((response) => response.json())

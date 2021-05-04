@@ -1,5 +1,6 @@
 import React from 'react';
 import './Main.css';
+import env from "react-dotenv";
 
 export default class IngredientRow extends React.Component {
   constructor() {
@@ -153,7 +154,7 @@ export default class IngredientRow extends React.Component {
         'auth-token': localStorage.getItem('authToken'),
       },
     };
-    fetch(`${process.env.REACT_APP_URL}/nutrition/ingredients/`, requestOptions)
+    fetch(`${env.API_URL}/nutrition/ingredients/`, requestOptions)
       .then((response) => response.json())
       .then((data) => {
         let ingredients = Object.assign({}, this.state.ingredients);

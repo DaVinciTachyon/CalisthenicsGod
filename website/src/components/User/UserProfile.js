@@ -1,5 +1,6 @@
 import React from 'react';
 import './Main.css';
+import env from "react-dotenv";
 
 export default class UserProfile extends React.Component {
   constructor() {
@@ -32,7 +33,7 @@ export default class UserProfile extends React.Component {
         'auth-token': localStorage.getItem('authToken'),
       },
     };
-    fetch(`${process.env.REACT_APP_URL}/user/`, requestOptions)
+    fetch(`${env.API_URL}/user/`, requestOptions)
       .then((response) => response.json())
       .then((data) => {
         let dateJoined = new Date(data.dateJoined);
@@ -93,7 +94,7 @@ export default class UserProfile extends React.Component {
 
   editProfile = (evt) => {
     evt.preventDefault();
-    fetch(`${process.env.REACT_APP_URL}/nutrition/calorieOffset`, {
+    fetch(`${env.API_URL}/nutrition/calorieOffset`, {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',

@@ -1,5 +1,6 @@
 import React from 'react';
 import './Main.css';
+import env from "react-dotenv";
 
 export default class Login extends React.Component {
   constructor() {
@@ -33,7 +34,7 @@ export default class Login extends React.Component {
         password: this.state.password,
       }),
     };
-    fetch(`${process.env.REACT_APP_URL}/auth/login`, requestOptions)
+    fetch(`${env.API_URL}/auth/login`, requestOptions)
       .then((response) => response.json())
       .then((data) => {
         if (data['auth-token']) {
