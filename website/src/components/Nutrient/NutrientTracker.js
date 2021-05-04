@@ -68,7 +68,7 @@ export default class NutrientTracker extends React.Component {
       },
     };
     fetch(
-      `${process.env.REACT_APP_URL}/nutrition/macronutrientDensities`,
+      `${window.env.API_URL}/nutrition/macronutrientDensities`,
       requestOptions
     )
       .then((response) => response.json())

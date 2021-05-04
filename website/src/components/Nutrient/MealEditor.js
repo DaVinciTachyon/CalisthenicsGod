@@ -45,7 +45,7 @@ export default class MealEditor extends React.Component {
       body: JSON.stringify({ _id: this.props.meal._id }),
     };
     fetch(
-      `${process.env.REACT_APP_URL}/nutrition/meals/preset/ingredients/`,
+      `${window.env.API_URL}/nutrition/meals/preset/ingredients/`,
       requestOptions
     )
       .then((response) => response.json())
@@ -66,7 +66,7 @@ export default class MealEditor extends React.Component {
       body: JSON.stringify({ _id: this.props.meal._id }),
     };
     fetch(
-      `${process.env.REACT_APP_URL}/nutrition/meals/preset/remove/`,
+      `${window.env.API_URL}/nutrition/meals/preset/remove/`,
       requestOptions
     ).then(() => {
       this.showMeal();
@@ -76,7 +76,7 @@ export default class MealEditor extends React.Component {
 
   addIngredient = (ingredient) => {
     if (!ingredient._id) {
-      fetch(`${process.env.REACT_APP_URL}/nutrition/ingredients/add/`, {
+      fetch(`${window.env.API_URL}/nutrition/ingredients/add/`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
@@ -93,7 +93,7 @@ export default class MealEditor extends React.Component {
         .then((response) => response.json())
         .then(async (data) => {
           await fetch(
-            `${process.env.REACT_APP_URL}/nutrition/meals/preset/addIngredient/`,
+            `${window.env.API_URL}/nutrition/meals/preset/addIngredient/`,
             {
               method: 'POST',
               headers: {
@@ -129,7 +129,7 @@ export default class MealEditor extends React.Component {
         }),
       };
       fetch(
-        `${process.env.REACT_APP_URL}/nutrition/meals/preset/addIngredient/`,
+        `${window.env.API_URL}/nutrition/meals/preset/addIngredient/`,
         requestOptions
       ).then(() => {
         this.getMeal();
@@ -139,7 +139,7 @@ export default class MealEditor extends React.Component {
 
   onSubmit = (ingredient) => {
     fetch(
-      `${process.env.REACT_APP_URL}/nutrition/meals/preset/editIngredient/`,
+      `${window.env.API_URL}/nutrition/meals/preset/editIngredient/`,
       {
         method: 'POST',
         headers: {
@@ -159,7 +159,7 @@ export default class MealEditor extends React.Component {
 
   submitStatus = (ingredient) => {
     fetch(
-      `${process.env.REACT_APP_URL}/nutrition/meals/preset/removeIngredient/`,
+      `${window.env.API_URL}/nutrition/meals/preset/removeIngredient/`,
       {
         method: 'POST',
         headers: {

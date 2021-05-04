@@ -45,7 +45,7 @@ export default class MeasurementSummary extends React.Component {
         'auth-token': localStorage.getItem('authToken'),
       },
     };
-    fetch(`${process.env.REACT_APP_URL}/measurement/`, requestOptions)
+    fetch(`${window.env.API_URL}/measurement/`, requestOptions)
       .then((response) => response.json())
       .then((data) =>
         this.setState({
