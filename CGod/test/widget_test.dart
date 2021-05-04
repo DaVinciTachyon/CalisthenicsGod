@@ -10,4 +10,6 @@ import 'package:flutter_test/flutter_test.dart';
 
 import 'package:CGod/main.dart';
 
-void main() {}
+void main() {
+  testWidgets('Empty Test', (WidgetTester tester) async {});
+}
