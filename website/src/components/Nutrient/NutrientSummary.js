@@ -98,7 +98,7 @@ export default class NutrientSummary extends React.Component {
         'auth-token': localStorage.getItem('authToken'),
       },
     };
-    fetch(`${process.env.REACT_APP_URL}/nutrition/goals`, requestOptions)
+    fetch(`${window.env.API_URL}/nutrition/goals`, requestOptions)
       .then((response) => response.json())
       .then((data) =>
         this.setState({

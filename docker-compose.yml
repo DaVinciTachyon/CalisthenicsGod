@@ -41,9 +41,9 @@ services:
     container_name: calisthenicsGodWebsite
     restart: unless-stopped
     ports:
-      - '3000:3000'
+      - '5000:5000'
     expose:
-      - 3000
+      - 5000
     volumes:
       - .:/home/node/app
       - node_modules:/home/node/app/node_modules
