@@ -7,9 +7,11 @@ router.use((req, res, next) => {
 });
 
 router.get('/stage', async (req, res) => {
+    const stageOrder = await WorkoutStageOrder.findOne();
     const stages = await WorkoutStage.find();
-
-	res.send({ stages: stages });
+    let orderedStages = []
+    stageOrder.forEach(id => orderedStages.push(stages.find(stage => stage._id === id)));
+	res.send({ stages: orderedStages });
 });
 
 router.post('/stage', async (req, res) => {
