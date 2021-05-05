@@ -25,7 +25,6 @@ export default class NutrientTracker extends React.Component {
   }
 
   async componentDidMount() {
-    if (!localStorage.getItem('authToken')) window.location = '/login';
     this.getMacronutrientDensities();
   }
 
@@ -36,7 +35,7 @@ export default class NutrientTracker extends React.Component {
 
   render() {
     return (
-      <div className="page">
+      <div>
         <div className="card">
           <NutrientSummary
             currentMacros={this.state.currentMacros}

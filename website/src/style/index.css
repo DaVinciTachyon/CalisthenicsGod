@@ -27,6 +27,7 @@
   --primaryBorder: 0.1rem solid lightgrey;
   --secondaryBorder: 0.1rem solid var(--primaryBackgroundColour);
   --primaryShadowColour: rgba(0, 0, 0, 0.2);
+  --secondaryShadowColour: rgba(0, 0, 0, 0.3);
 
   --primaryFatColour: #ffd433;
   --secondaryFatColour: #ffe582;
@@ -46,20 +47,9 @@
 
 body {
   background: var(--primaryBackgroundColour);
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-  align-items: center;
-  min-height: 100%;
 }
 
-#root {
-  height: 100%;
-  width: 100%;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-}
+/* #root {} */
 
 .button {
   text-decoration: none;
@@ -67,17 +57,19 @@ body {
   margin: 0.8rem;
   border-radius: 1rem;
   text-align: center;
-  border: 0.1rem solid var(--primaryBackgroundColour);
+  border: 0.1rem solid var(--darkPrimaryColour);
   color: var(--primaryBackgroundColour);
   background: var(--primaryColour);
   font-size: 1.1rem;
   min-width: 40%;
+  box-shadow: 0 0 0.5rem 0.25rem var(--primaryShadowColour);
 }
 
 .button:hover {
-  border: 0.1rem solid var(--primaryBackgroundColour);
+  border: 0.1rem solid var(--darkPrimaryColour);
   color: var(--primaryBackgroundColour);
   background: var(--primarySuccessColour);
+  box-shadow: 0 0 0.5rem 0.25rem var(--secondaryShadowColour);
 }
 
 .button:active {
@@ -160,6 +152,17 @@ body {
   border: 0.1rem solid var(--primaryBackgroundColour);
   color: var(--primaryBackgroundColour);
   background: var(--secondarySuccessColour);
+}
+
+.tinyButton {
+  padding: 0;
+  width: 0.5rem;
+}
+
+.thinButton {
+  font-size: 0.5rem;
+  padding: 0;
+  height: 1rem;
 }
 
 .card {

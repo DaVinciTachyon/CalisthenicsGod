@@ -1,6 +1,6 @@
 import React from 'react';
 import MealEditor from './MealEditor';
-import './Main.css';
+import '../../style/Nutrient.css';
 
 export default class Meals extends React.Component {
   constructor() {
@@ -30,7 +30,6 @@ export default class Meals extends React.Component {
   };
 
   async componentDidMount() {
-    if (!localStorage.getItem('authToken')) window.location = '/login';
     this.getMealNames();
   }
 
@@ -108,7 +107,7 @@ export default class Meals extends React.Component {
       );
     }
     return (
-      <div className="page">
+      <div>
         <div className="createMeal">
           {!this.state.newMeal && (
             <button className="mainButton button" onClick={this.flipNewMeal}>
@@ -117,7 +116,7 @@ export default class Meals extends React.Component {
           )}
           {this.state.newMeal && (
             <form onSubmit={this.newMeal.bind(this)}>
-              <div className="input-pair col">
+              <div className="input-pair column">
                 <label for="name">Meal Name</label>
                 <input
                   name="name"

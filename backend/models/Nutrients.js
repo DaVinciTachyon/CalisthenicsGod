@@ -1,8 +1,9 @@
 const mongoose = require('mongoose');
 
-const nutrientSchema = new mongoose.Schema({
+module.exports = mongoose.model('Nutrients', new mongoose.Schema({
   userId: {
-    type: String,
+    type: mongoose.Schema.Types.ObjectId,
+    ref: 'User',
     required: true,
   },
   maintenanceCalories: {
@@ -74,6 +75,4 @@ const nutrientSchema = new mongoose.Schema({
       ],
     },
   ],
-});
-
-module.exports = mongoose.model('Nutrients', nutrientSchema);
+}));

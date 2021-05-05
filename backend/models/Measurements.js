@@ -1,8 +1,9 @@
 const mongoose = require('mongoose');
 
-const measurementSchema = new mongoose.Schema({
+module.exports = mongoose.model('Measurements', new mongoose.Schema({
     userId: {
-        type: String,
+        type: mongoose.Schema.Types.ObjectId,
+        ref: 'User',
         required: true
     },
     weight: [
@@ -137,6 +138,4 @@ const measurementSchema = new mongoose.Schema({
             }
         }
     ]
-});
-
-module.exports = mongoose.model('Measurements', measurementSchema);
+}));

@@ -32,7 +32,6 @@ router.use(verify, (req, res, next) => {
 });
 
 router.post('/edit', async (req, res) => {
-  //FIXME?
   if (!req.body.mealId)
     return res.status(400).send({ error: 'Meal ID Required' });
   if (!req.body._id)

@@ -1,5 +1,6 @@
 import React from 'react';
-import './Main.css';
+import '../../style/Authentication.css';
+import Error from '../Error';
 
 export default class Login extends React.Component {
   constructor() {
@@ -10,17 +11,11 @@ export default class Login extends React.Component {
       error: '',
     };
 
-    this.handleEmailChange = this.handleEmailChange.bind(this);
-    this.handlePasswordChange = this.handlePasswordChange.bind(this);
-    this.handleSubmit = this.handleSubmit.bind(this);
-    this.dismissError = this.dismissError.bind(this);
+    this.onChange = this.onChange.bind(this);
+    this.onSubmit = this.onSubmit.bind(this);
   }
 
-  componentDidMount() {
-    if (localStorage.getItem('authToken')) window.location = '/';
-  }
-
-  handleSubmit(evt) {
+  onSubmit(evt) {
     evt.preventDefault();
     if (!this.state.email) return this.setState({ error: 'Email is required' });
     if (!this.state.password)
@@ -38,64 +33,43 @@ export default class Login extends React.Component {
       .then((data) => {
         if (data['auth-token']) {
           localStorage.setItem('authToken', data['auth-token']);
-          window.location.reload(false);
+          window.location.reload();
         }
         this.setState({ error: data.error });
       })
       .catch((err) => console.error(err));
   }
 
-  handleEmailChange(evt) {
-    this.setState({
-      email: evt.target.value,
-    });
-  }
-
-  handlePasswordChange(evt) {
-    this.setState({
-      password: evt.target.value,
-    });
-  }
-
-  dismissError() {
-    this.setState({ error: '' });
-  }
+  onChange = (evt) => this.setState({ [evt.target.name]: evt.target.value });
 
   render() {
     return (
-      <div className="page">
-        <form onSubmit={this.handleSubmit} className="card">
-          {this.state.error && (
-            <h3 data-test="error" onClick={this.dismissError}>
-              <button onClick={this.dismissError}>✖</button>
-              {this.state.error}
-            </h3>
-          )}
-          <label htmlFor="email">Email</label>
-          <input
-            name="email"
-            type="text"
-            value={this.state.email}
-            onChange={this.handleEmailChange}
-            placeholder="Email"
-          />
-          <label htmlFor="email">Password</label>
-          <input
-            type="password"
-            value={this.state.password}
-            onChange={this.handlePasswordChange}
-            placeholder="Password"
-          />
-          <input
-            className="primaryButton button"
-            type="submit"
-            value="Sign In"
-          />
-          <a className="secondaryButton button" href="/register">
-            Register
-          </a>
-        </form>
-      </div>
+      <form onSubmit={this.onSubmit} className="card">
+        <Error error={this.state.error} dismissError={() => this.setState({ error: '' })}/>
+        <label htmlFor="email">Email</label>
+        <input
+          name="email"
+          type="text"
+          value={this.state.email}
+          onChange={this.onChange}
+          placeholder="Email"
+        />
+        <label htmlFor="email">Password</label>
+        <input
+          type="password"
+          value={this.state.password}
+          onChange={this.onChange}
+          placeholder="Password"
+        />
+        <input
+          className="primaryButton button"
+          type="submit"
+          value="Sign In"
+        />
+        <a className="secondaryButton button" href="/register">
+          Register
+        </a>
+      </form>
     );
   }
 }

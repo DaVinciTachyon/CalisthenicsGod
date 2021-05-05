@@ -1,5 +1,5 @@
 import React from 'react';
-import './Toolbar.css';
+import '../../style/Toolbar.css';
 import { Link } from 'react-router-dom';
 import { isMobile } from 'react-device-detect';
 
@@ -97,7 +97,7 @@ export default class ToolBar extends React.Component {
                 </li>
               </ul>
             </li>
-            {/* <li
+            <li
               className={
                 this.state.path.includes("/workoutTracker")
                   ? "nav-current nav-item"
@@ -131,7 +131,19 @@ export default class ToolBar extends React.Component {
                 </svg>
                 <span className="link-text">Workouts</span>
               </Link>
-            </li> */}
+              <ul className="navbar-sub">
+                <li className="nav-item">
+                  <Link to="/workoutTracker/exercises" className="nav-link">
+                    <span className="link-text">Exercises</span>
+                  </Link>
+                </li>
+                <li className="nav-item">
+                  <Link to="/workoutTracker/stages" className="nav-link">
+                    <span className="link-text">Stages</span>
+                  </Link>
+                </li>
+              </ul>
+            </li>
             <li
               className={
                 this.state.path.includes('/measurementTracker')
@@ -276,6 +288,6 @@ export default class ToolBar extends React.Component {
 
   logOut = () => {
     localStorage.removeItem('authToken');
-    window.location.reload(false);
+    window.location.reload();
   };
 }

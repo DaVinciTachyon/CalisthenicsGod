@@ -1,6 +1,6 @@
 import React from 'react';
 import IngredientRow from './IngredientRow';
-import './Main.css';
+import '../../style/Nutrient.css';
 
 export default class IngredientList extends React.Component {
   constructor() {
@@ -171,32 +171,34 @@ export default class IngredientList extends React.Component {
     }
     if (ingredients.length === 0 && this.props.isUnavailable) return <div />;
     return (
-      <div className="table">
-        {!this.props.isUnavailable && <div className="title">Available</div>}
-        {this.props.isUnavailable && <div className="title">Unavailable</div>}
+      <div className="ingredients">
+        <div className="row title bigTitle">
+        {!this.props.isUnavailable && <div className="fullWidth">Available</div>}
+        {this.props.isUnavailable && <div className="fullWidth">Unavailable</div>}
+        </div>
         <div className="row">
-          <div className="name-col col"></div>
-          <div className="calories-col col">
+          <div className="name-column column"></div>
+          <div className="calories-column column">
             <div className="title">Calories</div>
-            <div className="subtitle">kcal</div>
+            <div className="title subtitle">kcal</div>
           </div>
-          <div className="fat-col col">
+          <div className="fat-column column">
             <div className="title">Fat</div>
-            <div className="subtitle">grams</div>
+            <div className="title subtitle">grams</div>
           </div>
-          <div className="carbohydrate-col col">
+          <div className="carbohydrate-column column">
             <div className="title">Carbs</div>
-            <div className="subtitle">grams</div>
+            <div className="title subtitle">grams</div>
           </div>
-          <div className="protein-col col">
+          <div className="protein-column column">
             <div className="title">Protein</div>
-            <div className="subtitle">grams</div>
+            <div className="title subtitle">grams</div>
           </div>
-          <div className="ethanol-col col">
+          <div className="ethanol-column column">
             <div className="title">Ethanol</div>
-            <div className="subtitle">grams</div>
+            <div className="title subtitle">grams</div>
           </div>
-          <div className="status-col col"></div>
+          <div className="status-column column"></div>
         </div>
         {!this.props.isUnavailable && (
           <IngredientRow

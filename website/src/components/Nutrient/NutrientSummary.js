@@ -1,6 +1,6 @@
 import React from 'react';
 import IngredientRow from './IngredientRow';
-import './Main.css';
+import '../../style/Nutrient.css';
 
 export default class NutrientSummary extends React.Component {
   constructor() {
@@ -22,26 +22,26 @@ export default class NutrientSummary extends React.Component {
 
   render() {
     return (
-      <div className="table">
+      <div className="calorieSummary">
         <div className="row">
-          <div className="name-col col"></div>
-          <div className="calories-col col">
+          <div className="name-column column"></div>
+          <div className="calories-column column">
             <div className="title">Calories</div>
             <div className="subtitle">kcal</div>
           </div>
-          <div className="fat-col col">
+          <div className="fat-column column">
             <div className="title">Fat</div>
             <div className="subtitle">grams</div>
           </div>
-          <div className="carbohydrate-col col">
+          <div className="carbohydrate-column column">
             <div className="title">Carbs</div>
             <div className="subtitle">grams</div>
           </div>
-          <div className="protein-col col">
+          <div className="protein-column column">
             <div className="title">Protein</div>
             <div className="subtitle">grams</div>
           </div>
-          <div className="ethanol-col col">
+          <div className="ethanol-column column">
             <div className="title">Ethanol</div>
             <div className="subtitle">grams</div>
           </div>

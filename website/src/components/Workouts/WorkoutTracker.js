@@ -9,9 +9,7 @@ export default class WorkoutTracker extends React.Component {
 
   render() {
     return (
-      <div className="page">
-        <Exercises />
-      </div>
+      <Exercises />
     );
   }
 }
