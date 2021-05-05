@@ -33,7 +33,7 @@ export default class Login extends React.Component {
         password: this.state.password,
       }),
     };
-    fetch(`${window.env.API_URL}/auth/login`, requestOptions)
+    fetch(`${process.env.REACT_APP_API_URL}/auth/login`, requestOptions)
       .then((response) => response.json())
       .then((data) => {
         if (data['auth-token']) {

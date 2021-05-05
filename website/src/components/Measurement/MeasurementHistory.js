@@ -41,7 +41,7 @@ export default class MeasurementHistory extends React.Component {
       },
     };
     fetch(
-      `${window.env.API_URL}/measurement/weight/history`,
+      `${process.env.REACT_APP_API_URL}/measurement/weight/history`,
       requestOptions
     )
       .then((response) => response.json())

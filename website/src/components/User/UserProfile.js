@@ -32,7 +32,7 @@ export default class UserProfile extends React.Component {
         'auth-token': localStorage.getItem('authToken'),
       },
     };
-    fetch(`${window.env.API_URL}/user/`, requestOptions)
+    fetch(`${process.env.REACT_APP_API_URL}/user/`, requestOptions)
       .then((response) => response.json())
       .then((data) => {
         let dateJoined = new Date(data.dateJoined);
@@ -93,7 +93,7 @@ export default class UserProfile extends React.Component {
 
   editProfile = (evt) => {
     evt.preventDefault();
-    fetch(`${window.env.API_URL}/nutrition/calorieOffset`, {
+    fetch(`${process.env.REACT_APP_API_URL}/nutrition/calorieOffset`, {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',

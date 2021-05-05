@@ -94,7 +94,7 @@ export default class NutrientDay extends React.Component {
     let newId = '';
     if (!ingredient._id) {
       const response = await fetch(
-        `${window.env.API_URL}/nutrition/ingredients/add/`,
+        `${process.env.REACT_APP_API_URL}/nutrition/ingredients/add/`,
         {
           method: 'POST',
           headers: {
@@ -115,7 +115,7 @@ export default class NutrientDay extends React.Component {
     } else newId = ingredient._id;
 
     const mealRes = await fetch(
-      `${window.env.API_URL}/nutrition/meals/`,
+      `${process.env.REACT_APP_API_URL}/nutrition/meals/`,
       {
         method: 'POST',
         headers: {
@@ -222,7 +222,7 @@ export default class NutrientDay extends React.Component {
 
   getMeals = async () => {
     const response = await fetch(
-      `${window.env.API_URL}/nutrition/meals/today/`,
+      `${process.env.REACT_APP_API_URL}/nutrition/meals/today/`,
       {
         method: 'GET',
         headers: {
@@ -240,7 +240,7 @@ export default class NutrientDay extends React.Component {
 
   getPresetMeals = async () => {
     const response = await fetch(
-      `${window.env.API_URL}/nutrition/meals/preset/names/`,
+      `${process.env.REACT_APP_API_URL}/nutrition/meals/preset/names/`,
       {
         method: 'GET',
         headers: {
@@ -276,7 +276,7 @@ export default class NutrientDay extends React.Component {
     evt.preventDefault();
     if (this.state.mealId === '') this.flipNewMeal();
     else {
-      await fetch(`${window.env.API_URL}/nutrition/meals/addPreset/`, {
+      await fetch(`${process.env.REACT_APP_API_URL}/nutrition/meals/addPreset/`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
