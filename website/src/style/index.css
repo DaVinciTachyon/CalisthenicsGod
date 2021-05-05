@@ -154,6 +154,17 @@ body {
   background: var(--secondarySuccessColour);
 }
 
+.tinyButton {
+  padding: 0;
+  width: 0.5rem;
+}
+
+.thinButton {
+  font-size: 0.5rem;
+  padding: 0;
+  height: 1rem;
+}
+
 .card {
   box-shadow: 0 0.25rem 0.5rem 0 var(--primaryShadowColour);
   transition: 0.3s;

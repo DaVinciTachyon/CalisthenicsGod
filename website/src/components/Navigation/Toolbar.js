@@ -288,6 +288,6 @@ export default class ToolBar extends React.Component {
 
   logOut = () => {
     localStorage.removeItem('authToken');
-    window.location.reload(false);
+    window.location.reload();
   };
 }

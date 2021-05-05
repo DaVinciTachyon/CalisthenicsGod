@@ -33,7 +33,7 @@ export default class Login extends React.Component {
       .then((data) => {
         if (data['auth-token']) {
           localStorage.setItem('authToken', data['auth-token']);
-          window.location.reload(false);
+          window.location.reload();
         }
         this.setState({ error: data.error });
       })

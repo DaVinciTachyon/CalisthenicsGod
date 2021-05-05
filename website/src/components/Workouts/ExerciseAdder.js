@@ -34,7 +34,7 @@ export default class Exercises extends React.Component {
 
   getWorkoutStages = async () => {
     const response = await fetch(
-      `${window.env.API_URL}/workout/stage/`,
+      `${process.env.REACT_APP_API_URL}/workout/stage/`,
       {
         method: 'GET',
         headers: {
@@ -51,7 +51,7 @@ export default class Exercises extends React.Component {
 
   getExercises = async () => {
     const response = await fetch(
-      `${window.env.API_URL}/exercise/`,
+      `${process.env.REACT_APP_API_URL}/exercise/`,
       {
         method: 'GET',
         headers: {
@@ -85,7 +85,7 @@ export default class Exercises extends React.Component {
     if (!this.state.kineticChain) return this.setState({ error: 'Kinetic Chain is required' });
     if (!this.state.motion) return this.setState({ error: 'Motion is required' });
     if (!this.state.potentialCategories || this.state.potentialCategories.length === 0) return this.setState({ error: 'Potential Categories are required' });
-    const response = await fetch(`${window.env.API_URL}/exercise/add`, {
+    const response = await fetch(`${process.env.REACT_APP_API_URL}/exercise/add`, {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',

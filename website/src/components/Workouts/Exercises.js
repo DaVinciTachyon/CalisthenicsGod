@@ -8,6 +8,7 @@ export default class Exercises extends React.Component {
     this.state = {
       exercises: []
     };
+    this.getExercises = this.getExercises.bind(this);
   }
 
   componentDidMount() {
@@ -16,7 +17,7 @@ export default class Exercises extends React.Component {
 
   getExercises = async () => {
     const response = await fetch(
-      `${window.env.API_URL}/exercise/`,
+      `${process.env.REACT_APP_API_URL}/exercise/`,
       {
         method: 'GET',
         headers: {

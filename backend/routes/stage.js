@@ -19,7 +19,7 @@ router.get('/', async (req, res) => {
 
 router.post('/', async (req, res) => {
     const { error } = workoutValidation.stage(req.body);
-    if (error) return res.status(400).send({ error: error.details[0].message });
+    if (error) return res.status(400).send({ error: error.details[0].message, notme:"hi" });
   
     const stageName = await WorkoutStage.findOne({
         name: req.body.name
