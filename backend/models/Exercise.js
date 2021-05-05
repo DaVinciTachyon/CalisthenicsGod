@@ -32,11 +32,13 @@ module.exports = mongoose.model('Exercise', new mongoose.Schema({
             enum : ['isometric','isotonic']
         }
     },
-    potentialCategories: [{ //FIXME reference ids
-        type: String
+    potentialCategories: [{
+        type: mongoose.Schema.Types.ObjectId,
+        ref: 'WorkoutStage'
     }],
-    requirements: [{ //FIXME reference ids
-        type: String
+    requirements: [{
+        type: mongoose.Schema.Types.ObjectId,
+        ref: 'Exercise'
     }],
     description: {
         type: String

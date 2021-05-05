@@ -33,7 +33,8 @@ module.exports = mongoose.model('Ingredients', new mongoose.Schema({
     type: Boolean,
     default: true,
   },
-  userId: { //FIXME reference user id properly
-    type: String,
+  userId: {
+    type: mongoose.Schema.Types.ObjectId,
+    ref: 'User'
   },
 }));
