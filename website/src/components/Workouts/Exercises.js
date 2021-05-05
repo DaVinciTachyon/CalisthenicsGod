@@ -33,7 +33,7 @@ export default class Exercises extends React.Component {
     let exercises = [];
     for (const exercise of this.state.exercises)
       exercises.push(
-        <div key={exercise.id} className={`${styles.row}`}>
+        <div key={exercise._id} className={`${styles.row}`}>
           <div className={`${styles.column} ${styles.name}`}>{exercise.name}</div>
           <div className={`${styles.column} ${styles.abbreviation}`}>{exercise.abbreviation}</div>
           <div className={`${styles.column} ${styles.motionType} ${styles.motionTypeSplit}`}>

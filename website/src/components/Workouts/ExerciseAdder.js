@@ -9,11 +9,11 @@ export default class Exercises extends React.Component {
       name: "",
       abbreviation: "",
       description: "",
-      transversePlane: "",
-      kineticChain: "",
-      verticality: "",
-      frontalPlane: "",
-      motion: "",
+      transversePlane: "upper",
+      kineticChain: "closed",
+      verticality: "horizontal",
+      frontalPlane: "push",
+      motion: "isometric",
       potentialCategories: [],
       requirements: [],
       potentialCategoryOptions: [],
@@ -75,9 +75,34 @@ export default class Exercises extends React.Component {
     this.setState({ [evt.name]: newValues });
   }
   
-  onSubmit(evt) {
+  async onSubmit(evt) {
     evt.preventDefault();
-    console.log(this.state);
+    //TODO make sure required items are filled
+    // if (!this.state.email) return this.setState({ error: 'Email is required' });
+    const response = await fetch(`${window.env.API_URL}/exercise/add`, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+        'auth-token': localStorage.getItem('authToken'),
+      },
+      body: JSON.stringify({
+        name: this.state.name,
+        abbreviation: this.state.abbreviation,
+        motionType: {
+          transversePlane: this.state.transversePlane,
+          verticality: this.state.verticality,
+          frontalPlane: this.state.frontalPlane,
+          kineticChain: this.state.kineticChain,
+          motion: this.state.motion
+        },
+        potentialCategories: this.state.potentialCategories,
+        requirements: this.state.requirements,
+        description: this.state.description
+      }),
+    })
+    console.log(response)
+    //TODO only if response 200
+    window.location = "/workoutTracker/exercises";
   }
 
   render() {
@@ -90,6 +115,7 @@ export default class Exercises extends React.Component {
           value={this.state.name}
           onChange={this.onChange}
           placeholder="Name"
+          required
           />
         <div className={styles.label}>Abbreviation</div>
         <input
@@ -103,56 +129,56 @@ export default class Exercises extends React.Component {
         <div className={`${styles.label} ${styles.motionType}`}>Transverse Plane</div>
         <div>
           <div>
-            <input type="radio" id="upper" name="transversePlane" value="upper"/>
-            <label for="upper">Upper</label>
+            <input type="radio" id="upper" name="transversePlane" value="upper" checked/>
+            Upper
           </div>
           <div>
             <input type="radio" id="lower" name="transversePlane" value="lower"/>
-            <label for="lower">Lower</label>
+            Lower
           </div>
         </div>
         <div className={`${styles.label} ${styles.motionType}`}>Kinetic Chain</div>
         <div>
           <div>
-            <input type="radio" id="closed" name="kineticChain" value="closed"/>
-            <label for="closed">Closed</label>
+            <input type="radio" id="closed" name="kineticChain" value="closed" checked/>
+            Closed
           </div>
           <div>
             <input type="radio" id="open" name="kineticChain" value="open"/>
-            <label for="open">Open</label>
+            Open
           </div>
         </div>
         <div className={`${styles.label} ${styles.motionType}`}>Verticality</div>
         <div>
           <div>
-            <input type="radio" id="horizontal" name="verticality" value="horizontal"/>
-            <label for="horizontal">Horizontal</label>
+            <input type="radio" id="horizontal" name="verticality" value="horizontal" checked/>
+            Horizontal
           </div>
           <div>
             <input type="radio" id="vertical" name="verticality" value="vertical"/>
-            <label for="vertical">Vertical</label>
+            Vertical
           </div>
         </div>
         <div className={`${styles.label} ${styles.motionType}`}>Frontal Plane</div>
         <div>
           <div>
-            <input type="radio" id="push" name="frontalPlane" value="push"/>
-            <label for="push">Push</label>
+            <input type="radio" id="push" name="frontalPlane" value="push" checked/>
+            Push
           </div>
           <div>
             <input type="radio" id="pull" name="frontalPlane" value="pull"/>
-            <label for="pull">Pull</label>
+            Pull
           </div>
         </div>
         <div className={`${styles.label} ${styles.motionType}`}>Motion</div>
         <div>
           <div>
-            <input type="radio" id="isometric" name="motion" value="isometric"/>
-            <label for="isometric">Isometric</label>
+            <input type="radio" id="isometric" name="motion" value="isometric" checked/>
+            Isometric
           </div>
           <div>
             <input type="radio" id="isotonic" name="motion" value="isotonic"/>
-            <label for="isotonic">Isotonic</label>
+            Isotonic
           </div>
         </div>
         <div className={styles.label}>Potential Categories</div>
