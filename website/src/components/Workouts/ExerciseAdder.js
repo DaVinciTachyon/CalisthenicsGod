@@ -34,7 +34,7 @@ export default class Exercises extends React.Component {
 
   getWorkoutStages = async () => {
     const response = await fetch(
-      `${window.env.API_URL}/workout/stages/`,
+      `${window.env.API_URL}/workout/stage/`,
       {
         method: 'GET',
         headers: {
