@@ -1,5 +1,5 @@
 .exercises {
-    --numberOfColumns: 6;
+    --numberOfColumns: 10;
 }
 
 .row {
@@ -16,6 +16,15 @@
     grid-column: span 1;
 }
 
+.motionType {
+    grid-column: span 5;
+}
+
 .title {
     font-weight: bold;
+}
+
+.motionTypeSplit {
+    display: grid;
+    grid-template-columns: repeat(5, 1fr);
 }
