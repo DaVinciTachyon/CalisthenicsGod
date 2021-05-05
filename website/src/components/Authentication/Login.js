@@ -10,13 +10,12 @@ export default class Login extends React.Component {
       error: '',
     };
 
-    this.handleEmailChange = this.handleEmailChange.bind(this);
-    this.handlePasswordChange = this.handlePasswordChange.bind(this);
-    this.handleSubmit = this.handleSubmit.bind(this);
+    this.onChange = this.onChange.bind(this);
+    this.onSubmit = this.onSubmit.bind(this);
     this.dismissError = this.dismissError.bind(this);
   }
 
-  handleSubmit(evt) {
+  onSubmit(evt) {
     evt.preventDefault();
     if (!this.state.email) return this.setState({ error: 'Email is required' });
     if (!this.state.password)
@@ -41,17 +40,7 @@ export default class Login extends React.Component {
       .catch((err) => console.error(err));
   }
 
-  handleEmailChange(evt) {
-    this.setState({
-      email: evt.target.value,
-    });
-  }
-
-  handlePasswordChange(evt) {
-    this.setState({
-      password: evt.target.value,
-    });
-  }
+  onChange = (evt) => this.setState({ [evt.target.name]: evt.target.value });
 
   dismissError() {
     this.setState({ error: '' });
@@ -59,7 +48,7 @@ export default class Login extends React.Component {
 
   render() {
     return (
-      <form onSubmit={this.handleSubmit} className="card">
+      <form onSubmit={this.onSubmit} className="card">
         {this.state.error && (
           <h3 data-test="error" onClick={this.dismissError}>
             <button onClick={this.dismissError}>✖</button>
@@ -71,14 +60,14 @@ export default class Login extends React.Component {
           name="email"
           type="text"
           value={this.state.email}
-          onChange={this.handleEmailChange}
+          onChange={this.onChange}
           placeholder="Email"
         />
         <label htmlFor="email">Password</label>
         <input
           type="password"
           value={this.state.password}
-          onChange={this.handlePasswordChange}
+          onChange={this.onChange}
           placeholder="Password"
         />
         <input

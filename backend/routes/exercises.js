@@ -10,7 +10,7 @@ router.get('/', async (req, res) => {
 
 // router.post('/add', async (req, res) => {});
 
-router.post('/edit', async (req, res) => {});
+// router.post('/edit', async (req, res) => {});
 
 module.exports = router;
 

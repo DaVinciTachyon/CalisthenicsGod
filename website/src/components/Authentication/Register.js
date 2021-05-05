@@ -15,9 +15,12 @@ export default class Register extends React.Component {
       birthDate: '',
       error: '',
     };
+    this.onChange = this.onChange.bind(this);
+    this.onSubmit = this.onSubmit.bind(this);
+    this.dismissError = this.dismissError.bind(this);
   }
 
-  handleSubmit(evt) {
+  onSubmit(evt) {
     evt.preventDefault();
     if (!this.state.firstname)
       return this.setState({ error: 'First Name is required' });
@@ -58,53 +61,7 @@ export default class Register extends React.Component {
       });
   }
 
-  handleFirstNameChange(evt) {
-    this.setState({
-      firstname: evt.target.value,
-    });
-  }
-
-  handleMiddleNameChange(evt) {
-    this.setState({
-      middlename: evt.target.value,
-    });
-  }
-
-  handleLastNameChange(evt) {
-    this.setState({
-      lastname: evt.target.value,
-    });
-  }
-
-  handleEmailChange(evt) {
-    this.setState({
-      email: evt.target.value,
-    });
-  }
-
-  handlePasswordChange(evt) {
-    this.setState({
-      password: evt.target.value,
-    });
-  }
-
-  handleWeightChange(evt) {
-    this.setState({
-      weight: evt.target.value,
-    });
-  }
-
-  handleGenderChange(evt) {
-    this.setState({
-      gender: evt.target.value,
-    });
-  }
-
-  handleBirthDateChange(evt) {
-    this.setState({
-      birthDate: evt.target.value,
-    });
-  }
+  onChange = (evt) => this.setState({ [evt.target.name]: evt.target.value });
 
   dismissError() {
     this.setState({ error: '' });
@@ -112,10 +69,10 @@ export default class Register extends React.Component {
 
   render() {
     return (
-      <form onSubmit={this.handleSubmit.bind(this)} className="card">
+      <form onSubmit={this.onSubmit} className="card">
         {this.state.error && (
-          <h3 data-test="error" onClick={this.dismissError.bind(this)}>
-            <button onClick={this.dismissError.bind(this)}>✖</button>
+          <h3 data-test="error" onClick={this.dismissError}>
+            <button onClick={this.dismissError}>✖</button>
             {this.state.error}
           </h3>
         )}
@@ -124,7 +81,7 @@ export default class Register extends React.Component {
           name="firstname"
           type="text"
           value={this.state.firstname}
-          onChange={this.handleFirstNameChange.bind(this)}
+          onChange={this.onChange}
           placeholder="First Name"
           required
         />
@@ -133,7 +90,7 @@ export default class Register extends React.Component {
           name="middlename"
           type="text"
           value={this.state.middlename}
-          onChange={this.handleMiddleNameChange.bind(this)}
+          onChange={this.onChange}
           placeholder="Middle Name"
         />
         <label for="lastname">Last Name</label>
@@ -141,7 +98,7 @@ export default class Register extends React.Component {
           name="lastname"
           type="text"
           value={this.state.lastname}
-          onChange={this.handleLastNameChange.bind(this)}
+          onChange={this.onChange}
           placeholder="Last Name"
           required
         />
@@ -150,7 +107,7 @@ export default class Register extends React.Component {
           name="email"
           type="text"
           value={this.state.email}
-          onChange={this.handleEmailChange.bind(this)}
+          onChange={this.onChange}
           placeholder="Email"
           required
         />
@@ -159,7 +116,7 @@ export default class Register extends React.Component {
           name="password"
           type="password"
           value={this.state.password}
-          onChange={this.handlePasswordChange.bind(this)}
+          onChange={this.onChange}
           placeholder="Password"
         />
         <label for="weight">Weight</label>
@@ -169,14 +126,14 @@ export default class Register extends React.Component {
           step="0.1"
           min="0"
           value={this.state.weight}
-          onChange={this.handleWeightChange.bind(this)}
+          onChange={this.onChange}
           placeholder="Weight"
           required
         />
         <label for="gender">Gender</label>
         <select
           name="gender"
-          onChange={this.handleGenderChange.bind(this)}
+          onChange={this.onChange}
           required
         >
           <option value="male" defaultValue>
@@ -191,7 +148,7 @@ export default class Register extends React.Component {
           max={new Date().toISOString().split('T')[0]}
           placeholder="Date of Birth"
           value={this.state.birthDate}
-          onChange={this.handleBirthDateChange.bind(this)}
+          onChange={this.onChange}
           required
         />
         <input

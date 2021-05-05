@@ -15,6 +15,7 @@
 		"react-minimal-pie-chart": "^7.3.1",
 		"react-router-dom": "^5.1.2",
 		"react-scripts": "3.4.1",
+		"react-select": "^4.3.0",
 		"serve": "^11.3.2"
 	},
 	"scripts": {
