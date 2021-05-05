@@ -6,6 +6,11 @@ module.exports = mongoose.model('WorkoutStage', new mongoose.Schema({
         required: true,
         unique: true
     },
+    chronologicalRanking: {
+        type: Number,
+        unique: true,
+        required: true
+    },
     description: {
         type: String
     }
