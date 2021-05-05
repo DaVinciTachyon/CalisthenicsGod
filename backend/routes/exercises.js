@@ -1,8 +1,9 @@
 const router = require('express').Router();
 const Exercise = require('../models/Exercise');
 const exerciseValidation = require('../validation/exercise');
+const verify = require('./verifyToken');
 
-router.use((req, res, next) => {
+router.use(verify, (req, res, next) => {
 	next();
 });
 
@@ -12,7 +13,7 @@ router.get('/', async (req, res) => {
 	res.send({ exercises: exercises });
 });
 
-router.post('/add', async (req, res) => { //FIXME ensure requirements and potentialCategories are valid ids
+router.post('/add', async (req, res) => {
   const { error } = exerciseValidation.exercise(req.body);
 	if (error) return res.status(400).send({ error: error.details[0].message });
 
