@@ -120,7 +120,7 @@ export default class MeasurementAdder extends React.Component {
         neck: this.state.neck > 0 ? this.state.neck : undefined,
       }),
     };
-    fetch(`${window.env.API_URL}/measurement/`, requestOptions).then(
+    fetch(`${process.env.REACT_APP_API_URL}/measurement/`, requestOptions).then(
       () => {
         this.props.addMeasurement();
       }

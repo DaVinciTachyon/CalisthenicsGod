@@ -115,7 +115,7 @@ export default class MealTable extends React.Component {
     let newId = '';
     if (!ingredient._id) {
       const response = await fetch(
-        `${window.env.API_URL}/nutrition/ingredients/add/`,
+        `${process.env.REACT_APP_API_URL}/nutrition/ingredients/add/`,
         {
           method: 'POST',
           headers: {
@@ -135,7 +135,7 @@ export default class MealTable extends React.Component {
       newId = data._id;
     } else newId = ingredient._id;
 
-    await fetch(`${window.env.API_URL}/nutrition/meals/`, {
+    await fetch(`${process.env.REACT_APP_API_URL}/nutrition/meals/`, {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
@@ -164,7 +164,7 @@ export default class MealTable extends React.Component {
   };
 
   removeIngredient = async (ingredient) => {
-    await fetch(`${window.env.API_URL}/nutrition/meals/remove/`, {
+    await fetch(`${process.env.REACT_APP_API_URL}/nutrition/meals/remove/`, {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
@@ -182,7 +182,7 @@ export default class MealTable extends React.Component {
   };
 
   editIngredient = async (ingredient) => {
-    await fetch(`${window.env.API_URL}/nutrition/meals/edit/`, {
+    await fetch(`${process.env.REACT_APP_API_URL}/nutrition/meals/edit/`, {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',

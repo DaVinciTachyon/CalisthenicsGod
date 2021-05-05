@@ -153,7 +153,7 @@ export default class IngredientRow extends React.Component {
         'auth-token': localStorage.getItem('authToken'),
       },
     };
-    fetch(`${window.env.API_URL}/nutrition/ingredients/`, requestOptions)
+    fetch(`${process.env.REACT_APP_API_URL}/nutrition/ingredients/`, requestOptions)
       .then((response) => response.json())
       .then((data) => {
         let ingredients = Object.assign({}, this.state.ingredients);

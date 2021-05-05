@@ -52,7 +52,7 @@ export default class Meals extends React.Component {
       },
     };
     fetch(
-      `${window.env.API_URL}/nutrition/meals/preset/names/`,
+      `${process.env.REACT_APP_API_URL}/nutrition/meals/preset/names/`,
       requestOptions
     )
       .then((response) => response.json())
@@ -77,7 +77,7 @@ export default class Meals extends React.Component {
       }),
     };
     fetch(
-      `${window.env.API_URL}/nutrition/meals/preset/add/`,
+      `${process.env.REACT_APP_API_URL}/nutrition/meals/preset/add/`,
       requestOptions
     ).then(() => {
       this.flipNewMeal();
