@@ -8,10 +8,6 @@ router.get('/stages', async (req, res) => {
 	res.send({ stages: stages });
 });
 
-//TODO router.post('/add', async (req, res) => {});
-
-//TODO router.post('/edit', async (req, res) => {});
-
 module.exports = router;
 
 //FIXME
