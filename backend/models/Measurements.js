@@ -1,6 +1,6 @@
 const mongoose = require('mongoose');
 
-const measurementSchema = new mongoose.Schema({
+module.exports = mongoose.model('Measurements', new mongoose.Schema({
     userId: {
         type: String,
         required: true
@@ -137,6 +137,4 @@ const measurementSchema = new mongoose.Schema({
             }
         }
     ]
-});
-
-module.exports = mongoose.model('Measurements', measurementSchema);
+}));

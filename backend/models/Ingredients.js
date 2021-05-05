@@ -1,6 +1,6 @@
 const mongoose = require('mongoose');
 
-const ingredientSchema = new mongoose.Schema({
+module.exports = mongoose.model('Ingredients', new mongoose.Schema({
   name: {
     type: String,
     required: true,
@@ -33,9 +33,7 @@ const ingredientSchema = new mongoose.Schema({
     type: Boolean,
     default: true,
   },
-  userId: {
+  userId: { //FIXME reference user id properly
     type: String,
   },
-});
-
-module.exports = mongoose.model('Ingredients', ingredientSchema);
+}));

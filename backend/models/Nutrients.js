@@ -1,6 +1,6 @@
 const mongoose = require('mongoose');
 
-const nutrientSchema = new mongoose.Schema({
+module.exports = mongoose.model('Nutrients', new mongoose.Schema({
   userId: {
     type: String,
     required: true,
@@ -74,6 +74,4 @@ const nutrientSchema = new mongoose.Schema({
       ],
     },
   ],
-});
-
-module.exports = mongoose.model('Nutrients', nutrientSchema);
+}));
