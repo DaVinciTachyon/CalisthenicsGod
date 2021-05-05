@@ -14,6 +14,7 @@ import ExerciseAdder from "./components/Workouts/ExerciseAdder";
 import Ingredients from "./components/Nutrient/Ingredients";
 import Meals from "./components/Nutrient/Meals";
 import Page from "./components/Page";
+import Stages from "./components/Workouts/Stages";
 
 ReactDOM.render(
   <React.StrictMode>
@@ -63,6 +64,11 @@ ReactDOM.render(
         <Route path="/workoutTracker/exercises/new" exact>
           <Page>
             <ExerciseAdder/>
+          </Page>
+        </Route>
+        <Route path="/workoutTracker/stages" exact>
+          <Page>
+            <Stages/>
           </Page>
         </Route>
         <Route path="/measurementTracker" exact>

@@ -137,6 +137,11 @@ export default class ToolBar extends React.Component {
                     <span className="link-text">Exercises</span>
                   </Link>
                 </li>
+                <li className="nav-item">
+                  <Link to="/workoutTracker/stages" className="nav-link">
+                    <span className="link-text">Stages</span>
+                  </Link>
+                </li>
               </ul>
             </li>
             <li
