@@ -1,5 +1,6 @@
 import React from 'react';
-import './Main.css';
+import '../../style/Authentication.css';
+import Error from '../Error';
 
 export default class Register extends React.Component {
   constructor() {
@@ -17,7 +18,6 @@ export default class Register extends React.Component {
     };
     this.onChange = this.onChange.bind(this);
     this.onSubmit = this.onSubmit.bind(this);
-    this.dismissError = this.dismissError.bind(this);
   }
 
   onSubmit(evt) {
@@ -63,19 +63,10 @@ export default class Register extends React.Component {
 
   onChange = (evt) => this.setState({ [evt.target.name]: evt.target.value });
 
-  dismissError() {
-    this.setState({ error: '' });
-  }
-
   render() {
     return (
       <form onSubmit={this.onSubmit} className="card">
-        {this.state.error && (
-          <h3 data-test="error" onClick={this.dismissError}>
-            <button onClick={this.dismissError}>✖</button>
-            {this.state.error}
-          </h3>
-        )}
+        <Error error={this.state.error} dismissError={() => this.setState({ error: '' })}/>
         <label for="firstname">First Name</label>
         <input
           name="firstname"

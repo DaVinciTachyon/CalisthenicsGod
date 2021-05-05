@@ -1,5 +1,5 @@
 import React from 'react';
-import './Main.css';
+import '../../style/User.css';
 
 export default class UserProfile extends React.Component {
   constructor() {

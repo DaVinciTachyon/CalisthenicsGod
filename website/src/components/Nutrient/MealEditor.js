@@ -1,6 +1,6 @@
 import React from 'react';
 import IngredientRow from './IngredientRow';
-import './Main.css';
+import '../../style/Nutrient.css';
 
 export default class MealEditor extends React.Component {
   constructor() {

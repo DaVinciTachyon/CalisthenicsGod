@@ -1,5 +1,5 @@
 import React from 'react';
-import './Main.css';
+import '../../style/Nutrient.css';
 
 export default class IngredientRow extends React.Component {
   constructor() {

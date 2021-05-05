@@ -1,6 +1,6 @@
 import React from "react";
 import ReactDOM from "react-dom";
-import "./index.css";
+import "./style/index.css";
 import Toolbar from "./components/Navigation/Toolbar";
 import Register from "./components/Authentication/Register";
 import Login from "./components/Authentication/Login";

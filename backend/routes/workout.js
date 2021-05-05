@@ -8,12 +8,13 @@ router.get('/stages', async (req, res) => {
 	res.send({ stages: stages });
 });
 
-// router.post('/add', async (req, res) => {});
+//TODO router.post('/add', async (req, res) => {});
 
-// router.post('/edit', async (req, res) => {});
+//TODO router.post('/edit', async (req, res) => {});
 
 module.exports = router;
 
+//FIXME
 const stages = [
     {
         _id: "1",

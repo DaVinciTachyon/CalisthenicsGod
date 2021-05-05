@@ -1,6 +1,7 @@
 import React from "react";
-import styles from './ExerciseAdder.module.css';
+import styles from '../../style/ExerciseAdder.module.css';
 import Select from 'react-select';
+import Error from '../Error';
 
 export default class Exercises extends React.Component {
   constructor() {
@@ -74,11 +75,16 @@ export default class Exercises extends React.Component {
     })
     this.setState({ [evt.name]: newValues });
   }
-  
+
   async onSubmit(evt) {
     evt.preventDefault();
-    //TODO make sure required items are filled
-    // if (!this.state.email) return this.setState({ error: 'Email is required' });
+    if (!this.state.name) return this.setState({ error: 'Name is required' });
+    if (!this.state.transversePlane) return this.setState({ error: 'Transverse Plane is required' });
+    if (!this.state.verticality) return this.setState({ error: 'Verticality is required' });
+    if (!this.state.frontalPlane) return this.setState({ error: 'Frontal Plane is required' });
+    if (!this.state.kineticChain) return this.setState({ error: 'Kinetic Chain is required' });
+    if (!this.state.motion) return this.setState({ error: 'Motion is required' });
+    if (!this.state.potentialCategories || this.state.potentialCategories.length === 0) return this.setState({ error: 'Potential Categories are required' });
     const response = await fetch(`${window.env.API_URL}/exercise/add`, {
       method: 'POST',
       headers: {
@@ -100,14 +106,17 @@ export default class Exercises extends React.Component {
         description: this.state.description
       }),
     })
-    console.log(response)
-    //TODO only if response 200
-    window.location = "/workoutTracker/exercises";
+    const data = await response.json();
+    if(response.status === 200)
+      window.location = "/workoutTracker/exercises";
+    else
+      this.setState({ error: data.error });
   }
 
   render() {
     return (
       <form className={styles.table} onSubmit={this.onSubmit}>
+        <Error error={this.state.error} className={styles.fullWidth} dismissError={() => this.setState({ error: '' })}/>
         <div className={styles.label}>Name</div>
         <input
           name="name"

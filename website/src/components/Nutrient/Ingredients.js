@@ -1,6 +1,6 @@
 import React from "react";
 import IngredientList from "./IngredientList";
-import "./Main.css";
+import '../../style/Nutrient.css';
 
 export default class Ingredients extends React.Component {
   constructor() {
