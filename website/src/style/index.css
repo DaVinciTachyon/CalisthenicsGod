@@ -175,6 +175,7 @@ body {
   justify-content: center;
   max-width: 95%;
   width: fit-content;
+  margin: auto;
 }
 
 .card:hover {
