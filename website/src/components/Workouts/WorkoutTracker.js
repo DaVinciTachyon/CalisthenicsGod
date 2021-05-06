@@ -1,5 +1,4 @@
 import React from "react";
-import Exercises from "./Exercises";
 
 export default class WorkoutTracker extends React.Component {
   constructor() {
@@ -9,7 +8,10 @@ export default class WorkoutTracker extends React.Component {
 
   render() {
     return (
-      <Exercises />
+      <div>
+        <div>log workout</div>
+        <div>workout history</div>
+      </div>
     );
   }
 }
