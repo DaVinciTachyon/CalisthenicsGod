@@ -4,31 +4,34 @@ const exerciseValidation = require('../validation/exercise');
 const verify = require('./verifyToken');
 
 router.use(verify, (req, res, next) => {
-	next();
+  next();
 });
 
 router.get('/', async (req, res) => {
   const exercises = await Exercise.find();
 
-	res.send({ exercises: exercises });
+  res.send({ exercises: exercises });
 });
 
-router.post('/add', async (req, res) => { //FIXME when adding requirements only add highest level, no need to add two things where one is a sub requirement of the other
+router.post('/add', async (req, res) => {
+  //FIXME when adding requirements only add highest level, no need to add two things where one is a sub requirement of the other
   const { error } = exerciseValidation.exercise(req.body);
-	if (error) return res.status(400).send({ error: error.details[0].message });
+  if (error) return res.status(400).send({ error: error.details[0].message });
 
-	const exerciseName = await Exercise.findOne({
-		name: req.body.name
-	});
-	if (exerciseName) return res.status(400).send({ error: 'Name already in use.' });
-  if(req.body.abbreviation !== "") {
+  const exerciseName = await Exercise.findOne({
+    name: req.body.name,
+  });
+  if (exerciseName)
+    return res.status(400).send({ error: 'Name already in use.' });
+  if (req.body.abbreviation !== '') {
     const exerciseAbbreviation = await Exercise.findOne({
-      abbreviation: req.body.abbreviation
+      abbreviation: req.body.abbreviation,
     });
-    if (exerciseAbbreviation) return res.status(400).send({ error: 'Abbreviation already in use.' });
+    if (exerciseAbbreviation)
+      return res.status(400).send({ error: 'Abbreviation already in use.' });
   }
 
-	const exercise = new Exercise({
+  const exercise = new Exercise({
     name: req.body.name,
     abbreviation: req.body.abbreviation,
     motionType: {
@@ -36,21 +39,19 @@ router.post('/add', async (req, res) => { //FIXME when adding requirements only 
       verticality: req.body.motionType.verticality,
       frontalPlane: req.body.motionType.frontalPlane,
       kineticChain: req.body.motionType.kineticChain,
-      motion: req.body.motionType.motion
+      motion: req.body.motionType.motion,
     },
     potentialCategories: req.body.potentialCategories,
     requirements: req.body.requirements,
-    description: req.body.description
-	});
+    description: req.body.description,
+  });
 
-	try {
-		await exercise.save();
-		res.status(200).send(exercise);
-	} catch (err) {
-		res.status(400).send({ error: err });
-	}
+  try {
+    await exercise.save();
+    res.status(200).send(exercise);
+  } catch (err) {
+    res.status(400).send({ error: err });
+  }
 });
-
-//TODO router.post('/edit', async (req, res) => {});
 
 module.exports = router;

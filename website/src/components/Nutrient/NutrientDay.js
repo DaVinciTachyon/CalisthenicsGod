@@ -276,16 +276,19 @@ export default class NutrientDay extends React.Component {
     evt.preventDefault();
     if (this.state.mealId === '') this.flipNewMeal();
     else {
-      await fetch(`${process.env.REACT_APP_API_URL}/nutrition/meals/addPreset/`, {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-          'auth-token': localStorage.getItem('authToken'),
-        },
-        body: JSON.stringify({
-          _id: this.state.mealId,
-        }),
-      });
+      await fetch(
+        `${process.env.REACT_APP_API_URL}/nutrition/meals/addPreset/`,
+        {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+            'auth-token': localStorage.getItem('authToken'),
+          },
+          body: JSON.stringify({
+            _id: this.state.mealId,
+          }),
+        }
+      );
       this.update();
       this.getMeals();
     }

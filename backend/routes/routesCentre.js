@@ -6,8 +6,8 @@ const userRoute = require('./user');
 const exerciseRoute = require('./exercises');
 const workoutRoute = require('./workout');
 
-router.use(function(req, res, next) {
-	next();
+router.use(function (req, res, next) {
+  next();
 });
 
 router.use('/auth', authRoute);

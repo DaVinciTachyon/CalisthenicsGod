@@ -99,9 +99,9 @@ export default class ToolBar extends React.Component {
             </li>
             <li
               className={
-                this.state.path.includes("/workoutTracker")
-                  ? "nav-current nav-item"
-                  : "nav-item"
+                this.state.path.includes('/workoutTracker')
+                  ? 'nav-current nav-item'
+                  : 'nav-item'
               }
             >
               <Link to="/workoutTracker" className="nav-link">
@@ -114,7 +114,7 @@ export default class ToolBar extends React.Component {
                   xmlns="http://www.w3.org/2000/svg"
                   viewBox="0 0 416 512"
                   className="svg-inline--fa fa-running fa-w-13"
-                  style={{ "--fa-secondary-opacity": 0.1 }}
+                  style={{ '--fa-secondary-opacity': 0.1 }}
                 >
                   <g className="fa-group">
                     <path

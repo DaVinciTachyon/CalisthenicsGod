@@ -1,12 +1,12 @@
-import React from "react";
-import { render, unmountComponentAtNode } from "react-dom";
-import { act } from "react-dom/test-utils";
+import React from 'react';
+import { render, unmountComponentAtNode } from 'react-dom';
+import { act } from 'react-dom/test-utils';
 
-import Login from "../../../components/Authentication/Login";
+import Login from '../../../components/Authentication/Login';
 
 let container = null;
 beforeEach(() => {
-  container = document.createElement("div");
+  container = document.createElement('div');
   document.body.appendChild(container);
 });
 
@@ -16,10 +16,10 @@ afterEach(() => {
   container = null;
 });
 
-it("renders Login Widget", async () => {
-    await act(async () => {
-        render(<Login />, container);
-    });
+it('renders Login Widget', async () => {
+  await act(async () => {
+    render(<Login />, container);
+  });
 
-    expect(container.querySelector(".primaryButton").value).toBe("Sign In");
+  expect(container.querySelector('.primaryButton').value).toBe('Sign In');
 });

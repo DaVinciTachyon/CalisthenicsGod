@@ -45,7 +45,10 @@ export default class Login extends React.Component {
   render() {
     return (
       <form onSubmit={this.onSubmit} className="card">
-        <Error error={this.state.error} dismissError={() => this.setState({ error: '' })}/>
+        <Error
+          error={this.state.error}
+          dismissError={() => this.setState({ error: '' })}
+        />
         <label htmlFor="email">Email</label>
         <input
           name="email"
@@ -62,11 +65,7 @@ export default class Login extends React.Component {
           onChange={this.onChange}
           placeholder="Password"
         />
-        <input
-          className="primaryButton button"
-          type="submit"
-          value="Sign In"
-        />
+        <input className="primaryButton button" type="submit" value="Sign In" />
         <a className="secondaryButton button" href="/register">
           Register
         </a>

@@ -153,7 +153,10 @@ export default class IngredientRow extends React.Component {
         'auth-token': localStorage.getItem('authToken'),
       },
     };
-    fetch(`${process.env.REACT_APP_API_URL}/nutrition/ingredients/`, requestOptions)
+    fetch(
+      `${process.env.REACT_APP_API_URL}/nutrition/ingredients/`,
+      requestOptions
+    )
       .then((response) => response.json())
       .then((data) => {
         let ingredients = Object.assign({}, this.state.ingredients);
@@ -730,10 +733,16 @@ export default class IngredientRow extends React.Component {
         )}
         {this.state.edit && (
           <div className="status-column column">
-            <div className="tinyButton successButton button" onClick={this.submit}>
+            <div
+              className="tinyButton successButton button"
+              onClick={this.submit}
+            >
               +
             </div>
-            <div className="tinyButton errorButton button" onClick={this.cancel}>
+            <div
+              className="tinyButton errorButton button"
+              onClick={this.cancel}
+            >
               ×
             </div>
           </div>

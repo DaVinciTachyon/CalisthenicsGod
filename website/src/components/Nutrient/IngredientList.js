@@ -115,21 +115,24 @@ export default class IngredientList extends React.Component {
   };
 
   onSubmit = async (ingredient) => {
-    await fetch(`${process.env.REACT_APP_API_URL}/nutrition/ingredients/edit/`, {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-        'auth-token': localStorage.getItem('authToken'),
-      },
-      body: JSON.stringify({
-        _id: ingredient._id,
-        name: ingredient.name,
-        fat: ingredient.fat,
-        carbohydrate: ingredient.carb,
-        protein: ingredient.prot,
-        ethanol: ingredient.eth,
-      }),
-    });
+    await fetch(
+      `${process.env.REACT_APP_API_URL}/nutrition/ingredients/edit/`,
+      {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          'auth-token': localStorage.getItem('authToken'),
+        },
+        body: JSON.stringify({
+          _id: ingredient._id,
+          name: ingredient.name,
+          fat: ingredient.fat,
+          carbohydrate: ingredient.carb,
+          protein: ingredient.prot,
+          ethanol: ingredient.eth,
+        }),
+      }
+    );
     this.update();
   };
 
@@ -173,8 +176,12 @@ export default class IngredientList extends React.Component {
     return (
       <div className="ingredients">
         <div className="row title bigTitle">
-        {!this.props.isUnavailable && <div className="fullWidth">Available</div>}
-        {this.props.isUnavailable && <div className="fullWidth">Unavailable</div>}
+          {!this.props.isUnavailable && (
+            <div className="fullWidth">Available</div>
+          )}
+          {this.props.isUnavailable && (
+            <div className="fullWidth">Unavailable</div>
+          )}
         </div>
         <div className="row">
           <div className="name-column column"></div>

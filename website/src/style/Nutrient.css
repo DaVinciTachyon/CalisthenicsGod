@@ -97,18 +97,18 @@
   border: none;
 }
 
-input[type="text"].inheritBackground {
+input[type='text'].inheritBackground {
   background: inherit;
   border: none;
   text-align: center;
 }
 
-input[type="number"] {
+input[type='number'] {
   width: 1rem;
 }
 
-input[type="number"]:hover.readOnly,
-input[type="number"]:focus.readOnly {
+input[type='number']:hover.readOnly,
+input[type='number']:focus.readOnly {
   -moz-appearance: textfield;
   cursor: default;
 }

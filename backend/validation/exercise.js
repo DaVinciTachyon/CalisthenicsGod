@@ -1,7 +1,8 @@
 const Joi = require('@hapi/joi');
 
 module.exports = {
-  exercise: (data) => Joi.object({
+  exercise: (data) =>
+    Joi.object({
       name: Joi.string().required(),
       abbreviation: Joi.string(),
       motionType: {
@@ -13,6 +14,6 @@ module.exports = {
       },
       potentialCategories: Joi.array().items(Joi.string()),
       requirements: Joi.array().items(Joi.string()),
-      description: Joi.string()
-    }).validate(data)
+      description: Joi.string(),
+    }).validate(data),
 };

@@ -250,10 +250,7 @@ export default class UserProfile extends React.Component {
               <option value="male" selected={this.state.gender === 'male'}>
                 Male
               </option>
-              <option
-                value="female"
-                selected={this.state.gender === 'female'}
-              >
+              <option value="female" selected={this.state.gender === 'female'}>
                 Female
               </option>
             </select>

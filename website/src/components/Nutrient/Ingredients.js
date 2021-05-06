@@ -1,5 +1,5 @@
-import React from "react";
-import IngredientList from "./IngredientList";
+import React from 'react';
+import IngredientList from './IngredientList';
 import '../../style/Nutrient.css';
 
 export default class Ingredients extends React.Component {
@@ -7,20 +7,20 @@ export default class Ingredients extends React.Component {
     super();
     this.state = {
       colours: {
-        fatDark: "#ffd433",
-        fatLight: "#ffe582",
-        carbDark: "#ff3f3f",
-        carbLight: "#ff9999",
-        protDark: "#3fafff",
-        protLight: "#99f1ff",
-        ethDark: "#35ff38",
-        ethLight: "#82ff84",
+        fatDark: '#ffd433',
+        fatLight: '#ffe582',
+        carbDark: '#ff3f3f',
+        carbLight: '#ff9999',
+        protDark: '#3fafff',
+        protLight: '#99f1ff',
+        ethDark: '#35ff38',
+        ethLight: '#82ff84',
       },
       update: false,
       newIngredient: false,
     };
   }
-  
+
   update = () => {
     this.setState({ update: !this.state.update });
   };

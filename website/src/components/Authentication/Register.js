@@ -66,7 +66,10 @@ export default class Register extends React.Component {
   render() {
     return (
       <form onSubmit={this.onSubmit} className="card">
-        <Error error={this.state.error} dismissError={() => this.setState({ error: '' })}/>
+        <Error
+          error={this.state.error}
+          dismissError={() => this.setState({ error: '' })}
+        />
         <label for="firstname">First Name</label>
         <input
           name="firstname"
@@ -122,11 +125,7 @@ export default class Register extends React.Component {
           required
         />
         <label for="gender">Gender</label>
-        <select
-          name="gender"
-          onChange={this.onChange}
-          required
-        >
+        <select name="gender" onChange={this.onChange} required>
           <option value="male" defaultValue>
             Male
           </option>
