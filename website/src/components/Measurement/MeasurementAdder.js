@@ -1,5 +1,7 @@
 import React from 'react';
 import { Row, Column } from '../../style/table';
+import { Button } from '../../style/buttons';
+import { Error } from '../Notification';
 
 export default class MeasurementAdder extends React.Component {
   constructor() {
@@ -16,6 +18,7 @@ export default class MeasurementAdder extends React.Component {
       shoulders: 0,
       chest: 0,
       neck: 0,
+      error: '',
     };
   }
 
@@ -96,41 +99,53 @@ export default class MeasurementAdder extends React.Component {
     this.setState({ neck: input });
   };
 
-  submitMeasurement = (evt) => {
-    evt.preventDefault();
-    const requestOptions = {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-        'auth-token': localStorage.getItem('authToken'),
-      },
-      body: JSON.stringify({
-        weight: this.state.weight > 0 ? this.state.weight : undefined,
-        height: this.state.height > 0 ? this.state.height : undefined,
-        waist: this.state.waist > 0 ? this.state.waist : undefined,
-        hips: this.state.hips > 0 ? this.state.hips : undefined,
-        rightBicep:
-          this.state.rightBicep > 0 ? this.state.rightBicep : undefined,
-        leftBicep: this.state.leftBicep > 0 ? this.state.leftBicep : undefined,
-        rightForearm:
-          this.state.rightForearm > 0 ? this.state.rightForearm : undefined,
-        leftForearm:
-          this.state.leftForearm > 0 ? this.state.leftForearm : undefined,
-        shoulders: this.state.shoulders > 0 ? this.state.shoulders : undefined,
-        chest: this.state.chest > 0 ? this.state.chest : undefined,
-        neck: this.state.neck > 0 ? this.state.neck : undefined,
-      }),
-    };
-    fetch(`${process.env.REACT_APP_API_URL}/measurement/`, requestOptions).then(
-      () => {
-        this.props.addMeasurement();
+  submitMeasurement = async () => {
+    const response = await fetch(
+      `${process.env.REACT_APP_API_URL}/measurement/`,
+      {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          'auth-token': localStorage.getItem('authToken'),
+        },
+        body: JSON.stringify({
+          weight: this.state.weight > 0 ? this.state.weight : undefined,
+          height: this.state.height > 0 ? this.state.height : undefined,
+          waist: this.state.waist > 0 ? this.state.waist : undefined,
+          hips: this.state.hips > 0 ? this.state.hips : undefined,
+          rightBicep:
+            this.state.rightBicep > 0 ? this.state.rightBicep : undefined,
+          leftBicep:
+            this.state.leftBicep > 0 ? this.state.leftBicep : undefined,
+          rightForearm:
+            this.state.rightForearm > 0 ? this.state.rightForearm : undefined,
+          leftForearm:
+            this.state.leftForearm > 0 ? this.state.leftForearm : undefined,
+          shoulders:
+            this.state.shoulders > 0 ? this.state.shoulders : undefined,
+          chest: this.state.chest > 0 ? this.state.chest : undefined,
+          neck: this.state.neck > 0 ? this.state.neck : undefined,
+        }),
       }
     );
+    if (response.status === 200) window.location = '/measurementTracker';
+    else {
+      const data = await response.json();
+      this.setState({ error: data.error });
+    }
   };
 
   render() {
     return (
-      <form onSubmit={this.submitMeasurement}>
+      <div>
+        <Row columns={2}>
+          <Column span={2}>
+            <Error
+              text={this.state.error}
+              dismiss={() => this.setState({ error: '' })}
+            />
+          </Column>
+        </Row>
         <Row columns={2}>
           <Column>Weight</Column>
           <Column>
@@ -287,10 +302,12 @@ export default class MeasurementAdder extends React.Component {
         </Row>
         <Row columns={2}>
           <Column span={2}>
-            <input type="submit" value="Add Measurements" />
+            <Button onClick={this.submitMeasurement.bind(this)}>
+              Add Measurements
+            </Button>
           </Column>
         </Row>
-      </form>
+      </div>
     );
   }
 }

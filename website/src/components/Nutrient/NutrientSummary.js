@@ -12,7 +12,6 @@ export default class NutrientSummary extends React.Component {
         protein: 0,
         ethanol: 0,
       },
-      showModal: false,
     };
   }
 

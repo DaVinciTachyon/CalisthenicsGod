@@ -1,9 +1,8 @@
 import React from 'react';
-import Modal from '../Modal';
-import MeasurementAdder from './MeasurementAdder';
 import { Card } from '../../style/general';
 import { Row, Column } from '../../style/table';
-import { ErrorButton } from '../../style/buttons';
+import { Link } from 'react-router-dom';
+import { Button } from '../../style/buttons';
 
 export default class MeasurementSummary extends React.Component {
   constructor() {
@@ -20,25 +19,12 @@ export default class MeasurementSummary extends React.Component {
       shoulders: 0,
       chest: 0,
       neck: 0,
-      newMeasurements: false,
     };
   }
 
   componentDidMount() {
     this.getMeasurements();
   }
-
-  addMeasurement = () => {
-    this.newMeasurements();
-    this.getMeasurements();
-    this.props.addMeasurement();
-  };
-
-  newMeasurements = () => {
-    this.setState({
-      newMeasurements: !this.state.newMeasurements,
-    });
-  };
 
   getMeasurements = () => {
     const requestOptions = {
@@ -138,18 +124,13 @@ export default class MeasurementSummary extends React.Component {
             </Row>
           )}
           <Row columns={2}>
-            <Column span={2} onClick={this.newMeasurements}>
-              New Measurements
+            <Column span={2}>
+              <Link to="/measurementTracker/new">
+                <Button>New Measurements</Button>
+              </Link>
             </Column>
           </Row>
         </Card>
-        <Modal
-          isOpen={this.state.newMeasurements}
-          toggle={this.newMeasurements}
-        >
-          <MeasurementAdder addMeasurement={this.addMeasurement} />
-          <ErrorButton onClick={this.newMeasurements}>Cancel</ErrorButton>
-        </Modal>
       </>
     );
   }

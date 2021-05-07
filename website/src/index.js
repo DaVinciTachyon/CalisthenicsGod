@@ -6,6 +6,7 @@ import Register from './components/Authentication/Register';
 import Login from './components/Authentication/Login';
 import NutrientTracker from './components/Nutrient/NutrientTracker';
 import MeasurementTracker from './components/Measurement/MeasurementTracker';
+import MeasurementAdder from './components/Measurement/MeasurementAdder';
 import { BrowserRouter as Router, Switch } from 'react-router-dom';
 import UserProfile from './components/User/UserProfile';
 import WorkoutTracker from './components/Workouts/WorkoutTracker';
@@ -70,6 +71,11 @@ ReactDOM.render(
           path="/measurementTracker"
           exact
           component={MeasurementTracker}
+        />
+        <AuthenticatedRoute
+          path="/measurementTracker/new"
+          exact
+          component={MeasurementAdder}
         />
         <AuthenticatedRoute path="/userProfile" exact component={UserProfile} />
       </Switch>

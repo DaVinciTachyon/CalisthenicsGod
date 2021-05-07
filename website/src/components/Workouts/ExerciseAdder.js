@@ -121,9 +121,11 @@ export default class Exercises extends React.Component {
         }),
       }
     );
-    const data = await response.json();
     if (response.status === 200) window.location = '/workoutTracker/exercises';
-    else this.setState({ error: data.error });
+    else {
+      const data = await response.json();
+      this.setState({ error: data.error });
+    }
   }
 
   render() {

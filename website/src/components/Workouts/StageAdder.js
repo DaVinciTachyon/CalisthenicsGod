@@ -37,12 +37,13 @@ export default class StageAdder extends React.Component {
         }),
       }
     );
-    const data = await response.json();
-    console.log(data);
     if (response.status === 200) {
       this.setState({ isAdding: false });
       window.location.reload();
-    } else this.setState({ error: data.error });
+    } else {
+      const data = await response.json();
+      this.setState({ error: data.error });
+    }
   };
 
   render() {
