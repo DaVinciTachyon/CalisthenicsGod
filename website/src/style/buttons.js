@@ -1,5 +1,11 @@
 import styled from 'styled-components';
-import General, { Background, Shadow, Border, Success, Error } from './colours';
+import General, {
+  Background,
+  Shadow,
+  Border,
+  Success,
+  Error,
+} from './constants';
 
 const Button = styled.div`
   text-decoration: none;

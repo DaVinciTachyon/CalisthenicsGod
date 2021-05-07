@@ -69,6 +69,10 @@ const Shadow = {
   secondary: 'rgba(0, 0, 0, 0.3)',
 };
 
+const Transition = {
+  primary: '200ms',
+};
+
 export {
   Nutrients,
   General,
@@ -79,6 +83,7 @@ export {
   Error,
   Border,
   Shadow,
+  Transition,
 };
 
 export default General;

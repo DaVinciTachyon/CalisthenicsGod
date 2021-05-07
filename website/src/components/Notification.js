@@ -1,8 +1,9 @@
 import React from 'react';
 import { Row, Column } from '../style/table';
-import { Error as ErrorColours } from '../style/colours';
+import { Error as ErrorColours } from '../style/constants';
+import styled from 'styled-components';
 
-export default class Notification extends React.Component {
+class BaseNotification extends React.Component {
   dismiss = () => {
     this.props.dismiss();
   };
@@ -19,13 +20,10 @@ export default class Notification extends React.Component {
   }
 }
 
-const Error = (
-  { ...props } //TODO styled component
-) => (
-  <Notification
-    {...props}
-    style={{ 'background-color': ErrorColours.primary }}
-  />
-);
+const Notification = styled(BaseNotification)``;
 
-export { Error };
+const Error = styled(Notification)`
+  background-color: ${ErrorColours.primary};
+`;
+
+export { Notification, Error };

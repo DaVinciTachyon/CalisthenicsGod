@@ -1,5 +1,5 @@
 import styled from 'styled-components';
-import { Shadow, Background } from './colours';
+import { Shadow, Background } from './constants';
 
 const Card = styled.div`
   box-shadow: 0 0.25rem 0.5rem 0 ${Shadow.primary};

@@ -31,7 +31,7 @@ export default class WorkoutTracker extends React.Component {
   render() {
     const workouts = [];
     this.state.workouts.forEach((workout) =>
-      workouts.push(<Workout details={workout} />)
+      workouts.push(<Workout key={workout._id} details={workout} />)
     );
     return (
       <div>
