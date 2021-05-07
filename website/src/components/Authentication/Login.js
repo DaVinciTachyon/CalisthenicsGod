@@ -1,7 +1,7 @@
 import React from 'react';
 import { Error } from '../Notification';
 import { Row, Column } from '../../style/table';
-import { Card } from '../../style/general';
+import Card from '../../style/card';
 import { Link } from 'react-router-dom';
 import { Button, SecondaryButton } from '../../style/buttons';
 

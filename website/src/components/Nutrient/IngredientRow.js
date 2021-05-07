@@ -1,6 +1,15 @@
 import React from 'react';
 import { Row, Column } from '../../style/table';
 import { Button, SuccessButton, ErrorButton } from '../../style/buttons';
+import {
+  Text,
+  Number,
+  Weight,
+  Fat,
+  Carbohydrate,
+  Protein,
+  Ethanol,
+} from '../../style/inputs';
 
 export default class IngredientRow extends React.Component {
   constructor() {
@@ -412,9 +421,9 @@ export default class IngredientRow extends React.Component {
         columns={this.props.isSummary ? (this.props.hasWeight ? 8 : 7) : 9}
         className={
           this.props.isSummary
-            ? 'lineEmphasis'
+            ? 'emphasis'
             : this.props.isNew && this.state.edit
-            ? 'inputLineEmphasis lineEmphasis'
+            ? 'input'
             : ''
         }
       >
@@ -428,18 +437,10 @@ export default class IngredientRow extends React.Component {
             </select>
           )}
           {(this.props.isNew || this.state.isNew) && (
-            <input
+            <Text
               name="name"
-              type="text"
               value={this.state.name}
               onChange={this.nameChange}
-              className={
-                'name input' +
-                ((this.props.hasWeight && !this.props.isNew) ||
-                this.props.isSummary
-                  ? ' readOnly inheritBackground'
-                  : ' editable')
-              }
               required
               readOnly={
                 !this.state.edit ||
@@ -451,42 +452,29 @@ export default class IngredientRow extends React.Component {
           )}
         </Column>
         <Column>
-          <input
+          <Number
             name="calories"
-            type="number"
             min="0"
             step="1"
             value={this.getCalories()}
-            className="calories readOnly"
             readOnly
             onDoubleClick={this.props.isSummary ? () => {} : this.changeFocus}
           />
         </Column>
         {this.props.hasWeight && (
           <Column>
-            <input
+            <Weight
               name="weight"
-              type="number"
-              min="0"
-              step="0.1"
               value={this.state.weight}
               onChange={this.weightChange}
-              className={
-                'weight input' +
-                (this.props.isSummary ? ' readOnly' : ' editable')
-              }
               readOnly={!this.state.edit || this.props.isSummary}
               onDoubleClick={this.props.isSummary ? () => {} : this.changeFocus}
             />
             {this.props.isNew && this.props.hasWeight && (
-              <input
+              <Weight
                 name="weight"
-                type="number"
-                min="0"
-                step="0.1"
                 value={this.state.standardWeight}
                 // onChange={this.weightChange}
-                className="weight readOnly"
                 // readOnly={!this.state.edit}
                 onDoubleClick={this.changeFocus}
               />
@@ -494,46 +482,22 @@ export default class IngredientRow extends React.Component {
           </Column>
         )}
         <Column>
-          <input
+          <Fat
             name="fat"
-            type="number"
-            min="0"
             max={this.props.isNew && this.props.hasWeight ? '' : '100'}
-            step="0.1"
             value={this.state.fat}
             onChange={this.fatChange}
-            className={
-              'fat input' +
-              (this.props.hasWeight || this.props.isSummary
-                ? ' readOnly'
-                : ' editable')
-            }
             readOnly={
               !this.state.edit || this.props.hasWeight || this.props.isSummary
             }
             onDoubleClick={this.props.isSummary ? () => {} : this.changeFocus}
           />
           {this.props.isNew && this.props.hasWeight && (
-            <input
+            <Fat
               name="fat_base"
-              type="number"
-              min="0"
               max="100"
-              step="0.1"
               value={this.state.fat_base}
               onChange={this.fatBaseChange}
-              className={
-                'fat input' +
-                (!this.state.isNew ||
-                !(
-                  (this.props.isNew &&
-                    this.props.hasWeight &&
-                    this.state.ingredient === '') ||
-                  this.props.isSummary
-                )
-                  ? ' readOnly'
-                  : ' editable')
-              }
               readOnly={
                 !this.state.edit ||
                 !this.state.isNew ||
@@ -549,46 +513,22 @@ export default class IngredientRow extends React.Component {
           )}
         </Column>
         <Column>
-          <input
+          <Carbohydrate
             name="carb"
-            type="number"
-            min="0"
-            max="100"
-            step="0.1"
+            max={this.props.isNew && this.props.hasWeight ? '' : '100'}
             value={this.state.carb}
             onChange={this.carbChange}
-            className={
-              'carbohydrate input' +
-              (this.props.hasWeight || this.props.isSummary
-                ? ' readOnly'
-                : ' editable')
-            }
             readOnly={
               !this.state.edit || this.props.hasWeight || this.props.isSummary
             }
             onDoubleClick={this.props.isSummary ? () => {} : this.changeFocus}
           />
           {this.props.isNew && this.props.hasWeight && (
-            <input
+            <Carbohydrate
               name="carb_base"
-              type="number"
-              min="0"
               max="100"
-              step="0.1"
               value={this.state.carb_base}
               onChange={this.carbBaseChange}
-              className={
-                'carbohydrate input' +
-                (!this.state.isNew ||
-                !(
-                  (this.props.isNew &&
-                    this.props.hasWeight &&
-                    this.state.ingredient === '') ||
-                  this.props.isSummary
-                )
-                  ? ' readOnly'
-                  : ' editable')
-              }
               readOnly={
                 !this.state.edit ||
                 !this.state.isNew ||
@@ -604,46 +544,22 @@ export default class IngredientRow extends React.Component {
           )}
         </Column>
         <Column>
-          <input
+          <Protein
             name="prot"
-            type="number"
-            min="0"
-            max="100"
-            step="0.1"
+            max={this.props.isNew && this.props.hasWeight ? '' : '100'}
             value={this.state.prot}
             onChange={this.protChange}
-            className={
-              'protein input' +
-              (this.props.hasWeight || this.props.isSummary
-                ? ' readOnly'
-                : ' editable')
-            }
             readOnly={
               !this.state.edit || this.props.hasWeight || this.props.isSummary
             }
             onDoubleClick={this.props.isSummary ? () => {} : this.changeFocus}
           />
           {this.props.isNew && this.props.hasWeight && (
-            <input
+            <Protein
               name="prot_base"
-              type="number"
-              min="0"
               max="100"
-              step="0.1"
               value={this.state.prot_base}
               onChange={this.protBaseChange}
-              className={
-                'protein input' +
-                (!this.state.isNew ||
-                !(
-                  this.props.isNew &&
-                  this.props.hasWeight &&
-                  this.state.ingredient === ''
-                ) ||
-                this.props.isSummary
-                  ? ' readOnly'
-                  : ' editable')
-              }
               readOnly={
                 !this.state.edit ||
                 !this.state.isNew ||
@@ -659,46 +575,22 @@ export default class IngredientRow extends React.Component {
           )}
         </Column>
         <Column>
-          <input
+          <Ethanol
             name="eth"
-            type="number"
-            min="0"
-            max="100"
-            step="0.1"
+            max={this.props.isNew && this.props.hasWeight ? '' : '100'}
             value={this.state.eth}
             onChange={this.ethChange}
-            className={
-              'ethanol input' +
-              (this.props.hasWeight || this.props.isSummary
-                ? ' readOnly'
-                : ' editable')
-            }
             readOnly={
               !this.state.edit || this.props.hasWeight || this.props.isSummary
             }
             onDoubleClick={this.props.isSummary ? () => {} : this.changeFocus}
           />
           {this.props.isNew && this.props.hasWeight && (
-            <input
+            <Ethanol
               name="eth_base"
-              type="number"
-              min="0"
               max="100"
-              step="0.1"
               value={this.state.eth_base}
               onChange={this.ethBaseChange}
-              className={
-                'ethanol input' +
-                (!this.state.isNew ||
-                !(
-                  this.props.isNew &&
-                  this.props.hasWeight &&
-                  this.state.ingredient === ''
-                ) ||
-                this.props.isSummary
-                  ? ' readOnly'
-                  : ' editable')
-              }
               readOnly={
                 !this.state.edit ||
                 !this.state.isNew ||

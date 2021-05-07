@@ -1,6 +1,6 @@
 import React from 'react';
 import { Line } from 'react-chartjs-2';
-import { Card } from '../../style/general';
+import Card from '../../style/card';
 
 export default class MeasurementHistory extends React.Component {
   constructor() {

@@ -2,7 +2,7 @@ import React from 'react';
 import { Error } from '../Notification';
 import { Row, Column } from '../../style/table';
 import { Link } from 'react-router-dom';
-import { Card } from '../../style/general';
+import Card from '../../style/card';
 import { Button, SecondaryButton } from '../../style/buttons';
 
 export default class Register extends React.Component {

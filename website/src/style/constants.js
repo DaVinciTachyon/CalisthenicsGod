@@ -4,20 +4,20 @@ const Nutrients = {
     dark: '#ffd433',
   },
   carbohydrate: {
-    light: '#ff3f3f',
-    dark: '#ff9999',
+    light: '#ff9999',
+    dark: '#ff3f3f',
   },
   protein: {
-    light: '#3fafff',
-    dark: '#99f1ff',
+    light: '#99f1ff',
+    dark: '#3fafff',
   },
   ethanol: {
-    light: '#35ff38',
-    dark: '#82ff84',
+    light: '#82ff84',
+    dark: '#35ff38',
   },
 };
 
-const General = {
+const Colours = {
   primary: {
     standard: '#23232e',
     dark: '#141418',
@@ -25,11 +25,6 @@ const General = {
   secondary: {
     standard: 'rgb(4, 42, 75)',
   },
-};
-
-const Title = {
-  primary: 'black',
-  secondary: 'grey',
 };
 
 const Text = {
@@ -41,6 +36,10 @@ const Text = {
   tertiary: {
     standard: '#ff7eee',
     alternative: '#8b7eff',
+  },
+  title: {
+    primary: 'black',
+    secondary: 'grey',
   },
 };
 
@@ -75,8 +74,7 @@ const Transition = {
 
 export {
   Nutrients,
-  General,
-  Title,
+  Colours,
   Text,
   Background,
   Success,
@@ -85,5 +83,3 @@ export {
   Shadow,
   Transition,
 };
-
-export default General;

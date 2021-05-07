@@ -1,10 +1,11 @@
 import styled from 'styled-components';
-import General, {
+import {
   Background,
   Shadow,
   Border,
   Success,
   Error,
+  Colours,
 } from './constants';
 
 const Button = styled.div`
@@ -13,14 +14,14 @@ const Button = styled.div`
   text-align: center;
   border: ${Border.secondary};
   color: ${Background.primary};
-  background: ${General.primary.standard};
+  background: ${Colours.primary.standard};
   font-size: 1.1rem;
   box-shadow: 0 0 0.5rem 0.25rem ${Shadow.primary};
   min-width: 60%;
   margin: 0.2rem;
 
   :hover {
-    border: 0.1rem solid ${General.primary.dark};
+    border: 0.1rem solid ${Colours.primary.dark};
     color: ${Background.primary};
     background: ${Success.primary};
     box-shadow: 0 0 0.5rem 0.25rem ${Shadow.secondary};
@@ -35,7 +36,7 @@ const Button = styled.div`
 
 const SecondaryButton = styled(Button)`
   border: ${Border.secondary};
-  color: ${General.primary.standard};
+  color: ${Colours.primary.standard};
   background: ${Background.primary};
 
   :hover {

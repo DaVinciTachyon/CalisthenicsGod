@@ -11,4 +11,4 @@ const Card = styled.div`
   max-width: 95%;
 `;
 
-export { Card };
+export default Card;

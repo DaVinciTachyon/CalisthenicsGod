@@ -1,5 +1,5 @@
 import styled from 'styled-components';
-import { General, Transition, Text } from './constants';
+import { Colours, Transition, Text } from './constants';
 import { Link } from 'react-router-dom';
 
 const pixelBarrier = 850;
@@ -40,7 +40,7 @@ const LogoSecondarySvgComponent = styled(SecondarySvgComponent)``;
 //navbar
 const NavigationBarContainer = styled.nav`
   position: fixed;
-  background: ${General.primary.standard};
+  background: ${Colours.primary.standard};
   transition: width ${Transition.primary} ease;
 
   &:hover {
@@ -126,7 +126,7 @@ const NavigationLink = styled(Link)`
 
   &:hover {
     filter: grayscale(0%) opacity(1);
-    background: ${General.primary.dark};
+    background: ${Colours.primary.dark};
   }
 
   .signedout & {
@@ -137,7 +137,7 @@ const NavigationLink = styled(Link)`
   }
 
   .signedout &:hover {
-    background: ${General.primary.standard};
+    background: ${Colours.primary.standard};
     filter: greyscale(0) opacity(0);
   }
 
@@ -188,7 +188,7 @@ const Logo = styled.li`
   text-transform: uppercase;
   margin-bottom: 1rem;
   color: ${Text.secondary};
-  background: ${General.primary.dark};
+  background: ${Colours.primary.dark};
   font-size: 1.5rem;
   letter-spacing: 0.3ch;
   display: flex;
@@ -200,7 +200,7 @@ const Logo = styled.li`
 
     .signedout & {
       display: block;
-      background: ${General.primary.standard};
+      background: ${Colours.primary.standard};
     }
   }
 `;
@@ -218,7 +218,7 @@ const SubNavigationBar = styled.ul`
       left: 0;
       width: 100vw;
       transition: ${Transition.primary};
-      background: ${General.primary.standard};
+      background: ${Colours.primary.standard};
     }
   }
   @media only screen and (min-width: ${pixelBarrier}px) {

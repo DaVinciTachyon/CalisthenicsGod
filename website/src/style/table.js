@@ -1,12 +1,18 @@
 import styled from 'styled-components';
+import { Background, Text } from './constants';
 
 const Row = styled.div`
   display: grid;
   grid-template-columns: repeat(${(props) => props.columns || 1}, 1fr);
   text-align: center;
-  ${(props) => {
-    if (props.isTitle) return `font-weight: bold;`;
-  }}
+  font-weight: ${(props) => (props.isTitle ? `bold` : 'normal')};
+
+  &.input {
+    background-color: ${Text.tertiary.alternative};
+  }
+  &.emphasis {
+    background-color: ${Background.secondary};
+  }
 `;
 
 const Column = styled.div`
@@ -23,7 +29,7 @@ const Title = styled.div`
 `;
 
 const Subtitle = styled.div`
-  color: var(--secondaryTitleColour);
+  color: ${Text.title.secondary};
   font-size: 0.8rem;
 `;
 

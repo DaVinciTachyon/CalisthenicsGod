@@ -1,5 +1,5 @@
 import React from 'react';
-import { Card } from '../../style/general';
+import Card from '../../style/card';
 import { Row, Column } from '../../style/table';
 import { Link } from 'react-router-dom';
 import { Button } from '../../style/buttons';

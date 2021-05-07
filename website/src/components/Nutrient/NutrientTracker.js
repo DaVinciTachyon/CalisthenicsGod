@@ -1,7 +1,7 @@
 import React from 'react';
 import NutrientSummary from './NutrientSummary';
 import NutrientDay from './NutrientDay';
-import { Card } from '../../style/general';
+import Card from '../../style/card';
 
 export default class NutrientTracker extends React.Component {
   constructor() {
