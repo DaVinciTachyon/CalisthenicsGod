@@ -22,4 +22,9 @@ const Title = styled.div`
   font-size: 1.5rem;
 `;
 
-export { Row, Column, Title };
+const Subtitle = styled.div`
+  color: var(--secondaryTitleColour);
+  font-size: 0.8rem;
+`;
+
+export { Row, Column, Title, Subtitle };

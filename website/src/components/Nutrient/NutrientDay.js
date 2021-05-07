@@ -1,7 +1,7 @@
 import React from 'react';
 import MealTable from './MealTable';
 import IngredientRow from './IngredientRow';
-import '../../style/Nutrient.css';
+import { Button } from '../../style/buttons';
 
 export default class NutrientDay extends React.Component {
   constructor() {
@@ -48,38 +48,36 @@ export default class NutrientDay extends React.Component {
       );
     }
     return (
-      <div className="container">
-        <div className="newMealContainer">
-          {!this.state.newMeal && (
-            <form className="newMeal" onSubmit={this.selectMeal.bind(this)}>
-              <select onChange={this.mealChange.bind(this)}>
-                <option value="" selected={this.state.mealId === ''}>
-                  New Meal
-                </option>
-                {presetMeals}
-              </select>
-              <input className="button" type="submit" value="Select" />
-            </form>
-          )}
-          {this.state.newMeal && !this.state.focus && (
-            <IngredientRow
-              key={'adder'}
-              update={() => {
-                this.update();
-                this.flipNewMeal();
-              }}
-              changeFocus={this.changeFocus}
-              focus={this.state.focus}
-              onSubmit={this.addIngredient}
-              macroDensities={this.props.macroDensities}
-              isNew={true}
-              hasWeight={true}
-              isNewMeal={true}
-              noToggle={true}
-              cancel={this.flipNewMeal}
-            />
-          )}
-        </div>
+      <div>
+        {!this.state.newMeal && (
+          <div>
+            <select onChange={this.mealChange.bind(this)}>
+              <option value="" selected={this.state.mealId === ''}>
+                New Meal
+              </option>
+              {presetMeals}
+            </select>
+            <Button onClick={this.selectMeal.bind(this)}>Select</Button>
+          </div>
+        )}
+        {this.state.newMeal && !this.state.focus && (
+          <IngredientRow
+            key={'adder'}
+            update={() => {
+              this.update();
+              this.flipNewMeal();
+            }}
+            changeFocus={this.changeFocus}
+            focus={this.state.focus}
+            onSubmit={this.addIngredient}
+            macroDensities={this.props.macroDensities}
+            isNew={true}
+            hasWeight={true}
+            isNewMeal={true}
+            noToggle={true}
+            cancel={this.flipNewMeal}
+          />
+        )}
         {meals}
       </div>
     );
@@ -272,8 +270,7 @@ export default class NutrientDay extends React.Component {
     this.setState({ mealId: input });
   };
 
-  selectMeal = async (evt) => {
-    evt.preventDefault();
+  selectMeal = async () => {
     if (this.state.mealId === '') this.flipNewMeal();
     else {
       await fetch(

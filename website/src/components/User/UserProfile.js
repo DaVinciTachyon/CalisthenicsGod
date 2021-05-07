@@ -1,5 +1,6 @@
 import React from 'react';
-import '../../style/User.css';
+import { Row, Column } from '../../style/table';
+import { Button } from '../../style/buttons';
 
 export default class UserProfile extends React.Component {
   constructor() {
@@ -116,21 +117,21 @@ export default class UserProfile extends React.Component {
 
   render() {
     return (
-      <form className="profile-table" onSubmit={this.editProfile}>
-        <div className="row">
-          <div className="label-column column">First Name</div>
-          <div className="value-column column">
+      <div>
+        <Row columns={2}>
+          <Column>First Name</Column>
+          <Column>
             <input
               type="text"
               value={this.state.name.first}
               className="readOnly"
               readOnly
             />
-          </div>
-        </div>
-        <div className="row">
-          <div className="label-column column">Middle Name</div>
-          <div className="value-column column">
+          </Column>
+        </Row>
+        <Row columns={2}>
+          <Column>Middle Name</Column>
+          <Column>
             <input
               type="text"
               placeholder="Middle Name"
@@ -138,33 +139,33 @@ export default class UserProfile extends React.Component {
               className="readOnly"
               readOnly
             />
-          </div>
-        </div>
-        <div className="row">
-          <div className="label-column column">Last Name</div>
-          <div className="value-column column">
+          </Column>
+        </Row>
+        <Row columns={2}>
+          <Column>Last Name</Column>
+          <Column>
             <input
               type="text"
               value={this.state.name.last}
               className="readOnly"
               readOnly
             />
-          </div>
-        </div>
-        <div className="row">
-          <div className="label-column column">Email</div>
-          <div className="value-column column">
+          </Column>
+        </Row>
+        <Row columns={2}>
+          <Column>Email</Column>
+          <Column>
             <input
               type="text"
               value={this.state.email}
               className="readOnly"
               readOnly
             />
-          </div>
-        </div>
-        <div className="row">
-          <div className="label-column column">Calorie Mode</div>
-          <div className="value-column column">
+          </Column>
+        </Row>
+        <Row columns={2}>
+          <Column>Calorie Mode</Column>
+          <Column>
             <select id="calorieMode" onChange={this.calorieModeChange}>
               <option
                 value="maintenance"
@@ -188,11 +189,11 @@ export default class UserProfile extends React.Component {
                 onChange={this.calorieOffsetChange}
               />
             )}
-          </div>
-        </div>
-        <div className="row">
-          <div className="label-column column">Maintenance Calories</div>
-          <div className="value-column column">
+          </Column>
+        </Row>
+        <Row columns={2}>
+          <Column>Maintenance Calories</Column>
+          <Column>
             <input
               type="number"
               min="0"
@@ -201,11 +202,11 @@ export default class UserProfile extends React.Component {
               readOnly
             />
             <div className="unit-col">kcal</div>
-          </div>
-        </div>
-        <div className="row">
-          <div className="label-column column">Calorie Offset</div>
-          <div className="value-column column">
+          </Column>
+        </Row>
+        <Row columns={2}>
+          <Column>Calorie Offset</Column>
+          <Column>
             <input
               type="number"
               step="1"
@@ -214,11 +215,11 @@ export default class UserProfile extends React.Component {
               readOnly
             />
             <div className="unit-col">kcal</div>
-          </div>
-        </div>
-        <div className="row">
-          <div className="label-column column">Protein Amount</div>
-          <div className="value-column column">
+          </Column>
+        </Row>
+        <Row columns={2}>
+          <Column>Protein Amount</Column>
+          <Column>
             <input
               type="number"
               min="0"
@@ -228,11 +229,11 @@ export default class UserProfile extends React.Component {
               readOnly
             />
             <div className="unit-col">g/kg</div>
-          </div>
-        </div>
-        <div className="row">
-          <div className="label-column column">Fat Partition</div>
-          <div className="value-column column">
+          </Column>
+        </Row>
+        <Row columns={2}>
+          <Column>Fat Partition</Column>
+          <Column>
             <input
               type="number"
               min="0"
@@ -241,11 +242,11 @@ export default class UserProfile extends React.Component {
               readOnly
             />
             <div className="unit-col">%</div>
-          </div>
-        </div>
-        <div className="row">
-          <div className="label-column column">Gender</div>
-          <div className="value-column column">
+          </Column>
+        </Row>
+        <Row columns={2}>
+          <Column>Gender</Column>
+          <Column>
             <select id="gender">
               <option value="male" selected={this.state.gender === 'male'}>
                 Male
@@ -254,40 +255,36 @@ export default class UserProfile extends React.Component {
                 Female
               </option>
             </select>
-          </div>
-        </div>
-        <div className="row">
-          <div className="label-column column">Birth Date</div>
-          <div className="value-column column">
+          </Column>
+        </Row>
+        <Row columns={2}>
+          <Column>Birth Date</Column>
+          <Column>
             <input
               type="date"
               value={this.state.birthDate}
               className="readOnly"
               readOnly
             />
-          </div>
-        </div>
-        <div className="row">
-          <div className="label-column column">Date Joined</div>
-          <div className="value-column column">
+          </Column>
+        </Row>
+        <Row columns={2}>
+          <Column>Date Joined</Column>
+          <Column>
             <input
               type="date"
               value={this.state.dateJoined}
               className="readOnly"
               readOnly
             />
-          </div>
-        </div>
-        <div className="row">
-          <div className="submit-column column">
-            <input
-              className="submitButton button"
-              type="submit"
-              value="Edit Profile"
-            />
-          </div>
-        </div>
-      </form>
+          </Column>
+        </Row>
+        <Row columns={2}>
+          <Column span={2}>
+            <Button onClick={this.editProfile}>Edit Profile</Button>
+          </Column>
+        </Row>
+      </div>
     );
   }
 

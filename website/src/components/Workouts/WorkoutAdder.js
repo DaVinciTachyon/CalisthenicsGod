@@ -34,7 +34,12 @@ export default class WorkoutTracker extends React.Component {
     this.state.stages.forEach((stage) => {
       stages.push(
         <div key={stage._id}>
-          <Row>{stage.name}</Row>+ exercise + exercise +
+          <Row>{stage.name}</Row>
+          <Row>+</Row>
+          <Row columns={4}>
+            <Column span={4}>exercise</Column>
+          </Row>
+          <Row>+</Row>
         </div>
       );
     });

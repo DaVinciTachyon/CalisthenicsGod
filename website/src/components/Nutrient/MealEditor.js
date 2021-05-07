@@ -1,6 +1,11 @@
 import React from 'react';
 import IngredientRow from './IngredientRow';
-import '../../style/Nutrient.css';
+import { Row, Column, Subtitle } from '../../style/table';
+import {
+  ErrorButton,
+  DeleteButton,
+  SecondaryButton,
+} from '../../style/buttons';
 
 export default class MealEditor extends React.Component {
   constructor() {
@@ -194,7 +199,6 @@ export default class MealEditor extends React.Component {
       ingredients.push(
         <IngredientRow
           key={`${i}${this.state.ingredients[i]._id}`}
-          colours={this.props.colours}
           ingredient={this.state.ingredients[i]}
           mealId={this.props.meal._id}
           changeFocus={this.changeFocus}
@@ -213,44 +217,47 @@ export default class MealEditor extends React.Component {
       summary.ethanol += (weight * this.state.ingredients[i].ethanol) / 100;
     }
     return (
-      <div className="meal">
-        <button className="secondaryButton button" onClick={this.showMeal}>
-          {this.props.meal.name}
-        </button>
+      <div>
+        <Row columns={9}>
+          <Column span={9}>
+            <SecondaryButton onClick={this.showMeal}>
+              {this.props.meal.name}
+            </SecondaryButton>
+          </Column>
+        </Row>
         {this.state.showMeal && (
-          <div className="mealSummary">
-            <div className="row">
-              <div className="name-column column"></div>
-              <div className="calories-column column">
-                <div className="title">Calories</div>
-                <div className="subtitle">kcal</div>
-              </div>
-              <div className="weight-column column">
-                <div className="title">Weight</div>
-                <div className="subtitle">grams</div>
-              </div>
-              <div className="fat-column column">
-                <div className="title">Fat</div>
-                <div className="subtitle">grams</div>
-              </div>
-              <div className="carbohydrate-column column">
-                <div className="title">Carbs</div>
-                <div className="subtitle">grams</div>
-              </div>
-              <div className="protein-column column">
-                <div className="title">Protein</div>
-                <div className="subtitle">grams</div>
-              </div>
-              <div className="ethanol-column column">
-                <div className="title">Ethanol</div>
-                <div className="subtitle">grams</div>
-              </div>
-              <div className="status-column column"></div>
-            </div>
+          <div>
+            <Row columns={9} isTitle>
+              <Column span={2} />
+              <Column>
+                <div>Calories</div>
+                <Subtitle>kcal</Subtitle>
+              </Column>
+              <Column>
+                <div>Weight</div>
+                <Subtitle>grams</Subtitle>
+              </Column>
+              <Column>
+                <div>Fat</div>
+                <Subtitle>grams</Subtitle>
+              </Column>
+              <Column>
+                <div>Carbs</div>
+                <Subtitle>grams</Subtitle>
+              </Column>
+              <Column>
+                <div>Protein</div>
+                <Subtitle>grams</Subtitle>
+              </Column>
+              <Column>
+                <div>Ethanol</div>
+                <Subtitle>grams</Subtitle>
+              </Column>
+              <Column />
+            </Row>
             {ingredients}
             <IngredientRow
               key={'adder'}
-              colours={this.props.colours}
               update={() => {
                 this.update();
                 this.showMeal();
@@ -266,24 +273,21 @@ export default class MealEditor extends React.Component {
             />
             <IngredientRow
               key={'summary'}
-              colours={this.props.colours}
               ingredient={summary}
               update={() => {}}
               hasWeight={true}
               isSummary={true}
             />
-            <button
-              className="exit deleteButton button"
-              onClick={this.showMeal}
-            >
-              Exit
-            </button>
-            <button
-              className="delete errorButton button"
-              onClick={this.removeMeal}
-            >
-              Delete
-            </button>
+            <Row columns={9}>
+              <Column span={9}>
+                <ErrorButton onClick={this.showMeal}>Exit</ErrorButton>
+              </Column>
+            </Row>
+            <Row columns={9}>
+              <Column span={9}>
+                <DeleteButton onClick={this.removeMeal}>Delete</DeleteButton>
+              </Column>
+            </Row>
           </div>
         )}
       </div>

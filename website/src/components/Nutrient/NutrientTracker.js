@@ -1,6 +1,7 @@
 import React from 'react';
 import NutrientSummary from './NutrientSummary';
 import NutrientDay from './NutrientDay';
+import { Card } from '../../style/general';
 
 export default class NutrientTracker extends React.Component {
   constructor() {
@@ -36,12 +37,12 @@ export default class NutrientTracker extends React.Component {
   render() {
     return (
       <div>
-        <div className="card">
+        <Card>
           <NutrientSummary
             currentMacros={this.state.currentMacros}
             macroDensities={this.state.macroDensities}
           />
-        </div>
+        </Card>
         <NutrientDay
           macroDensities={this.state.macroDensities}
           updateNutrients={this.update}

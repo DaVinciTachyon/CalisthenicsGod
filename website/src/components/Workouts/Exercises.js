@@ -1,6 +1,7 @@
 import React from 'react';
-import styles from '../../style/Exercises.module.css';
 import { Link } from 'react-router-dom';
+import { Row, Column } from '../../style/table';
+import { Button } from '../../style/buttons';
 
 export default class Exercises extends React.Component {
   constructor() {
@@ -31,65 +32,47 @@ export default class Exercises extends React.Component {
     let exercises = [];
     for (const exercise of this.state.exercises)
       exercises.push(
-        <div key={exercise._id} className={`${styles.row}`}>
-          <div className={`${styles.column} ${styles.name}`}>
-            {exercise.name}
-          </div>
-          <div className={`${styles.column} ${styles.abbreviation}`}>
-            {exercise.abbreviation}
-          </div>
-          <div
-            className={`${styles.column} ${styles.motionType} ${styles.motionTypeSplit}`}
-          >
-            <div>{exercise.motionType.transversePlane}</div>
-            <div>{exercise.motionType.kineticChain}</div>
-            <div>{exercise.motionType.verticality}</div>
-            <div>{exercise.motionType.frontalPlane}</div>
-            <div>{exercise.motionType.motion}</div>
-          </div>
-          <div className={`${styles.column} ${styles.potentialCategories}`}>
-            {exercise.potentialCategories}
-          </div>
-          <div className={`${styles.column} ${styles.requirements}`}>
-            {exercise.requirements}
-          </div>
-          <div className={`${styles.column} ${styles.description}`}>
-            {exercise.description}
-          </div>
-        </div>
+        <Row key={exercise._id} columns={10}>
+          <Column>{exercise.name}</Column>
+          <Column>{exercise.abbreviation}</Column>
+          <Column span={5} columns={5}>
+            <Column>{exercise.motionType.transversePlane}</Column>
+            <Column>{exercise.motionType.kineticChain}</Column>
+            <Column>{exercise.motionType.verticality}</Column>
+            <Column>{exercise.motionType.frontalPlane}</Column>
+            <Column>{exercise.motionType.motion}</Column>
+          </Column>
+          <Column>{exercise.potentialCategories}</Column>
+          <Column>{exercise.requirements}</Column>
+          <Column>{exercise.description}</Column>
+        </Row>
       );
     return (
-      <div className={`${styles.exercises}`}>
-        <div className={`${styles.row} ${styles.title}`}>
-          <div className={`${styles.column} ${styles.name}`}>Name</div>
-          <div className={`${styles.column} ${styles.abbreviation}`}>
-            Abbreviation
-          </div>
-          <div className={`${styles.column} ${styles.motionType}`}>
-            <div>Motion Type</div>
-            <div className={`${styles.motionTypeSplit}`}>
-              <div>Transverse Plane</div>
-              <div>Kinetic Chain</div>
-              <div>Verticality</div>
-              <div>Frontal Plane</div>
-              <div>Motion</div>
-            </div>
-          </div>
-          <div className={`${styles.column} ${styles.potentialCategories}`}>
-            Potential Categories
-          </div>
-          <div className={`${styles.column} ${styles.requirements}`}>
-            Requirements
-          </div>
-          <div className={`${styles.column} ${styles.description}`}>
-            Description
-          </div>
-        </div>
-        <div className={`${styles.row}`}>
-          <Link to="/workoutTracker/exercises/new" className={styles.fullWidth}>
-            <div className={`button`}>+</div>
-          </Link>
-        </div>
+      <div>
+        <Row columns={10} isTitle>
+          <Column>Name</Column>
+          <Column>Abbreviation</Column>
+          <Column span={5}>
+            <Column span={5}>Motion Type</Column>
+            <Column span={5} columns={5}>
+              <Column>Transverse Plane</Column>
+              <Column>Kinetic Chain</Column>
+              <Column>Verticality</Column>
+              <Column>Frontal Plane</Column>
+              <Column>Motion</Column>
+            </Column>
+          </Column>
+          <Column>Potential Categories</Column>
+          <Column>Requirements</Column>
+          <Column>Description</Column>
+        </Row>
+        <Row columns={10}>
+          <Column span={10}>
+            <Link to="/workoutTracker/exercises/new">
+              <Button>+</Button>
+            </Link>
+          </Column>
+        </Row>
         {exercises}
       </div>
     );

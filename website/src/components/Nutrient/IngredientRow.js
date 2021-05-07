@@ -1,5 +1,6 @@
 import React from 'react';
-import '../../style/Nutrient.css';
+import { Row, Column } from '../../style/table';
+import { Button, SuccessButton, ErrorButton } from '../../style/buttons';
 
 export default class IngredientRow extends React.Component {
   constructor() {
@@ -385,11 +386,11 @@ export default class IngredientRow extends React.Component {
   render() {
     if (!this.props.noToggle && this.props.isNew && !this.state.edit) {
       return (
-        <div className="row">
-          <div onClick={this.changeFocus} className="fullWidth button">
-            +
-          </div>
-        </div>
+        <Row columns={9}>
+          <Column span={9}>
+            <Button onClick={this.changeFocus}>+</Button>
+          </Column>
+        </Row>
       );
     }
 
@@ -407,16 +408,17 @@ export default class IngredientRow extends React.Component {
       }
     }
     return (
-      <div
+      <Row
+        columns={this.props.isSummary ? (this.props.hasWeight ? 8 : 7) : 9}
         className={
           this.props.isSummary
-            ? 'lineEmphasis row'
+            ? 'lineEmphasis'
             : this.props.isNew && this.state.edit
-            ? 'inputLineEmphasis lineEmphasis row'
-            : 'row'
+            ? 'inputLineEmphasis lineEmphasis'
+            : ''
         }
       >
-        <div className="name-column column">
+        <Column span={2}>
           {this.props.isNew && this.props.hasWeight && (
             <select onChange={this.ingredientChange.bind(this)}>
               <option value="" selected={this.state.ingredient === ''}>
@@ -447,8 +449,8 @@ export default class IngredientRow extends React.Component {
               onDoubleClick={this.props.isSummary ? () => {} : this.changeFocus}
             />
           )}
-        </div>
-        <div className="calories-column column">
+        </Column>
+        <Column>
           <input
             name="calories"
             type="number"
@@ -459,9 +461,9 @@ export default class IngredientRow extends React.Component {
             readOnly
             onDoubleClick={this.props.isSummary ? () => {} : this.changeFocus}
           />
-        </div>
+        </Column>
         {this.props.hasWeight && (
-          <div className="weight-column column">
+          <Column>
             <input
               name="weight"
               type="number"
@@ -489,9 +491,9 @@ export default class IngredientRow extends React.Component {
                 onDoubleClick={this.changeFocus}
               />
             )}
-          </div>
+          </Column>
         )}
-        <div className="fat-column column">
+        <Column>
           <input
             name="fat"
             type="number"
@@ -545,8 +547,8 @@ export default class IngredientRow extends React.Component {
               onDoubleClick={this.changeFocus}
             />
           )}
-        </div>
-        <div className="carbohydrate-column column">
+        </Column>
+        <Column>
           <input
             name="carb"
             type="number"
@@ -600,8 +602,8 @@ export default class IngredientRow extends React.Component {
               onDoubleClick={this.changeFocus}
             />
           )}
-        </div>
-        <div className="protein-column column">
+        </Column>
+        <Column>
           <input
             name="prot"
             type="number"
@@ -655,8 +657,8 @@ export default class IngredientRow extends React.Component {
               onDoubleClick={this.changeFocus}
             />
           )}
-        </div>
-        <div className="ethanol-column column">
+        </Column>
+        <Column>
           <input
             name="eth"
             type="number"
@@ -710,44 +712,24 @@ export default class IngredientRow extends React.Component {
               onDoubleClick={this.changeFocus}
             />
           )}
-        </div>
+        </Column>
         {!this.props.isSummary && !this.state.edit && !this.props.isNew && (
-          <div className="status-column column">
+          <Column>
             {this.props.isUnavailable && (
-              <div
-                className="tinyButton successButton button"
-                onClick={this.submitStatus}
-              >
-                +
-              </div>
+              <SuccessButton onClick={this.submitStatus}>+</SuccessButton>
             )}
             {!this.props.isUnavailable && (
-              <div
-                className="tinyButton errorButton button"
-                onClick={this.submitStatus}
-              >
-                ×
-              </div>
+              <ErrorButton onClick={this.submitStatus}>×</ErrorButton>
             )}
-          </div>
+          </Column>
         )}
         {this.state.edit && (
-          <div className="status-column column">
-            <div
-              className="tinyButton successButton button"
-              onClick={this.submit}
-            >
-              +
-            </div>
-            <div
-              className="tinyButton errorButton button"
-              onClick={this.cancel}
-            >
-              ×
-            </div>
-          </div>
+          <Column>
+            <SuccessButton onClick={this.submit}>+</SuccessButton>
+            <ErrorButton onClick={this.cancel}>×</ErrorButton>
+          </Column>
         )}
-      </div>
+      </Row>
     );
   }
 }

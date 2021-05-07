@@ -1,21 +1,12 @@
 import React from 'react';
 import MealEditor from './MealEditor';
-import '../../style/Nutrient.css';
+import { Row, Column } from '../../style/table';
+import { Button, ErrorButton } from '../../style/buttons';
 
 export default class Meals extends React.Component {
   constructor() {
     super();
     this.state = {
-      colours: {
-        fatDark: '#ffd433',
-        fatLight: '#ffe582',
-        carbDark: '#ff3f3f',
-        carbLight: '#ff9999',
-        protDark: '#3fafff',
-        protLight: '#99f1ff',
-        ethDark: '#35ff38',
-        ethLight: '#82ff84',
-      },
       update: false,
       newMeal: false,
       meals: [],
@@ -62,8 +53,7 @@ export default class Meals extends React.Component {
       });
   };
 
-  newMeal = (evt) => {
-    evt.preventDefault();
+  newMeal = () => {
     const requestOptions = {
       method: 'POST',
       headers: {
@@ -100,43 +90,42 @@ export default class Meals extends React.Component {
           key={`meals${i}`}
           update={this.update}
           meal={this.state.meals[i]}
-          colours={this.state.colours}
           focus={this.state.focus}
           changeFocus={this.changeFocus}
         />
       );
     }
     return (
-      <div>
-        <div className="createMeal">
-          {!this.state.newMeal && (
-            <button className="mainButton button" onClick={this.flipNewMeal}>
-              New Meal
-            </button>
-          )}
-          {this.state.newMeal && (
-            <form onSubmit={this.newMeal.bind(this)}>
-              <div className="input-pair column">
-                <label for="name">Meal Name</label>
-                <input
-                  name="name"
-                  type="text"
-                  value={this.state.name}
-                  placeholder="Meal Name"
-                  onChange={this.nameChange.bind(this)}
-                  className="input"
-                  required
-                />
-              </div>
-              <input className="button" type="submit" value="Add" />
-              <button className="errorButton button" onClick={this.flipNewMeal}>
-                Cancel
-              </button>
-            </form>
-          )}
-        </div>
+      <>
+        {!this.state.newMeal && (
+          <Row>
+            <Column>
+              <Button onClick={this.flipNewMeal}>New Meal</Button>
+            </Column>
+          </Row>
+        )}
+        {this.state.newMeal && (
+          <Row columns={2}>
+            <Column>
+              <label for="name">Meal Name</label>
+              <input
+                name="name"
+                type="text"
+                value={this.state.name}
+                placeholder="Meal Name"
+                onChange={this.nameChange.bind(this)}
+                className="input"
+                required
+              />
+            </Column>
+            <Column>
+              <Button onClick={this.newMeal.bind(this)}>Add</Button>
+              <ErrorButton onClick={this.flipNewMeal}>Cancel</ErrorButton>
+            </Column>
+          </Row>
+        )}
         {meals}
-      </div>
+      </>
     );
   }
 }

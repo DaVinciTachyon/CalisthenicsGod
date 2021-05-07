@@ -1,6 +1,6 @@
 import React from 'react';
 import IngredientRow from './IngredientRow';
-import '../../style/Nutrient.css';
+import { Row, Column, Subtitle } from '../../style/table';
 
 export default class MealTable extends React.Component {
   constructor() {
@@ -51,35 +51,35 @@ export default class MealTable extends React.Component {
         (weight * this.props.meal.ingredients[i].ethanol) / 100;
     }
     return (
-      <div className="meals">
-        <div className="row">
-          <div className="name-column column"></div>
-          <div className="calories-column column">
-            <div className="title">Calories</div>
-            <div className="subtitle">kcal</div>
-          </div>
-          <div className="weight-column column">
-            <div className="title">Weight</div>
-            <div className="subtitle">grams</div>
-          </div>
-          <div className="fat-column column">
-            <div className="title">Fat</div>
-            <div className="subtitle">grams</div>
-          </div>
-          <div className="carbohydrate-column column">
-            <div className="title">Carbs</div>
-            <div className="subtitle">grams</div>
-          </div>
-          <div className="protein-column column">
-            <div className="title">Protein</div>
-            <div className="subtitle">grams</div>
-          </div>
-          <div className="ethanol-column column">
-            <div className="title">Ethanol</div>
-            <div className="subtitle">grams</div>
-          </div>
-          <div className="status-column column"></div>
-        </div>
+      <div>
+        <Row columns={9} isTitle>
+          <Column span={2} />
+          <Column>
+            <div>Calories</div>
+            <Subtitle>kcal</Subtitle>
+          </Column>
+          <Column>
+            <div>Weight</div>
+            <Subtitle>grams</Subtitle>
+          </Column>
+          <Column>
+            <div>Fat</div>
+            <Subtitle>grams</Subtitle>
+          </Column>
+          <Column>
+            <div>Carbs</div>
+            <Subtitle>grams</Subtitle>
+          </Column>
+          <Column>
+            <div>Protein</div>
+            <Subtitle>grams</Subtitle>
+          </Column>
+          <Column>
+            <div>Ethanol</div>
+            <Subtitle>grams</Subtitle>
+          </Column>
+          <Column />
+        </Row>
         {meal}
         <IngredientRow
           key={'adder'}

@@ -1,7 +1,9 @@
 import React from 'react';
-import styles from '../../style/ExerciseAdder.module.css';
 import Select from 'react-select';
-import Error from '../Error';
+import { Error } from '../Notification';
+import { Row, Column } from '../../style/table';
+import { Button, ErrorButton } from '../../style/buttons';
+import { Link } from 'react-router-dom';
 
 export default class Exercises extends React.Component {
   constructor() {
@@ -126,171 +128,232 @@ export default class Exercises extends React.Component {
 
   render() {
     return (
-      <form className={styles.table} onSubmit={this.onSubmit}>
-        <Error
-          error={this.state.error}
-          className={styles.fullWidth}
-          dismissError={() => this.setState({ error: '' })}
-        />
-        <div className={styles.label}>Name</div>
-        <input
-          name="name"
-          type="text"
-          value={this.state.name}
-          onChange={this.onChange}
-          placeholder="Name"
-          required
-        />
-        <div className={styles.label}>Abbreviation</div>
-        <input
-          name="abbreviation"
-          type="text"
-          value={this.state.abbreviation}
-          onChange={this.onChange}
-          placeholder="Abbreviation"
-        />
-        <div
-          className={`${styles.label} ${styles.motionType} ${styles.motionTypeTitle}`}
-        >
-          Motion Type
-        </div>
-        <div className={`${styles.label} ${styles.motionType}`}>
-          Transverse Plane
-        </div>
-        <div>
-          <div>
-            <input
-              type="radio"
-              id="upper"
-              name="transversePlane"
-              value="upper"
-              checked
+      <div>
+        <Row columns={3}>
+          <Column span={3}>
+            <Error
+              text={this.state.error}
+              dismiss={() => this.setState({ error: '' })}
             />
-            Upper
-          </div>
-          <div>
+          </Column>
+        </Row>
+        <Row columns={3}>
+          <Column span={2}>Name</Column>
+          <Column>
             <input
-              type="radio"
-              id="lower"
-              name="transversePlane"
-              value="lower"
+              name="name"
+              type="text"
+              value={this.state.name}
+              onChange={this.onChange}
+              placeholder="Name"
+              required
             />
-            Lower
-          </div>
-        </div>
-        <div className={`${styles.label} ${styles.motionType}`}>
-          Kinetic Chain
-        </div>
-        <div>
-          <div>
+          </Column>
+        </Row>
+        <Row columns={3}>
+          <Column span={2}>Abbreviation</Column>
+          <Column>
             <input
-              type="radio"
-              id="closed"
-              name="kineticChain"
-              value="closed"
-              checked
+              name="abbreviation"
+              type="text"
+              value={this.state.abbreviation}
+              onChange={this.onChange}
+              placeholder="Abbreviation"
             />
-            Closed
-          </div>
-          <div>
-            <input type="radio" id="open" name="kineticChain" value="open" />
-            Open
-          </div>
-        </div>
-        <div className={`${styles.label} ${styles.motionType}`}>
-          Verticality
-        </div>
-        <div>
-          <div>
+          </Column>
+        </Row>
+        <Row columns={3}>
+          <Column />
+          <Column>Transverse Plane</Column>
+          <Column>
+            <Row columns={2}>
+              <Column>
+                <input
+                  type="radio"
+                  id="upper"
+                  name="transversePlane"
+                  value="upper"
+                  checked
+                />
+              </Column>
+              <Column>Upper</Column>
+            </Row>
+            <Row columns={2}>
+              <Column>
+                <input
+                  type="radio"
+                  id="lower"
+                  name="transversePlane"
+                  value="lower"
+                />
+              </Column>
+              <Column>Lower</Column>
+            </Row>
+          </Column>
+        </Row>
+        <Row columns={3}>
+          <Column />
+          <Column>Kinetic Chain</Column>
+          <Column>
+            <Row columns={2}>
+              <Column>
+                <input
+                  type="radio"
+                  id="closed"
+                  name="kineticChain"
+                  value="closed"
+                  checked
+                />
+              </Column>
+              <Column>Closed</Column>
+            </Row>
+            <Row columns={2}>
+              <Column>
+                <input
+                  type="radio"
+                  id="open"
+                  name="kineticChain"
+                  value="open"
+                />
+              </Column>
+              <Column>Open</Column>
+            </Row>
+          </Column>
+        </Row>
+        <Row columns={3}>
+          <Column>Motion Type</Column>
+          <Column>Verticality</Column>
+          <Column>
+            <Row columns={2}>
+              <Column>
+                <input
+                  type="radio"
+                  id="horizontal"
+                  name="verticality"
+                  value="horizontal"
+                  checked
+                />
+              </Column>
+              <Column>Horizontal</Column>
+            </Row>
+            <Row columns={2}>
+              <Column>
+                <input
+                  type="radio"
+                  id="vertical"
+                  name="verticality"
+                  value="vertical"
+                />
+              </Column>
+              <Column>Vertical</Column>
+            </Row>
+          </Column>
+        </Row>
+        <Row columns={3}>
+          <Column />
+          <Column>Frontal Plane</Column>
+          <Column>
+            <Row columns={2}>
+              <Column>
+                <input
+                  type="radio"
+                  id="push"
+                  name="frontalPlane"
+                  value="push"
+                  checked
+                />
+              </Column>
+              <Column>Push</Column>
+            </Row>
+            <Row columns={2}>
+              <Column>
+                <input
+                  type="radio"
+                  id="pull"
+                  name="frontalPlane"
+                  value="pull"
+                />
+              </Column>
+              <Column>Pull</Column>
+            </Row>
+          </Column>
+        </Row>
+        <Row columns={3}>
+          <Column />
+          <Column>Motion</Column>
+          <Column>
+            <Row columns={2}>
+              <Column>
+                <input
+                  type="radio"
+                  id="isometric"
+                  name="motion"
+                  value="isometric"
+                  checked
+                />
+              </Column>
+              <Column>Isometric</Column>
+            </Row>
+            <Row columns={2}>
+              <Column>
+                <input
+                  type="radio"
+                  id="isotonic"
+                  name="motion"
+                  value="isotonic"
+                />
+              </Column>
+              <Column>Isotonic</Column>
+            </Row>
+          </Column>
+        </Row>
+        <Row columns={3}>
+          <Column span={2}>Potential Stages</Column>
+          <Column>
+            <Select
+              options={this.state.potentialCategoryOptions}
+              name="potentialCategories"
+              onChange={this.onSelectChange}
+              isMulti
+            />
+          </Column>
+        </Row>
+        <Row columns={3}>
+          <Column span={2}>Requirements</Column>
+          <Column>
+            <Select
+              options={this.state.requirementOptions}
+              name="requirements"
+              onChange={this.onSelectChange}
+              isMulti
+            />
+          </Column>
+        </Row>
+        <Row columns={3}>
+          <Column span={2}>Description</Column>
+          <Column>
             <input
-              type="radio"
-              id="horizontal"
-              name="verticality"
-              value="horizontal"
-              checked
+              name="description"
+              type="text"
+              value={this.state.description}
+              onChange={this.onChange}
+              placeholder="Description"
             />
-            Horizontal
-          </div>
-          <div>
-            <input
-              type="radio"
-              id="vertical"
-              name="verticality"
-              value="vertical"
-            />
-            Vertical
-          </div>
-        </div>
-        <div className={`${styles.label} ${styles.motionType}`}>
-          Frontal Plane
-        </div>
-        <div>
-          <div>
-            <input
-              type="radio"
-              id="push"
-              name="frontalPlane"
-              value="push"
-              checked
-            />
-            Push
-          </div>
-          <div>
-            <input type="radio" id="pull" name="frontalPlane" value="pull" />
-            Pull
-          </div>
-        </div>
-        <div className={`${styles.label} ${styles.motionType}`}>Motion</div>
-        <div>
-          <div>
-            <input
-              type="radio"
-              id="isometric"
-              name="motion"
-              value="isometric"
-              checked
-            />
-            Isometric
-          </div>
-          <div>
-            <input type="radio" id="isotonic" name="motion" value="isotonic" />
-            Isotonic
-          </div>
-        </div>
-        <div className={styles.label}>Potential Categories</div>
-        <Select
-          options={this.state.potentialCategoryOptions}
-          name="potentialCategories"
-          onChange={this.onSelectChange}
-          isMulti
-        />
-        <div className={styles.label}>Requirements</div>
-        <Select
-          options={this.state.requirementOptions}
-          name="requirements"
-          onChange={this.onSelectChange}
-          isMulti
-        />
-        <div className={styles.label}>Description</div>
-        <input
-          name="description"
-          type="text"
-          value={this.state.description}
-          onChange={this.onChange}
-          placeholder="Description"
-        />
-        <input
-          type="submit"
-          className={`primaryButton button ${styles.fullWidth}`}
-          value="Submit"
-        />
-        <a
-          className={`errorButton secondaryButton button ${styles.fullWidth}`}
-          href="/workoutTracker/exercises"
-        >
-          Cancel
-        </a>
-      </form>
+          </Column>
+        </Row>
+        <Row columns={3}>
+          <Column span={3}>
+            <Button onClick={this.onSubmit}>Submit</Button>
+          </Column>
+        </Row>
+        <Row columns={3}>
+          <Column span={3}>
+            <Link to="/workoutTracker/exercises">
+              <ErrorButton>Cancel</ErrorButton>
+            </Link>
+          </Column>
+        </Row>
+      </div>
     );
   }
 }

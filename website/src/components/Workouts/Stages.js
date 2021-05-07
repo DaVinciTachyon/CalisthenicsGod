@@ -1,6 +1,6 @@
 import React from 'react';
-import styles from '../../style/Stages.module.css';
 import StageAdder from './StageAdder';
+import { Row, Column } from '../../style/table';
 
 export default class Stages extends React.Component {
   constructor() {
@@ -35,30 +35,30 @@ export default class Stages extends React.Component {
     for (let i = 0; i < this.state.stages.length; i++) {
       const stage = this.state.stages[i];
       stages.push(
-        <div>
-          <div key={stage._id} className={`${styles.row}`}>
-            <div className={`${styles.column} ${styles.name}`}>
-              {stage.name}
-            </div>
-            <div className={`${styles.column} ${styles.description}`}>
-              {stage.description}
-            </div>
-            <div className={`${styles.column} ${styles.submit}`}></div>
-          </div>
-          <StageAdder index={i + 1} />
+        <div key={stage._id}>
+          <Row columns={2}>
+            <Column>{stage.name}</Column>
+            <Column>{stage.description}</Column>
+          </Row>
+          <Row columns={2}>
+            <Column span={2}>
+              <StageAdder index={i + 1} />
+            </Column>
+          </Row>
         </div>
       );
     }
     return (
-      <div className={`${styles.stages}`}>
-        <div className={`${styles.row} ${styles.title}`}>
-          <div className={`${styles.column} ${styles.name}`}>Name</div>
-          <div className={`${styles.column} ${styles.description}`}>
-            Description
-          </div>
-          <div className={`${styles.column} ${styles.submit}`}></div>
-        </div>
-        <StageAdder index={0} />
+      <div>
+        <Row columns={2} isTitle>
+          <Column>Name</Column>
+          <Column>Description</Column>
+        </Row>
+        <Row columns={2}>
+          <Column span={2}>
+            <StageAdder index={0} />
+          </Column>
+        </Row>
         {stages}
       </div>
     );

@@ -1,6 +1,6 @@
 import React from 'react';
 import IngredientRow from './IngredientRow';
-import '../../style/Nutrient.css';
+import { Row, Column, Title, Subtitle } from '../../style/table';
 
 export default class IngredientList extends React.Component {
   constructor() {
@@ -161,7 +161,6 @@ export default class IngredientList extends React.Component {
       ingredients.push(
         <IngredientRow
           key={this.state.ingredients[i]._id}
-          colours={this.props.colours}
           isUnavailable={this.props.isUnavailable}
           ingredient={this.state.ingredients[i]}
           update={this.update}
@@ -174,43 +173,40 @@ export default class IngredientList extends React.Component {
     }
     if (ingredients.length === 0 && this.props.isUnavailable) return <div />;
     return (
-      <div className="ingredients">
-        <div className="row title bigTitle">
-          {!this.props.isUnavailable && (
-            <div className="fullWidth">Available</div>
-          )}
-          {this.props.isUnavailable && (
-            <div className="fullWidth">Unavailable</div>
-          )}
-        </div>
-        <div className="row">
-          <div className="name-column column"></div>
-          <div className="calories-column column">
-            <div className="title">Calories</div>
-            <div className="title subtitle">kcal</div>
-          </div>
-          <div className="fat-column column">
-            <div className="title">Fat</div>
-            <div className="title subtitle">grams</div>
-          </div>
-          <div className="carbohydrate-column column">
-            <div className="title">Carbs</div>
-            <div className="title subtitle">grams</div>
-          </div>
-          <div className="protein-column column">
-            <div className="title">Protein</div>
-            <div className="title subtitle">grams</div>
-          </div>
-          <div className="ethanol-column column">
-            <div className="title">Ethanol</div>
-            <div className="title subtitle">grams</div>
-          </div>
-          <div className="status-column column"></div>
-        </div>
+      <div>
+        <Row columns={7}>
+          <Column span={7}>
+            {!this.props.isUnavailable && <Title>Available</Title>}
+            {this.props.isUnavailable && <Title>Unavailable</Title>}
+          </Column>
+        </Row>
+        <Row columns={7} isTitle>
+          <Column></Column>
+          <Column>
+            <div>Calories</div>
+            <Subtitle>kcal</Subtitle>
+          </Column>
+          <Column>
+            <div>Fat</div>
+            <Subtitle>grams</Subtitle>
+          </Column>
+          <Column>
+            <div>Carbs</div>
+            <Subtitle>grams</Subtitle>
+          </Column>
+          <Column>
+            <div>Protein</div>
+            <Subtitle>grams</Subtitle>
+          </Column>
+          <Column>
+            <div>Ethanol</div>
+            <Subtitle>grams</Subtitle>
+          </Column>
+          <Column></Column>
+        </Row>
         {!this.props.isUnavailable && (
           <IngredientRow
             key={'adder'}
-            colours={this.props.colours}
             update={this.update}
             changeFocus={this.changeFocus}
             focus={this.state.focus}

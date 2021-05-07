@@ -1,7 +1,7 @@
 import React from 'react';
-import stageStyles from '../../style/Stages.module.css';
-import styles from '../../style/StageAdder.module.css';
-import Error from '../Error';
+import { Error } from '../Notification';
+import { Row, Column } from '../../style/table';
+import { Button } from '../../style/buttons';
 
 export default class StageAdder extends React.Component {
   constructor() {
@@ -48,39 +48,44 @@ export default class StageAdder extends React.Component {
   render() {
     if (!this.state.isAdding)
       return (
-        <div className={`${stageStyles.row}`}>
-          <div
-            className={`thinButton button ${stageStyles.fullWidth}`}
-            onClick={() => this.setState({ isAdding: true })}
-          >
-            +
-          </div>
-        </div>
+        <Row columns={3}>
+          <Column span={3}>
+            <Button onClick={() => this.setState({ isAdding: true })}>+</Button>
+          </Column>
+        </Row>
       );
     else
       return (
         <>
-          <Error
-            error={this.state.error}
-            dismissError={() => this.setState({ error: '' })}
-          />
-          <form className={`${stageStyles.row}`} onSubmit={this.onSubmit}>
-            <input
-              name="name"
-              className={styles.name}
-              type="text"
-              value={this.state.name}
-              onChange={this.onChange}
-            />
-            <input
-              name="description"
-              className={styles.description}
-              type="text"
-              value={this.state.description}
-              onChange={this.onChange}
-            />
-            <input type="submit" className="primaryButton button" />
-          </form>
+          <Row columns={3}>
+            <Column span={3}>
+              <Error
+                text={this.state.error}
+                dismiss={() => this.setState({ error: '' })}
+              />
+            </Column>
+          </Row>
+          <Row columns={3}>
+            <Column>
+              <input
+                name="name"
+                type="text"
+                value={this.state.name}
+                onChange={this.onChange}
+              />
+            </Column>
+            <Column>
+              <input
+                name="description"
+                type="text"
+                value={this.state.description}
+                onChange={this.onChange}
+              />
+            </Column>
+            <Column>
+              <Button onClick={this.onSubmit}>Submit</Button>
+            </Column>
+          </Row>
         </>
       );
   }
