@@ -2,6 +2,7 @@ import React from 'react';
 import MealEditor from './MealEditor';
 import { Row, Column } from '../../style/table';
 import { Button, ErrorButton } from '../../style/buttons';
+import { Text } from '../../style/inputs';
 
 export default class Meals extends React.Component {
   constructor() {
@@ -108,13 +109,11 @@ export default class Meals extends React.Component {
           <Row columns={2}>
             <Column>
               <label for="name">Meal Name</label>
-              <input
+              <Text
                 name="name"
-                type="text"
                 value={this.state.name}
                 placeholder="Meal Name"
                 onChange={this.nameChange.bind(this)}
-                className="input"
                 required
               />
             </Column>

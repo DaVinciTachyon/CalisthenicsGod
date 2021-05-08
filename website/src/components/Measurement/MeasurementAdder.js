@@ -2,6 +2,7 @@ import React from 'react';
 import { Row, Column } from '../../style/table';
 import { Button } from '../../style/buttons';
 import { Error } from '../Notification';
+import { Number, Weight } from '../../style/inputs';
 
 export default class MeasurementAdder extends React.Component {
   constructor() {
@@ -149,154 +150,130 @@ export default class MeasurementAdder extends React.Component {
         <Row columns={2}>
           <Column>Weight</Column>
           <Column>
-            <input
+            <Weight
               name="weight"
-              type="number"
-              min="0"
-              step="0.1"
               value={this.state.weight}
               onChange={this.weightChange.bind(this)}
-              className="input"
             />
           </Column>
         </Row>
         <Row columns={2}>
           <Column>Height</Column>
           <Column>
-            <input
+            <Number
               name="height"
-              type="number"
               min="0"
               step="0.1"
               value={this.state.height}
               onChange={this.heightChange.bind(this)}
-              className="input"
             />
           </Column>
         </Row>
         <Row columns={2}>
           <Column>Waist</Column>
           <Column>
-            <input
+            <Number
               name="waist"
-              type="number"
               min="0"
               step="0.1"
               value={this.state.waist}
               onChange={this.waistChange.bind(this)}
-              className="input"
             />
           </Column>
         </Row>
         <Row columns={2}>
           <Column>Hips</Column>
           <Column>
-            <input
+            <Number
               name="hips"
-              type="number"
               min="0"
               step="0.1"
               value={this.state.hips}
               onChange={this.hipsChange.bind(this)}
-              className="input"
             />
           </Column>
         </Row>
         <Row columns={2}>
           <Column>Right Bicep</Column>
           <Column>
-            <input
+            <Number
               name="rightBicep"
-              type="number"
               min="0"
               step="0.1"
               value={this.state.rightBicep}
               nge={this.rightBicepChange.bind(this)}
-              className="input"
             />
           </Column>
         </Row>
         <Row columns={2}>
           <Column>Left Bicep</Column>
           <Column>
-            <input
+            <Number
               name="leftBicep"
-              type="number"
               min="0"
               step="0.1"
               value={this.state.leftBicep}
               onChange={this.leftBicepChange.bind(this)}
-              className="input"
             />
           </Column>
         </Row>
         <Row columns={2}>
           <Column>Right Forearm</Column>
           <Column>
-            <input
+            <Number
               name="rightForearm"
-              type="number"
               min="0"
               step="0.1"
               value={this.state.rightForearm}
               onChange={this.rightForearmChange.bind(this)}
-              className="input"
             />
           </Column>
         </Row>
         <Row columns={2}>
           <Column>Left Forearm</Column>
           <Column>
-            <input
+            <Number
               name="leftForearm"
-              type="number"
               min="0"
               step="0.1"
               value={this.state.leftForearm}
               onChange={this.leftForearmChange.bind(this)}
-              className="input"
             />
           </Column>
         </Row>
         <Row columns={2}>
           <Column>Shoulders</Column>
           <Column>
-            <input
+            <Number
               name="shoulders"
-              type="number"
               min="0"
               step="0.1"
               value={this.state.shoulders}
               onChange={this.shouldersChange.bind(this)}
-              className="input"
             />
           </Column>
         </Row>
         <Row columns={2}>
           <Column>Chest</Column>
           <Column>
-            <input
+            <Number
               name="chest"
-              type="number"
               min="0"
               step="0.1"
               value={this.state.chest}
               onChange={this.chestChange.bind(this)}
-              className="input"
             />
           </Column>
         </Row>
         <Row columns={2}>
           <Column>Neck</Column>
           <Column>
-            <input
+            <Number
               name="neck"
-              type="number"
               min="0"
               step="0.1"
               value={this.state.neck}
               onChange={this.neckChange.bind(this)}
-              className="input"
             />
           </Column>
         </Row>

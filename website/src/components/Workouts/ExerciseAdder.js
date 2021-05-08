@@ -4,6 +4,7 @@ import { Error } from '../Notification';
 import { Row, Column } from '../../style/table';
 import { Button, ErrorButton } from '../../style/buttons';
 import { Link } from 'react-router-dom';
+import { Text, Radio } from '../../style/inputs';
 
 export default class Exercises extends React.Component {
   constructor() {
@@ -142,9 +143,8 @@ export default class Exercises extends React.Component {
         <Row columns={3}>
           <Column span={2}>Name</Column>
           <Column>
-            <input
+            <Text
               name="name"
-              type="text"
               value={this.state.name}
               onChange={this.onChange}
               placeholder="Name"
@@ -155,9 +155,8 @@ export default class Exercises extends React.Component {
         <Row columns={3}>
           <Column span={2}>Abbreviation</Column>
           <Column>
-            <input
+            <Text
               name="abbreviation"
-              type="text"
               value={this.state.abbreviation}
               onChange={this.onChange}
               placeholder="Abbreviation"
@@ -170,8 +169,7 @@ export default class Exercises extends React.Component {
           <Column>
             <Row columns={2}>
               <Column>
-                <input
-                  type="radio"
+                <Radio
                   id="upper"
                   name="transversePlane"
                   value="upper"
@@ -182,12 +180,7 @@ export default class Exercises extends React.Component {
             </Row>
             <Row columns={2}>
               <Column>
-                <input
-                  type="radio"
-                  id="lower"
-                  name="transversePlane"
-                  value="lower"
-                />
+                <Radio id="lower" name="transversePlane" value="lower" />
               </Column>
               <Column>Lower</Column>
             </Row>
@@ -199,24 +192,13 @@ export default class Exercises extends React.Component {
           <Column>
             <Row columns={2}>
               <Column>
-                <input
-                  type="radio"
-                  id="closed"
-                  name="kineticChain"
-                  value="closed"
-                  checked
-                />
+                <Radio id="closed" name="kineticChain" value="closed" checked />
               </Column>
               <Column>Closed</Column>
             </Row>
             <Row columns={2}>
               <Column>
-                <input
-                  type="radio"
-                  id="open"
-                  name="kineticChain"
-                  value="open"
-                />
+                <Radio id="open" name="kineticChain" value="open" />
               </Column>
               <Column>Open</Column>
             </Row>
@@ -228,8 +210,7 @@ export default class Exercises extends React.Component {
           <Column>
             <Row columns={2}>
               <Column>
-                <input
-                  type="radio"
+                <Radio
                   id="horizontal"
                   name="verticality"
                   value="horizontal"
@@ -240,12 +221,7 @@ export default class Exercises extends React.Component {
             </Row>
             <Row columns={2}>
               <Column>
-                <input
-                  type="radio"
-                  id="vertical"
-                  name="verticality"
-                  value="vertical"
-                />
+                <Radio id="vertical" name="verticality" value="vertical" />
               </Column>
               <Column>Vertical</Column>
             </Row>
@@ -257,24 +233,13 @@ export default class Exercises extends React.Component {
           <Column>
             <Row columns={2}>
               <Column>
-                <input
-                  type="radio"
-                  id="push"
-                  name="frontalPlane"
-                  value="push"
-                  checked
-                />
+                <Radio id="push" name="frontalPlane" value="push" checked />
               </Column>
               <Column>Push</Column>
             </Row>
             <Row columns={2}>
               <Column>
-                <input
-                  type="radio"
-                  id="pull"
-                  name="frontalPlane"
-                  value="pull"
-                />
+                <Radio id="pull" name="frontalPlane" value="pull" />
               </Column>
               <Column>Pull</Column>
             </Row>
@@ -286,24 +251,13 @@ export default class Exercises extends React.Component {
           <Column>
             <Row columns={2}>
               <Column>
-                <input
-                  type="radio"
-                  id="isometric"
-                  name="motion"
-                  value="isometric"
-                  checked
-                />
+                <Radio id="isometric" name="motion" value="isometric" checked />
               </Column>
               <Column>Isometric</Column>
             </Row>
             <Row columns={2}>
               <Column>
-                <input
-                  type="radio"
-                  id="isotonic"
-                  name="motion"
-                  value="isotonic"
-                />
+                <Radio id="isotonic" name="motion" value="isotonic" />
               </Column>
               <Column>Isotonic</Column>
             </Row>
@@ -334,9 +288,8 @@ export default class Exercises extends React.Component {
         <Row columns={3}>
           <Column span={2}>Description</Column>
           <Column>
-            <input
+            <Text
               name="description"
-              type="text"
               value={this.state.description}
               onChange={this.onChange}
               placeholder="Description"

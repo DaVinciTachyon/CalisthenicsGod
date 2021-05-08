@@ -4,6 +4,7 @@ import { Row, Column } from '../../style/table';
 import Card from '../../style/card';
 import { Link } from 'react-router-dom';
 import { Button, SecondaryButton } from '../../style/buttons';
+import { Text, Password } from '../../style/inputs';
 
 export default class Login extends React.Component {
   constructor() {
@@ -57,9 +58,8 @@ export default class Login extends React.Component {
         <Row columns={2}>
           <Column>Email</Column>
           <Column>
-            <input
+            <Text
               name="email"
-              type="text"
               value={this.state.email}
               onChange={this.onChange}
               placeholder="Email"
@@ -69,9 +69,8 @@ export default class Login extends React.Component {
         <Row columns={2}>
           <Column>Password</Column>
           <Column>
-            <input
+            <Password
               name="password"
-              type="password"
               value={this.state.password}
               onChange={this.onChange}
               placeholder="Password"

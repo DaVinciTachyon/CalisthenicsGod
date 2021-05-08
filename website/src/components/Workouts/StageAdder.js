@@ -2,6 +2,7 @@ import React from 'react';
 import { Error } from '../Notification';
 import { Row, Column } from '../../style/table';
 import { Button } from '../../style/buttons';
+import { Text } from '../../style/inputs';
 
 export default class StageAdder extends React.Component {
   constructor() {
@@ -68,17 +69,15 @@ export default class StageAdder extends React.Component {
           </Row>
           <Row columns={3}>
             <Column>
-              <input
+              <Text
                 name="name"
-                type="text"
                 value={this.state.name}
                 onChange={this.onChange}
               />
             </Column>
             <Column>
-              <input
+              <Text
                 name="description"
-                type="text"
                 value={this.state.description}
                 onChange={this.onChange}
               />

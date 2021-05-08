@@ -1,6 +1,7 @@
 import React from 'react';
 import { Row, Column } from '../../style/table';
 import { Button } from '../../style/buttons';
+import { Number, Calories, Text, Date } from '../../style/inputs';
 
 export default class UserProfile extends React.Component {
   constructor() {
@@ -121,22 +122,15 @@ export default class UserProfile extends React.Component {
         <Row columns={2}>
           <Column>First Name</Column>
           <Column>
-            <input
-              type="text"
-              value={this.state.name.first}
-              className="readOnly"
-              readOnly
-            />
+            <Text value={this.state.name.first} readOnly />
           </Column>
         </Row>
         <Row columns={2}>
           <Column>Middle Name</Column>
           <Column>
-            <input
-              type="text"
+            <Text
               placeholder="Middle Name"
               value={this.state.name.middle}
-              className="readOnly"
               readOnly
             />
           </Column>
@@ -144,23 +138,13 @@ export default class UserProfile extends React.Component {
         <Row columns={2}>
           <Column>Last Name</Column>
           <Column>
-            <input
-              type="text"
-              value={this.state.name.last}
-              className="readOnly"
-              readOnly
-            />
+            <Text value={this.state.name.last} readOnly />
           </Column>
         </Row>
         <Row columns={2}>
           <Column>Email</Column>
           <Column>
-            <input
-              type="text"
-              value={this.state.email}
-              className="readOnly"
-              readOnly
-            />
+            <Text value={this.state.email} readOnly />
           </Column>
         </Row>
         <Row columns={2}>
@@ -181,11 +165,8 @@ export default class UserProfile extends React.Component {
               </option>
             </select>
             {this.state.calorieOffset !== 0 && (
-              <input
-                type="number"
+              <Calories
                 value={this.state.calorieOffset}
-                min="0"
-                step="1"
                 onChange={this.calorieOffsetChange}
               />
             )}
@@ -194,38 +175,24 @@ export default class UserProfile extends React.Component {
         <Row columns={2}>
           <Column>Maintenance Calories</Column>
           <Column>
-            <input
-              type="number"
-              min="0"
-              value={this.state.maintenanceCalories}
-              className="readOnly"
-              readOnly
-            />
+            <Calories value={this.state.maintenanceCalories} readOnly />
             <div className="unit-col">kcal</div>
           </Column>
         </Row>
         <Row columns={2}>
           <Column>Calorie Offset</Column>
           <Column>
-            <input
-              type="number"
-              step="1"
-              value={this.state.currentOffset}
-              className="readOnly"
-              readOnly
-            />
+            <Calories value={this.state.currentOffset} readOnly />
             <div className="unit-col">kcal</div>
           </Column>
         </Row>
         <Row columns={2}>
           <Column>Protein Amount</Column>
           <Column>
-            <input
-              type="number"
+            <Number
               min="0"
               step="0.05"
               value={this.state.proteinAmount}
-              className="readOnly"
               readOnly
             />
             <div className="unit-col">g/kg</div>
@@ -234,13 +201,7 @@ export default class UserProfile extends React.Component {
         <Row columns={2}>
           <Column>Fat Partition</Column>
           <Column>
-            <input
-              type="number"
-              min="0"
-              value={this.state.fatPartition * 100}
-              className="readOnly"
-              readOnly
-            />
+            <Number min="0" value={this.state.fatPartition * 100} readOnly />
             <div className="unit-col">%</div>
           </Column>
         </Row>
@@ -260,23 +221,13 @@ export default class UserProfile extends React.Component {
         <Row columns={2}>
           <Column>Birth Date</Column>
           <Column>
-            <input
-              type="date"
-              value={this.state.birthDate}
-              className="readOnly"
-              readOnly
-            />
+            <Date value={this.state.birthDate} readOnly />
           </Column>
         </Row>
         <Row columns={2}>
           <Column>Date Joined</Column>
           <Column>
-            <input
-              type="date"
-              value={this.state.dateJoined}
-              className="readOnly"
-              readOnly
-            />
+            <Date value={this.state.dateJoined} readOnly />
           </Column>
         </Row>
         <Row columns={2}>

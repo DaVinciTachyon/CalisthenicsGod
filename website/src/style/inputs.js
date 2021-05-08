@@ -17,6 +17,18 @@ const Text = styled(Input).attrs({
   type: 'text',
 })``;
 
+const Password = styled(Input).attrs({
+  type: 'password',
+})``;
+
+const Date = styled(Input).attrs({
+  type: 'date',
+})``;
+
+const Radio = styled(Input).attrs({
+  type: 'radio',
+})``;
+
 const Number = styled(Input).attrs({
   type: 'number',
 })`
@@ -32,6 +44,11 @@ const Number = styled(Input).attrs({
 const Weight = styled(Number).attrs({
   min: 0,
   step: 0.1,
+})``;
+
+const Calories = styled(Number).attrs({
+  min: 0,
+  step: 1,
 })``;
 
 const Fat = styled(Weight)`
@@ -54,4 +71,16 @@ const Ethanol = styled(Weight)`
   border-color: ${Nutrients.ethanol.dark};
 `;
 
-export { Text, Number, Weight, Fat, Carbohydrate, Protein, Ethanol };
+export {
+  Text,
+  Password,
+  Radio,
+  Date,
+  Number,
+  Calories,
+  Weight,
+  Fat,
+  Carbohydrate,
+  Protein,
+  Ethanol,
+};

@@ -4,6 +4,7 @@ import { Row, Column } from '../../style/table';
 import { Link } from 'react-router-dom';
 import Card from '../../style/card';
 import { Button, SecondaryButton } from '../../style/buttons';
+import { Weight, Text, Password, Date as DateInput } from '../../style/inputs';
 
 export default class Register extends React.Component {
   constructor() {
@@ -79,9 +80,8 @@ export default class Register extends React.Component {
         <Row columns={2}>
           <Column>First Name</Column>
           <Column>
-            <input
+            <Text
               name="firstname"
-              type="text"
               value={this.state.firstname}
               onChange={this.onChange}
               placeholder="First Name"
@@ -92,9 +92,8 @@ export default class Register extends React.Component {
         <Row columns={2}>
           <Column>Middle Name</Column>
           <Column>
-            <input
+            <Text
               name="middlename"
-              type="text"
               value={this.state.middlename}
               onChange={this.onChange}
               placeholder="Middle Name"
@@ -104,9 +103,8 @@ export default class Register extends React.Component {
         <Row columns={2}>
           <Column>Last Name</Column>
           <Column>
-            <input
+            <Text
               name="lastname"
-              type="text"
               value={this.state.lastname}
               onChange={this.onChange}
               placeholder="Last Name"
@@ -117,9 +115,8 @@ export default class Register extends React.Component {
         <Row columns={2}>
           <Column>Email</Column>
           <Column>
-            <input
+            <Text
               name="email"
-              type="text"
               value={this.state.email}
               onChange={this.onChange}
               placeholder="Email"
@@ -130,9 +127,8 @@ export default class Register extends React.Component {
         <Row columns={2}>
           <Column>Password</Column>
           <Column>
-            <input
+            <Password
               name="password"
-              type="password"
               value={this.state.password}
               onChange={this.onChange}
               placeholder="Password"
@@ -142,14 +138,10 @@ export default class Register extends React.Component {
         <Row columns={2}>
           <Column>Weight</Column>
           <Column>
-            <input
+            <Weight
               name="weight"
-              type="number"
-              step="0.1"
-              min="0"
               value={this.state.weight}
               onChange={this.onChange}
-              placeholder="Weight"
               required
             />
           </Column>
@@ -168,9 +160,8 @@ export default class Register extends React.Component {
         <Row columns={2}>
           <Column>Birth Date</Column>
           <Column>
-            <input
+            <DateInput
               name="birthDate"
-              type="date"
               max={new Date().toISOString().split('T')[0]}
               placeholder="Date of Birth"
               value={this.state.birthDate}
