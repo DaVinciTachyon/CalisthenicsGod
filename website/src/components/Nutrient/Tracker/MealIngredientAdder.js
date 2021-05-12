@@ -51,23 +51,23 @@ export default class MealIngredientAdder extends React.Component {
 
   onSubmit = async () => {
     const id = this.state.id || (await this.addIngredient());
-    const response = await fetch(
-      `${process.env.REACT_APP_API_URL}/nutrition/meals/`,
-      {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-          'auth-token': localStorage.getItem('authToken'),
+    let url = `${process.env.REACT_APP_API_URL}/nutrition/meals/`;
+    if (this.props.isPreset)
+      url = `${process.env.REACT_APP_API_URL}/nutrition/meals/preset/addIngredient/`;
+    const response = await fetch(url, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+        'auth-token': localStorage.getItem('authToken'),
+      },
+      body: JSON.stringify({
+        _id: this.props.id,
+        ingredient: {
+          _id: id,
+          weight: this.state.weight,
         },
-        body: JSON.stringify({
-          mealId: this.props.id,
-          ingredient: {
-            ingredientId: id,
-            weight: this.state.weight,
-          },
-        }),
-      }
-    );
+      }),
+    });
     if (response.status === 200) this.props.onSubmit();
     else {
       const data = await response.json();

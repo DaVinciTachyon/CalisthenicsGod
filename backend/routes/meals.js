@@ -110,13 +110,13 @@ router.post('/', async (req, res) => {
 
   const ogIngredient = await Ingredients.findOne({
     userId: req.user._id,
-    _id: req.body.ingredient.ingredientId,
+    _id: req.body.ingredient._id,
   });
   if (!ogIngredient)
     return res.status(400).send({ error: 'Invalid Ingredient ID' });
 
   const ingredient = {
-    ingredientId: req.body.ingredient.ingredientId,
+    ingredientId: req.body.ingredient._id,
     weight: req.body.ingredient.weight,
     fat: ogIngredient.fat,
     carbohydrate: ogIngredient.carbohydrate,
@@ -125,14 +125,14 @@ router.post('/', async (req, res) => {
   };
 
   if (
-    req.body.mealId &&
+    req.body._id &&
     nutrients.history !== undefined &&
     nutrients.history.length > 0 &&
     nutrients.history[0].meals !== undefined &&
     nutrients.history[0].meals.length > 0
   ) {
     const meal = nutrients.history[0].meals.findIndex(
-      (info) => info._id == req.body.mealId
+      (info) => info._id == req.body._id
     );
     if (meal === -1)
       return res.status(400).send({ error: 'Incorrect Meal ID' });
@@ -160,9 +160,7 @@ router.post('/', async (req, res) => {
   try {
     await nutrients.save();
     res.status(200).send({
-      mealId: req.body.mealId
-        ? req.body.mealId
-        : nutrients.history[0].meals[0]._id,
+      _id: req.body._id ? req.body._id : nutrients.history[0].meals[0]._id,
     });
   } catch (err) {
     res.status(400).send({ error: err });

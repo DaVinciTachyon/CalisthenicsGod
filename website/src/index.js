@@ -14,7 +14,7 @@ import WorkoutAdder from './components/Workouts/WorkoutAdder';
 import Exercises from './components/Workouts/Exercises';
 import ExerciseAdder from './components/Workouts/ExerciseAdder';
 import Ingredients from './components/Nutrient/Ingredients/Ingredients';
-import Meals from './components/Nutrient/Meals';
+import Meals from './components/Nutrient/Meals/Meals';
 import Stages from './components/Workouts/Stages';
 import AuthenticatedRoute from './components/AuthenticatedRoute';
 import NonAuthenticatedRoute from './components/NonAuthenticatedRoute';
