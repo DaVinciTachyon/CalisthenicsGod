@@ -23,7 +23,7 @@ router.post('/ingredients', async (req, res) => {
 
   let ingredients = [];
   for (let i = 0; i < meal.ingredients.length; i++) {
-    const ingredient = await Ingredients.findById(meal.ingredients[i]._id);
+    const ingredient = await Ingredients.findById(meal.ingredients[i].id);
     ingredients.push({
       _id: ingredient._id,
       name: ingredient.name,
@@ -105,7 +105,7 @@ router.post('/removeIngredient', async (req, res) => {
   if (!meal) return res.status(400).send({ error: 'Invalid Meal ID' });
 
   const index = meal.ingredients.findIndex(
-    (val) => val._id == req.body.ingredientId
+    (val) => val.id == req.body.ingredientId
   );
   if (index === -1)
     return res.status(400).send({ error: 'Invalid Ingredient ID' });
@@ -133,7 +133,7 @@ router.post('/editIngredient', async (req, res) => {
   if (!meal) return res.status(400).send({ error: 'Invalid Meal ID' });
 
   const index = meal.ingredients.findIndex(
-    (val) => val._id == req.body.ingredientId
+    (val) => val.id == req.body.ingredientId
   );
   if (index === -1)
     return res.status(400).send({ error: 'Invalid Ingredient ID' });

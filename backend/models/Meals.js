@@ -9,7 +9,7 @@ module.exports = mongoose.model(
     },
     ingredients: [
       {
-        _id: {
+        id: {
           type: mongoose.Schema.Types.ObjectId,
           ref: 'Ingredients',
           required: true,
