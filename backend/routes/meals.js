@@ -110,13 +110,13 @@ router.post('/', async (req, res) => {
 
   const ogIngredient = await Ingredients.findOne({
     userId: req.user._id,
-    _id: req.body.ingredient._id,
+    _id: req.body.ingredient.id,
   });
   if (!ogIngredient)
     return res.status(400).send({ error: 'Invalid Ingredient ID' });
 
   const ingredient = {
-    ingredientId: req.body.ingredient._id,
+    ingredientId: req.body.ingredient.id,
     weight: req.body.ingredient.weight,
     fat: ogIngredient.fat,
     carbohydrate: ogIngredient.carbohydrate,
