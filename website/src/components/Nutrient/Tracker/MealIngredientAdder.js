@@ -63,7 +63,7 @@ export default class MealIngredientAdder extends React.Component {
       body: JSON.stringify({
         _id: this.props.id,
         ingredient: {
-          _id: id,
+          id: id,
           weight: this.state.weight,
         },
       }),
