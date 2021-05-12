@@ -6,14 +6,6 @@ const Meals = require('../models/Meals');
 const nutrientValidation = require('../validation/nutrition');
 const presetMealsRoute = require('./presetMeals');
 
-const macronutrientDensities = {
-  //FIXME in db?
-  fat: 9,
-  carbohydrate: 4,
-  protein: 4,
-  ethanol: 7,
-};
-
 /**
  * Find if today's date
  * @param {Date} date
@@ -90,11 +82,13 @@ router.get('/today', async (req, res) => {
           _id: nutrients.history[0].meals[i].ingredients[j]._id,
           name: ingredient.name,
           weight: nutrients.history[0].meals[i].ingredients[j].weight,
-          fat: nutrients.history[0].meals[i].ingredients[j].fat,
-          carbohydrate:
-            nutrients.history[0].meals[i].ingredients[j].carbohydrate,
-          protein: nutrients.history[0].meals[i].ingredients[j].protein,
-          ethanol: nutrients.history[0].meals[i].ingredients[j].ethanol,
+          macronutrients: {
+            fat: nutrients.history[0].meals[i].ingredients[j].fat,
+            carbohydrate:
+              nutrients.history[0].meals[i].ingredients[j].carbohydrate,
+            protein: nutrients.history[0].meals[i].ingredients[j].protein,
+            ethanol: nutrients.history[0].meals[i].ingredients[j].ethanol,
+          },
         });
       }
       meals.push(meal);

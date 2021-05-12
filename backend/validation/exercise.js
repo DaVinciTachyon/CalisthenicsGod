@@ -4,7 +4,7 @@ module.exports = {
   exercise: (data) =>
     Joi.object({
       name: Joi.string().required(),
-      abbreviation: Joi.string(),
+      abbreviation: Joi.string().allow(''),
       motionType: {
         transversePlane: Joi.string().valid('upper', 'lower'),
         verticality: Joi.string().valid('horizontal', 'vertical'),
@@ -14,6 +14,6 @@ module.exports = {
       },
       potentialCategories: Joi.array().items(Joi.string()),
       requirements: Joi.array().items(Joi.string()),
-      description: Joi.string(),
+      description: Joi.string().allow(''),
     }).validate(data),
 };

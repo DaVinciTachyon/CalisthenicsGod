@@ -46,7 +46,7 @@ router.get('/names', async (req, res) => {
   const meals = await Meals.find({ userId: req.user._id });
 
   res.send({
-    names: meals.map((val) => {
+    meals: meals.map((val) => {
       return { _id: val._id, name: val.name };
     }),
   });

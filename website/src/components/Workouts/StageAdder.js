@@ -1,5 +1,5 @@
 import React from 'react';
-import { Error } from '../Notification';
+import { Error } from '../../style/notification';
 import { Row, Column } from '../../style/table';
 import { Button } from '../../style/buttons';
 import { Text } from '../../style/inputs';

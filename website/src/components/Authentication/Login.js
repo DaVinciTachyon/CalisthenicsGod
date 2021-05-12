@@ -1,5 +1,5 @@
 import React from 'react';
-import { Error } from '../Notification';
+import { Error } from '../../style/notification';
 import { Row, Column } from '../../style/table';
 import Card from '../../style/card';
 import { Link } from 'react-router-dom';

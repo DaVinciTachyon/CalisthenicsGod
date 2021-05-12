@@ -7,10 +7,16 @@ module.exports = mongoose.model(
       type: String,
       required: true,
       unique: true,
+      trim: true,
     },
     abbreviation: {
       type: String,
-      unique: true,
+      trim: true,
+      index: {
+        partialFilterExpression: {
+          abbreviation: { $type: 'string' },
+        },
+      },
     },
     motionType: {
       transversePlane: {

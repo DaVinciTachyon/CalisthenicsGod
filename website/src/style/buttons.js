@@ -8,7 +8,7 @@ import {
   Colours,
 } from './constants';
 
-const Button = styled.div`
+const Button = styled.button`
   text-decoration: none;
   border-radius: 1rem;
   text-align: center;
@@ -18,7 +18,7 @@ const Button = styled.div`
   font-size: 1.1rem;
   box-shadow: 0 0 0.5rem 0.25rem ${Shadow.primary};
   min-width: 60%;
-  margin: 0.2rem;
+  margin: auto;
 
   :hover {
     border: 0.1rem solid ${Colours.primary.dark};

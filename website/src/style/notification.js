@@ -11,7 +11,11 @@ class BaseNotification extends React.Component {
   render() {
     if (this.props.text)
       return (
-        <Row columns={4} onClick={this.dismiss} style={this.props.style}>
+        <Row
+          columns={4}
+          onClick={this.dismiss}
+          className={this.props.className}
+        >
           <Column span={3}>{this.props.text}</Column>
           <Column onClick={this.dismiss}>✖</Column>
         </Row>
@@ -22,8 +26,15 @@ class BaseNotification extends React.Component {
 
 const Notification = styled(BaseNotification)``;
 
-const Error = styled(Notification)`
-  background-color: ${ErrorColours.primary};
+//FIXME
+// const Error = styled(Notification)`
+//   background-color: ${ErrorColours.primary};
+// `;
+
+const Error = styled(Row)`
+  ${Notification} {
+    background-color: ${ErrorColours.primary};
+  }
 `;
 
 export { Notification, Error };

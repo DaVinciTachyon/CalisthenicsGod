@@ -8,23 +8,23 @@ module.exports = mongoose.model(
       ref: 'User',
       required: true,
     },
-    maintenanceCalories: {
+    caloriesPerKg: {
       type: Number,
-      default: 0,
+      default: 30,
       min: 0,
     },
     calorieOffset: {
       type: Number,
       default: 0,
     },
-    proteinAmount: {
+    proteinGramsPerKg: {
       type: Number,
-      default: 1.9,
+      default: 2,
       min: 0,
     },
-    fatPartition: {
+    fatCalorieProportion: {
       type: Number,
-      default: 0.3,
+      default: 0.2,
       min: 0,
       max: 1,
     },

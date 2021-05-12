@@ -1,16 +1,22 @@
-import styled from 'styled-components';
+import React from 'react';
+import styled, { css } from 'styled-components';
 import { Nutrients, Background } from './constants';
+import ReactSelect from 'react-select';
 
-const Input = styled.input`
+const BaseStyle = css`
   border-radius: 5px;
   border-style: solid;
-  border-width: ${(props) => (props.readOnly ? `0` : `3px`)};
+  border-width: ${(props) => (props.readOnly ? `0` : `2px`)};
   border-color: black;
   background-color: ${(props) =>
     props.readOnly ? `inherit` : Background.primary};
   text-align: center;
-  margin: 0.5rem;
+  margin: auto;
   padding: 0.2rem;
+`;
+
+const Input = styled.input`
+  ${BaseStyle}
 `;
 
 const Text = styled(Input).attrs({
@@ -71,6 +77,67 @@ const Ethanol = styled(Weight)`
   border-color: ${Nutrients.ethanol.dark};
 `;
 
+const BaseSelect = styled.select`
+  ${BaseStyle}
+`;
+
+class Select extends React.Component {
+  constructor() {
+    super();
+    this.state = { value: '' };
+    this.onChange = this.onChange.bind(this);
+  }
+
+  componentDidMount() {
+    this.setState({ value: this.props.defaultValue || this.state.value });
+  }
+
+  onChange = (evt) => {
+    let value = this.state.value;
+    if (this.props.isMulti) {
+      value = [];
+      evt.forEach((entry) => value.push(entry.value));
+    } else if (evt.target.validity.valid) value = evt.target.value;
+    this.setState({ value });
+    this.props.onChange({ name: this.props.name, value });
+  };
+
+  render() {
+    if (this.props.isMulti)
+      //FIXME
+      return (
+        <ReactSelect
+          name={this.props.name}
+          id={this.props.id}
+          onChange={this.onChange}
+          options={this.props.options}
+          isMulti
+        />
+      );
+    const options = [];
+    this.props.options.forEach((option) =>
+      options.push(
+        <option
+          key={option.value}
+          value={option.value}
+          selected={option.value === this.state.value}
+        >
+          {option.label}
+        </option>
+      )
+    );
+    return (
+      <BaseSelect
+        name={this.props.name}
+        id={this.props.id}
+        onChange={this.onChange}
+      >
+        {options}
+      </BaseSelect>
+    );
+  }
+}
+
 export {
   Text,
   Password,
@@ -83,4 +150,5 @@ export {
   Carbohydrate,
   Protein,
   Ethanol,
+  Select,
 };

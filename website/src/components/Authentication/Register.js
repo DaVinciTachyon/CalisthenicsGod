@@ -1,10 +1,11 @@
 import React from 'react';
-import { Error } from '../Notification';
+import { Error } from '../../style/notification';
 import { Row, Column } from '../../style/table';
 import { Link } from 'react-router-dom';
 import Card from '../../style/card';
 import { Button, SecondaryButton } from '../../style/buttons';
 import { Weight, Text, Password, Date as DateInput } from '../../style/inputs';
+import { Select } from '../../style/inputs';
 
 export default class Register extends React.Component {
   constructor() {
@@ -60,11 +61,12 @@ export default class Register extends React.Component {
         this.setState({ error: data.error });
       })
       .catch((err) => {
-        console.log(err);
+        console.error(err);
       });
   };
 
   onChange = (evt) => this.setState({ [evt.target.name]: evt.target.value });
+  onSelectChange = (evt) => this.setState({ [evt.name]: evt.value });
 
   render() {
     return (
@@ -149,12 +151,16 @@ export default class Register extends React.Component {
         <Row columns={2}>
           <Column>Gender</Column>
           <Column>
-            <select name="gender" onChange={this.onChange} required>
-              <option value="male" defaultValue>
-                Male
-              </option>
-              <option value="female">Female</option>
-            </select>
+            <Select
+              name="gender"
+              options={[
+                { label: 'Male', value: 'male' },
+                { label: 'Female', value: 'female' },
+              ]}
+              defaultValue={'male'}
+              onChange={this.onSelectChange}
+              required
+            />
           </Column>
         </Row>
         <Row columns={2}>

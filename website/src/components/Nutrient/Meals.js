@@ -48,9 +48,7 @@ export default class Meals extends React.Component {
     )
       .then((response) => response.json())
       .then((data) => {
-        let meals = Object.assign({}, this.state.meals);
-        meals = data.names;
-        this.setState({ meals: meals });
+        this.setState({ meals: data.meals });
       });
   };
 

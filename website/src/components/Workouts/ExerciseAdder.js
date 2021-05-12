@@ -1,6 +1,6 @@
 import React from 'react';
-import Select from 'react-select';
-import { Error } from '../Notification';
+import { Select } from '../../style/inputs';
+import { Error } from '../../style/notification';
 import { Row, Column } from '../../style/table';
 import { Button, ErrorButton } from '../../style/buttons';
 import { Link } from 'react-router-dom';
@@ -72,13 +72,7 @@ export default class Exercises extends React.Component {
 
   onChange = (evt) => this.setState({ [evt.target.name]: evt.target.value });
 
-  onSelectChange = (elements, evt) => {
-    const newValues = [];
-    elements.forEach((element) => {
-      newValues.push(element.value);
-    });
-    this.setState({ [evt.name]: newValues });
-  };
+  onSelectChange = (evt) => this.setState({ [evt.name]: evt.value });
 
   async onSubmit(evt) {
     evt.preventDefault();
@@ -97,7 +91,7 @@ export default class Exercises extends React.Component {
       !this.state.potentialCategories ||
       this.state.potentialCategories.length === 0
     )
-      return this.setState({ error: 'Potential Categories are required' });
+      return this.setState({ error: 'Potential Stages are required' });
     const response = await fetch(
       `${process.env.REACT_APP_API_URL}/exercise/add`,
       {

@@ -53,12 +53,12 @@ router.post('/add', async (req, res) => {
 });
 
 router.post('/makeUnavailable', async (req, res) => {
-  if (!req.body._id) return res.status(400).send({ error: 'ID required' });
+  if (!req.body._id) return res.status(400).send({ error: '_id required' });
   const ingredient = await Ingredients.findOne({
     userId: req.user._id,
     _id: req.body._id,
   });
-  if (!ingredient) return res.status(400).send({ error: 'ID not found' });
+  if (!ingredient) return res.status(400).send({ error: '_id not found' });
 
   ingredient.isAvailable = false;
 

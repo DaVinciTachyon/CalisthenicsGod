@@ -5,14 +5,16 @@ const Measurements = require('../models/Measurements');
 const nutrientValidation = require('../validation/nutrition');
 const mealsRoute = require('./meals');
 const ingredientsRoute = require('./ingredients');
-
-const macronutrientDensities = {
-  //FIXME in db?
-  fat: 9,
-  carbohydrate: 4,
-  protein: 4,
-  ethanol: 7,
-};
+const {
+  macronutrientDensities,
+  getMaintenanceCalories,
+  getProteinGrams,
+  getFatGrams,
+  getCarbohydrateGrams,
+  getEthanolGrams,
+  getFiberGrams,
+  getWaterLitres,
+} = require('./nutrientUtil');
 
 /**
  * Find if today's date
@@ -59,29 +61,29 @@ router.get('/goals', async (req, res) => {
   const nutrients = await Nutrients.findOne({ userId: req.user._id });
 
   const calories = Math.round(
-    nutrients.maintenanceCalories + nutrients.calorieOffset
+    getMaintenanceCalories(weight, nutrients.caloriesPerKg) +
+      nutrients.calorieOffset
   );
-
-  const protein = Math.round(weight * nutrients.proteinAmount * 10) / 10;
-  const fat =
-    Math.round(
-      ((calories * nutrients.fatPartition) / macronutrientDensities.fat) * 10
-    ) / 10;
-  const carbohydrate =
-    Math.round(
-      ((calories -
-        fat * macronutrientDensities.fat -
-        protein * macronutrientDensities.protein) /
-        macronutrientDensities.carbohydrate) *
-        10
-    ) / 10;
-  const ethanol = 0;
+  const protein = getProteinGrams(weight, nutrients.proteinGramsPerKg);
+  const fat = getFatGrams(calories, nutrients.fatCalorieProportion);
+  const carbohydrate = getCarbohydrateGrams(
+    calories,
+    fat * macronutrientDensities.fat,
+    protein * macronutrientDensities.protein
+  );
+  const ethanol = getEthanolGrams();
+  const fiber = getFiberGrams(carbohydrate);
+  const water = getWaterLitres(weight);
 
   res.send({
-    fat: fat,
-    carbohydrate: carbohydrate,
-    protein: protein,
-    ethanol: ethanol,
+    macronutrients: {
+      fat: fat,
+      carbohydrate: carbohydrate,
+      protein: protein,
+      ethanol: ethanol,
+      fiber: fiber,
+    },
+    water: water,
   });
 });
 

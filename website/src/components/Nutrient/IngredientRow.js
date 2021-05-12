@@ -10,6 +10,7 @@ import {
   Protein,
   Ethanol,
 } from '../../style/inputs';
+import { Select } from '../../style/inputs';
 
 export default class IngredientRow extends React.Component {
   constructor() {
@@ -120,10 +121,7 @@ export default class IngredientRow extends React.Component {
   }
 
   ingredientChange = (evt) => {
-    const input = evt.target.validity.valid
-      ? evt.target.value
-      : this.state.ingredient;
-    if (input === '')
+    if (evt.value === '')
       this.setState({
         name: '',
         fat_base: 0,
@@ -134,7 +132,7 @@ export default class IngredientRow extends React.Component {
       });
     else {
       const ingredient = this.state.ingredients.find(
-        (val) => val._id === input
+        (val) => val._id === evt.value
       );
       this.setState({
         name: ingredient.name,
@@ -146,7 +144,7 @@ export default class IngredientRow extends React.Component {
       });
     }
     this.setState({
-      ingredient: input,
+      ingredient: evt.value,
       weight: 0,
       fat: 0,
       carb: 0,
@@ -403,19 +401,11 @@ export default class IngredientRow extends React.Component {
       );
     }
 
-    let ingredients = [];
-    if (this.props.isNew && this.props.hasWeight) {
-      for (let i = 0; i < this.state.ingredients.length; i++) {
-        ingredients.push(
-          <option
-            key={this.state.ingredients[i]._id}
-            value={this.state.ingredients[i]._id}
-          >
-            {this.state.ingredients[i].name}
-          </option>
-        );
-      }
-    }
+    let ingredients = [{ label: 'New', value: '' }];
+    if (this.props.isNew && this.props.hasWeight)
+      this.state.ingredients.forEach((ingredient) =>
+        ingredients.push({ value: ingredient._id, label: ingredient.name })
+      );
     return (
       <Row
         columns={this.props.isSummary ? (this.props.hasWeight ? 8 : 7) : 9}
@@ -429,12 +419,11 @@ export default class IngredientRow extends React.Component {
       >
         <Column span={2}>
           {this.props.isNew && this.props.hasWeight && (
-            <select onChange={this.ingredientChange.bind(this)}>
-              <option value="" selected={this.state.ingredient === ''}>
-                New
-              </option>
-              {ingredients}
-            </select>
+            <Select
+              options={ingredients}
+              defaultValue={this.state.ingredient}
+              onChange={this.ingredientChange}
+            />
           )}
           {(this.props.isNew || this.state.isNew) && (
             <Text
