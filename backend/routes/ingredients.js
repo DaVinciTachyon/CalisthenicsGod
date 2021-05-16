@@ -24,7 +24,7 @@ router.get('/unavailable', async (req, res) => {
   res.send({ ingredients: ingredients });
 });
 
-router.post('/add', async (req, res) => {
+router.post('/', async (req, res) => {
   const { error } = nutrientValidation.ingredient(req.body);
   if (error) return res.status(400).send({ error: error.details[0].message });
 
@@ -37,10 +37,7 @@ router.post('/add', async (req, res) => {
 
   const ingredient = new Ingredients({
     name: req.body.name,
-    fat: req.body.fat,
-    carbohydrate: req.body.carbohydrate,
-    protein: req.body.protein,
-    ethanol: req.body.ethanol,
+    macronutrients: req.body.macronutrients,
     userId: req.user._id,
   });
 
@@ -53,7 +50,9 @@ router.post('/add', async (req, res) => {
 });
 
 router.post('/makeUnavailable', async (req, res) => {
-  if (!req.body._id) return res.status(400).send({ error: '_id required' });
+  const { error } = nutrientValidation.id(req.body);
+  if (error) return res.status(400).send({ error: error.details[0].message });
+
   const ingredient = await Ingredients.findOne({
     userId: req.user._id,
     _id: req.body._id,
@@ -71,12 +70,14 @@ router.post('/makeUnavailable', async (req, res) => {
 });
 
 router.post('/makeAvailable', async (req, res) => {
-  if (!req.body._id) return res.status(400).send({ error: 'ID required' });
+  const { error } = nutrientValidation.id(req.body);
+  if (error) return res.status(400).send({ error: error.details[0].message });
+
   const ingredient = await Ingredients.findOne({
     userId: req.user._id,
     _id: req.body._id,
   });
-  if (!ingredient) return res.status(400).send({ error: 'ID not found' });
+  if (!ingredient) return res.status(400).send({ error: '_id not found' });
 
   ingredient.isAvailable = true;
 
@@ -89,20 +90,17 @@ router.post('/makeAvailable', async (req, res) => {
 });
 
 router.post('/edit', async (req, res) => {
-  const { error } = nutrientValidation.ingredient(req.body);
+  const { error } = nutrientValidation.editIngredient(req.body);
   if (error) return res.status(400).send({ error: error.details[0].message });
 
   const ingredient = await Ingredients.findOne({
     userId: req.user._id,
     _id: req.body._id,
   });
-  if (!ingredient) return res.status(400).send({ error: 'ID not found' });
+  if (!ingredient) return res.status(400).send({ error: '_id not found' });
 
   ingredient.name = req.body.name;
-  ingredient.fat = req.body.fat;
-  ingredient.carbohydrate = req.body.carbohydrate;
-  ingredient.protein = req.body.protein;
-  ingredient.ethanol = req.body.ethanol;
+  ingredient.macronutrients = req.body.macronutrients;
 
   try {
     await ingredient.save();

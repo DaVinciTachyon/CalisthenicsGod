@@ -40,7 +40,7 @@ module.exports = mongoose.model(
         enum: ['isometric', 'isotonic'],
       },
     },
-    potentialCategories: [
+    potentialStages: [
       {
         type: mongoose.Schema.Types.ObjectId,
         ref: 'WorkoutStage',

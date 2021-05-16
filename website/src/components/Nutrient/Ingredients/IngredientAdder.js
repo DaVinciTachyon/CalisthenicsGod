@@ -27,7 +27,7 @@ export default class IngredientAdder extends React.Component {
 
   onSubmit = async () => {
     const response = await fetch(
-      `${process.env.REACT_APP_API_URL}/nutrition/ingredients/add/`,
+      `${process.env.REACT_APP_API_URL}/nutrition/ingredients/`,
       {
         method: 'POST',
         headers: {
@@ -36,10 +36,12 @@ export default class IngredientAdder extends React.Component {
         },
         body: JSON.stringify({
           name: this.state.name,
-          fat: this.state.fat,
-          carbohydrate: this.state.carbohydrate,
-          protein: this.state.protein,
-          ethanol: this.state.ethanol,
+          macronutrients: {
+            fat: this.state.fat,
+            carbohydrate: this.state.carbohydrate,
+            protein: this.state.protein,
+            ethanol: this.state.ethanol,
+          },
         }),
       }
     );
@@ -122,7 +124,12 @@ export default class IngredientAdder extends React.Component {
     return (
       <Row columns={9}>
         <Column span={9}>
-          <Button onClick={() => this.setState({ isAdding: true })}>Add</Button>
+          <Button
+            className="maxWidth thin"
+            onClick={() => this.setState({ isAdding: true })}
+          >
+            Add
+          </Button>
         </Column>
       </Row>
     );

@@ -1,5 +1,5 @@
 const router = require('express').Router();
-const verify = require('./verifyToken');
+const verify = require('./tokenVerification');
 const Meals = require('../models/Meals');
 const Ingredients = require('../models/Ingredients');
 const nutrientValidation = require('../validation/nutrition');
@@ -17,9 +17,11 @@ router.get('/', async (req, res) => {
 });
 
 router.post('/ingredients', async (req, res) => {
-  if (!req.body._id) return res.status(400).send({ error: 'ID Required' });
+  const { error } = nutrientValidation.id(req.body);
+  if (error) return res.status(400).send({ error: error.details[0].message });
+
   const meal = await Meals.findById(req.body._id);
-  if (!meal) return res.status(400).send({ error: 'Invalid ID' });
+  if (!meal) return res.status(400).send({ error: '_id invalid' });
 
   let ingredients = [];
   for (let i = 0; i < meal.ingredients.length; i++) {
@@ -28,10 +30,7 @@ router.post('/ingredients', async (req, res) => {
       _id: ingredient._id,
       name: ingredient.name,
       weight: meal.ingredients[i].weight,
-      fat: ingredient.fat,
-      carbohydrate: ingredient.carbohydrate,
-      protein: ingredient.protein,
-      ethanol: ingredient.ethanol,
+      macronutrients: ingredient.macronutrients,
     });
   }
 
@@ -50,8 +49,8 @@ router.get('/names', async (req, res) => {
   });
 });
 
-router.post('/add', async (req, res) => {
-  const { error } = nutrientValidation.meal(req.body);
+router.post('/', async (req, res) => {
+  const { error } = nutrientValidation.presetMeal(req.body);
   if (error) return res.status(400).send({ error: error.details[0].message });
 
   const meal = new Meals({
@@ -69,19 +68,16 @@ router.post('/add', async (req, res) => {
 });
 
 router.post('/remove', async (req, res) => {
-  if (!req.body._id) return res.status(400).send({ error: 'Meal ID Required' });
+  const { error } = nutrientValidation.id(req.body);
+  if (error) return res.status(400).send({ error: error.details[0].message });
 
   await Meals.findByIdAndDelete(req.body._id);
 
   res.sendStatus(200);
 });
 
-router.post('/addIngredient', async (req, res) => {
-  if (!req.body._id) return res.status(400).send({ error: 'Meal ID Required' });
-  if (!req.body.ingredient)
-    return res.status(400).send({ error: 'Ingredient Required' });
-
-  const { error } = nutrientValidation.mealIngredient(req.body.ingredient);
+router.post('/ingredient/add', async (req, res) => {
+  const { error } = nutrientValidation.mealIngredient(req.body);
   if (error) return res.status(400).send({ error: error.details[0].message });
 
   const meal = await Meals.findById(req.body._id);
@@ -96,10 +92,9 @@ router.post('/addIngredient', async (req, res) => {
   }
 });
 
-router.post('/removeIngredient', async (req, res) => {
-  if (!req.body._id) return res.status(400).send({ error: 'Meal ID Required' });
-  if (!req.body.ingredientId)
-    return res.status(400).send({ error: 'Ingredient ID Required' });
+router.post('/ingredient/remove', async (req, res) => {
+  const { error } = nutrientValidation.mealIngredientId(req.body);
+  if (error) return res.status(400).send({ error: error.details[0].message });
 
   const meal = await Meals.findById(req.body._id);
   if (!meal) return res.status(400).send({ error: 'Invalid Meal ID' });
@@ -120,25 +115,21 @@ router.post('/removeIngredient', async (req, res) => {
   }
 });
 
-router.post('/editIngredient', async (req, res) => {
-  if (!req.body._id) return res.status(400).send({ error: 'Meal ID Required' });
-  if (!req.body.ingredientId)
-    return res.status(400).send({ error: 'Ingredient ID Required' });
-  if (!req.body.weight)
-    return res.status(400).send({ error: 'Weight Required' });
-  if (isNaN(req.body.weight) || req.body.weight <= 0)
-    return res.status(400).send({ error: 'Invalid Weight' });
+router.post('/ingredient/edit', async (req, res) => {
+  const { error } = nutrientValidation.mealIngredient(req.body);
+  if (error) return res.status(400).send({ error: error.details[0].message });
 
   const meal = await Meals.findById(req.body._id);
   if (!meal) return res.status(400).send({ error: 'Invalid Meal ID' });
 
   const index = meal.ingredients.findIndex(
-    (val) => val.id == req.body.ingredientId
+    (val) => val.id == req.body.ingredient.id
   );
   if (index === -1)
     return res.status(400).send({ error: 'Invalid Ingredient ID' });
 
-  meal.ingredients[index].weight = req.body.weight;
+  meal.ingredients[index].weight = req.body.ingredient.weight;
+
   try {
     await meal.save();
     res.status(200).send(meal);

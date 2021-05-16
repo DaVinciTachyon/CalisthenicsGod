@@ -21,10 +21,7 @@ router.get('/', async (req, res) => {
 
 router.post('/', async (req, res) => {
   const { error } = workoutValidation.stage(req.body);
-  if (error)
-    return res
-      .status(400)
-      .send({ error: error.details[0].message, notme: 'hi' });
+  if (error) return res.status(400).send({ error: error.details[0].message });
 
   const stageName = await WorkoutStage.findOne({
     name: req.body.name,
@@ -48,6 +45,44 @@ router.post('/', async (req, res) => {
     await stage.save();
     await stageOrder.save();
     res.status(200).send(stage);
+  } catch (err) {
+    res.status(400).send({ error: err });
+  }
+});
+
+router.post('/edit', async (req, res) => {
+  const { error } = workoutValidation.stageEdit(req.body);
+  if (error) return res.status(400).send({ error: error.details[0].message });
+
+  const stage = await WorkoutStage.findById(req.body._id);
+  if (!stage) return res.status(400).send({ error: 'Stage not found' });
+
+  stage.name = req.body.name;
+  stage.description = req.body.description;
+
+  try {
+    await stage.save();
+    res.status(200).send(stage);
+  } catch (err) {
+    res.status(400).send({ error: err });
+  }
+});
+
+router.post('/remove', async (req, res) => {
+  const { error } = workoutValidation.id(req.body);
+  if (error) return res.status(400).send({ error: error.details[0].message });
+
+  const stage = await WorkoutStage.findByIdAndDelete(req.body._id);
+  if (!stage) return res.status(400).send({ error: 'Stage not found' });
+
+  const stageOrder = await WorkoutStageOrder.findOne();
+  stageOrder.order = stageOrder.order.filter(
+    (element) => !element.equals(req.body._id)
+  );
+
+  try {
+    await stageOrder.save();
+    res.sendStatus(200);
   } catch (err) {
     res.status(400).send({ error: err });
   }

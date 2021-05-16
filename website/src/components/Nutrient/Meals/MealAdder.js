@@ -12,20 +12,17 @@ export default class MealAdder extends React.Component {
   set = () => this.setState({ isAdding: false, name: '' });
 
   onSubmit = async () => {
-    await fetch(
-      `${process.env.REACT_APP_API_URL}/nutrition/meals/preset/add/`,
-      {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-          'auth-token': localStorage.getItem('authToken'),
-        },
-        body: JSON.stringify({
-          name: this.state.name,
-          ingredients: [],
-        }),
-      }
-    );
+    await fetch(`${process.env.REACT_APP_API_URL}/nutrition/meals/preset/`, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+        'auth-token': localStorage.getItem('authToken'),
+      },
+      body: JSON.stringify({
+        name: this.state.name,
+        ingredients: [],
+      }),
+    });
     this.set();
     this.props.onSubmit();
   };
@@ -52,7 +49,12 @@ export default class MealAdder extends React.Component {
     return (
       <Row columns={8}>
         <Column span={8}>
-          <Button onClick={() => this.setState({ isAdding: true })}>Add</Button>
+          <Button
+            className="maxWidth"
+            onClick={() => this.setState({ isAdding: true })}
+          >
+            Add
+          </Button>
         </Column>
       </Row>
     );

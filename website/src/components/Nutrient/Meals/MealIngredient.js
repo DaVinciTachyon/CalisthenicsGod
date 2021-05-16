@@ -30,21 +30,21 @@ export default class MealIngredient extends React.Component {
   }
 
   componentDidMount() {
-    this.set();
+    if (!this.props.isTitle) this.set();
   }
 
   componentDidUpdate(prevProps) {
-    if (prevProps !== this.props) this.set();
+    if (prevProps !== this.props && !this.props.isTitle) this.set();
   }
 
   set = () =>
     this.setState({
       weight: this.props.weight,
       isEditing: false,
-      fat: this.props.fat,
-      carbohydrate: this.props.carbohydrate,
-      protein: this.props.protein,
-      ethanol: this.props.ethanol,
+      fat: this.props.macronutrients.fat,
+      carbohydrate: this.props.macronutrients.carbohydrate,
+      protein: this.props.macronutrients.protein,
+      ethanol: this.props.macronutrients.ethanol,
     });
 
   getCalories = () =>
@@ -59,7 +59,7 @@ export default class MealIngredient extends React.Component {
 
   onSubmit = async () => {
     await fetch(
-      `${process.env.REACT_APP_API_URL}/nutrition/meals/preset/editIngredient/`,
+      `${process.env.REACT_APP_API_URL}/nutrition/meals/preset/ingredient/edit`,
       {
         method: 'POST',
         headers: {
@@ -67,9 +67,11 @@ export default class MealIngredient extends React.Component {
           'auth-token': localStorage.getItem('authToken'),
         },
         body: JSON.stringify({
-          ingredientId: this.props.id,
           _id: this.props.mealId,
-          weight: this.state.weight,
+          ingredient: {
+            id: this.props.id,
+            weight: this.state.weight,
+          },
         }),
       }
     );
@@ -79,7 +81,7 @@ export default class MealIngredient extends React.Component {
 
   onRemove = async () => {
     await fetch(
-      `${process.env.REACT_APP_API_URL}/nutrition/meals/preset/removeIngredient/`,
+      `${process.env.REACT_APP_API_URL}/nutrition/meals/preset/ingredient/remove`,
       {
         method: 'POST',
         headers: {

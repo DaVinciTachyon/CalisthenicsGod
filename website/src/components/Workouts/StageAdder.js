@@ -1,7 +1,7 @@
 import React from 'react';
 import { Error } from '../../style/notification';
 import { Row, Column } from '../../style/table';
-import { Button } from '../../style/buttons';
+import { Button, ErrorButton } from '../../style/buttons';
 import { Text } from '../../style/inputs';
 
 export default class StageAdder extends React.Component {
@@ -15,6 +15,13 @@ export default class StageAdder extends React.Component {
     this.onChange = this.onChange.bind(this);
     this.onSubmit = this.onSubmit.bind(this);
   }
+
+  set = () =>
+    this.setState({
+      isAdding: false,
+      name: '',
+      description: '',
+    });
 
   onChange = (evt) => this.setState({ [evt.target.name]: evt.target.value });
 
@@ -50,32 +57,37 @@ export default class StageAdder extends React.Component {
   render() {
     if (!this.state.isAdding)
       return (
-        <Row columns={3}>
-          <Column span={3}>
-            <Button onClick={() => this.setState({ isAdding: true })}>+</Button>
+        <Row columns={5}>
+          <Column span={5}>
+            <Button
+              onClick={() => this.setState({ isAdding: true })}
+              className="maxWidth thin"
+            >
+              +
+            </Button>
           </Column>
         </Row>
       );
     else
       return (
         <>
-          <Row columns={3}>
-            <Column span={3}>
+          <Row columns={5}>
+            <Column span={5}>
               <Error
                 text={this.state.error}
                 dismiss={() => this.setState({ error: '' })}
               />
             </Column>
           </Row>
-          <Row columns={3}>
-            <Column>
+          <Row columns={5}>
+            <Column span={2}>
               <Text
                 name="name"
                 value={this.state.name}
                 onChange={this.onChange}
               />
             </Column>
-            <Column>
+            <Column span={2}>
               <Text
                 name="description"
                 value={this.state.description}
@@ -84,6 +96,7 @@ export default class StageAdder extends React.Component {
             </Column>
             <Column>
               <Button onClick={this.onSubmit}>Submit</Button>
+              <ErrorButton onClick={this.set}>Cancel</ErrorButton>
             </Column>
           </Row>
         </>

@@ -1,5 +1,5 @@
 const router = require('express').Router();
-const verify = require('./verifyToken');
+const verify = require('./tokenVerification');
 const Nutrients = require('../models/Nutrients');
 const Measurements = require('../models/Measurements');
 const nutrientValidation = require('../validation/nutrition');
@@ -77,13 +77,13 @@ router.get('/goals', async (req, res) => {
 
   res.send({
     macronutrients: {
-      fat: fat,
-      carbohydrate: carbohydrate,
-      protein: protein,
-      ethanol: ethanol,
-      fiber: fiber,
+      fat,
+      carbohydrate,
+      protein,
+      ethanol,
+      fiber,
     },
-    water: water,
+    water,
   });
 });
 

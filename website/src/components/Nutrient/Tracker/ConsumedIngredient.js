@@ -36,9 +36,11 @@ export default class ConsumedIngredient extends React.Component {
           'auth-token': localStorage.getItem('authToken'),
         },
         body: JSON.stringify({
-          mealId: this.props.mealId,
-          _id: this.props.id,
-          weight: this.state.weight,
+          _id: this.props.mealId,
+          ingredient: {
+            _id: this.props._id,
+            weight: this.state.weight,
+          },
         }),
       }
     );
@@ -55,8 +57,8 @@ export default class ConsumedIngredient extends React.Component {
           'auth-token': localStorage.getItem('authToken'),
         },
         body: JSON.stringify({
-          mealId: this.props.mealId,
-          ingredientId: this.props.id,
+          _id: this.props.mealId,
+          ingredientId: this.props._id,
         }),
       }
     );

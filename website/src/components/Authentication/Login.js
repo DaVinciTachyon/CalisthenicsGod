@@ -3,7 +3,7 @@ import { Error } from '../../style/notification';
 import { Row, Column } from '../../style/table';
 import Card from '../../style/card';
 import { Link } from 'react-router-dom';
-import { Button, SecondaryButton } from '../../style/buttons';
+import { Button } from '../../style/buttons';
 import { Text, Password } from '../../style/inputs';
 
 export default class Login extends React.Component {
@@ -85,7 +85,7 @@ export default class Login extends React.Component {
         <Row columns={2}>
           <Column span={2}>
             <Link to="/register">
-              <SecondaryButton>Register</SecondaryButton>
+              <Button className="secondary">Register</Button>
             </Link>
           </Column>
         </Row>

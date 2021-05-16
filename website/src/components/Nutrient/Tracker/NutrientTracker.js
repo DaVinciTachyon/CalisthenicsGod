@@ -40,16 +40,23 @@ export default class NutrientTracker extends React.Component {
   };
 
   addMeal = async (id) => {
-    await fetch(`${process.env.REACT_APP_API_URL}/nutrition/meals/addPreset/`, {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-        'auth-token': localStorage.getItem('authToken'),
-      },
-      body: JSON.stringify({
-        _id: id,
-      }),
-    });
+    const response = await fetch(
+      `${process.env.REACT_APP_API_URL}/nutrition/meals/addPreset/`,
+      {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          'auth-token': localStorage.getItem('authToken'),
+        },
+        body: JSON.stringify({
+          _id: id,
+        }),
+      }
+    );
+    if (response.status !== 200) {
+      const data = await response.json();
+      console.error(data.error);
+    }
   };
 
   render() {

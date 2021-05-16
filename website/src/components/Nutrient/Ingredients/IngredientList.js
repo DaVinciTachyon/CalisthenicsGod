@@ -44,10 +44,7 @@ export default class IngredientList extends React.Component {
           key={ingredient._id}
           id={ingredient._id}
           name={ingredient.name}
-          fat={ingredient.fat}
-          carbohydrate={ingredient.carbohydrate}
-          protein={ingredient.protein}
-          ethanol={ingredient.ethanol}
+          macronutrients={ingredient.macronutrients}
           macroDensities={this.props.macroDensities}
           onUpdate={this.props.onUpdate}
           isAvailable={!this.props.isUnavailable}

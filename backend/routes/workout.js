@@ -1,6 +1,6 @@
 const router = require('express').Router();
 const stageRoute = require('./stage');
-const verify = require('./verifyToken');
+const verify = require('./tokenVerification');
 
 router.use(verify, (req, res, next) => {
   next();

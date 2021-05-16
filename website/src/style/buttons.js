@@ -1,109 +1,68 @@
 import styled from 'styled-components';
-import {
-  Background,
-  Shadow,
-  Border,
-  Success,
-  Error,
-  Colours,
-} from './constants';
+import { Background, Shadow, Success, Error, Colours } from './constants';
 
-const Button = styled.button`
+const Button = styled.button.attrs({
+  background: Colours.primary.standard,
+  color: Background.primary,
+})`
   text-decoration: none;
-  border-radius: 1rem;
+  border-radius: 0.5rem;
   text-align: center;
-  border: ${Border.secondary};
-  color: ${Background.primary};
-  background: ${Colours.primary.standard};
-  font-size: 1.1rem;
+  border: 0.1rem solid ${(props) => props.color};
+  color: ${(props) => props.color};
+  background: ${(props) => props.background};
   box-shadow: 0 0 0.5rem 0.25rem ${Shadow.primary};
-  min-width: 60%;
   margin: auto;
+  min-width: 60%;
+  height: 3vh;
+  font-size: 2vh;
 
-  :hover {
-    border: 0.1rem solid ${Colours.primary.dark};
-    color: ${Background.primary};
-    background: ${Success.primary};
+  &.secondary {
+    min-width: 51%;
+    font-size: 1vw;
+  }
+
+  &.maxWidth {
+    width: 100%;
+  }
+
+  &.minWidth {
+    width: fit-content;
+    height: fit-content;
+  }
+
+  &.thin {
+    height: 2vh;
+    font-size: 1vh;
+  }
+
+  &:hover {
+    border: 0.1rem solid ${(props) => props.background};
+    color: ${(props) => props.background};
+    background: ${(props) => props.color};
     box-shadow: 0 0 0.5rem 0.25rem ${Shadow.secondary};
   }
 
-  :active {
-    border: 0.1rem solid ${Success.primary};
-    color: ${Success.primary};
-    background: ${Background.primary};
+  &:active {
+    border: 0.1rem solid ${(props) => props.color};
+    color: ${(props) => props.color};
+    background: ${(props) => props.background};
   }
 `;
 
-const SecondaryButton = styled(Button)`
-  border: ${Border.secondary};
-  color: ${Colours.primary.standard};
-  background: ${Background.primary};
+const ErrorButton = styled(Button)({
+  background: Background.primary,
+  color: Error.primary,
+});
 
-  :hover {
-    border: 0.1rem solid ${Success.primary};
-    color: ${Success.primary};
-    background: ${Background.primary};
-  }
+const DeleteButton = styled(Button)({
+  background: Error.primary,
+  color: Background.primary,
+});
 
-  :active {
-    border: 0.1rem solid ${Background.primary};
-    color: ${Background.primary};
-    background: ${Success.primary};
-  }
-`;
+const SuccessButton = styled(Button)({
+  background: Success.primary,
+  color: Background.primary,
+});
 
-const ErrorButton = styled(Button)`
-  border: 0.1rem solid ${Error.primary};
-  color: ${Error.primary};
-  background: ${Background.primary};
-
-  :hover {
-    border: 0.1rem solid ${Background.primary};
-    color: ${Background.primary};
-    background: ${Error.primary};
-  }
-
-  :active {
-    border: 0.1rem solid ${Error.secondary};
-    color: ${Error.secondary};
-    background: ${Background.primary};
-  }
-`;
-
-const DeleteButton = styled(Button)`
-  border: 0.1rem solid ${Background.primary};
-  color: ${Background.primary};
-  background: ${Error.primary};
-
-  :hover {
-    border: 0.1rem solid ${Error.primary};
-    color: ${Error.primary};
-    background: ${Background.primary};
-  }
-
-  :active {
-    border: 0.1rem solid ${Background.primary};
-    color: ${Background.primary};
-    background: ${Error.secondary};
-  }
-`;
-
-const SuccessButton = styled(Button)`
-  border: 0.1rem solid ${Background.primary};
-  color: ${Background.primary};
-  background: ${Success.primary};
-
-  :hover {
-    border: 0.1rem solid ${Success.primary};
-    color: ${Success.primary};
-    background: ${Background.primary};
-  }
-
-  :active {
-    border: 0.1rem solid ${Background.primary};
-    color: ${Background.primary};
-    background: ${Success.secondary};
-  }
-`;
-
-export { Button, SecondaryButton, ErrorButton, DeleteButton, SuccessButton };
+export { Button, ErrorButton, DeleteButton, SuccessButton };

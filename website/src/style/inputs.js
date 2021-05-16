@@ -1,7 +1,6 @@
 import React from 'react';
 import styled, { css } from 'styled-components';
 import { Nutrients, Background } from './constants';
-import ReactSelect from 'react-select';
 
 const BaseStyle = css`
   border-radius: 5px;
@@ -11,6 +10,7 @@ const BaseStyle = css`
   background-color: ${(props) =>
     props.readOnly ? `inherit` : Background.primary};
   text-align: center;
+  width: 100%;
   margin: auto;
   padding: 0.2rem;
 `;
@@ -79,6 +79,13 @@ const Ethanol = styled(Weight)`
 
 const BaseSelect = styled.select`
   ${BaseStyle}
+
+  ${(props) =>
+    props.disabled
+      ? `& option:not(:checked) {
+    display: none;
+  }`
+      : ``}
 `;
 
 class Select extends React.Component {
@@ -89,38 +96,34 @@ class Select extends React.Component {
   }
 
   componentDidMount() {
-    this.setState({ value: this.props.defaultValue || this.state.value });
+    this.set();
   }
 
+  set = () =>
+    this.setState({ value: this.props.defaultValue || this.state.value });
+
   onChange = (evt) => {
+    if (this.props.readOnly) return;
     let value = this.state.value;
-    if (this.props.isMulti) {
-      value = [];
-      evt.forEach((entry) => value.push(entry.value));
-    } else if (evt.target.validity.valid) value = evt.target.value;
+    if (this.props.isMulti)
+      value = Array.from(evt.target.selectedOptions, (option) => option.value);
+    else if (evt.target.validity.valid) value = evt.target.value;
     this.setState({ value });
     this.props.onChange({ name: this.props.name, value });
   };
 
   render() {
-    if (this.props.isMulti)
-      //FIXME
-      return (
-        <ReactSelect
-          name={this.props.name}
-          id={this.props.id}
-          onChange={this.onChange}
-          options={this.props.options}
-          isMulti
-        />
-      );
     const options = [];
     this.props.options.forEach((option) =>
       options.push(
         <option
           key={option.value}
           value={option.value}
-          selected={option.value === this.state.value}
+          selected={
+            this.props.isMulti
+              ? this.state.value.includes(option.value)
+              : option.value === this.state.value
+          }
         >
           {option.label}
         </option>
@@ -131,6 +134,9 @@ class Select extends React.Component {
         name={this.props.name}
         id={this.props.id}
         onChange={this.onChange}
+        disabled={this.props.readOnly}
+        multiple={this.props.isMulti}
+        size={this.props.isMulti ? 3 : undefined}
       >
         {options}
       </BaseSelect>

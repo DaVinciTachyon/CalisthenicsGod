@@ -99,10 +99,11 @@ export default class MealRow extends React.Component {
     let protein = 0;
     let ethanol = 0;
     this.state.ingredients.forEach((ingredient) => {
-      fat += (ingredient.weight * ingredient.fat) / 100;
-      carbohydrate += (ingredient.weight * ingredient.carbohydrate) / 100;
-      protein += (ingredient.weight * ingredient.protein) / 100;
-      ethanol += (ingredient.weight * ingredient.ethanol) / 100;
+      fat += (ingredient.weight * ingredient.macronutrients.fat) / 100;
+      carbohydrate +=
+        (ingredient.weight * ingredient.macronutrients.carbohydrate) / 100;
+      protein += (ingredient.weight * ingredient.macronutrients.protein) / 100;
+      ethanol += (ingredient.weight * ingredient.macronutrients.ethanol) / 100;
     });
     this.setState({ fat, carbohydrate, protein, ethanol });
   };

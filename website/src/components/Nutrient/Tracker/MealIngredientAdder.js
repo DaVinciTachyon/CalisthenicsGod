@@ -31,10 +31,10 @@ export default class MealIngredientAdder extends React.Component {
     else {
       this.setState({
         id: ingredient._id,
-        fat: ingredient.fat,
-        carbohydrate: ingredient.carbohydrate,
-        protein: ingredient.protein,
-        ethanol: ingredient.ethanol,
+        fat: ingredient.macronutrients.fat,
+        carbohydrate: ingredient.macronutrients.carbohydrate,
+        protein: ingredient.macronutrients.protein,
+        ethanol: ingredient.macronutrients.ethanol,
       });
     }
   };
@@ -53,7 +53,7 @@ export default class MealIngredientAdder extends React.Component {
     const id = this.state.id || (await this.addIngredient());
     let url = `${process.env.REACT_APP_API_URL}/nutrition/meals/`;
     if (this.props.isPreset)
-      url = `${process.env.REACT_APP_API_URL}/nutrition/meals/preset/addIngredient/`;
+      url = `${process.env.REACT_APP_API_URL}/nutrition/meals/preset/ingredient/add/`;
     const response = await fetch(url, {
       method: 'POST',
       headers: {
@@ -63,7 +63,7 @@ export default class MealIngredientAdder extends React.Component {
       body: JSON.stringify({
         _id: this.props.id,
         ingredient: {
-          id: id,
+          id,
           weight: this.state.weight,
         },
       }),
@@ -77,7 +77,7 @@ export default class MealIngredientAdder extends React.Component {
 
   addIngredient = async () => {
     const response = await fetch(
-      `${process.env.REACT_APP_API_URL}/nutrition/ingredients/add/`,
+      `${process.env.REACT_APP_API_URL}/nutrition/ingredients/`,
       {
         method: 'POST',
         headers: {
@@ -86,10 +86,12 @@ export default class MealIngredientAdder extends React.Component {
         },
         body: JSON.stringify({
           name: this.state.name,
-          fat: this.state.fat,
-          carbohydrate: this.state.carbohydrate,
-          protein: this.state.protein,
-          ethanol: this.state.ethanol,
+          macronutrients: {
+            fat: this.state.fat,
+            carbohydrate: this.state.carbohydrate,
+            protein: this.state.protein,
+            ethanol: this.state.ethanol,
+          },
         }),
       }
     );

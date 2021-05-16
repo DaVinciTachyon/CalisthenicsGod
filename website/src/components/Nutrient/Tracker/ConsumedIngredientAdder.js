@@ -27,7 +27,12 @@ export default class ConsumedIngredientAdder extends React.Component {
     return (
       <Row>
         <Column>
-          <Button onClick={() => this.setState({ isAdding: true })}>Add</Button>
+          <Button
+            className="maxWidth thin"
+            onClick={() => this.setState({ isAdding: true })}
+          >
+            Add
+          </Button>
         </Column>
       </Row>
     );

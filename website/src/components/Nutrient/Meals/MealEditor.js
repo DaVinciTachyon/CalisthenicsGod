@@ -18,10 +18,7 @@ export default class MealEditor extends React.Component {
           mealId={this.props.id}
           name={ingredient.name}
           weight={ingredient.weight}
-          fat={ingredient.fat}
-          carbohydrate={ingredient.carbohydrate}
-          protein={ingredient.protein}
-          ethanol={ingredient.ethanol}
+          macronutrients={ingredient.macronutrients}
           macroDensities={this.props.macroDensities}
           onUpdate={this.props.onUpdate}
         />

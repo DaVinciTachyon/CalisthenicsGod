@@ -36,7 +36,7 @@ export default class WorkoutTracker extends React.Component {
     return (
       <div>
         <Link to="/workoutTracker/new">
-          <Button>+</Button>
+          <Button className="maxWidth">+</Button>
         </Link>
         {workouts}
       </div>

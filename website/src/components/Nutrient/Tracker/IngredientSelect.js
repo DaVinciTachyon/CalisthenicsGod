@@ -27,9 +27,11 @@ export default class IngredientSelect extends React.Component {
     );
     return (
       <Select
+        name="ingredient"
         options={ingredients}
         defaultValue={''}
         onChange={this.onChange}
+        readOnly={this.props.readOnly}
       />
     );
   }

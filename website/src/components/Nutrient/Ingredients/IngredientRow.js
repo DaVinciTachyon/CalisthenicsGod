@@ -31,11 +31,11 @@ export default class IngredientRow extends React.Component {
   }
 
   componentDidMount() {
-    this.setMacros();
+    if (!this.props.isTitle) this.setMacros();
   }
 
   componentDidUpdate(prevProps) {
-    if (prevProps !== this.props) this.setMacros();
+    if (prevProps !== this.props && !this.props.isTitle) this.setMacros();
   }
 
   getCalories = () =>
@@ -49,10 +49,10 @@ export default class IngredientRow extends React.Component {
   setMacros = () =>
     this.setState({
       name: this.props.name,
-      fat: this.props.fat,
-      carbohydrate: this.props.carbohydrate,
-      protein: this.props.protein,
-      ethanol: this.props.ethanol,
+      fat: this.props.macronutrients.fat,
+      carbohydrate: this.props.macronutrients.carbohydrate,
+      protein: this.props.macronutrients.protein,
+      ethanol: this.props.macronutrients.ethanol,
     });
 
   onChangeAvailability = async () => {
@@ -92,10 +92,12 @@ export default class IngredientRow extends React.Component {
         body: JSON.stringify({
           _id: this.props.id,
           name: this.state.name,
-          fat: this.state.fat,
-          carbohydrate: this.state.carbohydrate,
-          protein: this.state.protein,
-          ethanol: this.state.ethanol,
+          macronutrients: {
+            fat: this.state.fat,
+            carbohydrate: this.state.carbohydrate,
+            protein: this.state.protein,
+            ethanol: this.state.ethanol,
+          },
         }),
       }
     );
@@ -208,7 +210,9 @@ export default class IngredientRow extends React.Component {
           )}
           {this.state.isEditing && (
             <div>
-              <SuccessButton onClick={this.onSubmit}>Submit</SuccessButton>
+              <SuccessButton className="primary" onClick={this.onSubmit}>
+                Submit
+              </SuccessButton>
               <ErrorButton
                 onClick={() => {
                   this.setMacros();

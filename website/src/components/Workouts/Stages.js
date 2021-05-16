@@ -1,5 +1,6 @@
 import React from 'react';
 import StageAdder from './StageAdder';
+import StageRow from './StageRow';
 import { Row, Column } from '../../style/table';
 
 export default class Stages extends React.Component {
@@ -8,7 +9,6 @@ export default class Stages extends React.Component {
     this.state = {
       stages: [],
     };
-    this.getStages = this.getStages.bind(this);
   }
 
   componentDidMount() {
@@ -36,12 +36,14 @@ export default class Stages extends React.Component {
       const stage = this.state.stages[i];
       stages.push(
         <div key={stage._id}>
-          <Row columns={2}>
-            <Column>{stage.name}</Column>
-            <Column>{stage.description}</Column>
-          </Row>
-          <Row columns={2}>
-            <Column span={2}>
+          <StageRow
+            id={stage._id}
+            name={stage.name}
+            description={stage.description}
+            onUpdate={this.getStages}
+          />
+          <Row columns={5}>
+            <Column span={5}>
               <StageAdder index={i + 1} />
             </Column>
           </Row>
@@ -50,12 +52,9 @@ export default class Stages extends React.Component {
     }
     return (
       <div>
-        <Row columns={2} isTitle>
-          <Column>Name</Column>
-          <Column>Description</Column>
-        </Row>
-        <Row columns={2}>
-          <Column span={2}>
+        <StageRow isTitle />
+        <Row columns={5}>
+          <Column span={5}>
             <StageAdder index={0} />
           </Column>
         </Row>

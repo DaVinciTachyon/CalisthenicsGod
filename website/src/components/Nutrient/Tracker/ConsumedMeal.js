@@ -16,7 +16,8 @@ export default class ConsumedMeal extends React.Component {
         <ConsumedIngredient
           key={ingredient._id}
           mealId={this.props.id}
-          id={ingredient._id}
+          _id={ingredient._id}
+          id={ingredient.id}
           name={ingredient.name}
           weight={ingredient.weight}
           macros={ingredient.macronutrients}

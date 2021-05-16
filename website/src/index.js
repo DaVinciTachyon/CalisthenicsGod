@@ -12,7 +12,6 @@ import UserProfile from './components/User/UserProfile';
 import WorkoutTracker from './components/Workouts/WorkoutTracker';
 import WorkoutAdder from './components/Workouts/WorkoutAdder';
 import Exercises from './components/Workouts/Exercises';
-import ExerciseAdder from './components/Workouts/ExerciseAdder';
 import Ingredients from './components/Nutrient/Ingredients/Ingredients';
 import Meals from './components/Nutrient/Meals/Meals';
 import Stages from './components/Workouts/Stages';
@@ -56,11 +55,6 @@ ReactDOM.render(
           path="/workoutTracker/exercises"
           exact
           component={Exercises}
-        />
-        <AuthenticatedRoute
-          path="/workoutTracker/exercises/new"
-          exact
-          component={ExerciseAdder}
         />
         <AuthenticatedRoute
           path="/workoutTracker/stages"

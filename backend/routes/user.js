@@ -1,5 +1,5 @@
 const router = require('express').Router();
-const verify = require('./verifyToken');
+const verify = require('./tokenVerification');
 const Nutrients = require('../models/Nutrients');
 const Measurements = require('../models/Measurements');
 const User = require('../models/User');

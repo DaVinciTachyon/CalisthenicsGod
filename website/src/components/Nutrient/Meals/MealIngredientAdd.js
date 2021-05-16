@@ -26,7 +26,12 @@ export default class MealIngredientAdd extends React.Component {
     return (
       <Row columns={8}>
         <Column span={8}>
-          <Button onClick={() => this.setState({ isAdding: true })}>Add</Button>
+          <Button
+            className="maxWidth thin"
+            onClick={() => this.setState({ isAdding: true })}
+          >
+            Add
+          </Button>
         </Column>
       </Row>
     );

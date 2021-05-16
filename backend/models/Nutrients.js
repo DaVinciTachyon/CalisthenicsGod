@@ -38,7 +38,7 @@ module.exports = mongoose.model(
           {
             ingredients: [
               {
-                ingredientId: {
+                id: {
                   type: mongoose.Schema.Types.ObjectId,
                   ref: 'Ingredients',
                   required: true,
@@ -47,30 +47,6 @@ module.exports = mongoose.model(
                   type: Number,
                   min: 0.01,
                   required: true,
-                },
-                fat: {
-                  type: Number,
-                  default: 0,
-                  min: 0,
-                  max: 100,
-                },
-                carbohydrate: {
-                  type: Number,
-                  default: 0,
-                  min: 0,
-                  max: 100,
-                },
-                protein: {
-                  type: Number,
-                  default: 0,
-                  min: 0,
-                  max: 100,
-                },
-                ethanol: {
-                  type: Number,
-                  default: 0,
-                  min: 0,
-                  max: 100,
                 },
               },
             ],
