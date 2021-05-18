@@ -2,7 +2,6 @@ import React from 'react';
 import { Error } from '../../style/notification';
 import { Row, Column } from '../../style/table';
 import Card from '../../style/card';
-import { Link } from 'react-router-dom';
 import { Button } from '../../style/buttons';
 import { Text, Password } from '../../style/inputs';
 
@@ -84,9 +83,12 @@ export default class Login extends React.Component {
         </Row>
         <Row columns={2}>
           <Column span={2}>
-            <Link to="/register">
-              <Button className="secondary">Register</Button>
-            </Link>
+            <Button
+              className="secondary"
+              onClick={() => (window.location = '/register')}
+            >
+              Register
+            </Button>
           </Column>
         </Row>
       </Card>

@@ -1,7 +1,6 @@
 import React from 'react';
 import Card from '../../style/card';
 import { Row, Column } from '../../style/table';
-import { Link } from 'react-router-dom';
 import { Button } from '../../style/buttons';
 
 export default class MeasurementSummary extends React.Component {
@@ -125,9 +124,11 @@ export default class MeasurementSummary extends React.Component {
           )}
           <Row columns={2}>
             <Column span={2}>
-              <Link to="/measurementTracker/new">
-                <Button>New Measurements</Button>
-              </Link>
+              <Button
+                onClick={() => (window.location = '/measurementTracker/new')}
+              >
+                New Measurements
+              </Button>
             </Column>
           </Row>
         </Card>

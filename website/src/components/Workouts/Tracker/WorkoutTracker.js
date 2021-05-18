@@ -1,5 +1,4 @@
 import React from 'react';
-import { Link } from 'react-router-dom';
 import Workout from './Workout';
 import { Button } from '../../../style/buttons';
 
@@ -31,9 +30,12 @@ export default class WorkoutTracker extends React.Component {
   render() {
     return (
       <div>
-        <Link to="/workoutTracker/new">
-          <Button className="maxWidth">+</Button>
-        </Link>
+        <Button
+          className="maxWidth"
+          onClick={() => (window.location = '/workoutTracker/new')}
+        >
+          +
+        </Button>
         {this.state.workouts.map((workout) => (
           <Workout key={workout._id} details={workout} />
         ))}

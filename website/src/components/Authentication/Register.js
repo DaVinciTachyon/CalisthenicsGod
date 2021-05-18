@@ -1,7 +1,6 @@
 import React from 'react';
 import { Error } from '../../style/notification';
 import { Row, Column } from '../../style/table';
-import { Link } from 'react-router-dom';
 import Card from '../../style/card';
 import { Button } from '../../style/buttons';
 import { Weight, Text, Password, Date as DateInput } from '../../style/inputs';
@@ -183,9 +182,12 @@ export default class Register extends React.Component {
         </Row>
         <Row columns={2}>
           <Column span={2}>
-            <Link to="/login">
-              <Button className="secondary">Login</Button>
-            </Link>
+            <Button
+              className="secondary"
+              onClick={() => (window.location = '/login')}
+            >
+              Login
+            </Button>
           </Column>
         </Row>
       </Card>
