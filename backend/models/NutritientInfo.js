@@ -1,7 +1,7 @@
 const mongoose = require('mongoose');
 
 module.exports = mongoose.model(
-  'Nutrients',
+  'NutrientInfo',
   new mongoose.Schema({
     userId: {
       type: mongoose.Schema.Types.ObjectId,
@@ -40,7 +40,7 @@ module.exports = mongoose.model(
               {
                 id: {
                   type: mongoose.Schema.Types.ObjectId,
-                  ref: 'Ingredients',
+                  ref: 'Ingredient',
                   required: true,
                 },
                 weight: {

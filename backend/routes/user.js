@@ -1,7 +1,7 @@
 const router = require('express').Router();
 const verify = require('./tokenVerification');
-const Nutrients = require('../models/Nutrients');
-const Measurements = require('../models/Measurements');
+const NutrientInfo = require('../models/NutrientInfo');
+const Measurement = require('../models/Measurement');
 const User = require('../models/User');
 const { getMaintenanceCalories } = require('./nutrientUtil');
 
@@ -11,8 +11,8 @@ router.use(verify, (req, res, next) => {
 
 router.get('/', async (req, res) => {
   const user = await User.findOne({ _id: req.user._id });
-  const nutrients = await Nutrients.findOne({ userId: req.user._id });
-  const measurements = await Measurements.findOne({ userId: req.user._id });
+  const nutrients = await NutrientInfo.findOne({ userId: req.user._id });
+  const measurements = await Measurement.findOne({ userId: req.user._id });
   res.send({
     name: user.name,
     email: user.email,

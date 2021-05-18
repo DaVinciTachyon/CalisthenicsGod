@@ -7,6 +7,8 @@ module.exports = mongoose.model(
       type: String,
       required: true,
       unique: true,
+      lowercase: true,
+      trim: true,
     },
     description: {
       type: String,

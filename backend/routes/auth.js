@@ -4,7 +4,7 @@ const jwt = require('jsonwebtoken');
 const authorisationValidation = require('../validation/auth');
 const measurementValidation = require('../validation/measurement');
 const User = require('../models/User');
-const Measurements = require('../models/Measurements');
+const Measurement = require('../models/Measurement');
 
 router.post('/register', async (req, res) => {
   const { error } = authorisationValidation.register(req.body);
@@ -27,7 +27,7 @@ router.post('/register', async (req, res) => {
     gender: req.body.gender,
     birthDate: req.body.birthDate,
   });
-  const measurements = new Measurements({
+  const measurements = new Measurement({
     userId: user._id,
   });
   measurements.weight.unshift({
