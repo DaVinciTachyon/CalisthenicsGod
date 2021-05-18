@@ -21,5 +21,7 @@ it('renders Login Widget', async () => {
     render(<Login />, container);
   });
 
-  expect(container.querySelector('.primaryButton').value).toBe('Sign In');
+  expect(
+    container.querySelector('[data-test="signInButton"]').textContent
+  ).toBe('Sign In');
 });

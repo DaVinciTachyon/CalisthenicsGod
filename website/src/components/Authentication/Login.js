@@ -78,7 +78,9 @@ export default class Login extends React.Component {
         </Row>
         <Row columns={2}>
           <Column span={2}>
-            <Button onClick={this.onSubmit}>Sign In</Button>
+            <Button data-test="signInButton" onClick={this.onSubmit}>
+              Sign In
+            </Button>
           </Column>
         </Row>
         <Row columns={2}>
