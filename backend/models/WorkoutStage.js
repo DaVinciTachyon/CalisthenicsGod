@@ -1,12 +1,15 @@
 const mongoose = require('mongoose');
 
-module.exports = mongoose.model('WorkoutStage', new mongoose.Schema({
+module.exports = mongoose.model(
+  'WorkoutStage',
+  new mongoose.Schema({
     name: {
-        type: String,
-        required: true,
-        unique: true
+      type: String,
+      required: true,
+      unique: true,
     },
     description: {
-        type: String
-    }
-}));
+      type: String,
+    },
+  })
+);

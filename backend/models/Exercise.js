@@ -1,46 +1,59 @@
 const mongoose = require('mongoose');
 
-module.exports = mongoose.model('Exercise', new mongoose.Schema({
+module.exports = mongoose.model(
+  'Exercise',
+  new mongoose.Schema({
     name: {
-        type: String,
-        required: true,
-        unique: true
+      type: String,
+      required: true,
+      unique: true,
+      trim: true,
     },
     abbreviation: {
-        type: String,
-        unique: true
+      type: String,
+      trim: true,
+      index: {
+        partialFilterExpression: {
+          abbreviation: { $type: 'string' },
+        },
+      },
     },
     motionType: {
-        transversePlane:{
-            type: String,
-            enum : ['upper','lower']
-        },
-        verticality:{
-            type: String,
-            enum : ['horizontal','vertical']
-        },
-        frontalPlane:{
-            type: String,
-            enum : ['push','pull']
-        },
-        kineticChain:{
-            type: String,
-            enum : ['closed','open']
-        },
-        motion:{
-            type: String,
-            enum : ['isometric','isotonic']
-        }
+      transversePlane: {
+        type: String,
+        enum: ['upper', 'lower'],
+      },
+      verticality: {
+        type: String,
+        enum: ['horizontal', 'vertical'],
+      },
+      frontalPlane: {
+        type: String,
+        enum: ['push', 'pull'],
+      },
+      kineticChain: {
+        type: String,
+        enum: ['closed', 'open'],
+      },
+      motion: {
+        type: String,
+        enum: ['isometric', 'isotonic'],
+      },
     },
-    potentialCategories: [{
+    potentialStages: [
+      {
         type: mongoose.Schema.Types.ObjectId,
-        ref: 'WorkoutStage'
-    }],
-    requirements: [{
+        ref: 'WorkoutStage',
+      },
+    ],
+    requirements: [
+      {
         type: mongoose.Schema.Types.ObjectId,
-        ref: 'Exercise'
-    }],
+        ref: 'Exercise',
+      },
+    ],
     description: {
-        type: String
-    }
-}));
+      type: String,
+    },
+  })
+);

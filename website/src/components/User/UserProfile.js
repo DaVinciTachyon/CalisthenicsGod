@@ -1,5 +1,8 @@
 import React from 'react';
-import '../../style/User.css';
+import { Row, Column } from '../../style/table';
+import { Button } from '../../style/buttons';
+import { Number, Calories, Text, Date as DateInput } from '../../style/inputs';
+import { Select } from '../../style/inputs';
 
 export default class UserProfile extends React.Component {
   constructor() {
@@ -14,14 +17,22 @@ export default class UserProfile extends React.Component {
       birthDate: '',
       gender: '',
       maintenanceCalories: 0,
-      proteinAmount: 0,
-      fatPartition: 0,
+      weight: 0,
+      caloriesPerKg: 0,
+      proteinGramsPerKg: 0,
+      fatCalorieProportion: 0,
     };
   }
 
-  editProfile = () => {
-    this.setState({ update: !this.state.update });
-  };
+  formatDate = (date) =>
+    `${date.getFullYear().toString().padStart(4, '0')}-${(date.getMonth() + 1)
+      .toString()
+      .padStart(2, '0')}-${date.getDate().toString().padStart(2, '0')}`;
+
+  setMaintenanceCalories = () =>
+    this.setState({
+      maintenanceCalories: this.state.caloriesPerKg * this.state.weight,
+    });
 
   componentDidMount() {
     const requestOptions = {
@@ -34,33 +45,18 @@ export default class UserProfile extends React.Component {
     fetch(`${process.env.REACT_APP_API_URL}/user/`, requestOptions)
       .then((response) => response.json())
       .then((data) => {
-        let dateJoined = new Date(data.dateJoined);
-        let birthDate = new Date(data.birthDate);
         this.setState({
           name: data.name,
           email: data.email,
-          dateJoined: `${dateJoined
-            .getFullYear()
-            .toString()
-            .padStart(4, '0')}-${(dateJoined.getMonth() + 1)
-            .toString()
-            .padStart(2, '0')}-${dateJoined
-            .getDate()
-            .toString()
-            .padStart(2, '0')}`,
-          birthDate: `${birthDate.getFullYear().toString().padStart(4, '0')}-${(
-            birthDate.getMonth() + 1
-          )
-            .toString()
-            .padStart(2, '0')}-${birthDate
-            .getDate()
-            .toString()
-            .padStart(2, '0')}`,
+          dateJoined: this.formatDate(new Date(data.dateJoined)),
+          birthDate: this.formatDate(new Date(data.birthDate)),
           gender: data.gender,
-          maintenanceCalories: data.maintenanceCalories,
-          proteinAmount: data.proteinAmount,
-          fatPartition: data.fatPartition,
+          weight: data.weight,
+          caloriesPerKg: data.caloriesPerKg,
+          proteinGramsPerKg: data.proteinGramsPerKg,
+          fatCalorieProportion: data.fatCalorieProportion,
         });
+        this.setMaintenanceCalories();
         if (data.calorieOffset > 0)
           this.setState({
             calorieOffset: data.calorieOffset,
@@ -77,16 +73,17 @@ export default class UserProfile extends React.Component {
   }
 
   calorieModeChange = (evt) => {
-    const input = evt.target.validity.valid
-      ? evt.target.value
-      : this.state.calorieMode;
-    this.setState({ calorieMode: input });
-    if (this.state.currentOffset < 0 && input === 'deficit')
-      this.setState({ calorieOffset: -1 * this.state.currentOffset });
-    else if (input === 'deficit') this.setState({ calorieOffset: 300 });
-    else if (this.state.currentOffset > 0 && input === 'bulk')
-      this.setState({ calorieOffset: this.state.currentOffset });
-    else if (input === 'bulk') this.setState({ calorieOffset: 200 });
+    this.setState({ calorieMode: evt.value });
+    if (evt.value === 'deficit')
+      this.setState({
+        calorieOffset:
+          this.state.currentOffset < 0 ? -1 * this.state.currentOffset : 300,
+      });
+    else if (evt.value === 'bulk')
+      this.setState({
+        calorieOffset:
+          this.state.currentOffset > 0 ? this.state.currentOffset : 200,
+      });
     else this.setState({ calorieOffset: 0 });
   };
 
@@ -116,181 +113,135 @@ export default class UserProfile extends React.Component {
 
   render() {
     return (
-      <form className="profile-table" onSubmit={this.editProfile}>
-        <div className="row">
-          <div className="label-column column">First Name</div>
-          <div className="value-column column">
-            <input
-              type="text"
-              value={this.state.name.first}
-              className="readOnly"
-              readOnly
-            />
-          </div>
-        </div>
-        <div className="row">
-          <div className="label-column column">Middle Name</div>
-          <div className="value-column column">
-            <input
-              type="text"
+      <div>
+        <Row columns={2}>
+          <Column>First Name</Column>
+          <Column>
+            <Text value={this.state.name.first} readOnly />
+          </Column>
+        </Row>
+        <Row columns={2}>
+          <Column>Middle Name</Column>
+          <Column>
+            <Text
               placeholder="Middle Name"
               value={this.state.name.middle}
-              className="readOnly"
               readOnly
             />
-          </div>
-        </div>
-        <div className="row">
-          <div className="label-column column">Last Name</div>
-          <div className="value-column column">
-            <input
-              type="text"
-              value={this.state.name.last}
-              className="readOnly"
-              readOnly
-            />
-          </div>
-        </div>
-        <div className="row">
-          <div className="label-column column">Email</div>
-          <div className="value-column column">
-            <input
-              type="text"
-              value={this.state.email}
-              className="readOnly"
-              readOnly
-            />
-          </div>
-        </div>
-        <div className="row">
-          <div className="label-column column">Calorie Mode</div>
-          <div className="value-column column">
-            <select id="calorieMode" onChange={this.calorieModeChange}>
-              <option
-                value="maintenance"
-                selected={this.state.currentOffset === 0}
-              >
-                Maintenance
-              </option>
-              <option value="deficit" selected={this.state.currentOffset < 0}>
-                Deficit
-              </option>
-              <option value="bulk" selected={this.state.currentOffset > 0}>
-                Bulk
-              </option>
-            </select>
-            {this.state.calorieOffset !== 0 && (
-              <input
-                type="number"
-                value={this.state.calorieOffset}
-                min="0"
-                step="1"
-                onChange={this.calorieOffsetChange}
+          </Column>
+        </Row>
+        <Row columns={2}>
+          <Column>Last Name</Column>
+          <Column>
+            <Text value={this.state.name.last} readOnly />
+          </Column>
+        </Row>
+        <Row columns={2}>
+          <Column>Email</Column>
+          <Column>
+            <Text value={this.state.email} readOnly />
+          </Column>
+        </Row>
+        <Row columns={2}>
+          <Column>Calorie Mode</Column>
+          <Column columns={2}>
+            <Column span={this.state.calorieOffset === 0 ? 2 : 1}>
+              <Select
+                id="calorieMode"
+                options={[
+                  { label: 'Maintenance', value: 'maintenance' },
+                  { label: 'Deficit', value: 'deficit' },
+                  { label: 'Bulk', value: 'bulk' },
+                ]}
+                defaultValue={
+                  this.state.currentOffset === 0
+                    ? 'maintenance'
+                    : this.state.currentOffset > 0
+                    ? 'bulk'
+                    : 'deficit'
+                }
+                onChange={this.calorieModeChange}
               />
+            </Column>
+            {this.state.calorieOffset !== 0 && (
+              <Column>
+                <Calories
+                  value={this.state.calorieOffset}
+                  onChange={this.calorieOffsetChange}
+                />
+              </Column>
             )}
-          </div>
-        </div>
-        <div className="row">
-          <div className="label-column column">Maintenance Calories</div>
-          <div className="value-column column">
-            <input
-              type="number"
-              min="0"
-              value={this.state.maintenanceCalories}
-              className="readOnly"
-              readOnly
-            />
+          </Column>
+        </Row>
+        <Row columns={2}>
+          <Column>Maintenance Calories</Column>
+          <Column>
+            <Calories value={this.state.maintenanceCalories} readOnly />
             <div className="unit-col">kcal</div>
-          </div>
-        </div>
-        <div className="row">
-          <div className="label-column column">Calorie Offset</div>
-          <div className="value-column column">
-            <input
-              type="number"
-              step="1"
-              value={this.state.currentOffset}
-              className="readOnly"
-              readOnly
-            />
+          </Column>
+        </Row>
+        <Row columns={2}>
+          <Column>Calories Per Kilogram of Bodyweight</Column>
+          <Column>
+            <Calories value={this.state.caloriesPerKg} readOnly />
             <div className="unit-col">kcal</div>
-          </div>
-        </div>
-        <div className="row">
-          <div className="label-column column">Protein Amount</div>
-          <div className="value-column column">
-            <input
-              type="number"
+          </Column>
+        </Row>
+        <Row columns={2}>
+          <Column>Protein Amount</Column>
+          <Column>
+            <Number
               min="0"
               step="0.05"
-              value={this.state.proteinAmount}
-              className="readOnly"
+              value={this.state.proteinGramsPerKg}
               readOnly
             />
             <div className="unit-col">g/kg</div>
-          </div>
-        </div>
-        <div className="row">
-          <div className="label-column column">Fat Partition</div>
-          <div className="value-column column">
-            <input
-              type="number"
+          </Column>
+        </Row>
+        <Row columns={2}>
+          <Column>Fat Partition</Column>
+          <Column>
+            <Number
               min="0"
-              value={this.state.fatPartition * 100}
-              className="readOnly"
+              value={this.state.fatCalorieProportion * 100}
               readOnly
             />
             <div className="unit-col">%</div>
-          </div>
-        </div>
-        <div className="row">
-          <div className="label-column column">Gender</div>
-          <div className="value-column column">
-            <select id="gender">
-              <option value="male" selected={this.state.gender === 'male'}>
-                Male
-              </option>
-              <option
-                value="female"
-                selected={this.state.gender === 'female'}
-              >
-                Female
-              </option>
-            </select>
-          </div>
-        </div>
-        <div className="row">
-          <div className="label-column column">Birth Date</div>
-          <div className="value-column column">
-            <input
-              type="date"
-              value={this.state.birthDate}
-              className="readOnly"
-              readOnly
+          </Column>
+        </Row>
+        <Row columns={2}>
+          <Column>Gender</Column>
+          <Column>
+            <Select
+              id="gender"
+              options={[
+                { label: 'Male', value: 'male' },
+                { label: 'Female', value: 'female' },
+              ]}
+              defaultValue={this.state.gender}
+              onChange={(evt) => this.setState({ gender: evt.value })}
             />
-          </div>
-        </div>
-        <div className="row">
-          <div className="label-column column">Date Joined</div>
-          <div className="value-column column">
-            <input
-              type="date"
-              value={this.state.dateJoined}
-              className="readOnly"
-              readOnly
-            />
-          </div>
-        </div>
-        <div className="row">
-          <div className="submit-column column">
-            <input
-              className="submitButton button"
-              type="submit"
-              value="Edit Profile"
-            />
-          </div>
-        </div>
-      </form>
+          </Column>
+        </Row>
+        <Row columns={2}>
+          <Column>Birth Date</Column>
+          <Column>
+            <DateInput value={this.state.birthDate} readOnly />
+          </Column>
+        </Row>
+        <Row columns={2}>
+          <Column>Date Joined</Column>
+          <Column>
+            <DateInput value={this.state.dateJoined} readOnly />
+          </Column>
+        </Row>
+        <Row columns={2}>
+          <Column span={2}>
+            <Button onClick={this.editProfile}>Edit Profile</Button>
+          </Column>
+        </Row>
+      </div>
     );
   }
 

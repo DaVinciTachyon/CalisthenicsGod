@@ -1,5 +1,6 @@
 import React from 'react';
 import { Line } from 'react-chartjs-2';
+import Card from '../../style/card';
 
 export default class MeasurementHistory extends React.Component {
   constructor() {
@@ -78,7 +79,7 @@ export default class MeasurementHistory extends React.Component {
 
   render() {
     return (
-      <div className="card">
+      <Card>
         <Line
           data={this.state.chart}
           options={{
@@ -93,7 +94,7 @@ export default class MeasurementHistory extends React.Component {
             },
           }}
         />
-      </div>
+      </Card>
     );
   }
 }

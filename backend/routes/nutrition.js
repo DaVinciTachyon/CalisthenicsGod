@@ -1,56 +1,57 @@
 const router = require('express').Router();
-const verify = require('./verifyToken');
+const verify = require('./tokenVerification');
 const Nutrients = require('../models/Nutrients');
 const Measurements = require('../models/Measurements');
 const nutrientValidation = require('../validation/nutrition');
 const mealsRoute = require('./meals');
 const ingredientsRoute = require('./ingredients');
+const {
+  macronutrientDensities,
+  getMaintenanceCalories,
+  getProteinGrams,
+  getFatGrams,
+  getCarbohydrateGrams,
+  getEthanolGrams,
+  getFiberGrams,
+  getWaterLitres,
+} = require('./nutrientUtil');
 
-const macronutrientDensities = {
-  //FIXME in db?
-  fat: 9,
-  carbohydrate: 4,
-  protein: 4,
-  ethanol: 7,
-};
+router.use(verify, async (req, res, next) => {
+  let nutrients = await Nutrients.findOne({ userId: req.user._id });
 
-/**
- * Find if today's date
- * @param {Date} date
- */
-const isToday = (date) => {
-  const today = new Date();
-  return (
-    date.getDate() === today.getDate() &&
-    date.getMonth() === today.getMonth() &&
-    date.getFullYear() === today.getFullYear()
-  );
-};
+  if (!nutrients) {
+    nutrients = new Nutrients({ userId: req.user._id });
 
-router.use(verify, (req, res, next) => {
-  next();
+    try {
+      await nutrients.save();
+      return next();
+    } catch (err) {
+      console.error(err);
+    }
+  } else next();
 });
 
-router.post('/calorieOffset', async (req, res) => {
-  const { error } = nutrientValidation.calorieOffset(req.body);
-  if (error) return res.status(400).send({ error: error.details[0].message });
+router
+  .route('/calorieOffset')
+  .get(async (req, res) => {
+    const nutrients = await Nutrients.findOne({ userId: req.user._id });
+    res.send({ calorieOffset: nutrients.calorieOffset });
+  })
+  .post(async (req, res) => {
+    const { error } = nutrientValidation.calorieOffset(req.body);
+    if (error) return res.status(400).send({ error: error.details[0].message });
 
-  const nutrients = await Nutrients.findOne({ userId: req.user._id });
-  nutrients.calorieOffset = req.body.calorieOffset;
-  try {
-    await nutrients.save();
-    res.sendStatus(200);
-  } catch (err) {
-    res.status(400).send({ error: err });
-  }
-});
+    const nutrients = await Nutrients.findOne({ userId: req.user._id });
+    nutrients.calorieOffset = req.body.calorieOffset;
+    try {
+      await nutrients.save();
+      res.sendStatus(200);
+    } catch (err) {
+      res.status(400).send({ error: err });
+    }
+  });
 
-router.get('/calorieOffset', async (req, res) => {
-  const nutrients = await Nutrients.findOne({ userId: req.user._id });
-  res.send({ calorieOffset: nutrients.calorieOffset });
-});
-
-router.get('/goals', async (req, res) => {
+router.route('/goals').get(async (req, res) => {
   const measurements = await Measurements.findOne({ userId: req.user._id });
 
   if (measurements.weight.length == 0) return res.status(404);
@@ -59,33 +60,33 @@ router.get('/goals', async (req, res) => {
   const nutrients = await Nutrients.findOne({ userId: req.user._id });
 
   const calories = Math.round(
-    nutrients.maintenanceCalories + nutrients.calorieOffset
+    getMaintenanceCalories(weight, nutrients.caloriesPerKg) +
+      nutrients.calorieOffset
   );
-
-  const protein = Math.round(weight * nutrients.proteinAmount * 10) / 10;
-  const fat =
-    Math.round(
-      ((calories * nutrients.fatPartition) / macronutrientDensities.fat) * 10
-    ) / 10;
-  const carbohydrate =
-    Math.round(
-      ((calories -
-        fat * macronutrientDensities.fat -
-        protein * macronutrientDensities.protein) /
-        macronutrientDensities.carbohydrate) *
-        10
-    ) / 10;
-  const ethanol = 0;
+  const protein = getProteinGrams(weight, nutrients.proteinGramsPerKg);
+  const fat = getFatGrams(calories, nutrients.fatCalorieProportion);
+  const carbohydrate = getCarbohydrateGrams(
+    calories,
+    fat * macronutrientDensities.fat,
+    protein * macronutrientDensities.protein
+  );
+  const ethanol = getEthanolGrams();
+  const fiber = getFiberGrams(carbohydrate);
+  const water = getWaterLitres(weight);
 
   res.send({
-    fat: fat,
-    carbohydrate: carbohydrate,
-    protein: protein,
-    ethanol: ethanol,
+    macronutrients: {
+      fat,
+      carbohydrate,
+      protein,
+      ethanol,
+      fiber,
+    },
+    water,
   });
 });
 
-router.get('/macronutrientDensities', (req, res) => {
+router.route('/macronutrientDensities').get((req, res) => {
   res.send(macronutrientDensities);
 });
 

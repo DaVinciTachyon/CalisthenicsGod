@@ -1,6 +1,6 @@
-import React from "react";
-import MeasurementSummary from "./MeasurementSummary";
-import MeasurementHistory from "./MeasurementHistory";
+import React from 'react';
+import MeasurementSummary from './MeasurementSummary';
+import MeasurementHistory from './MeasurementHistory';
 
 export default class MeasurementTracker extends React.Component {
   constructor() {
