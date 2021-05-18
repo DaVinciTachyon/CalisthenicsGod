@@ -14,11 +14,10 @@ export default class MealSelect extends React.Component {
   }
 
   render() {
-    let meals = [{ label: 'New Meal', value: '' }].concat(this.state.meals);
     return (
       <Row columns={2}>
         <Select
-          options={meals}
+          options={[{ label: 'New Meal', value: '' }].concat(this.state.meals)}
           defaultValue={''}
           onChange={(evt) => this.setState({ id: evt.value })}
         />

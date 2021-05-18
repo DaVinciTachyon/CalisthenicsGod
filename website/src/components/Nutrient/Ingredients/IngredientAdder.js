@@ -46,8 +46,8 @@ export default class IngredientAdder extends React.Component {
       }
     );
     if (response.status === 200) {
+      await this.props.onSubmit();
       this.resetState();
-      this.props.onSubmit();
     } else {
       const data = await response.json();
       console.error(data.error);

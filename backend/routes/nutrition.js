@@ -16,43 +16,42 @@ const {
   getWaterLitres,
 } = require('./nutrientUtil');
 
-/**
- * Find if today's date
- * @param {Date} date
- */
-const isToday = (date) => {
-  const today = new Date();
-  return (
-    date.getDate() === today.getDate() &&
-    date.getMonth() === today.getMonth() &&
-    date.getFullYear() === today.getFullYear()
-  );
-};
+router.use(verify, async (req, res, next) => {
+  let nutrients = await Nutrients.findOne({ userId: req.user._id });
 
-router.use(verify, (req, res, next) => {
-  next();
+  if (!nutrients) {
+    nutrients = new Nutrients({ userId: req.user._id });
+
+    try {
+      await nutrients.save();
+      return next();
+    } catch (err) {
+      console.error(err);
+    }
+  } else next();
 });
 
-router.post('/calorieOffset', async (req, res) => {
-  const { error } = nutrientValidation.calorieOffset(req.body);
-  if (error) return res.status(400).send({ error: error.details[0].message });
+router
+  .route('/calorieOffset')
+  .get(async (req, res) => {
+    const nutrients = await Nutrients.findOne({ userId: req.user._id });
+    res.send({ calorieOffset: nutrients.calorieOffset });
+  })
+  .post(async (req, res) => {
+    const { error } = nutrientValidation.calorieOffset(req.body);
+    if (error) return res.status(400).send({ error: error.details[0].message });
 
-  const nutrients = await Nutrients.findOne({ userId: req.user._id });
-  nutrients.calorieOffset = req.body.calorieOffset;
-  try {
-    await nutrients.save();
-    res.sendStatus(200);
-  } catch (err) {
-    res.status(400).send({ error: err });
-  }
-});
+    const nutrients = await Nutrients.findOne({ userId: req.user._id });
+    nutrients.calorieOffset = req.body.calorieOffset;
+    try {
+      await nutrients.save();
+      res.sendStatus(200);
+    } catch (err) {
+      res.status(400).send({ error: err });
+    }
+  });
 
-router.get('/calorieOffset', async (req, res) => {
-  const nutrients = await Nutrients.findOne({ userId: req.user._id });
-  res.send({ calorieOffset: nutrients.calorieOffset });
-});
-
-router.get('/goals', async (req, res) => {
+router.route('/goals').get(async (req, res) => {
   const measurements = await Measurements.findOne({ userId: req.user._id });
 
   if (measurements.weight.length == 0) return res.status(404);
@@ -87,7 +86,7 @@ router.get('/goals', async (req, res) => {
   });
 });
 
-router.get('/macronutrientDensities', (req, res) => {
+router.route('/macronutrientDensities').get((req, res) => {
   res.send(macronutrientDensities);
 });
 

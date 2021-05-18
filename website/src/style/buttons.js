@@ -6,7 +6,7 @@ const Button = styled.button.attrs({
   color: Background.primary,
 })`
   text-decoration: none;
-  border-radius: 0.5rem;
+  border-radius: 1vw;
   text-align: center;
   border: 0.1rem solid ${(props) => props.color};
   color: ${(props) => props.color};
@@ -14,12 +14,12 @@ const Button = styled.button.attrs({
   box-shadow: 0 0 0.5rem 0.25rem ${Shadow.primary};
   margin: auto;
   min-width: 60%;
-  height: 3vh;
-  font-size: 2vh;
+  height: 2vw;
+  font-size: 1vw;
 
   &.secondary {
     min-width: 51%;
-    font-size: 1vw;
+    font-size: 0.7vw;
   }
 
   &.maxWidth {
@@ -32,8 +32,8 @@ const Button = styled.button.attrs({
   }
 
   &.thin {
-    height: 2vh;
-    font-size: 1vh;
+    height: 1vw;
+    font-size: 0.5vw;
   }
 
   &:hover {

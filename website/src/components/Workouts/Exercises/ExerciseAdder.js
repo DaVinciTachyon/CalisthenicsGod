@@ -1,9 +1,9 @@
 import React from 'react';
-import { Row, Column } from '../../style/table';
-import { Button, ErrorButton } from '../../style/buttons';
-import { Text, Radio } from '../../style/inputs';
-import StageSelect from './StageSelect';
-import ExerciseSelect from './ExerciseSelect';
+import { Row, Column } from '../../../style/table';
+import { Button, ErrorButton } from '../../../style/buttons';
+import { Text, Radio } from '../../../style/inputs';
+import StageSelect from '../StageSelect';
+import ExerciseSelect from '../ExerciseSelect';
 
 export default class Exercises extends React.Component {
   constructor() {
@@ -63,7 +63,7 @@ export default class Exercises extends React.Component {
 
   onChange = (evt) => this.setState({ [evt.target.name]: evt.target.value });
 
-  onSelectChange = (name, value) => this.setState({ [name]: value });
+  onSelectChange = (evt) => this.setState({ [evt.name]: evt.value });
 
   async onSubmit(evt) {
     evt.preventDefault();
@@ -257,6 +257,7 @@ export default class Exercises extends React.Component {
             name="potentialStages"
             onChange={this.onSelectChange}
             defaultValue={this.state.potentialStages}
+            isMulti
           />
         </Column>
         <Column>
@@ -264,6 +265,7 @@ export default class Exercises extends React.Component {
             name="requirements"
             onChange={this.onSelectChange}
             defaultValue={this.state.requirements}
+            isMulti
           />
         </Column>
         <Column>

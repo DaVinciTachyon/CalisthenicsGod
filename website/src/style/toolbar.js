@@ -66,15 +66,15 @@ const NavigationBarContainer = styled.nav`
     top: 0;
     left: 0;
 
+    &:hover {
+      width: 16rem;
+    }
+
     &.signedout {
       height: 5rem;
       width: 100vw;
       top: 0;
       left: 0;
-    }
-
-    &:hover {
-      width: 16rem;
     }
   }
 `;

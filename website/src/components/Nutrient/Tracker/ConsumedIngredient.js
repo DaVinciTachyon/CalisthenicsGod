@@ -67,8 +67,8 @@ export default class ConsumedIngredient extends React.Component {
 
   onUpdate = async (response) => {
     if (response.status === 200) {
+      await this.props.onUpdate();
       this.setState({ isEditing: false });
-      this.props.onUpdate();
     } else {
       const data = await response.json();
       console.error(data.error);

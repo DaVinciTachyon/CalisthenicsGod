@@ -37,20 +37,6 @@ export default class IngredientList extends React.Component {
   render() {
     if (this.state.ingredients.length === 0 && this.props.isUnavailable)
       return <></>;
-    const ingredients = [];
-    this.state.ingredients.forEach((ingredient) =>
-      ingredients.push(
-        <IngredientRow
-          key={ingredient._id}
-          id={ingredient._id}
-          name={ingredient.name}
-          macronutrients={ingredient.macronutrients}
-          macroDensities={this.props.macroDensities}
-          onUpdate={this.props.onUpdate}
-          isAvailable={!this.props.isUnavailable}
-        />
-      )
-    );
     return (
       <div>
         <Row columns={9}>
@@ -66,7 +52,17 @@ export default class IngredientList extends React.Component {
             macroDensities={this.props.macroDensities}
           />
         )}
-        {ingredients}
+        {this.state.ingredients.map((ingredient) => (
+          <IngredientRow
+            key={ingredient._id}
+            id={ingredient._id}
+            name={ingredient.name}
+            macronutrients={ingredient.macronutrients}
+            macroDensities={this.props.macroDensities}
+            onUpdate={this.props.onUpdate}
+            isAvailable={!this.props.isUnavailable}
+          />
+        ))}
       </div>
     );
   }

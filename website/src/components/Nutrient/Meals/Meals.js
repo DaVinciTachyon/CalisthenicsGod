@@ -36,18 +36,6 @@ export default class Meals extends React.Component {
   };
 
   render() {
-    const meals = [];
-    this.state.meals.forEach((meal) =>
-      meals.push(
-        <MealRow
-          key={meal._id}
-          id={meal._id}
-          name={meal.name}
-          macroDensities={this.state.macroDensities}
-          onUpdate={this.getMeals}
-        />
-      )
-    );
     return (
       <div>
         <MealRow isTitle />
@@ -55,7 +43,15 @@ export default class Meals extends React.Component {
           macroDensities={this.state.macroDensities}
           onSubmit={this.getMeals}
         />
-        {meals}
+        {this.state.meals.map((meal) => (
+          <MealRow
+            key={meal._id}
+            id={meal._id}
+            name={meal.name}
+            macroDensities={this.state.macroDensities}
+            onUpdate={this.getMeals}
+          />
+        ))}
       </div>
     );
   }

@@ -1,6 +1,6 @@
 import React from 'react';
-import { Row, Column } from '../../style/table';
-import { Button } from '../../style/buttons';
+import { Row, Column } from '../../../style/table';
+import { Button } from '../../../style/buttons';
 import ExerciseRow from './ExerciseRow';
 import ExerciseAdder from './ExerciseAdder';
 
@@ -39,8 +39,8 @@ export default class Exercises extends React.Component {
       body: JSON.stringify(exercise),
     });
     if (response.status === 200) {
-      await this.setState({ isAdding: false });
-      this.getExercises();
+      await this.getExercises();
+      this.setState({ isAdding: false });
     } else {
       const data = await response.json();
       return data.error;
@@ -48,17 +48,6 @@ export default class Exercises extends React.Component {
   };
 
   render() {
-    let exercises = [];
-    this.state.exercises.forEach((exercise) =>
-      exercises.push(
-        <ExerciseRow
-          key={exercise._id}
-          id={exercise._id}
-          exercise={exercise}
-          onUpdate={this.getExercises}
-        />
-      )
-    );
     return (
       <div>
         <ExerciseRow isTitle />
@@ -80,7 +69,14 @@ export default class Exercises extends React.Component {
             )}
           </Column>
         </Row>
-        {exercises}
+        {this.state.exercises.map((exercise) => (
+          <ExerciseRow
+            key={exercise._id}
+            id={exercise._id}
+            exercise={exercise}
+            onUpdate={this.getExercises}
+          />
+        ))}
       </div>
     );
   }

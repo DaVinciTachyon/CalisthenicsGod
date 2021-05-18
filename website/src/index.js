@@ -9,12 +9,12 @@ import MeasurementTracker from './components/Measurement/MeasurementTracker';
 import MeasurementAdder from './components/Measurement/MeasurementAdder';
 import { BrowserRouter as Router, Switch } from 'react-router-dom';
 import UserProfile from './components/User/UserProfile';
-import WorkoutTracker from './components/Workouts/WorkoutTracker';
-import WorkoutAdder from './components/Workouts/WorkoutAdder';
-import Exercises from './components/Workouts/Exercises';
+import WorkoutTracker from './components/Workouts/Tracker/WorkoutTracker';
+import WorkoutAdder from './components/Workouts/Tracker/WorkoutAdder';
+import Exercises from './components/Workouts/Exercises/Exercises';
 import Ingredients from './components/Nutrient/Ingredients/Ingredients';
 import Meals from './components/Nutrient/Meals/Meals';
-import Stages from './components/Workouts/Stages';
+import Stages from './components/Workouts/Stages/Stages';
 import AuthenticatedRoute from './components/AuthenticatedRoute';
 import NonAuthenticatedRoute from './components/NonAuthenticatedRoute';
 

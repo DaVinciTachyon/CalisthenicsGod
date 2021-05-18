@@ -10,26 +10,22 @@ export default class ConsumedMeal extends React.Component {
   }
 
   render() {
-    const ingredients = [];
-    this.props.ingredients.forEach((ingredient) =>
-      ingredients.push(
-        <ConsumedIngredient
-          key={ingredient._id}
-          mealId={this.props.id}
-          _id={ingredient._id}
-          id={ingredient.id}
-          name={ingredient.name}
-          weight={ingredient.weight}
-          macros={ingredient.macronutrients}
-          macroDensities={this.props.macroDensities}
-          onUpdate={this.props.onUpdate}
-        />
-      )
-    );
     return (
       <div>
         <ConsumedIngredient isTitle />
-        {ingredients}
+        {this.props.ingredients.map((ingredient) => (
+          <ConsumedIngredient
+            key={ingredient._id}
+            mealId={this.props.id}
+            _id={ingredient._id}
+            id={ingredient.id}
+            name={ingredient.name}
+            weight={ingredient.weight}
+            macros={ingredient.macronutrients}
+            macroDensities={this.props.macroDensities}
+            onUpdate={this.props.onUpdate}
+          />
+        ))}
         <ConsumedIngredientAdder
           id={this.props.id}
           macroDensities={this.props.macroDensities}

@@ -25,13 +25,13 @@ module.exports = {
       _id: Joi.string().required(),
       name: Joi.string().required(),
       abbreviation: Joi.string().allow(''),
-      motionType: {
+      motionType: Joi.object({
         transversePlane: Joi.string().valid('upper', 'lower'),
         verticality: Joi.string().valid('horizontal', 'vertical'),
         frontalPlane: Joi.string().valid('push', 'pull'),
         kineticChain: Joi.string().valid('closed', 'open'),
         motion: Joi.string().valid('isometric', 'isotonic'),
-      },
+      }),
       potentialStages: Joi.array().items(Joi.string()),
       requirements: Joi.array().items(Joi.string()),
       description: Joi.string().allow(''),

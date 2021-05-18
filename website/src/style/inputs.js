@@ -102,33 +102,17 @@ class Select extends React.Component {
   set = () =>
     this.setState({ value: this.props.defaultValue || this.state.value });
 
-  onChange = (evt) => {
+  onChange = async (evt) => {
     if (this.props.readOnly) return;
     let value = this.state.value;
     if (this.props.isMulti)
       value = Array.from(evt.target.selectedOptions, (option) => option.value);
     else if (evt.target.validity.valid) value = evt.target.value;
-    this.setState({ value });
+    await this.setState({ value });
     this.props.onChange({ name: this.props.name, value });
   };
 
   render() {
-    const options = [];
-    this.props.options.forEach((option) =>
-      options.push(
-        <option
-          key={option.value}
-          value={option.value}
-          selected={
-            this.props.isMulti
-              ? this.state.value.includes(option.value)
-              : option.value === this.state.value
-          }
-        >
-          {option.label}
-        </option>
-      )
-    );
     return (
       <BaseSelect
         name={this.props.name}
@@ -138,7 +122,19 @@ class Select extends React.Component {
         multiple={this.props.isMulti}
         size={this.props.isMulti ? 3 : undefined}
       >
-        {options}
+        {this.props.options.map((option) => (
+          <option
+            key={option.value}
+            value={option.value}
+            selected={
+              this.props.isMulti
+                ? this.state.value.includes(option.value)
+                : option.value === this.state.value
+            }
+          >
+            {option.label}
+          </option>
+        ))}
       </BaseSelect>
     );
   }

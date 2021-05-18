@@ -60,18 +60,6 @@ export default class NutrientTracker extends React.Component {
   };
 
   render() {
-    const meals = [];
-    this.state.meals.forEach((meal) =>
-      meals.push(
-        <ConsumedMeal
-          key={meal._id}
-          id={meal._id}
-          ingredients={meal.ingredients}
-          macroDensities={this.state.macroDensities}
-          onUpdate={this.getMeals}
-        />
-      )
-    );
     return (
       <div>
         <Card>
@@ -101,7 +89,15 @@ export default class NutrientTracker extends React.Component {
             macroDensities={this.state.macroDensities}
           />
         )}
-        {meals}
+        {this.state.meals.map((meal) => (
+          <ConsumedMeal
+            key={meal._id}
+            id={meal._id}
+            ingredients={meal.ingredients}
+            macroDensities={this.state.macroDensities}
+            onUpdate={this.getMeals}
+          />
+        ))}
       </div>
     );
   }

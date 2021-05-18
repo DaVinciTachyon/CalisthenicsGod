@@ -1,7 +1,7 @@
 import React from 'react';
 import StageAdder from './StageAdder';
 import StageRow from './StageRow';
-import { Row, Column } from '../../style/table';
+import { Row, Column } from '../../../style/table';
 
 export default class Stages extends React.Component {
   constructor() {
@@ -31,25 +31,6 @@ export default class Stages extends React.Component {
   };
 
   render() {
-    let stages = [];
-    for (let i = 0; i < this.state.stages.length; i++) {
-      const stage = this.state.stages[i];
-      stages.push(
-        <div key={stage._id}>
-          <StageRow
-            id={stage._id}
-            name={stage.name}
-            description={stage.description}
-            onUpdate={this.getStages}
-          />
-          <Row columns={5}>
-            <Column span={5}>
-              <StageAdder index={i + 1} />
-            </Column>
-          </Row>
-        </div>
-      );
-    }
     return (
       <div>
         <StageRow isTitle />
@@ -58,7 +39,21 @@ export default class Stages extends React.Component {
             <StageAdder index={0} />
           </Column>
         </Row>
-        {stages}
+        {this.state.stages.map((stage, i) => (
+          <div key={stage._id}>
+            <StageRow
+              id={stage._id}
+              name={stage.name}
+              description={stage.description}
+              onUpdate={this.getStages}
+            />
+            <Row columns={5}>
+              <Column span={5}>
+                <StageAdder index={i + 1} />
+              </Column>
+            </Row>
+          </div>
+        ))}
       </div>
     );
   }

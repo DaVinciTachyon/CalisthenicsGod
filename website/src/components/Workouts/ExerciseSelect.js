@@ -24,25 +24,32 @@ export default class ExerciseSelect extends React.Component {
     });
     const data = await response.json();
     const exercises = [];
-    data.exercises.forEach((exercise) =>
-      exercises.push({ label: exercise.name, value: exercise._id })
-    );
+    data.exercises.forEach((exercise) => {
+      if (
+        !this.props.stage ||
+        (this.props.stage &&
+          exercise.potentialStages.includes(this.props.stage))
+      )
+        exercises.push({ label: exercise.name, value: exercise._id });
+    });
     this.setState({ exerciseOptions: exercises });
   };
 
   onChange = async (evt) => {
     await this.setState({ [evt.name]: evt.value });
-    this.props.onChange(this.props.name, evt.value);
+    this.props.onChange(evt);
   };
 
   render() {
     return (
       <Select
-        options={this.state.exerciseOptions}
-        name="exercises"
+        options={[{ label: 'Choose Exercise', value: '' }].concat(
+          this.state.exerciseOptions
+        )}
+        name={this.props.name || 'exercises'}
         defaultValue={this.props.defaultValue}
         onChange={this.onChange}
-        isMulti
+        isMulti={this.props.isMulti}
         readOnly={this.props.readOnly}
       />
     );

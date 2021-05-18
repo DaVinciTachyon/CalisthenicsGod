@@ -1,9 +1,9 @@
 import React from 'react';
-import { Row, Column } from '../../style/table';
-import { Text } from '../../style/inputs';
-import { Button, DeleteButton } from '../../style/buttons';
-import StageSelect from './StageSelect';
-import ExerciseSelect from './ExerciseSelect';
+import { Row, Column } from '../../../style/table';
+import { Text } from '../../../style/inputs';
+import { Button, DeleteButton } from '../../../style/buttons';
+import StageSelect from '../StageSelect';
+import ExerciseSelect from '../ExerciseSelect';
 import ExerciseAdder from './ExerciseAdder';
 
 export default class ExerciseRow extends React.Component {
@@ -27,8 +27,8 @@ export default class ExerciseRow extends React.Component {
       }
     );
     if (response.status === 200) {
-      await this.setState({ isEditing: false });
-      this.props.onUpdate();
+      await this.props.onUpdate();
+      this.setState({ isEditing: false });
     } else {
       const data = await response.json();
       return data.error;
@@ -113,12 +113,14 @@ export default class ExerciseRow extends React.Component {
             <StageSelect
               defaultValue={this.props.exercise.potentialStages}
               readOnly
+              isMulti
             />
           </Column>
           <Column>
             <ExerciseSelect
               defaultValue={this.props.exercise.requirements}
               readOnly
+              isMulti
             />
           </Column>
           <Column>

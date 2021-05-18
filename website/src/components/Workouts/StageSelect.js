@@ -35,17 +35,19 @@ export default class StageSelect extends React.Component {
 
   onChange = async (evt) => {
     await this.setState({ [evt.name]: evt.value });
-    this.props.onChange(this.props.name, evt.value);
+    this.props.onChange(evt);
   };
 
   render() {
     return (
       <Select
-        options={this.state.stageOptions}
-        name="stages"
+        options={[{ label: 'Choose Stage', value: '' }].concat(
+          this.state.stageOptions
+        )}
+        name={this.props.name || 'stages'}
         onChange={this.onChange}
         defaultValue={this.props.defaultValue}
-        isMulti
+        isMulti={this.props.isMulti}
         readOnly={this.props.readOnly}
       />
     );

@@ -22,13 +22,12 @@ export default class IngredientSelect extends React.Component {
   };
 
   render() {
-    let ingredients = [{ label: 'New Ingredient', value: '' }].concat(
-      this.state.ingredientOptions
-    );
     return (
       <Select
-        name="ingredient"
-        options={ingredients}
+        name={this.props.name || 'ingredient'}
+        options={[{ label: 'New Ingredient', value: '' }].concat(
+          this.state.ingredientOptions
+        )}
         defaultValue={''}
         onChange={this.onChange}
         readOnly={this.props.readOnly}

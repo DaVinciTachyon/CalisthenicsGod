@@ -1,7 +1,7 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
 import Workout from './Workout';
-import { Button } from '../../style/buttons';
+import { Button } from '../../../style/buttons';
 
 export default class WorkoutTracker extends React.Component {
   constructor() {
@@ -29,16 +29,14 @@ export default class WorkoutTracker extends React.Component {
   };
 
   render() {
-    const workouts = [];
-    this.state.workouts.forEach((workout) =>
-      workouts.push(<Workout key={workout._id} details={workout} />)
-    );
     return (
       <div>
         <Link to="/workoutTracker/new">
           <Button className="maxWidth">+</Button>
         </Link>
-        {workouts}
+        {this.state.workouts.map((workout) => (
+          <Workout key={workout._id} details={workout} />
+        ))}
       </div>
     );
   }

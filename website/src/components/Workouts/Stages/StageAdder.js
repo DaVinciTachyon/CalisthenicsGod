@@ -1,8 +1,8 @@
 import React from 'react';
-import { Error } from '../../style/notification';
-import { Row, Column } from '../../style/table';
-import { Button, ErrorButton } from '../../style/buttons';
-import { Text } from '../../style/inputs';
+import { Error } from '../../../style/notification';
+import { Row, Column } from '../../../style/table';
+import { Button, ErrorButton } from '../../../style/buttons';
+import { Text } from '../../../style/inputs';
 
 export default class StageAdder extends React.Component {
   constructor() {
@@ -46,7 +46,7 @@ export default class StageAdder extends React.Component {
       }
     );
     if (response.status === 200) {
-      this.setState({ isAdding: false });
+      await this.setState({ isAdding: false });
       window.location.reload();
     } else {
       const data = await response.json();

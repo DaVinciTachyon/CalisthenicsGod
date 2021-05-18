@@ -208,7 +208,7 @@ export default class ToolBar extends React.Component {
               </NavigationLink>
             </NavigationItem>
             <NavigationItem>
-              <NavigationLink onClick={this.logOut}>
+              <NavigationLink to="/" onClick={this.logOut}>
                 <Svg
                   aria-hidden="true"
                   focusable="false"

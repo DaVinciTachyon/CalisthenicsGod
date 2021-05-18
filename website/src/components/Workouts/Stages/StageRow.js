@@ -1,12 +1,12 @@
 import React from 'react';
-import { Row, Column } from '../../style/table';
-import { Text } from '../../style/inputs';
+import { Row, Column } from '../../../style/table';
+import { Text } from '../../../style/inputs';
 import {
   Button,
   SuccessButton,
   ErrorButton,
   DeleteButton,
-} from '../../style/buttons';
+} from '../../../style/buttons';
 
 export default class StageRow extends React.Component {
   constructor() {
