@@ -35,15 +35,49 @@ const Radio = styled(Input).attrs({
   type: 'radio',
 })``;
 
-const Number = styled(Input).attrs({
+const BaseNumber = styled.input.attrs({
   type: 'number',
 })`
-  max-width: 4rem;
   -moz-appearance: textfield;
+  border: none;
+  text-align: center;
+  max-width: 4rem;
+
+  &:focus {
+    border: none;
+  }
 
   &::-webkit-inner-spin-button {
     -webkit-appearance: none;
     margin: 0;
+  }
+`;
+
+const Number = styled(({ className, children, type, unit, style, ...rest }) => {
+  if (unit)
+    return (
+      <div style={style} className={`${className} container`}>
+        <BaseNumber className="input" type={type} {...rest}>
+          {children}
+        </BaseNumber>
+        <div className="unit">{unit}</div>
+      </div>
+    );
+  return (
+    <BaseNumber style={style} className={className} type={type} {...rest}>
+      {children}
+    </BaseNumber>
+  );
+})`
+  ${BaseStyle}
+
+  &.container {
+    display: grid;
+    grid-template-columns: 3fr 1fr;
+  }
+
+  & .unit {
+    margin: 0 0.5rem 0;
   }
 `;
 
