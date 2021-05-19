@@ -1,5 +1,5 @@
 import React from 'react';
-import IngredientSelect from './IngredientSelect';
+import IngredientSelect from '../IngredientSelect';
 import { Row, Column } from '../../../style/table';
 import { Text, Calories } from '../../../style/inputs';
 import { SuccessButton, ErrorButton } from '../../../style/buttons';

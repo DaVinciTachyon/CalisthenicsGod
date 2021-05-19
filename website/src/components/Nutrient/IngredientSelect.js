@@ -1,10 +1,10 @@
 import React from 'react';
-import { Select } from '../../../style/inputs';
+import { Select } from '../../style/inputs';
 
 export default class IngredientSelect extends React.Component {
   constructor() {
     super();
-    this.state = { ingredients: [], ingredientOptions: [] };
+    this.state = { ingredients: [] };
   }
 
   componentDidMount() {
@@ -13,11 +13,9 @@ export default class IngredientSelect extends React.Component {
 
   onChange = (evt) => {
     this.props.onChange(
-      this.state.ingredients[
-        this.state.ingredients.findIndex(
-          (ingredient) => evt.value === ingredient._id
-        )
-      ]
+      this.state.ingredients.filter(
+        (ingredient) => evt.value === ingredient._id
+      )[0]
     );
   };
 
@@ -26,7 +24,9 @@ export default class IngredientSelect extends React.Component {
       <Select
         name={this.props.name || 'ingredient'}
         options={[{ label: 'New Ingredient', value: '' }].concat(
-          this.state.ingredientOptions
+          this.state.ingredients.map((ingredient) => {
+            return { label: ingredient.name, value: ingredient._id };
+          })
         )}
         defaultValue={''}
         onChange={this.onChange}
@@ -47,10 +47,6 @@ export default class IngredientSelect extends React.Component {
       }
     );
     const data = await response.json();
-    const ingredientOptions = [];
-    data.ingredients.forEach((ingredient) =>
-      ingredientOptions.push({ label: ingredient.name, value: ingredient._id })
-    );
-    this.setState({ ingredients: data.ingredients, ingredientOptions });
+    this.setState({ ingredients: data.ingredients });
   };
 }

@@ -36,6 +36,12 @@ export default class Workout extends React.Component {
                       return <Column>{set.repetitions}</Column>;
                     else if (exercise.type === 'isometric')
                       return <Column>{set.time}s</Column>;
+                    else if (exercise.type === 'distance')
+                      return (
+                        <Column>
+                          {set.distance}m in {set.time}s
+                        </Column>
+                      );
                     else
                       return (
                         <Column>
