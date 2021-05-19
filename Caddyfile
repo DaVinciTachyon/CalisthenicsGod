@@ -1,4 +1,4 @@
-example.com {
+cgod.michaelmcguinness.net {
   reverse_proxy website:5000  {
     header_down Strict-Transport-Security max-age=31536000;
    }
