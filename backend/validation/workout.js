@@ -26,9 +26,10 @@ module.exports = {
           sets: Joi.array().items({
             repetitions: Joi.number().min(0),
             time: Joi.number().min(0),
+            distance: Joi.number().min(0),
           }),
           type: Joi.string()
-            .valid('isotonic', 'eccentric', 'isometric')
+            .valid('isotonic', 'eccentric', 'isometric', 'distance')
             .required(),
           rest: Joi.object({
             intraset: Joi.number().min(0),

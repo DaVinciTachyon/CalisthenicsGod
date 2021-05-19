@@ -58,11 +58,11 @@ export default class ExerciseRow extends React.Component {
           <Column span={5}>
             <Column span={5}>Motion Type</Column>
             <Column span={5} columns={5}>
+              <Column>Motion</Column>
               <Column>Transverse Plane</Column>
               <Column>Kinetic Chain</Column>
               <Column>Verticality</Column>
               <Column>Frontal Plane</Column>
-              <Column>Motion</Column>
             </Column>
           </Column>
           <Column>Potential Stages</Column>
@@ -82,32 +82,39 @@ export default class ExerciseRow extends React.Component {
           </Column>
           <Column span={5} columns={5}>
             <Column>
-              <Text
-                value={this.props.exercise.motionType.transversePlane}
-                readOnly
-              />
-            </Column>
-            <Column>
-              <Text
-                value={this.props.exercise.motionType.kineticChain}
-                readOnly
-              />
-            </Column>
-            <Column>
-              <Text
-                value={this.props.exercise.motionType.verticality}
-                readOnly
-              />
-            </Column>
-            <Column>
-              <Text
-                value={this.props.exercise.motionType.frontalPlane}
-                readOnly
-              />
-            </Column>
-            <Column>
               <Text value={this.props.exercise.motionType.motion} readOnly />
             </Column>
+            {this.props.exercise.motionType.motion === 'distance' && (
+              <Column span={4} />
+            )}
+            {this.props.exercise.motionType.motion !== 'distance' && (
+              <>
+                <Column>
+                  <Text
+                    value={this.props.exercise.motionType.transversePlane}
+                    readOnly
+                  />
+                </Column>
+                <Column>
+                  <Text
+                    value={this.props.exercise.motionType.kineticChain}
+                    readOnly
+                  />
+                </Column>
+                <Column>
+                  <Text
+                    value={this.props.exercise.motionType.verticality}
+                    readOnly
+                  />
+                </Column>
+                <Column>
+                  <Text
+                    value={this.props.exercise.motionType.frontalPlane}
+                    readOnly
+                  />
+                </Column>
+              </>
+            )}
           </Column>
           <Column>
             <StageSelect

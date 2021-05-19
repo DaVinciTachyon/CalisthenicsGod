@@ -5,7 +5,7 @@ import { Number } from '../../../style/inputs';
 export default class SetEditor extends React.Component {
   constructor() {
     super();
-    this.state = { repetitions: 1, time: 1 };
+    this.state = { repetitions: 1, time: 1, distance: 1 };
   }
 
   componentDidMount() {
@@ -14,13 +14,14 @@ export default class SetEditor extends React.Component {
 
   componentDidUpdate(prevProps) {
     if (prevProps.type !== this.props.type)
-      this.setState({ repetitions: 1, time: 1 });
+      this.setState({ repetitions: 1, time: 1, distance: 1 });
   }
 
   onUpdate = () =>
     this.props.onUpdate({
       repetitions: this.state.repetitions,
       time: this.state.time,
+      distance: this.state.distance,
     });
 
   onChange = async (evt) => {
@@ -45,6 +46,30 @@ export default class SetEditor extends React.Component {
     else if (this.props.type === 'isometric')
       return (
         <Row columns={2}>
+          <Column>
+            <Number
+              name="time"
+              min={1}
+              value={this.state.time}
+              onChange={this.onChange}
+            />
+          </Column>
+          <Column>s</Column>
+        </Row>
+      );
+    else if (this.props.type === 'distance')
+      return (
+        <Row columns={5}>
+          <Column>
+            <Number
+              name="distance"
+              min={1}
+              value={this.state.distance}
+              onChange={this.onChange}
+            />
+          </Column>
+          <Column>m</Column>
+          <Column>in</Column>
           <Column>
             <Number
               name="time"

@@ -10,10 +10,11 @@ export default class ExerciseRow extends React.Component {
     super();
     this.state = {
       sets: [],
-      type: 'isotonic',
+      type: undefined,
       id: '',
-      intrasetRest: 0,
+      intrasetRest: undefined,
       intersetRest: 0,
+      exercise: undefined,
     };
   }
 
@@ -42,6 +43,15 @@ export default class ExerciseRow extends React.Component {
     this.onUpdate();
   };
 
+  onExerciseChange = async (evt, exercise) => {
+    let type = 'isotonic';
+    if (!exercise) type = undefined;
+    else if (exercise.motionType.motion === 'distance') type = 'distance';
+    else if (exercise.motionType.motion === 'isometric') type = 'isometric';
+    await this.setState({ [evt.name]: evt.value, exercise, type });
+    this.onUpdate();
+  };
+
   onUpdateSet = async (index, set) => {
     await this.setState((state) => {
       state.sets[index] = set;
@@ -54,18 +64,32 @@ export default class ExerciseRow extends React.Component {
   addSet = (length) =>
     this.setState((state) => {
       if (state.sets.length < length + 1) state.sets.push({});
+      if (state.sets.length > 1) state.intrasetRest = 0;
 
-      return { sets: state.sets };
+      return { sets: state.sets, intrasetRest: state.intrasetRest };
     });
 
   removeSet = (length) =>
     this.setState((state) => {
       if (state.sets.length > length - 1) state.sets.pop();
+      if (state.sets.length <= 1) state.intrasetRest = undefined;
 
-      return { sets: state.sets };
+      return { sets: state.sets, intrasetRest: state.intrasetRest };
     });
 
   render() {
+    const typeOptions = [];
+    if (this.state.exercise) {
+      if (this.state.exercise.motionType.motion === 'distance')
+        typeOptions.push({ value: 'distance', label: 'Distance' });
+      else if (this.state.exercise.motionType.motion === 'isometric')
+        typeOptions.push({ value: 'isometric', label: 'Isometric' });
+      else
+        typeOptions.push([
+          { value: 'isotonic', label: 'Isotonic' },
+          { value: 'eccentric', label: 'Eccentric' },
+        ]);
+    }
     return (
       <Row columns={5}>
         <Column>
@@ -96,13 +120,9 @@ export default class ExerciseRow extends React.Component {
           </Row>
         </Column>
         <Column>
-          <Select //check if isometric vs isotonic
+          <Select
             name="type"
-            options={[
-              { value: 'isotonic', label: 'Isotonic' },
-              { value: 'isometric', label: 'Isometric' },
-              { value: 'eccentric', label: 'Eccentric' },
-            ]}
+            options={typeOptions}
             defaultValue={this.state.type}
             onChange={this.onSelectChange}
           />
@@ -111,18 +131,21 @@ export default class ExerciseRow extends React.Component {
           <ExerciseSelect
             name="id"
             stage={this.props.stageId}
-            onChange={this.onSelectChange}
+            onChange={this.onExerciseChange}
           />
         </Column>
         <Column columns={2}>
-          <Column>
-            <Number
-              name="intrasetRest"
-              min={0}
-              value={this.state.intrasetRest}
-              onChange={this.onChange}
-            />
-          </Column>
+          {this.state.intrasetRest === undefined && <Column />}
+          {this.state.intrasetRest !== undefined && (
+            <Column>
+              <Number
+                name="intrasetRest"
+                min={0}
+                value={this.state.intrasetRest}
+                onChange={this.onChange}
+              />
+            </Column>
+          )}
           <Column>
             <Number
               name="intersetRest"

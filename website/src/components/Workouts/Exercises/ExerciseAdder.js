@@ -61,23 +61,41 @@ export default class Exercises extends React.Component {
       });
   };
 
-  onChange = (evt) => this.setState({ [evt.target.name]: evt.target.value });
+  onChange = (evt) => {
+    this.setState({ [evt.target.name]: evt.target.value });
+    if (evt.target.name === 'motion' && evt.target.value === 'distance')
+      this.setState({
+        transversePlane: undefined,
+        kineticChain: undefined,
+        verticality: undefined,
+        frontalPlane: undefined,
+      });
+    else if (evt.target.name === 'motion')
+      this.setState({
+        transversePlane: 'upper',
+        kineticChain: 'closed',
+        verticality: 'horizontal',
+        frontalPlane: 'push',
+      });
+  };
 
   onSelectChange = (evt) => this.setState({ [evt.name]: evt.value });
 
   async onSubmit(evt) {
     evt.preventDefault();
     if (!this.state.name) return this.setState({ error: 'Name is required' });
-    if (!this.state.transversePlane)
-      return this.setState({ error: 'Transverse Plane is required' });
-    if (!this.state.verticality)
-      return this.setState({ error: 'Verticality is required' });
-    if (!this.state.frontalPlane)
-      return this.setState({ error: 'Frontal Plane is required' });
-    if (!this.state.kineticChain)
-      return this.setState({ error: 'Kinetic Chain is required' });
     if (!this.state.motion)
       return this.setState({ error: 'Motion is required' });
+    if (this.state.motion !== 'distance') {
+      if (!this.state.transversePlane)
+        return this.setState({ error: 'Transverse Plane is required' });
+      if (!this.state.verticality)
+        return this.setState({ error: 'Verticality is required' });
+      if (!this.state.frontalPlane)
+        return this.setState({ error: 'Frontal Plane is required' });
+      if (!this.state.kineticChain)
+        return this.setState({ error: 'Kinetic Chain is required' });
+    }
     if (!this.state.potentialStages || this.state.potentialStages.length === 0)
       return this.setState({ error: 'Potential Stages are required' });
     this.props.onSubmit({
@@ -126,111 +144,6 @@ export default class Exercises extends React.Component {
           <Row columns={2}>
             <Column>
               <Radio
-                id="upper"
-                name="transversePlane"
-                value="upper"
-                checked={this.state.transversePlane === 'upper'}
-                onClick={this.onChange}
-              />
-            </Column>
-            <Column>Upper</Column>
-          </Row>
-          <Row columns={2}>
-            <Column>
-              <Radio
-                id="lower"
-                name="transversePlane"
-                value="lower"
-                checked={this.state.transversePlane === 'lower'}
-                onClick={this.onChange}
-              />
-            </Column>
-            <Column>Lower</Column>
-          </Row>
-        </Column>
-        <Column>
-          <Row columns={2}>
-            <Column>
-              <Radio
-                id="closed"
-                name="kineticChain"
-                value="closed"
-                checked={this.state.kineticChain === 'closed'}
-                onClick={this.onChange}
-              />
-            </Column>
-            <Column>Closed</Column>
-          </Row>
-          <Row columns={2}>
-            <Column>
-              <Radio
-                id="open"
-                name="kineticChain"
-                value="open"
-                checked={this.state.kineticChain === 'open'}
-                onClick={this.onChange}
-              />
-            </Column>
-            <Column>Open</Column>
-          </Row>
-        </Column>
-        <Column>
-          <Row columns={2}>
-            <Column>
-              <Radio
-                id="horizontal"
-                name="verticality"
-                value="horizontal"
-                checked={this.state.verticality === 'horizontal'}
-                onClick={this.onChange}
-              />
-            </Column>
-            <Column>Horizontal</Column>
-          </Row>
-          <Row columns={2}>
-            <Column>
-              <Radio
-                id="vertical"
-                name="verticality"
-                value="vertical"
-                checked={this.state.verticality === 'vertical'}
-                onClick={this.onChange}
-              />
-            </Column>
-            <Column>Vertical</Column>
-          </Row>
-        </Column>
-        <Column>
-          <Row columns={2}>
-            <Column>
-              <Radio
-                id="push"
-                name="frontalPlane"
-                value="push"
-                checked={this.state.frontalPlane === 'push'}
-                onClick={this.onChange}
-              />
-            </Column>
-            <Column>Push</Column>
-          </Row>
-          <Row columns={2}>
-            <Column>
-              <Radio
-                id="pull"
-                name="frontalPlane"
-                value="pull"
-                checked={this.state.frontalPlane === 'pull'}
-                onClick={this.onChange}
-              />
-            </Column>
-            <Column>Pull</Column>
-          </Row>
-        </Column>
-        <Column>
-          <Row columns={2}>
-            <Column>
-              <Radio
-                id="isometric"
                 name="motion"
                 value="isometric"
                 checked={this.state.motion === 'isometric'}
@@ -242,7 +155,6 @@ export default class Exercises extends React.Component {
           <Row columns={2}>
             <Column>
               <Radio
-                id="isotonic"
                 name="motion"
                 value="isotonic"
                 checked={this.state.motion === 'isotonic'}
@@ -251,7 +163,119 @@ export default class Exercises extends React.Component {
             </Column>
             <Column>Isotonic</Column>
           </Row>
+          <Row columns={2}>
+            <Column>
+              <Radio
+                name="motion"
+                value="distance"
+                checked={this.state.motion === 'distance'}
+                onClick={this.onChange}
+              />
+            </Column>
+            <Column>Distance</Column>
+          </Row>
         </Column>
+        {this.state.motion === 'distance' && <Column span={4} />}
+        {this.state.motion !== 'distance' && (
+          <>
+            <Column>
+              <Row columns={2}>
+                <Column>
+                  <Radio
+                    name="transversePlane"
+                    value="upper"
+                    checked={this.state.transversePlane === 'upper'}
+                    onClick={this.onChange}
+                  />
+                </Column>
+                <Column>Upper</Column>
+              </Row>
+              <Row columns={2}>
+                <Column>
+                  <Radio
+                    name="transversePlane"
+                    value="lower"
+                    checked={this.state.transversePlane === 'lower'}
+                    onClick={this.onChange}
+                  />
+                </Column>
+                <Column>Lower</Column>
+              </Row>
+            </Column>
+            <Column>
+              <Row columns={2}>
+                <Column>
+                  <Radio
+                    name="kineticChain"
+                    value="closed"
+                    checked={this.state.kineticChain === 'closed'}
+                    onClick={this.onChange}
+                  />
+                </Column>
+                <Column>Closed</Column>
+              </Row>
+              <Row columns={2}>
+                <Column>
+                  <Radio
+                    name="kineticChain"
+                    value="open"
+                    checked={this.state.kineticChain === 'open'}
+                    onClick={this.onChange}
+                  />
+                </Column>
+                <Column>Open</Column>
+              </Row>
+            </Column>
+            <Column>
+              <Row columns={2}>
+                <Column>
+                  <Radio
+                    name="verticality"
+                    value="horizontal"
+                    checked={this.state.verticality === 'horizontal'}
+                    onClick={this.onChange}
+                  />
+                </Column>
+                <Column>Horizontal</Column>
+              </Row>
+              <Row columns={2}>
+                <Column>
+                  <Radio
+                    name="verticality"
+                    value="vertical"
+                    checked={this.state.verticality === 'vertical'}
+                    onClick={this.onChange}
+                  />
+                </Column>
+                <Column>Vertical</Column>
+              </Row>
+            </Column>
+            <Column>
+              <Row columns={2}>
+                <Column>
+                  <Radio
+                    name="frontalPlane"
+                    value="push"
+                    checked={this.state.frontalPlane === 'push'}
+                    onClick={this.onChange}
+                  />
+                </Column>
+                <Column>Push</Column>
+              </Row>
+              <Row columns={2}>
+                <Column>
+                  <Radio
+                    name="frontalPlane"
+                    value="pull"
+                    checked={this.state.frontalPlane === 'pull'}
+                    onClick={this.onChange}
+                  />
+                </Column>
+                <Column>Pull</Column>
+              </Row>
+            </Column>
+          </>
+        )}
         <Column>
           <StageSelect
             name="potentialStages"

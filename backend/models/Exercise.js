@@ -37,7 +37,8 @@ module.exports = mongoose.model(
       },
       motion: {
         type: String,
-        enum: ['isometric', 'isotonic'],
+        enum: ['isometric', 'isotonic', 'distance'],
+        required: true,
       },
     },
     potentialStages: [
