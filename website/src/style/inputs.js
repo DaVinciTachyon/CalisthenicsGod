@@ -1,153 +1,94 @@
 import React from 'react';
-import styled, { css } from 'styled-components';
-import { Nutrients, Background } from './constants';
+import styled from 'styled-components';
+import { Nutrients } from './constants';
 
-const BaseStyle = css`
-  border-radius: 5px;
-  border-style: solid;
-  border-width: ${(props) => (props.readOnly ? `0` : `2px`)};
-  border-color: black;
-  background-color: ${(props) =>
-    props.readOnly ? `inherit` : Background.primary};
-  text-align: center;
-  width: 100%;
-  margin: auto;
-  padding: 0.2rem;
-  outline: 0;
-`;
-
-const Input = styled.input`
-  ${BaseStyle}
-`;
-
-const Text = styled(({ className, name, label, ...rest }) => {
-  const rName = name || 'input';
+const Input = styled(({ className, name, label, ...rest }) => {
+  //units
+  if (label)
+    return (
+      <label className={className}>
+        <input name={name || 'input'} placeholder=" " {...rest} />
+        <span className="label">{label}</span>
+      </label>
+    );
   return (
-    <div className={className}>
-      <input name={rName} placeholder={rName} {...rest} />
-      <label for={rName}>{label}</label>
-    </div>
+    <label className={className}>
+      <input name={name || 'input'} placeholder=" " {...rest} />
+    </label>
   );
-}).attrs({
-  type: 'text',
 })`
   position: relative;
-  padding: 15px 0 0;
-  margin: auto;
-  width: 50%;
+  margin: 5px 0 0;
+  border: 1px solid currentColor;
+  border-radius: 4px;
 
-  & input {
-    width: 100%;
-    border: 0;
-    ${(props) => (!props.readOnly ? `border-bottom: 2px solid lightblue;` : ``)}
-    outline: 0;
-    padding: 7px 3px;
-    background: transparent;
-    transition: border-color 0.2s;
-    margin-top: 6px;
-
-    &::placeholder {
-      color: transparent;
-    }
-
-    &:placeholder-shown ~ label {
-      cursor: text;
-      top: 20px;
-    }
-  }
-
-  & label {
+  & span.label {
     position: absolute;
+    left: 0;
     top: 0;
-    display: block;
-    transition: 0.2s;
-    font-size: 1.2rem;
-    font-weight: 600;
-    color: #9b9b9b;
-  }
-
-  ${(props) =>
-    !props.readOnly
-      ? `
-  & input:focus {
-    ~ label {
-      position: absolute;
-      top: 0;
-      display: block;
-      transition: 0.2s;
-      color: #11998e;
-    }
-
-    padding-bottom: 6px;
-    border-width: 3px;
-    border-image: linear-gradient(to right, #11998e, #38ef7d);
-    border-image-slice: 1;
+    padding: calc(0.5rem * 0.75) calc(0.5rem * 0.5);
+    margin: calc(0.5rem * 0.75 + 3px) calc(0.5rem * 0.5);
+    white-space: nowrap;
+    transform: translate(0, 0);
+    transform-origin: 0 0;
+    transition: transform 120ms ease-in;
+    font-weight: bold;
+    line-height: 1.2;
+    border-radius: 10px;
   }
 
   & input {
-    &:required,
-    &:invalid {
-      box-shadow: none;
+    box-sizing: border-box;
+    display: block;
+    width: 100%;
+    outline: 0;
+    padding: calc(0.5rem * 1.5) 0.5rem;
+    color: currentColor;
+    background: transparent;
+
+    &:focus,
+    &:not(:placeholder-shown) {
+      & + span {
+        transform: translate(0.25rem, -65%) scale(0.8);
+        background: white;
+      }
     }
-  }`
-      : ``}
+  }
 `;
+
+const Text = styled(Input).attrs({
+  type: 'text',
+})``;
 
 const Password = styled(Text).attrs({
   type: 'password',
 })``;
 
 const Date = styled(Input).attrs({
-  type: 'date',
-})``;
-
-const Radio = styled(Input).attrs({
-  type: 'radio',
-})``;
-
-const BaseNumber = styled.input.attrs({
-  type: 'number',
+  type: 'text',
+  onFocus: (e) => (e.target.type = 'date'),
+  onBlur: (e) => (e.target.value === '' ? (e.target.type = 'text') : undefined),
 })`
-  -moz-appearance: textfield;
-  border: none;
-  text-align: center;
-  max-width: 4rem;
-
-  &:focus {
-    border: none;
-  }
-
-  &::-webkit-inner-spin-button {
-    -webkit-appearance: none;
-    margin: 0;
+  & input {
+    text-align: center;
+    &:not(.has-value):before {
+      color: lightgray;
+      content: attr(placeholder);
+    }
   }
 `;
 
-const Number = styled(({ className, children, type, unit, style, ...rest }) => {
-  if (unit)
-    return (
-      <div style={style} className={`${className} container`}>
-        <BaseNumber className="input" type={type} {...rest}>
-          {children}
-        </BaseNumber>
-        <div className="unit">{unit}</div>
-      </div>
-    );
-  return (
-    <BaseNumber style={style} className={className} type={type} {...rest}>
-      {children}
-    </BaseNumber>
-  );
+const Number = styled(Input).attrs({
+  type: 'number',
 })`
-  ${BaseStyle}
+  & input {
+    -moz-appearance: textfield;
+    text-align: center;
 
-  &.container {
-    display: grid;
-    grid-template-columns: 3fr 1fr;
-  }
-
-  & .unit {
-    margin: 0 0.5rem 0;
+    &::-webkit-inner-spin-button {
+      -webkit-appearance: none;
+      margin: 0;
+    }
   }
 `;
 
@@ -181,9 +122,61 @@ const Ethanol = styled(Weight)`
   border-color: ${Nutrients.ethanol.dark};
 `;
 
-const BaseSelect = styled.select`
-  ${BaseStyle}
+const RadioOption = styled(({ className, label, value, ...rest }) => (
+  <div className={className}>
+    <input id={value} value={value} {...rest} />
+    <label for={value}>{label}</label>
+  </div>
+)).attrs({
+  type: 'radio',
+})`
+  display: ${(props) => (props.isHorizontal ? `inline-block` : `block`)};
+  margin: 3px;
+  cursor: pointer;
 
+  & label {
+    display: inline-block;
+    width: 100%;
+    height: 100%;
+    padding: 5px;
+    border-radius: 3px;
+    border: 1px solid currentColor;
+    transition: all 0.3s ease-out;
+  }
+
+  & input {
+    display: none;
+  }
+
+  & input:checked + label {
+    background-color: black;
+    color: white;
+  }
+`;
+
+const Radio = styled(
+  ({ className, options, name, value, onChange, ...rest }) => (
+    <div className={className}>
+      {options?.map((option) => (
+        <RadioOption
+          name={name}
+          value={option.value}
+          checked={option.value === value}
+          onClick={onChange}
+          label={option.label}
+          {...rest}
+        />
+      ))}
+    </div>
+  )
+)`
+  display: table-cell;
+  vertical-align: middle;
+  text-align: center;
+  margin: auto;
+`;
+
+const BaseSelect = styled.select`
   ${(props) =>
     props.disabled
       ? `& option:not(:checked) {

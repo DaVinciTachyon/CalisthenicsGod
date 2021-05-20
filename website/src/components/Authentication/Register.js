@@ -131,13 +131,13 @@ export default class Register extends React.Component {
             />
           </Column>
         </Row>
-        <Row columns={2}>
-          <Column>Weight</Column>
+        <Row>
           <Column>
             <Weight
               name="weight"
               value={this.state.weight}
               onChange={this.onChange}
+              label="Weight"
               required
             />
           </Column>
@@ -157,13 +157,12 @@ export default class Register extends React.Component {
             />
           </Column>
         </Row>
-        <Row columns={2}>
-          <Column>Birth Date</Column>
+        <Row>
           <Column>
             <DateInput
               name="birthDate"
               max={new Date().toISOString().split('T')[0]}
-              placeholder="Date of Birth"
+              label="Date of Birth"
               value={this.state.birthDate}
               onChange={this.onChange}
               required
