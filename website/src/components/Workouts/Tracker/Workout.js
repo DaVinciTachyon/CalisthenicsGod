@@ -47,7 +47,7 @@ export default class Workout extends React.Component {
                       );
                     else if (exercise.type === 'distance')
                       return (
-                        <Column>
+                        <Column columns={3}>
                           <Number value={set.distance} unit="m" readOnly />
                           <div>in</div>
                           <Number value={set.time} unit="s" readOnly />

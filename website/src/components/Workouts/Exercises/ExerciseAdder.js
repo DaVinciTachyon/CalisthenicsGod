@@ -128,7 +128,6 @@ export default class Exercises extends React.Component {
             name="name"
             value={this.state.name}
             onChange={this.onChange}
-            placeholder="Name"
             required
           />
         </Column>
@@ -137,7 +136,6 @@ export default class Exercises extends React.Component {
             name="abbreviation"
             value={this.state.abbreviation}
             onChange={this.onChange}
-            placeholder="Abbreviation"
           />
         </Column>
         <Column>

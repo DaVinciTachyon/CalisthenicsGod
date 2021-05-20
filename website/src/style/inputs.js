@@ -2,25 +2,33 @@ import React from 'react';
 import styled from 'styled-components';
 import { Nutrients } from './constants';
 
-const Input = styled(({ className, name, label, ...rest }) => {
-  //units
-  if (label)
-    return (
-      <label className={className}>
-        <input name={name || 'input'} placeholder=" " {...rest} />
-        <span className="label">{label}</span>
-      </label>
-    );
-  return (
+const Input = styled(
+  ({ className, name, placeholder, label, unit, ...rest }) => (
     <label className={className}>
       <input name={name || 'input'} placeholder=" " {...rest} />
+      {label && <span className="label">{label}</span>}
+      {unit && (
+        <span className="unit">
+          <span>{unit}</span>
+        </span>
+      )}
     </label>
-  );
-})`
+  )
+)`
   position: relative;
   margin: 5px 0 0;
   border: 1px solid currentColor;
   border-radius: 4px;
+  display: flex;
+
+  & span.unit {
+    font-size: 1.2em;
+    color: gray;
+    padding-right: 8px;
+    display: flex;
+    align-items: center;
+    background: transparent;
+  }
 
   & span.label {
     position: absolute;
@@ -48,7 +56,7 @@ const Input = styled(({ className, name, label, ...rest }) => {
 
     &:focus,
     &:not(:placeholder-shown) {
-      & + span {
+      & + span.label {
         transform: translate(0.25rem, -65%) scale(0.8);
         background: white;
       }
