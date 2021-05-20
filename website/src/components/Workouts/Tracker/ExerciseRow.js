@@ -143,6 +143,7 @@ export default class ExerciseRow extends React.Component {
                 min={0}
                 value={this.state.intrasetRest}
                 onChange={this.onChange}
+                unit="s"
               />
             </Column>
           )}
@@ -152,6 +153,7 @@ export default class ExerciseRow extends React.Component {
               min={0}
               value={this.state.intersetRest}
               onChange={this.onChange}
+              unit="s"
             />
           </Column>
         </Column>

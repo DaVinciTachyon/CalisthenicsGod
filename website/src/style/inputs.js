@@ -13,17 +13,87 @@ const BaseStyle = css`
   width: 100%;
   margin: auto;
   padding: 0.2rem;
+  outline: 0;
 `;
 
 const Input = styled.input`
   ${BaseStyle}
 `;
 
-const Text = styled(Input).attrs({
+const Text = styled(({ className, name, label, ...rest }) => {
+  const rName = name || 'input';
+  return (
+    <div className={className}>
+      <input name={rName} placeholder={rName} {...rest} />
+      <label for={rName}>{label}</label>
+    </div>
+  );
+}).attrs({
   type: 'text',
-})``;
+})`
+  position: relative;
+  padding: 15px 0 0;
+  margin: auto;
+  width: 50%;
 
-const Password = styled(Input).attrs({
+  & input {
+    width: 100%;
+    border: 0;
+    ${(props) => (!props.readOnly ? `border-bottom: 2px solid lightblue;` : ``)}
+    outline: 0;
+    padding: 7px 3px;
+    background: transparent;
+    transition: border-color 0.2s;
+    margin-top: 6px;
+
+    &::placeholder {
+      color: transparent;
+    }
+
+    &:placeholder-shown ~ label {
+      cursor: text;
+      top: 20px;
+    }
+  }
+
+  & label {
+    position: absolute;
+    top: 0;
+    display: block;
+    transition: 0.2s;
+    font-size: 1.2rem;
+    font-weight: 600;
+    color: #9b9b9b;
+  }
+
+  ${(props) =>
+    !props.readOnly
+      ? `
+  & input:focus {
+    ~ label {
+      position: absolute;
+      top: 0;
+      display: block;
+      transition: 0.2s;
+      color: #11998e;
+    }
+
+    padding-bottom: 6px;
+    border-width: 3px;
+    border-image: linear-gradient(to right, #11998e, #38ef7d);
+    border-image-slice: 1;
+  }
+
+  & input {
+    &:required,
+    &:invalid {
+      box-shadow: none;
+    }
+  }`
+      : ``}
+`;
+
+const Password = styled(Text).attrs({
   type: 'password',
 })``;
 

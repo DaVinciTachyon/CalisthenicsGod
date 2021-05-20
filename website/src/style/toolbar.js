@@ -39,6 +39,7 @@ const LogoSecondarySvgComponent = styled(SecondarySvgComponent)``;
 
 //navbar
 const NavigationBarContainer = styled.nav`
+  z-index: 1000;
   position: fixed;
   background: ${Colours.primary.standard};
   transition: width ${Transition.primary} ease;

@@ -60,16 +60,16 @@ export default class SetEditor extends React.Component {
       );
     else if (this.props.type === 'distance')
       return (
-        <Row columns={5}>
+        <Row columns={3}>
           <Column>
             <Number
               name="distance"
               min={1}
               value={this.state.distance}
               onChange={this.onChange}
+              unit="m"
             />
           </Column>
-          <Column>m</Column>
           <Column>in</Column>
           <Column>
             <Number
@@ -77,9 +77,9 @@ export default class SetEditor extends React.Component {
               min={1}
               value={this.state.time}
               onChange={this.onChange}
+              unit="s"
             />
           </Column>
-          <Column>s</Column>
         </Row>
       );
     return (

@@ -114,32 +114,24 @@ export default class UserProfile extends React.Component {
   render() {
     return (
       <div>
-        <Row columns={2}>
-          <Column>First Name</Column>
+        <Row>
           <Column>
-            <Text value={this.state.name.first} readOnly />
+            <Text label="First Name" value={this.state.name.first} readOnly />
           </Column>
         </Row>
-        <Row columns={2}>
-          <Column>Middle Name</Column>
+        <Row>
           <Column>
-            <Text
-              placeholder="Middle Name"
-              value={this.state.name.middle}
-              readOnly
-            />
+            <Text label="Middle Name" value={this.state.name.middle} readOnly />
           </Column>
         </Row>
-        <Row columns={2}>
-          <Column>Last Name</Column>
+        <Row>
           <Column>
-            <Text value={this.state.name.last} readOnly />
+            <Text label="Last Name" value={this.state.name.last} readOnly />
           </Column>
         </Row>
-        <Row columns={2}>
-          <Column>Email</Column>
+        <Row>
           <Column>
-            <Text value={this.state.email} readOnly />
+            <Text label="Email" value={this.state.email} readOnly />
           </Column>
         </Row>
         <Row columns={2}>

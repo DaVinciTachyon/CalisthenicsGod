@@ -78,61 +78,56 @@ export default class Register extends React.Component {
             />
           </Column>
         </Row>
-        <Row columns={2}>
-          <Column>First Name</Column>
+        <Row>
           <Column>
             <Text
               name="firstname"
               value={this.state.firstname}
               onChange={this.onChange}
-              placeholder="First Name"
+              label="First Name"
               required
             />
           </Column>
         </Row>
-        <Row columns={2}>
-          <Column>Middle Name</Column>
+        <Row>
           <Column>
             <Text
               name="middlename"
               value={this.state.middlename}
               onChange={this.onChange}
-              placeholder="Middle Name"
+              label="Middle Name"
             />
           </Column>
         </Row>
-        <Row columns={2}>
-          <Column>Last Name</Column>
+        <Row>
           <Column>
             <Text
               name="lastname"
               value={this.state.lastname}
               onChange={this.onChange}
-              placeholder="Last Name"
+              label="Last Name"
               required
             />
           </Column>
         </Row>
-        <Row columns={2}>
-          <Column>Email</Column>
+        <Row>
           <Column>
             <Text
               name="email"
               value={this.state.email}
               onChange={this.onChange}
-              placeholder="Email"
+              label="Email"
               required
             />
           </Column>
         </Row>
-        <Row columns={2}>
-          <Column>Password</Column>
+        <Row>
           <Column>
             <Password
               name="password"
               value={this.state.password}
               onChange={this.onChange}
-              placeholder="Password"
+              label="Password"
             />
           </Column>
         </Row>
