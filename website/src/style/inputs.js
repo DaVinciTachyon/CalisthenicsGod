@@ -16,10 +16,11 @@ const Input = styled(
   )
 )`
   position: relative;
-  margin: 5px 0 0;
+  margin: 5px;
   border: 1px solid currentColor;
   border-radius: 4px;
   display: flex;
+  height: fit-content;
 
   & span.unit {
     font-size: 1.2em;
@@ -141,6 +142,7 @@ const RadioOption = styled(({ className, label, value, ...rest }) => (
   display: ${(props) => (props.isHorizontal ? `inline-block` : `block`)};
   margin: 3px;
   cursor: pointer;
+  height: fit-content;
 
   & label {
     display: inline-block;

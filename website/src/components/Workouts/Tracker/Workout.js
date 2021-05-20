@@ -31,7 +31,7 @@ export default class Workout extends React.Component {
             </Row>
             {stage.exercises.map((exercise) => (
               <Row columns={4} key={exercise._id} id={exercise.id}>
-                <Column columns={exercise.sets.length}>
+                <Column>
                   {exercise.sets.map((set) => {
                     if (exercise.type === 'isotonic')
                       return (
