@@ -16,7 +16,7 @@ const Input = styled(
   )
 )`
   position: relative;
-  margin: 5px;
+  margin: 10px;
   border: 1px solid currentColor;
   border-radius: 4px;
   display: flex;
@@ -106,6 +106,11 @@ const Weight = styled(Number).attrs({
   step: 0.1,
 })``;
 
+const Length = styled(Number).attrs({
+  min: 0,
+  step: 0.1,
+})``;
+
 const Calories = styled(Number).attrs({
   min: 0,
   step: 1,
@@ -186,16 +191,7 @@ const Radio = styled(
   margin: auto;
 `;
 
-const BaseSelect = styled.select`
-  ${(props) =>
-    props.disabled
-      ? `& option:not(:checked) {
-    display: none;
-  }`
-      : ``}
-`;
-
-class Select extends React.Component {
+class BaseSelect extends React.Component {
   constructor() {
     super();
     this.state = { value: '' };
@@ -221,31 +217,80 @@ class Select extends React.Component {
 
   render() {
     return (
-      <BaseSelect
-        name={this.props.name}
-        id={this.props.id}
-        onChange={this.onChange}
-        disabled={this.props.readOnly}
-        multiple={this.props.isMulti}
-        size={this.props.isMulti ? 3 : undefined}
-      >
-        {this.props.options.map((option) => (
-          <option
-            key={option.value}
-            value={option.value}
-            selected={
-              this.props.isMulti
-                ? this.state.value.includes(option.value)
-                : option.value === this.state.value
-            }
-          >
-            {option.label}
-          </option>
-        ))}
-      </BaseSelect>
+      <div className={this.props.className}>
+        <select
+          name={this.props.name}
+          id={this.props.id}
+          onChange={this.onChange}
+          disabled={this.props.readOnly}
+          multiple={this.props.isMulti}
+          size={this.props.isMulti ? 3 : undefined}
+        >
+          {this.props.options?.map((option) => (
+            <option
+              key={option.value}
+              value={option.value}
+              selected={
+                this.props.isMulti
+                  ? this.state.value.includes(option.value)
+                  : option.value === this.state.value
+              }
+            >
+              {option.label}
+            </option>
+          ))}
+        </select>
+        {this.props.label && (
+          <label for={this.props.name}>{this.props.label}</label>
+        )}
+      </div>
     );
   }
 }
+
+const Select = styled(BaseSelect)`
+  position: relative;
+  margin: 10px;
+
+  & select {
+    border: 1px solid currentColor;
+    border-radius: 4px;
+    box-sizing: border-box;
+    outline: 0;
+    padding: calc(0.5rem * 1.5) 0.5rem;
+    width: 100%;
+  }
+
+  & label {
+    position: absolute;
+    left: 0;
+    top: 0;
+    padding: calc(0.5rem * 0.75) calc(0.5rem * 0.5);
+    margin: calc(0.5rem * 0.75 + 3px) calc(0.5rem * 0.5);
+    white-space: nowrap;
+    transform-origin: 0 0;
+    transition: transform 120ms ease-in;
+    font-weight: bold;
+    line-height: 1.2;
+    border-radius: 10px;
+    transform: translate(0, 0);
+  }
+
+  // &:focus,
+  // &:not(:placeholder-shown) {
+  & label {
+    transform: translate(0.25rem, -65%) scale(0.8);
+    background: white;
+  }
+  // }
+
+  ${(props) =>
+    props.readOnly
+      ? `& option:not(:checked) {
+    display: none;
+  }`
+      : ``}
+`;
 
 export {
   Text,
@@ -255,6 +300,7 @@ export {
   Number,
   Calories,
   Weight,
+  Length,
   Fat,
   Carbohydrate,
   Protein,
