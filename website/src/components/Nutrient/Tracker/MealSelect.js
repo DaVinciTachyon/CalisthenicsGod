@@ -18,7 +18,7 @@ export default class MealSelect extends React.Component {
       <Row columns={2}>
         <Select
           options={[{ label: 'New Meal', value: '' }].concat(this.state.meals)}
-          defaultValue={''}
+          value={this.state.id}
           onChange={(evt) => this.setState({ id: evt.value })}
         />
         <Button onClick={() => this.props.onSubmit(this.state.id)}>

@@ -28,7 +28,7 @@ export default class IngredientSelect extends React.Component {
             return { label: ingredient.name, value: ingredient._id };
           })
         )}
-        defaultValue={''}
+        value={this.props.value}
         onChange={this.onChange}
         readOnly={this.props.readOnly}
       />

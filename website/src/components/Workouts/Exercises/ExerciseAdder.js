@@ -62,7 +62,6 @@ export default class Exercises extends React.Component {
   };
 
   onChange = (evt) => {
-    this.setState({ [evt.target.name]: evt.target.value });
     if (evt.target.name === 'motion' && evt.target.value === 'distance')
       this.setState({
         transversePlane: undefined,
@@ -70,16 +69,19 @@ export default class Exercises extends React.Component {
         verticality: undefined,
         frontalPlane: undefined,
       });
-    else if (evt.target.name === 'motion')
+    else if (evt.target.name === 'motion' && this.state.motion === ' distance')
       this.setState({
         transversePlane: 'upper',
         kineticChain: 'closed',
         verticality: 'horizontal',
         frontalPlane: 'push',
       });
+    this.setState({ [evt.target.name]: evt.target.value });
   };
 
-  onSelectChange = (evt) => this.setState({ [evt.name]: evt.value });
+  onSelectChange = (evt) => {
+    this.setState({ [evt.name]: evt.value });
+  };
 
   async onSubmit(evt) {
     evt.preventDefault();
@@ -203,7 +205,7 @@ export default class Exercises extends React.Component {
           <StageSelect
             name="potentialStages"
             onChange={this.onSelectChange}
-            defaultValue={this.state.potentialStages}
+            value={this.state.potentialStages}
             isMulti
           />
         </Column>
@@ -211,7 +213,7 @@ export default class Exercises extends React.Component {
           <ExerciseSelect
             name="requirements"
             onChange={this.onSelectChange}
-            defaultValue={this.state.requirements}
+            value={this.state.requirements}
             isMulti
           />
         </Column>

@@ -6,7 +6,6 @@ export default class StageSelect extends React.Component {
     super();
     this.state = {
       stages: [],
-      stageOptions: [],
     };
   }
 
@@ -26,12 +25,11 @@ export default class StageSelect extends React.Component {
       }
     );
     const data = await response.json();
-    this.setState({ stageOptions: data.stages });
+    this.setState({ stages: data.stages });
   };
 
   onChange = async (evt) => {
-    await this.setState({ [evt.name]: evt.value });
-    const stages = this.state.stageOptions.filter((stage) => {
+    const stages = this.state.stages.filter((stage) => {
       if (this.props.isMulti) return evt.value.includes(stage._id);
       return evt.value === stage._id;
     });
@@ -41,14 +39,17 @@ export default class StageSelect extends React.Component {
   render() {
     return (
       <Select
-        options={[{ label: 'Choose Stage', value: '' }].concat(
-          this.state.stageOptions.map((stage) => {
+        options={(this.props.isMulti
+          ? []
+          : [{ label: 'Choose Stage', value: '' }]
+        ).concat(
+          this.state.stages.map((stage) => {
             return { label: stage.name, value: stage._id };
           })
         )}
-        name={this.props.name || 'stages'}
+        name={this.props.name}
         onChange={this.onChange}
-        defaultValue={this.props.defaultValue}
+        value={this.props.value}
         isMulti={this.props.isMulti}
         readOnly={this.props.readOnly}
       />

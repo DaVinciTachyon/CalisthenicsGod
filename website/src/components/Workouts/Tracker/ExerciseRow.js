@@ -79,17 +79,15 @@ export default class ExerciseRow extends React.Component {
 
   render() {
     const typeOptions = [];
-    if (this.state.exercise) {
-      if (this.state.exercise.motionType.motion === 'distance')
-        typeOptions.push({ value: 'distance', label: 'Distance' });
-      else if (this.state.exercise.motionType.motion === 'isometric')
-        typeOptions.push({ value: 'isometric', label: 'Isometric' });
-      else
-        typeOptions.push([
-          { value: 'isotonic', label: 'Isotonic' },
-          { value: 'eccentric', label: 'Eccentric' },
-        ]);
-    }
+    if (this.state.exercise?.motionType.motion === 'distance')
+      typeOptions.push({ value: 'distance', label: 'Distance' });
+    else if (this.state.exercise?.motionType.motion === 'isometric')
+      typeOptions.push({ value: 'isometric', label: 'Isometric' });
+    else
+      typeOptions.push(
+        { value: 'isotonic', label: 'Isotonic' },
+        { value: 'eccentric', label: 'Eccentric' }
+      );
     return (
       <Row columns={5}>
         <Column>
@@ -123,7 +121,7 @@ export default class ExerciseRow extends React.Component {
           <Select
             name="type"
             options={typeOptions}
-            defaultValue={this.state.type}
+            value={this.state.type}
             onChange={this.onSelectChange}
           />
         </Column>
@@ -131,6 +129,7 @@ export default class ExerciseRow extends React.Component {
           <ExerciseSelect
             name="id"
             stage={this.props.stageId}
+            value={this.state.id}
             onChange={this.onExerciseChange}
           />
         </Column>

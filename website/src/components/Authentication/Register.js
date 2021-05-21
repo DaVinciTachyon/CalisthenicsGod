@@ -151,7 +151,7 @@ export default class Register extends React.Component {
                 { label: 'Male', value: 'male' },
                 { label: 'Female', value: 'female' },
               ]}
-              defaultValue={'male'}
+              value={this.state.gender}
               onChange={this.onSelectChange}
               required
             />

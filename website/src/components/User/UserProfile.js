@@ -129,7 +129,7 @@ export default class UserProfile extends React.Component {
                 { label: 'Deficit', value: 'deficit' },
                 { label: 'Bulk', value: 'bulk' },
               ]}
-              defaultValue={
+              value={
                 this.state.currentOffset === 0
                   ? 'maintenance'
                   : this.state.currentOffset > 0
@@ -182,7 +182,7 @@ export default class UserProfile extends React.Component {
             { label: 'Male', value: 'male' },
             { label: 'Female', value: 'female' },
           ]}
-          defaultValue={this.state.gender}
+          value={this.state.gender}
           onChange={this.onChange}
           label="Gender"
           readOnly

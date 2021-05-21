@@ -191,31 +191,130 @@ const Radio = styled(
   margin: auto;
 `;
 
+const SelectedOption = styled(({ className, label, ...rest }) => (
+  <div className={className} {...rest}>
+    <span className="label">{label}</span>
+    <span className="x">✕</span>
+  </div>
+))`
+  background: lightgrey;
+  display: flex;
+  border-radius: 4px;
+  font-size: 0.7rem;
+  margin: 2px;
+  align-items: center;
+
+  & span {
+    padding: 3px;
+  }
+
+  &:hover {
+    background: crimson;
+  }
+`;
+
+const DropdownOption = styled(({ className, label, ...rest }) => (
+  <div className={className} {...rest}>
+    {label}
+  </div>
+))`
+  width: 100%;
+  font-size: 0.7rem;
+  padding: 2px;
+
+  &:hover {
+    background: lightgreen;
+  }
+`;
+
+const SelectDropdown = styled(
+  ({ className, options, value, onSelect, ...rest }) => (
+    <div className={className} {...rest}>
+      {options.map((option) => {
+        return value?.find((id) => option.value === id) ? (
+          <></>
+        ) : (
+          <DropdownOption
+            label={option.label}
+            value={option.value}
+            onClick={() => onSelect(option)}
+          />
+        );
+      })}
+    </div>
+  )
+)`
+  display: none;
+  position: absolute;
+  background: white;
+  border: 1px solid currentColor;
+  z-index: 1;
+`;
+
+const SelectChoices = styled(
+  ({ className, options, value, onSelect, ...rest }) => (
+    <div className={className} {...rest}>
+      {value?.map((id) => {
+        const option = options.find((option) => option.value === id);
+        return option ? (
+          <SelectedOption
+            label={option.label}
+            value={option.value}
+            onClick={() => onSelect(option)}
+          />
+        ) : (
+          <></>
+        );
+      })}
+    </div>
+  )
+)``;
+
 class BaseSelect extends React.Component {
   constructor() {
     super();
-    this.state = { value: '' };
-    this.onChange = this.onChange.bind(this);
+    this.state = {};
   }
 
   componentDidMount() {
     this.set();
   }
 
-  set = () =>
-    this.setState({ value: this.props.defaultValue || this.state.value });
+  componentDidUpdate(prevProps) {
+    if (prevProps !== this.props) this.set();
+  }
 
-  onChange = async (evt) => {
+  set = () =>
+    this.setState({
+      value: this.props.value || (this.props.isMulti ? [] : ''),
+    });
+
+  onChange = (evt, isAdding = true) => {
     if (this.props.readOnly) return;
-    let value = this.state.value;
-    if (this.props.isMulti)
-      value = Array.from(evt.target.selectedOptions, (option) => option.value);
+    let value = this.props.value;
+    if (this.props.isMulti && isAdding) value = value.concat(evt.value);
+    else if (this.props.isMulti) value = value.filter((id) => id !== evt.value);
     else if (evt.target.validity.valid) value = evt.target.value;
-    await this.setState({ value });
     this.props.onChange({ name: this.props.name, value });
   };
 
   render() {
+    if (this.props.isMulti)
+      return (
+        <div className={this.props.className}>
+          <SelectChoices
+            options={this.props.options}
+            value={this.props.value}
+            onSelect={(option) => this.onChange(option, false)}
+          />
+          <SelectDropdown
+            options={this.props.options}
+            value={this.props.value}
+            onSelect={(option) => this.onChange(option, true)}
+          />
+          {/* {this.props.label && <label>{this.props.label}</label>} TODO */}
+        </div>
+      );
     return (
       <div className={this.props.className}>
         <select
@@ -223,18 +322,12 @@ class BaseSelect extends React.Component {
           id={this.props.id}
           onChange={this.onChange}
           disabled={this.props.readOnly}
-          multiple={this.props.isMulti}
-          size={this.props.isMulti ? 3 : undefined}
         >
           {this.props.options?.map((option) => (
             <option
               key={option.value}
               value={option.value}
-              selected={
-                this.props.isMulti
-                  ? this.state.value.includes(option.value)
-                  : option.value === this.state.value
-              }
+              selected={option.value === this.props.value}
             >
               {option.label}
             </option>
@@ -252,13 +345,18 @@ const Select = styled(BaseSelect)`
   position: relative;
   margin: 10px;
 
-  & select {
+  & select,
+  & ${SelectChoices} {
     border: 1px solid currentColor;
     border-radius: 4px;
     box-sizing: border-box;
     outline: 0;
     padding: calc(0.5rem * 1.5) 0.5rem;
     width: 100%;
+  }
+
+  & ${SelectChoices}:hover + ${SelectDropdown}, & ${SelectDropdown}:hover {
+    display: block;
   }
 
   & label {
@@ -276,7 +374,7 @@ const Select = styled(BaseSelect)`
     transform: translate(0, 0);
   }
 
-  // &:focus,
+  // &:focus, //FIXME
   // &:not(:placeholder-shown) {
   & label {
     transform: translate(0.25rem, -65%) scale(0.8);
