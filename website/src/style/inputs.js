@@ -194,7 +194,7 @@ const Radio = styled(
 const SelectedOption = styled(({ className, label, ...rest }) => (
   <div className={className} {...rest}>
     <span>{label}</span>
-    <span>✕</span>
+    <span className="cross">✕</span>
   </div>
 ))`
   background: lightgrey;
@@ -213,8 +213,13 @@ const SelectedOption = styled(({ className, label, ...rest }) => (
       ? `
   &:hover {
     background: crimson;
-  }`
-      : ``}
+  }
+  `
+      : `
+  & span.cross {
+    display: none;
+  }
+  `}
 `;
 
 const DropdownOption = styled(({ className, label, ...rest }) => (
@@ -252,28 +257,59 @@ const SelectDropdown = styled(
   position: absolute;
   background: white;
   border: 1px solid currentColor;
+  width: 100%;
   z-index: 1;
 `;
 
 const SelectChoices = styled(
   ({ className, options, value, onSelect, readOnly, ...rest }) => (
     <div className={className} {...rest}>
-      {value?.map((id) => {
-        const option = options.find((option) => option.value === id);
-        return option ? (
-          <SelectedOption
-            label={option.label}
-            value={option.value}
-            onClick={() => onSelect(option)}
-            readOnly={readOnly}
-          />
-        ) : (
-          <></>
-        );
-      })}
+      <div>
+        {value?.map((id) => {
+          const option = options.find((option) => option.value === id);
+          return option ? (
+            <SelectedOption
+              label={option.label}
+              value={option.value}
+              onClick={() => onSelect(option)}
+              readOnly={readOnly}
+            />
+          ) : (
+            <></>
+          );
+        })}
+      </div>
+      <span className="arrow">🢓</span>
     </div>
   )
-)``;
+)`
+  position: relative;
+  overflow: hidden;
+  display: flex;
+
+  &:hover {
+    & span.arrow {
+      background: lightgrey;
+    }
+  }
+
+  &:active {
+    & span.arrow {
+      color: black;
+    }
+  }
+
+  & span.arrow {
+    position: absolute;
+    right: 0;
+    top: 0;
+    height: 100%;
+    color: darkgrey;
+    justify-content: center;
+    align-items: center;
+    display: ${(props) => (props.readOnly ? `none` : `flex`)};
+  }
+`;
 
 class BaseSelect extends React.Component {
   constructor() {
