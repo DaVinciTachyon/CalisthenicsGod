@@ -10,14 +10,14 @@ export default class Register extends React.Component {
   constructor() {
     super();
     this.state = {
-      firstname: '',
-      middlename: '',
-      lastname: '',
-      email: '',
-      password: '',
-      weight: '',
-      gender: 'male',
-      birthDate: '',
+      firstname: undefined,
+      middlename: undefined,
+      lastname: undefined,
+      email: undefined,
+      password: undefined,
+      weight: undefined,
+      gender: undefined,
+      birthDate: undefined,
       error: '',
     };
     this.onChange = this.onChange.bind(this);
