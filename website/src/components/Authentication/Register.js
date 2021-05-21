@@ -10,14 +10,14 @@ export default class Register extends React.Component {
   constructor() {
     super();
     this.state = {
-      firstname: '',
-      middlename: '',
-      lastname: '',
-      email: '',
-      password: '',
-      weight: '',
-      gender: 'male',
-      birthDate: '',
+      firstname: undefined,
+      middlename: undefined,
+      lastname: undefined,
+      email: undefined,
+      password: undefined,
+      weight: undefined,
+      gender: undefined,
+      birthDate: undefined,
       error: '',
     };
     this.onChange = this.onChange.bind(this);
@@ -70,111 +70,69 @@ export default class Register extends React.Component {
   render() {
     return (
       <Card>
-        <Row columns={2}>
-          <Column span={2}>
-            <Error
-              text={this.state.error}
-              dismiss={() => this.setState({ error: '' })}
-            />
-          </Column>
-        </Row>
-        <Row columns={2}>
-          <Column>First Name</Column>
-          <Column>
-            <Text
-              name="firstname"
-              value={this.state.firstname}
-              onChange={this.onChange}
-              placeholder="First Name"
-              required
-            />
-          </Column>
-        </Row>
-        <Row columns={2}>
-          <Column>Middle Name</Column>
-          <Column>
-            <Text
-              name="middlename"
-              value={this.state.middlename}
-              onChange={this.onChange}
-              placeholder="Middle Name"
-            />
-          </Column>
-        </Row>
-        <Row columns={2}>
-          <Column>Last Name</Column>
-          <Column>
-            <Text
-              name="lastname"
-              value={this.state.lastname}
-              onChange={this.onChange}
-              placeholder="Last Name"
-              required
-            />
-          </Column>
-        </Row>
-        <Row columns={2}>
-          <Column>Email</Column>
-          <Column>
-            <Text
-              name="email"
-              value={this.state.email}
-              onChange={this.onChange}
-              placeholder="Email"
-              required
-            />
-          </Column>
-        </Row>
-        <Row columns={2}>
-          <Column>Password</Column>
-          <Column>
-            <Password
-              name="password"
-              value={this.state.password}
-              onChange={this.onChange}
-              placeholder="Password"
-            />
-          </Column>
-        </Row>
-        <Row columns={2}>
-          <Column>Weight</Column>
-          <Column>
-            <Weight
-              name="weight"
-              value={this.state.weight}
-              onChange={this.onChange}
-              required
-            />
-          </Column>
-        </Row>
-        <Row columns={2}>
-          <Column>Gender</Column>
-          <Column>
-            <Select
-              name="gender"
-              options={[
-                { label: 'Male', value: 'male' },
-                { label: 'Female', value: 'female' },
-              ]}
-              defaultValue={'male'}
-              onChange={this.onSelectChange}
-              required
-            />
-          </Column>
-        </Row>
-        <Row columns={2}>
-          <Column>Birth Date</Column>
-          <Column>
-            <DateInput
-              name="birthDate"
-              max={new Date().toISOString().split('T')[0]}
-              placeholder="Date of Birth"
-              value={this.state.birthDate}
-              onChange={this.onChange}
-              required
-            />
-          </Column>
-        </Row>
+        <Error
+          text={this.state.error}
+          dismiss={() => this.setState({ error: '' })}
+        />
+        <Text
+          name="firstname"
+          value={this.state.firstname}
+          onChange={this.onChange}
+          label="First Name"
+          required
+        />
+        <Text
+          name="middlename"
+          value={this.state.middlename}
+          onChange={this.onChange}
+          label="Middle Name"
+        />
+        <Text
+          name="lastname"
+          value={this.state.lastname}
+          onChange={this.onChange}
+          label="Last Name"
+          required
+        />
+        <Text
+          name="email"
+          value={this.state.email}
+          onChange={this.onChange}
+          label="Email"
+          required
+        />
+        <Password
+          name="password"
+          value={this.state.password}
+          onChange={this.onChange}
+          label="Password"
+        />
+        <Weight
+          name="weight"
+          value={this.state.weight}
+          onChange={this.onChange}
+          label="Weight"
+          required
+        />
+        <Select
+          name="gender"
+          options={[
+            { label: 'Male', value: 'male' },
+            { label: 'Female', value: 'female' },
+          ]}
+          value={this.state.gender}
+          onChange={this.onSelectChange}
+          label="Gender"
+          required
+        />
+        <DateInput
+          name="birthDate"
+          max={new Date().toISOString().split('T')[0]}
+          label="Date of Birth"
+          value={this.state.birthDate}
+          onChange={this.onChange}
+          required
+        />
         <Row columns={2}>
           <Column span={2}>
             <Button onClick={this.onSubmit}>Register</Button>

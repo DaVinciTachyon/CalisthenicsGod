@@ -1,5 +1,6 @@
 import React from 'react';
 import { Row, Column, Title } from '../../../style/table';
+import { Number, Text } from '../../../style/inputs';
 
 export default class Workout extends React.Component {
   constructor() {
@@ -30,31 +31,51 @@ export default class Workout extends React.Component {
             </Row>
             {stage.exercises.map((exercise) => (
               <Row columns={4} key={exercise._id} id={exercise.id}>
-                <Column columns={exercise.sets.length}>
+                <Column>
                   {exercise.sets.map((set) => {
                     if (exercise.type === 'isotonic')
-                      return <Column>{set.repetitions}</Column>;
-                    else if (exercise.type === 'isometric')
-                      return <Column>{set.time}s</Column>;
-                    else if (exercise.type === 'distance')
                       return (
                         <Column>
-                          {set.distance}m in {set.time}s
+                          <Number value={set.repetitions} unit="r" readOnly />
+                        </Column>
+                      );
+                    else if (exercise.type === 'isometric')
+                      return (
+                        <Column>
+                          <Number value={set.time} unit="s" readOnly />
+                        </Column>
+                      );
+                    else if (exercise.type === 'distance')
+                      return (
+                        <Column columns={3}>
+                          <Number value={set.distance} unit="m" readOnly />
+                          <div>in</div>
+                          <Number value={set.time} unit="s" readOnly />
                         </Column>
                       );
                     else
                       return (
-                        <Column>
-                          {set.repetitions}*{set.time}s
+                        <Column columns={3}>
+                          <Number value={set.repetitions} unit="r" readOnly />
+                          <div>*</div>
+                          <Number value={set.time} unit="s" readOnly />
                         </Column>
                       );
                   })}
                 </Column>
-                <Column>{exercise.type}</Column>
-                <Column>{exercise.name}</Column>
+                <Column>
+                  <Text value={exercise.type} readOnly />
+                </Column>
+                <Column>
+                  <Text value={exercise.name} readOnly />
+                </Column>
                 <Column columns={2}>
-                  <Column>{exercise.rest.intraset}s</Column>
-                  <Column>{exercise.rest.interset}s</Column>
+                  <Column>
+                    <Number value={exercise.rest.intraset} unit="s" readOnly />
+                  </Column>
+                  <Column>
+                    <Number value={exercise.rest.interset} unit="s" readOnly />
+                  </Column>
                 </Column>
               </Row>
             ))}

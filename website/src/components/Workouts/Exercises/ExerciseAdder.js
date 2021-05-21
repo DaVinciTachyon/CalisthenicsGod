@@ -62,7 +62,6 @@ export default class Exercises extends React.Component {
   };
 
   onChange = (evt) => {
-    this.setState({ [evt.target.name]: evt.target.value });
     if (evt.target.name === 'motion' && evt.target.value === 'distance')
       this.setState({
         transversePlane: undefined,
@@ -70,16 +69,19 @@ export default class Exercises extends React.Component {
         verticality: undefined,
         frontalPlane: undefined,
       });
-    else if (evt.target.name === 'motion')
+    else if (evt.target.name === 'motion' && this.state.motion === ' distance')
       this.setState({
         transversePlane: 'upper',
         kineticChain: 'closed',
         verticality: 'horizontal',
         frontalPlane: 'push',
       });
+    this.setState({ [evt.target.name]: evt.target.value });
   };
 
-  onSelectChange = (evt) => this.setState({ [evt.name]: evt.value });
+  onSelectChange = (evt) => {
+    this.setState({ [evt.name]: evt.value });
+  };
 
   async onSubmit(evt) {
     evt.preventDefault();
@@ -128,7 +130,6 @@ export default class Exercises extends React.Component {
             name="name"
             value={this.state.name}
             onChange={this.onChange}
-            placeholder="Name"
             required
           />
         </Column>
@@ -137,142 +138,66 @@ export default class Exercises extends React.Component {
             name="abbreviation"
             value={this.state.abbreviation}
             onChange={this.onChange}
-            placeholder="Abbreviation"
           />
         </Column>
         <Column>
-          <Row columns={2}>
-            <Column>
-              <Radio
-                name="motion"
-                value="isometric"
-                checked={this.state.motion === 'isometric'}
-                onClick={this.onChange}
-              />
-            </Column>
-            <Column>Isometric</Column>
-          </Row>
-          <Row columns={2}>
-            <Column>
-              <Radio
-                name="motion"
-                value="isotonic"
-                checked={this.state.motion === 'isotonic'}
-                onClick={this.onChange}
-              />
-            </Column>
-            <Column>Isotonic</Column>
-          </Row>
-          <Row columns={2}>
-            <Column>
-              <Radio
-                name="motion"
-                value="distance"
-                checked={this.state.motion === 'distance'}
-                onClick={this.onChange}
-              />
-            </Column>
-            <Column>Distance</Column>
-          </Row>
+          <Radio
+            name="motion"
+            value={this.state.motion}
+            options={[
+              { label: 'Isometric', value: 'isometric' },
+              { label: 'Isotonic', value: 'isotonic' },
+              { label: 'Distance', value: 'distance' },
+            ]}
+            onChange={this.onChange}
+          />
         </Column>
         {this.state.motion === 'distance' && <Column span={4} />}
         {this.state.motion !== 'distance' && (
           <>
             <Column>
-              <Row columns={2}>
-                <Column>
-                  <Radio
-                    name="transversePlane"
-                    value="upper"
-                    checked={this.state.transversePlane === 'upper'}
-                    onClick={this.onChange}
-                  />
-                </Column>
-                <Column>Upper</Column>
-              </Row>
-              <Row columns={2}>
-                <Column>
-                  <Radio
-                    name="transversePlane"
-                    value="lower"
-                    checked={this.state.transversePlane === 'lower'}
-                    onClick={this.onChange}
-                  />
-                </Column>
-                <Column>Lower</Column>
-              </Row>
+              <Radio
+                name="transversePlane"
+                value={this.state.transversePlane}
+                options={[
+                  { label: 'Upper', value: 'upper' },
+                  { label: 'Lower', value: 'lower' },
+                ]}
+                onChange={this.onChange}
+              />
             </Column>
             <Column>
-              <Row columns={2}>
-                <Column>
-                  <Radio
-                    name="kineticChain"
-                    value="closed"
-                    checked={this.state.kineticChain === 'closed'}
-                    onClick={this.onChange}
-                  />
-                </Column>
-                <Column>Closed</Column>
-              </Row>
-              <Row columns={2}>
-                <Column>
-                  <Radio
-                    name="kineticChain"
-                    value="open"
-                    checked={this.state.kineticChain === 'open'}
-                    onClick={this.onChange}
-                  />
-                </Column>
-                <Column>Open</Column>
-              </Row>
+              <Radio
+                name="kineticChain"
+                value={this.state.kineticChain}
+                options={[
+                  { label: 'Closed', value: 'closed' },
+                  { label: 'Open', value: 'open' },
+                ]}
+                onChange={this.onChange}
+              />
             </Column>
             <Column>
-              <Row columns={2}>
-                <Column>
-                  <Radio
-                    name="verticality"
-                    value="horizontal"
-                    checked={this.state.verticality === 'horizontal'}
-                    onClick={this.onChange}
-                  />
-                </Column>
-                <Column>Horizontal</Column>
-              </Row>
-              <Row columns={2}>
-                <Column>
-                  <Radio
-                    name="verticality"
-                    value="vertical"
-                    checked={this.state.verticality === 'vertical'}
-                    onClick={this.onChange}
-                  />
-                </Column>
-                <Column>Vertical</Column>
-              </Row>
+              <Radio
+                name="verticality"
+                value={this.state.verticality}
+                options={[
+                  { label: 'Horizontal', value: 'horizontal' },
+                  { label: 'Vertical', value: 'vertical' },
+                ]}
+                onChange={this.onChange}
+              />
             </Column>
             <Column>
-              <Row columns={2}>
-                <Column>
-                  <Radio
-                    name="frontalPlane"
-                    value="push"
-                    checked={this.state.frontalPlane === 'push'}
-                    onClick={this.onChange}
-                  />
-                </Column>
-                <Column>Push</Column>
-              </Row>
-              <Row columns={2}>
-                <Column>
-                  <Radio
-                    name="frontalPlane"
-                    value="pull"
-                    checked={this.state.frontalPlane === 'pull'}
-                    onClick={this.onChange}
-                  />
-                </Column>
-                <Column>Pull</Column>
-              </Row>
+              <Radio
+                name="frontalPlane"
+                value={this.state.frontalPlane}
+                options={[
+                  { label: 'Push', value: 'push' },
+                  { label: 'Pull', value: 'pull' },
+                ]}
+                onChange={this.onChange}
+              />
             </Column>
           </>
         )}
@@ -280,7 +205,7 @@ export default class Exercises extends React.Component {
           <StageSelect
             name="potentialStages"
             onChange={this.onSelectChange}
-            defaultValue={this.state.potentialStages}
+            value={this.state.potentialStages}
             isMulti
           />
         </Column>
@@ -288,7 +213,7 @@ export default class Exercises extends React.Component {
           <ExerciseSelect
             name="requirements"
             onChange={this.onSelectChange}
-            defaultValue={this.state.requirements}
+            value={this.state.requirements}
             isMulti
           />
         </Column>

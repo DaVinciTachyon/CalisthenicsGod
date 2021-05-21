@@ -2,22 +2,23 @@ import React from 'react';
 import Card from '../../style/card';
 import { Row, Column } from '../../style/table';
 import { Button } from '../../style/buttons';
+import { Weight, Length } from '../../style/inputs';
 
 export default class MeasurementSummary extends React.Component {
   constructor() {
     super();
     this.state = {
-      weight: 0,
-      height: 0,
-      waist: 0,
-      hips: 0,
-      rightBicep: 0,
-      leftBicep: 0,
-      rightForearm: 0,
-      leftForearm: 0,
-      shoulders: 0,
-      chest: 0,
-      neck: 0,
+      weight: undefined,
+      height: undefined,
+      waist: undefined,
+      hips: undefined,
+      rightBicep: undefined,
+      leftBicep: undefined,
+      rightForearm: undefined,
+      leftForearm: undefined,
+      shoulders: undefined,
+      chest: undefined,
+      neck: undefined,
     };
   }
 
@@ -57,70 +58,72 @@ export default class MeasurementSummary extends React.Component {
       <>
         <Card>
           {this.state.weight > 0 && (
-            <Row columns={2}>
-              <Column>Weight</Column>
-              <Column>{this.state.weight}</Column>
-            </Row>
+            <Weight
+              label="Weight"
+              unit="kg"
+              value={this.state.weight}
+              readOnly
+            />
           )}
           {this.state.height > 0 && (
-            <Row columns={2}>
-              <Column>Height</Column>
-              <Column>{this.state.height}</Column>
-            </Row>
+            <Length
+              label="Height"
+              unit="cm"
+              value={this.state.height}
+              readOnly
+            />
           )}
           {this.state.waist > 0 && (
-            <Row columns={2}>
-              <Column>Waist</Column>
-              <Column>{this.state.waist}</Column>
-            </Row>
+            <Length label="Waist" unit="cm" value={this.state.waist} readOnly />
           )}
           {this.state.hips > 0 && (
-            <Row columns={2}>
-              <Column>Hips</Column>
-              <Column>{this.state.hips}</Column>
-            </Row>
+            <Length label="Hips" unit="cm" value={this.state.hips} readOnly />
           )}
           {this.state.rightBicep > 0 && (
-            <Row columns={2}>
-              <Column>Right Bicep</Column>
-              <Column>{this.state.rightBicep}</Column>
-            </Row>
+            <Length
+              label="Right Bicep"
+              unit="cm"
+              value={this.state.rightBicep}
+              readOnly
+            />
           )}
           {this.state.leftBicep > 0 && (
-            <Row columns={2}>
-              <Column>Left Bicep</Column>
-              <Column>{this.state.leftBicep}</Column>
-            </Row>
+            <Length
+              label="Left Bicep"
+              unit="cm"
+              value={this.state.leftBicep}
+              readOnly
+            />
           )}
           {this.state.rightForearm > 0 && (
-            <Row columns={2}>
-              <Column>Right Forearm</Column>
-              <Column>{this.state.rightForearm}</Column>
-            </Row>
+            <Length
+              label="Right Forearm"
+              unit="cm"
+              value={this.state.rightForearm}
+              readOnly
+            />
           )}
           {this.state.leftForearm > 0 && (
-            <Row columns={2}>
-              <Column>Left Forearm</Column>
-              <Column>{this.state.leftForearm}</Column>
-            </Row>
+            <Length
+              label="Left Forearm"
+              unit="cm"
+              value={this.state.leftForearm}
+              readOnly
+            />
           )}
           {this.state.shoulders > 0 && (
-            <Row columns={2}>
-              <Column>Shoulders</Column>
-              <Column>{this.state.shoulders}</Column>
-            </Row>
+            <Length
+              label="Shoulders"
+              unit="cm"
+              value={this.state.shoulders}
+              readOnly
+            />
           )}
           {this.state.chest > 0 && (
-            <Row columns={2}>
-              <Column>Chest</Column>
-              <Column>{this.state.chest}</Column>
-            </Row>
+            <Length label="Chest" unit="cm" value={this.state.chest} readOnly />
           )}
           {this.state.neck > 0 && (
-            <Row columns={2}>
-              <Column>Neck</Column>
-              <Column>{this.state.neck}</Column>
-            </Row>
+            <Length label="Neck" unit="cm" value={this.state.neck} readOnly />
           )}
           <Row columns={2}>
             <Column span={2}>

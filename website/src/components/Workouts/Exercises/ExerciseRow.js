@@ -118,16 +118,18 @@ export default class ExerciseRow extends React.Component {
           </Column>
           <Column>
             <StageSelect
-              defaultValue={this.props.exercise.potentialStages}
+              value={this.props.exercise.potentialStages}
               readOnly
               isMulti
+              label="Stage"
             />
           </Column>
           <Column>
             <ExerciseSelect
-              defaultValue={this.props.exercise.requirements}
+              value={this.props.exercise.requirements}
               readOnly
               isMulti
+              label="Exercise"
             />
           </Column>
           <Column>

@@ -1,7 +1,7 @@
 import React from 'react';
-import { Select } from '../../../style/inputs';
-import { Button } from '../../../style/buttons';
-import { Row } from '../../../style/table';
+import { Select } from '../../style/inputs';
+import { Button } from '../../style/buttons';
+import { Row } from '../../style/table';
 
 export default class MealSelect extends React.Component {
   constructor() {
@@ -18,7 +18,7 @@ export default class MealSelect extends React.Component {
       <Row columns={2}>
         <Select
           options={[{ label: 'New Meal', value: '' }].concat(this.state.meals)}
-          defaultValue={''}
+          value={this.state.id}
           onChange={(evt) => this.setState({ id: evt.value })}
         />
         <Button onClick={() => this.props.onSubmit(this.state.id)}>

@@ -54,25 +54,23 @@ export default class Login extends React.Component {
             />
           </Column>
         </Row>
-        <Row columns={2}>
-          <Column>Email</Column>
+        <Row>
           <Column>
             <Text
               name="email"
               value={this.state.email}
               onChange={this.onChange}
-              placeholder="Email"
+              label="Email"
             />
           </Column>
         </Row>
-        <Row columns={2}>
-          <Column>Password</Column>
+        <Row>
           <Column>
             <Password
               name="password"
               value={this.state.password}
               onChange={this.onChange}
-              placeholder="Password"
+              label="Password"
             />
           </Column>
         </Row>
