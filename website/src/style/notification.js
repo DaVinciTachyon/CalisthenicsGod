@@ -24,17 +24,12 @@ class BaseNotification extends React.Component {
   }
 }
 
-const Notification = styled(BaseNotification)``;
+const Notification = styled(BaseNotification)`
+  border-radius: 4px;
+`;
 
-//FIXME
-// const Error = styled(Notification)`
-//   background-color: ${ErrorColours.primary};
-// `;
-
-const Error = styled(Row)`
-  ${Notification} {
-    background-color: ${ErrorColours.primary};
-  }
+const Error = styled(Notification)`
+  background-color: ${ErrorColours.primary};
 `;
 
 export { Notification, Error };
