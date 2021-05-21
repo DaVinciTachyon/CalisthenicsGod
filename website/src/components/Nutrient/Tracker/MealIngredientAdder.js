@@ -105,7 +105,10 @@ export default class MealIngredientAdder extends React.Component {
     return (
       <Row columns={11} className="input">
         <Column span={2}>
-          <IngredientSelect onChange={this.onIngredientChange} />
+          <IngredientSelect
+            value={this.state.id}
+            onChange={this.onIngredientChange}
+          />
           {this.state.id === undefined && (
             <Text
               name="name"

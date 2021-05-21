@@ -237,10 +237,10 @@ const DropdownOption = styled(({ className, label, ...rest }) => (
 `;
 
 const SelectDropdown = styled(
-  ({ className, options, value, onSelect, ...rest }) => (
+  ({ className, options, value, onSelect, isMulti, ...rest }) => (
     <div className={className} {...rest}>
-      {options.map((option) => {
-        return value?.find((id) => option.value === id) ? (
+      {options.map((option) =>
+        (isMulti ? value?.find((id) => option.value === id) : false) ? (
           <></>
         ) : (
           <DropdownOption
@@ -248,8 +248,8 @@ const SelectDropdown = styled(
             value={option.value}
             onClick={() => onSelect(option)}
           />
-        );
-      })}
+        )
+      )}
     </div>
   )
 )`
@@ -262,22 +262,31 @@ const SelectDropdown = styled(
 `;
 
 const SelectChoices = styled(
-  ({ className, options, value, onSelect, readOnly, ...rest }) => (
+  ({ className, options, value, onSelect, readOnly, isMulti, ...rest }) => (
     <div className={className} {...rest}>
       <div>
-        {value?.map((id) => {
-          const option = options.find((option) => option.value === id);
-          return option ? (
-            <SelectedOption
-              label={option.label}
-              value={option.value}
-              onClick={() => onSelect(option)}
-              readOnly={readOnly}
-            />
-          ) : (
-            <></>
-          );
-        })}
+        {isMulti
+          ? value?.map((id) => {
+              const option = options.find((option) => option.value === id);
+              return option ? (
+                <SelectedOption
+                  label={option.label}
+                  value={option.value}
+                  onClick={() => onSelect(option)}
+                  readOnly={readOnly}
+                />
+              ) : (
+                <></>
+              );
+            })
+          : (() => {
+              const option = options.find(
+                (option) =>
+                  option.value === value ||
+                  (option.value === '' && value === undefined)
+              );
+              return option ? <div>{option.label}</div> : <div>Select</div>;
+            })()}
       </div>
       <span className="arrow">🢓</span>
     </div>
@@ -335,53 +344,29 @@ class BaseSelect extends React.Component {
     let value = this.props.value;
     if (this.props.isMulti && isAdding) value = value.concat(evt.value);
     else if (this.props.isMulti) value = value.filter((id) => id !== evt.value);
-    else if (evt.target.validity.valid) value = evt.target.value;
+    else value = evt.value;
     this.props.onChange({ name: this.props.name, value });
   };
 
   render() {
-    if (this.props.isMulti)
-      return (
-        <div className={this.props.className}>
-          <SelectChoices
-            options={this.props.options}
-            value={this.props.value}
-            onSelect={(option) => this.onChange(option, false)}
-            readOnly={this.props.readOnly}
-          />
-          {!this.props.readOnly && (
-            <SelectDropdown
-              options={this.props.options}
-              value={this.props.value}
-              onSelect={(option) => this.onChange(option, true)}
-            />
-          )}
-          {this.props.label && (
-            <span className="label">{this.props.label}</span>
-          )}
-        </div>
-      );
     return (
       <div className={this.props.className}>
-        <select
-          name={this.props.name}
-          id={this.props.id}
-          onChange={this.onChange}
-          disabled={this.props.readOnly}
-        >
-          {this.props.options?.map((option) => (
-            <option
-              key={option.value}
-              value={option.value}
-              selected={option.value === this.props.value}
-            >
-              {option.label}
-            </option>
-          ))}
-        </select>
-        {this.props.label && (
-          <label for={this.props.name}>{this.props.label}</label>
+        <SelectChoices
+          options={this.props.options}
+          value={this.props.value}
+          onSelect={(option) => this.onChange(option, false)}
+          readOnly={this.props.readOnly}
+          isMulti={this.props.isMulti}
+        />
+        {!this.props.readOnly && (
+          <SelectDropdown
+            options={this.props.options}
+            value={this.props.value}
+            onSelect={(option) => this.onChange(option, true)}
+            isMulti={this.props.isMulti}
+          />
         )}
+        {this.props.label && <span className="label">{this.props.label}</span>}
       </div>
     );
   }
@@ -391,7 +376,6 @@ const Select = styled(BaseSelect)`
   position: relative;
   margin: 10px;
 
-  & select,
   & ${SelectChoices} {
     border: 1px solid currentColor;
     border-radius: 4px;
@@ -405,7 +389,6 @@ const Select = styled(BaseSelect)`
     display: block;
   }
 
-  & label,
   & span.label {
     position: absolute;
     left: 0;
@@ -423,7 +406,6 @@ const Select = styled(BaseSelect)`
 
   // &:focus, //FIXME
   // &:not(:placeholder-shown) {
-  & label,
   & span.label {
     transform: translate(0.25rem, -65%) scale(0.8);
     background: white;
