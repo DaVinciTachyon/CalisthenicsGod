@@ -1,7 +1,7 @@
 import React from 'react';
-import { Select } from '../../../style/inputs';
-import { Button } from '../../../style/buttons';
-import { Row } from '../../../style/table';
+import { Select } from '../../style/inputs';
+import { Button } from '../../style/buttons';
+import { Row } from '../../style/table';
 
 export default class MealSelect extends React.Component {
   constructor() {

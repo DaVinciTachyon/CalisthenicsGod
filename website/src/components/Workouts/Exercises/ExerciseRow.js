@@ -121,6 +121,7 @@ export default class ExerciseRow extends React.Component {
               value={this.props.exercise.potentialStages}
               readOnly
               isMulti
+              label="Stage"
             />
           </Column>
           <Column>
@@ -128,6 +129,7 @@ export default class ExerciseRow extends React.Component {
               value={this.props.exercise.requirements}
               readOnly
               isMulti
+              label="Exercise"
             />
           </Column>
           <Column>

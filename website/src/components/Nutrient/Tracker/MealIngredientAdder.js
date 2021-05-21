@@ -15,14 +15,14 @@ export default class MealIngredientAdder extends React.Component {
       ethanol: 0,
       weight: 0,
       name: '',
-      id: undefined,
+      id: '',
     };
   }
 
   onIngredientChange = (ingredient) => {
     if (ingredient === undefined)
       this.setState({
-        id: undefined,
+        id: '',
         fat: 0,
         carbohydrate: 0,
         protein: 0,
@@ -50,7 +50,9 @@ export default class MealIngredientAdder extends React.Component {
   onChange = (evt) => this.setState({ [evt.target.name]: evt.target.value });
 
   onSubmit = async () => {
-    const id = this.state.id || (await this.addIngredient());
+    const id =
+      (this.state.id === '' ? undefined : this.state.id) ||
+      (await this.addIngredient());
     let url = `${process.env.REACT_APP_API_URL}/nutrition/meals/`;
     if (this.props.isPreset)
       url = `${process.env.REACT_APP_API_URL}/nutrition/meals/preset/ingredient/add/`;
@@ -108,8 +110,9 @@ export default class MealIngredientAdder extends React.Component {
           <IngredientSelect
             value={this.state.id}
             onChange={this.onIngredientChange}
+            label="Ingredient" //color
           />
-          {this.state.id === undefined && (
+          {this.state.id === '' && (
             <Text
               name="name"
               value={this.state.name}
@@ -137,7 +140,7 @@ export default class MealIngredientAdder extends React.Component {
               this.setState({ fat, carbohydrate, protein, ethanol })
             }
             isBaseline
-            macroReadOnly={this.state.id !== undefined}
+            macroReadOnly={this.state.id !== ''}
             weight={100}
             fat={this.state.fat}
             carbohydrate={this.state.carbohydrate}

@@ -5,7 +5,7 @@ import { Nutrients } from './constants';
 const Input = styled(
   ({ className, name, placeholder, label, unit, ...rest }) => (
     <label className={className}>
-      <input name={name || 'input'} placeholder=" " {...rest} />
+      <input name={name || 'input'} placeholder="&#8203;" {...rest} />
       {label && <span className="label">{label}</span>}
       {unit && (
         <span className="unit">
@@ -55,7 +55,7 @@ const Input = styled(
     color: currentColor;
     background: transparent;
 
-    &:focus,
+    ${(props) => (props.readOnly ? '' : '&:focus,')}
     &:not(:placeholder-shown) {
       & + span.label {
         transform: translate(0.25rem, -65%) scale(0.8);
@@ -261,31 +261,32 @@ const SelectDropdown = styled(
   z-index: 1;
 `;
 
+const EmptySpan = <span className="empty">&#8203;</span>;
+
 const SelectChoices = styled(
   ({ className, options, value, onSelect, readOnly, isMulti, ...rest }) => (
     <div className={className} {...rest}>
       <div>
         {isMulti
-          ? value?.map((id) => {
-              const option = options.find((option) => option.value === id);
-              return option ? (
-                <SelectedOption
-                  label={option.label}
-                  value={option.value}
-                  onClick={() => onSelect(option)}
-                  readOnly={readOnly}
-                />
-              ) : (
-                <></>
-              );
-            })
+          ? (() => {
+              const optionDivs = value?.map((id) => {
+                const option = options.find((option) => option.value === id);
+                return option ? (
+                  <SelectedOption
+                    label={option.label}
+                    value={option.value}
+                    onClick={() => onSelect(option)}
+                    readOnly={readOnly}
+                  />
+                ) : (
+                  <></>
+                );
+              });
+              return optionDivs.length > 0 ? optionDivs : EmptySpan;
+            })()
           : (() => {
-              const option = options.find(
-                (option) =>
-                  option.value === value ||
-                  (option.value === '' && value === undefined)
-              );
-              return option ? <div>{option.label}</div> : <div>Select</div>;
+              const option = options.find((option) => option.value === value);
+              return option ? <span>{option.label}</span> : EmptySpan;
             })()}
       </div>
       <span className="arrow">🢓</span>
@@ -357,6 +358,7 @@ class BaseSelect extends React.Component {
           onSelect={(option) => this.onChange(option, false)}
           readOnly={this.props.readOnly}
           isMulti={this.props.isMulti}
+          label={this.props.label}
         />
         {!this.props.readOnly && (
           <SelectDropdown
@@ -366,7 +368,21 @@ class BaseSelect extends React.Component {
             isMulti={this.props.isMulti}
           />
         )}
-        {this.props.label && <span className="label">{this.props.label}</span>}
+        {this.props.label && (
+          <span
+            className="label"
+            style={(() =>
+              (this.props.isMulti && this.props.value.length > 0) ||
+              (!this.props.isMulti && this.props.value !== undefined)
+                ? {
+                    transform: 'translate(0.25rem, -65%) scale(0.8)',
+                    background: 'white',
+                  }
+                : {})()}
+          >
+            {this.props.label}
+          </span>
+        )}
       </div>
     );
   }
@@ -403,14 +419,6 @@ const Select = styled(BaseSelect)`
     border-radius: 10px;
     transform: translate(0, 0);
   }
-
-  // &:focus, //FIXME
-  // &:not(:placeholder-shown) {
-  & span.label {
-    transform: translate(0.25rem, -65%) scale(0.8);
-    background: white;
-  }
-  // }
 
   ${(props) =>
     props.readOnly

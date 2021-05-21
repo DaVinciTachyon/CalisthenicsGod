@@ -1,6 +1,6 @@
 import React from 'react';
 import NutrientSummary from './NutrientSummary';
-import MealSelect from './MealSelect';
+import MealSelect from '../MealSelect';
 import Card from '../../../style/card';
 import MealIngredientAdder from './MealIngredientAdder';
 import ConsumedMeal from './ConsumedMeal';
