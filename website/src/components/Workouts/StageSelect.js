@@ -52,6 +52,7 @@ export default class StageSelect extends React.Component {
         value={this.props.value}
         isMulti={this.props.isMulti}
         readOnly={this.props.readOnly}
+        label={this.props.label}
       />
     );
   }

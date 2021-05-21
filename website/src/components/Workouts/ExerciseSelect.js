@@ -58,6 +58,7 @@ export default class ExerciseSelect extends React.Component {
         onChange={this.onChange}
         isMulti={this.props.isMulti}
         readOnly={this.props.readOnly}
+        label={this.props.label}
       />
     );
   }

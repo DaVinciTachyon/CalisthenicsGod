@@ -193,24 +193,28 @@ const Radio = styled(
 
 const SelectedOption = styled(({ className, label, ...rest }) => (
   <div className={className} {...rest}>
-    <span className="label">{label}</span>
-    <span className="x">✕</span>
+    <span>{label}</span>
+    <span>✕</span>
   </div>
 ))`
   background: lightgrey;
-  display: flex;
+  display: inline-block;
   border-radius: 4px;
   font-size: 0.7rem;
   margin: 2px;
-  align-items: center;
+  padding: 2px;
 
   & span {
     padding: 3px;
   }
 
+  ${(props) =>
+    !props.readOnly
+      ? `
   &:hover {
     background: crimson;
-  }
+  }`
+      : ``}
 `;
 
 const DropdownOption = styled(({ className, label, ...rest }) => (
@@ -252,7 +256,7 @@ const SelectDropdown = styled(
 `;
 
 const SelectChoices = styled(
-  ({ className, options, value, onSelect, ...rest }) => (
+  ({ className, options, value, onSelect, readOnly, ...rest }) => (
     <div className={className} {...rest}>
       {value?.map((id) => {
         const option = options.find((option) => option.value === id);
@@ -261,6 +265,7 @@ const SelectChoices = styled(
             label={option.label}
             value={option.value}
             onClick={() => onSelect(option)}
+            readOnly={readOnly}
           />
         ) : (
           <></>
@@ -306,13 +311,18 @@ class BaseSelect extends React.Component {
             options={this.props.options}
             value={this.props.value}
             onSelect={(option) => this.onChange(option, false)}
+            readOnly={this.props.readOnly}
           />
-          <SelectDropdown
-            options={this.props.options}
-            value={this.props.value}
-            onSelect={(option) => this.onChange(option, true)}
-          />
-          {/* {this.props.label && <label>{this.props.label}</label>} TODO */}
+          {!this.props.readOnly && (
+            <SelectDropdown
+              options={this.props.options}
+              value={this.props.value}
+              onSelect={(option) => this.onChange(option, true)}
+            />
+          )}
+          {this.props.label && (
+            <span className="label">{this.props.label}</span>
+          )}
         </div>
       );
     return (
@@ -359,7 +369,8 @@ const Select = styled(BaseSelect)`
     display: block;
   }
 
-  & label {
+  & label,
+  & span.label {
     position: absolute;
     left: 0;
     top: 0;
@@ -376,7 +387,8 @@ const Select = styled(BaseSelect)`
 
   // &:focus, //FIXME
   // &:not(:placeholder-shown) {
-  & label {
+  & label,
+  & span.label {
     transform: translate(0.25rem, -65%) scale(0.8);
     background: white;
   }
