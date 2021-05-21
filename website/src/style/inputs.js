@@ -80,10 +80,6 @@ const Date = styled(Input).attrs({
 })`
   & input {
     text-align: center;
-    &:not(.has-value):before {
-      color: lightgray;
-      content: attr(placeholder);
-    }
   }
 `;
 
