@@ -189,11 +189,7 @@ export default class UserProfile extends React.Component {
         />
         <DateInput value={this.state.birthDate} label="Birth Date" readOnly />
         <DateInput value={this.state.dateJoined} label="Date Joined" readOnly />
-        <Row columns={2}>
-          <Column span={2}>
-            <Button onClick={this.editProfile}>Edit Profile</Button>
-          </Column>
-        </Row>
+        <Button onClick={this.editProfile}>Edit Profile</Button>
       </div>
     );
   }

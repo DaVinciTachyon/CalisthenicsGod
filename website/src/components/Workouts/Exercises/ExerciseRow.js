@@ -74,67 +74,45 @@ export default class ExerciseRow extends React.Component {
     if (!this.state.isEditing)
       return (
         <Row columns={11}>
-          <Column>
-            <Text value={this.props.exercise.name} readOnly />
-          </Column>
-          <Column>
-            <Text value={this.props.exercise.abbreviation} readOnly />
-          </Column>
+          <Text value={this.props.exercise.name} readOnly />
+          <Text value={this.props.exercise.abbreviation} readOnly />
           <Column span={5} columns={5}>
-            <Column>
-              <Text value={this.props.exercise.motionType.motion} readOnly />
-            </Column>
+            <Text value={this.props.exercise.motionType.motion} readOnly />
             {this.props.exercise.motionType.motion === 'distance' && (
               <Column span={4} />
             )}
             {this.props.exercise.motionType.motion !== 'distance' && (
               <>
-                <Column>
-                  <Text
-                    value={this.props.exercise.motionType.transversePlane}
-                    readOnly
-                  />
-                </Column>
-                <Column>
-                  <Text
-                    value={this.props.exercise.motionType.kineticChain}
-                    readOnly
-                  />
-                </Column>
-                <Column>
-                  <Text
-                    value={this.props.exercise.motionType.verticality}
-                    readOnly
-                  />
-                </Column>
-                <Column>
-                  <Text
-                    value={this.props.exercise.motionType.frontalPlane}
-                    readOnly
-                  />
-                </Column>
+                <Text
+                  value={this.props.exercise.motionType.transversePlane}
+                  readOnly
+                />
+                <Text
+                  value={this.props.exercise.motionType.kineticChain}
+                  readOnly
+                />
+                <Text
+                  value={this.props.exercise.motionType.verticality}
+                  readOnly
+                />
+                <Text
+                  value={this.props.exercise.motionType.frontalPlane}
+                  readOnly
+                />
               </>
             )}
           </Column>
-          <Column>
-            <StageSelect
-              value={this.props.exercise.potentialStages}
-              readOnly
-              isMulti
-              label="Stage"
-            />
-          </Column>
-          <Column>
-            <ExerciseSelect
-              value={this.props.exercise.requirements}
-              readOnly
-              isMulti
-              label="Exercise"
-            />
-          </Column>
-          <Column>
-            <Text value={this.props.exercise.description} readOnly />
-          </Column>
+          <StageSelect
+            value={this.props.exercise.potentialStages}
+            readOnly
+            isMulti
+          />
+          <ExerciseSelect
+            value={this.props.exercise.requirements}
+            readOnly
+            isMulti
+          />
+          <Text value={this.props.exercise.description} readOnly />
           <Column>
             <Button onClick={() => this.setState({ isEditing: true })}>
               Edit

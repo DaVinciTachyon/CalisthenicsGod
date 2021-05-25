@@ -1,5 +1,5 @@
 import React from 'react';
-import { Row, Column } from '../../../style/table';
+import { Row } from '../../../style/table';
 import { Number } from '../../../style/inputs';
 
 export default class SetEditor extends React.Component {
@@ -32,69 +32,35 @@ export default class SetEditor extends React.Component {
   render() {
     if (this.props.type === 'isotonic')
       return (
-        <Row columns={1}>
-          <Column>
-            <Number
-              name="repetitions"
-              min={1}
-              value={this.state.repetitions}
-              onChange={this.onChange}
-              unit="r"
-            />
-          </Column>
-        </Row>
+        <Number
+          name="repetitions"
+          min={1}
+          value={this.state.repetitions}
+          onChange={this.onChange}
+          unit="r"
+        />
       );
     else if (this.props.type === 'isometric')
       return (
-        <Row columns={1}>
-          <Column>
-            <Number
-              name="time"
-              min={1}
-              value={this.state.time}
-              onChange={this.onChange}
-              unit="s"
-            />
-          </Column>
-        </Row>
+        <Number
+          name="time"
+          min={1}
+          value={this.state.time}
+          onChange={this.onChange}
+          unit="s"
+        />
       );
     else if (this.props.type === 'distance')
       return (
         <Row columns={3}>
-          <Column>
-            <Number
-              name="distance"
-              min={1}
-              value={this.state.distance}
-              onChange={this.onChange}
-              unit="m"
-            />
-          </Column>
-          <Column>in</Column>
-          <Column>
-            <Number
-              name="time"
-              min={1}
-              value={this.state.time}
-              onChange={this.onChange}
-              unit="s"
-            />
-          </Column>
-        </Row>
-      );
-    return (
-      <Row columns={3}>
-        <Column>
           <Number
-            name="repetitions"
+            name="distance"
             min={1}
-            value={this.state.repetitions}
+            value={this.state.distance}
             onChange={this.onChange}
-            unit="r"
+            unit="m"
           />
-        </Column>
-        <Column>*</Column>
-        <Column>
+          <span>in</span>
           <Number
             name="time"
             min={1}
@@ -102,7 +68,25 @@ export default class SetEditor extends React.Component {
             onChange={this.onChange}
             unit="s"
           />
-        </Column>
+        </Row>
+      );
+    return (
+      <Row columns={3}>
+        <Number
+          name="repetitions"
+          min={1}
+          value={this.state.repetitions}
+          onChange={this.onChange}
+          unit="r"
+        />
+        <span>*</span>
+        <Number
+          name="time"
+          min={1}
+          value={this.state.time}
+          onChange={this.onChange}
+          unit="s"
+        />
       </Row>
     );
   }

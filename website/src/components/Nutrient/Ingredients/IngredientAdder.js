@@ -85,36 +85,24 @@ export default class IngredientAdder extends React.Component {
               value={this.state.name}
             />
           </Column>
-          <Column>
-            <Calories value={this.getCalories()} readOnly />
-          </Column>
-          <Column>
-            <Weight value={this.state.weight} readOnly />
-          </Column>
-          <Column>
-            <Fat name="fat" onChange={this.onChange} value={this.state.fat} />
-          </Column>
-          <Column>
-            <Carbohydrate
-              name="carbohydrate"
-              onChange={this.onChange}
-              value={this.state.carbohydrate}
-            />
-          </Column>
-          <Column>
-            <Protein
-              name="protein"
-              onChange={this.onChange}
-              value={this.state.protein}
-            />
-          </Column>
-          <Column>
-            <Ethanol
-              name="ethanol"
-              onChange={this.onChange}
-              value={this.state.ethanol}
-            />
-          </Column>
+          <Calories value={this.getCalories()} readOnly />
+          <Weight value={this.state.weight} readOnly />
+          <Fat name="fat" onChange={this.onChange} value={this.state.fat} />
+          <Carbohydrate
+            name="carbohydrate"
+            onChange={this.onChange}
+            value={this.state.carbohydrate}
+          />
+          <Protein
+            name="protein"
+            onChange={this.onChange}
+            value={this.state.protein}
+          />
+          <Ethanol
+            name="ethanol"
+            onChange={this.onChange}
+            value={this.state.ethanol}
+          />
           <Column>
             <Button onClick={this.onSubmit}>Submit</Button>
             <ErrorButton onClick={this.resetState}>Cancel</ErrorButton>
@@ -122,16 +110,12 @@ export default class IngredientAdder extends React.Component {
         </Row>
       );
     return (
-      <Row columns={9}>
-        <Column span={9}>
-          <Button
-            className="maxWidth thin"
-            onClick={() => this.setState({ isAdding: true })}
-          >
-            Add
-          </Button>
-        </Column>
-      </Row>
+      <Button
+        className="maxWidth thin"
+        onClick={() => this.setState({ isAdding: true })}
+      >
+        Add
+      </Button>
     );
   }
 }

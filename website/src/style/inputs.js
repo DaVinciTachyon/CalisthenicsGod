@@ -16,14 +16,17 @@ const Input = styled(
   )
 )`
   position: relative;
-  margin: 10px;
-  border: 1px solid currentColor;
+  margin: ${(props) => (props.label ? '10px' : '2px')};
+  border: ${(props) =>
+    props.label || !props.readOnly ? '1px solid currentColor' : 'none'};
   border-radius: 4px;
   display: flex;
   height: fit-content;
+  background-color: ${(props) => props.primaryColor || 'transparent'};
+  border-color: ${(props) => props.secondaryColor || 'currentColor'};
 
   & span.unit {
-    font-size: 1.2em;
+    font-size: 0.8em;
     color: gray;
     padding-right: 8px;
     display: flex;
@@ -83,9 +86,12 @@ const Date = styled(Input).attrs({
   }
 `;
 
-const Number = styled(Input).attrs({
+const Number = styled(Input).attrs((props) => ({
+  value:
+    Math.round(props.value * Math.pow(10, props.decimalPlaces || 0)) /
+    Math.pow(10, props.decimalPlaces || 0),
   type: 'number',
-})`
+}))`
   & input {
     -moz-appearance: textfield;
     text-align: center;
@@ -97,10 +103,11 @@ const Number = styled(Input).attrs({
   }
 `;
 
-const Weight = styled(Number).attrs({
+const Weight = styled(Number).attrs((props) => ({
+  unit: props.unit || 'g',
   min: 0,
-  step: 0.1,
-})``;
+  step: props.step || 0.1,
+}))``;
 
 const Length = styled(Number).attrs({
   min: 0,
@@ -110,27 +117,28 @@ const Length = styled(Number).attrs({
 const Calories = styled(Number).attrs({
   min: 0,
   step: 1,
+  unit: 'kcal',
 })``;
 
-const Fat = styled(Weight)`
-  background-color: ${Nutrients.fat.light};
-  border-color: ${Nutrients.fat.dark};
-`;
+const Fat = styled(Weight).attrs({
+  primaryColor: Nutrients.fat.light,
+  secondaryColor: Nutrients.fat.dark,
+})``;
 
-const Carbohydrate = styled(Weight)`
-  background-color: ${Nutrients.carbohydrate.light};
-  border-color: ${Nutrients.carbohydrate.dark};
-`;
+const Carbohydrate = styled(Weight).attrs({
+  primaryColor: Nutrients.carbohydrate.light,
+  secondaryColor: Nutrients.carbohydrate.dark,
+})``;
 
-const Protein = styled(Weight)`
-  background-color: ${Nutrients.protein.light};
-  border-color: ${Nutrients.protein.dark};
-`;
+const Protein = styled(Weight).attrs({
+  primaryColor: Nutrients.protein.light,
+  secondaryColor: Nutrients.protein.dark,
+})``;
 
-const Ethanol = styled(Weight)`
-  background-color: ${Nutrients.ethanol.light};
-  border-color: ${Nutrients.ethanol.dark};
-`;
+const Ethanol = styled(Weight).attrs({
+  primaryColor: Nutrients.ethanol.light,
+  secondaryColor: Nutrients.ethanol.dark,
+})``;
 
 const RadioOption = styled(({ className, label, value, ...rest }) => (
   <div className={className}>

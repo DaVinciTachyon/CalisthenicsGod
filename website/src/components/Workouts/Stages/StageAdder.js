@@ -57,28 +57,20 @@ export default class StageAdder extends React.Component {
   render() {
     if (!this.state.isAdding)
       return (
-        <Row columns={5}>
-          <Column span={5}>
-            <Button
-              onClick={() => this.setState({ isAdding: true })}
-              className="maxWidth thin"
-            >
-              +
-            </Button>
-          </Column>
-        </Row>
+        <Button
+          onClick={() => this.setState({ isAdding: true })}
+          className="maxWidth thin"
+        >
+          +
+        </Button>
       );
     else
       return (
         <>
-          <Row columns={5}>
-            <Column span={5}>
-              <Error
-                text={this.state.error}
-                dismiss={() => this.setState({ error: '' })}
-              />
-            </Column>
-          </Row>
+          <Error
+            text={this.state.error}
+            dismiss={() => this.setState({ error: '' })}
+          />
           <Row columns={5}>
             <Column span={2}>
               <Text

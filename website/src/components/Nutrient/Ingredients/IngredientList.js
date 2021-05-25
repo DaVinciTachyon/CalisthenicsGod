@@ -1,6 +1,6 @@
 import React from 'react';
 import IngredientRow from './IngredientRow';
-import { Row, Column, Title } from '../../../style/table';
+import { Title } from '../../../style/table';
 import IngredientAdder from './IngredientAdder';
 
 export default class IngredientList extends React.Component {
@@ -39,12 +39,10 @@ export default class IngredientList extends React.Component {
       return <></>;
     return (
       <div>
-        <Row columns={9}>
-          <Column span={9}>
-            {!this.props.isUnavailable && <Title>Available</Title>}
-            {this.props.isUnavailable && <Title>Unavailable</Title>}
-          </Column>
-        </Row>
+        <Title>
+          {!this.props.isUnavailable && <>Available</>}
+          {this.props.isUnavailable && <>Unavailable</>}
+        </Title>
         <IngredientRow isTitle />
         {!this.props.isUnavailable && (
           <IngredientAdder

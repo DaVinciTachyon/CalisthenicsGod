@@ -1,5 +1,5 @@
 import React from 'react';
-import { Row, Column, Subtitle } from '../../../style/table';
+import { Row, Column } from '../../../style/table';
 import {
   Text,
   Calories,
@@ -115,35 +115,17 @@ export default class IngredientRow extends React.Component {
       return (
         <Row columns={9} isTitle>
           <Column span={2} />
-          <Column>
-            <div>Calories</div>
-            <Subtitle>kcal</Subtitle>
-          </Column>
-          <Column>
-            <div>Weight</div>
-            <Subtitle>grams</Subtitle>
-          </Column>
-          <Column>
-            <div>Fat</div>
-            <Subtitle>grams</Subtitle>
-          </Column>
-          <Column>
-            <div>Carbs</div>
-            <Subtitle>grams</Subtitle>
-          </Column>
-          <Column>
-            <div>Protein</div>
-            <Subtitle>grams</Subtitle>
-          </Column>
-          <Column>
-            <div>Ethanol</div>
-            <Subtitle>grams</Subtitle>
-          </Column>
+          <Column>Calories</Column>
+          <Column>Weight</Column>
+          <Column>Fat</Column>
+          <Column>Carbs</Column>
+          <Column>Protein</Column>
+          <Column>Ethanol</Column>
           <Column />
         </Row>
       );
     return (
-      <Row columns={9} isTitle>
+      <Row columns={9}>
         <Column span={2}>
           <Text
             name="name"
@@ -152,78 +134,64 @@ export default class IngredientRow extends React.Component {
             readOnly={!this.state.isEditing}
           />
         </Column>
-        <Column>
-          <Calories value={this.getCalories()} readOnly />
-        </Column>
-        <Column>
-          <Weight value={this.state.weight} readOnly />
-        </Column>
-        <Column>
-          <Fat
-            name="fat"
-            onChange={this.onChange}
-            value={this.state.fat}
-            readOnly={!this.state.isEditing}
-          />
-        </Column>
-        <Column>
-          <Carbohydrate
-            name="carbohydrate"
-            onChange={this.onChange}
-            value={this.state.carbohydrate}
-            readOnly={!this.state.isEditing}
-          />
-        </Column>
-        <Column>
-          <Protein
-            name="protein"
-            onChange={this.onChange}
-            value={this.state.protein}
-            readOnly={!this.state.isEditing}
-          />
-        </Column>
-        <Column>
-          <Ethanol
-            name="ethanol"
-            onChange={this.onChange}
-            value={this.state.ethanol}
-            readOnly={!this.state.isEditing}
-          />
-        </Column>
-        <Column>
-          {!this.state.isEditing && (
-            <div>
-              <Button onClick={() => this.setState({ isEditing: true })}>
-                Edit
-              </Button>
-              {this.props.isAvailable && (
-                <DeleteButton onClick={this.onChangeAvailability}>
-                  Unavailable
-                </DeleteButton>
-              )}
-              {!this.props.isAvailable && (
-                <SuccessButton onClick={this.onChangeAvailability}>
-                  Available
-                </SuccessButton>
-              )}
-            </div>
-          )}
-          {this.state.isEditing && (
-            <div>
-              <SuccessButton className="primary" onClick={this.onSubmit}>
-                Submit
+        <Calories value={this.getCalories()} readOnly />
+        <Weight value={this.state.weight} readOnly />
+        <Fat
+          name="fat"
+          onChange={this.onChange}
+          value={this.state.fat}
+          readOnly={!this.state.isEditing}
+        />
+        <Carbohydrate
+          name="carbohydrate"
+          onChange={this.onChange}
+          value={this.state.carbohydrate}
+          readOnly={!this.state.isEditing}
+        />
+        <Protein
+          name="protein"
+          onChange={this.onChange}
+          value={this.state.protein}
+          readOnly={!this.state.isEditing}
+        />
+        <Ethanol
+          name="ethanol"
+          onChange={this.onChange}
+          value={this.state.ethanol}
+          readOnly={!this.state.isEditing}
+        />
+        {!this.state.isEditing && (
+          <div>
+            <Button onClick={() => this.setState({ isEditing: true })}>
+              Edit
+            </Button>
+            {this.props.isAvailable && (
+              <DeleteButton onClick={this.onChangeAvailability}>
+                Unavailable
+              </DeleteButton>
+            )}
+            {!this.props.isAvailable && (
+              <SuccessButton onClick={this.onChangeAvailability}>
+                Available
               </SuccessButton>
-              <ErrorButton
-                onClick={() => {
-                  this.setMacros();
-                  this.setState({ isEditing: false });
-                }}
-              >
-                Cancel
-              </ErrorButton>
-            </div>
-          )}
-        </Column>
+            )}
+          </div>
+        )}
+        {this.state.isEditing && (
+          <div>
+            <SuccessButton className="primary" onClick={this.onSubmit}>
+              Submit
+            </SuccessButton>
+            <ErrorButton
+              onClick={() => {
+                this.setMacros();
+                this.setState({ isEditing: false });
+              }}
+            >
+              Cancel
+            </ErrorButton>
+          </div>
+        )}
       </Row>
     );
   }

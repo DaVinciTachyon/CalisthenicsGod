@@ -1,6 +1,6 @@
 import React from 'react';
 import { Error } from '../../style/notification';
-import { Row, Column } from '../../style/table';
+import { Row } from '../../style/table';
 import Card from '../../style/card';
 import { Button } from '../../style/buttons';
 import { Weight, Text, Password, Date as DateInput } from '../../style/inputs';
@@ -133,20 +133,16 @@ export default class Register extends React.Component {
           onChange={this.onChange}
           required
         />
-        <Row columns={2}>
-          <Column span={2}>
-            <Button onClick={this.onSubmit}>Register</Button>
-          </Column>
+        <Row>
+          <Button onClick={this.onSubmit}>Register</Button>
         </Row>
-        <Row columns={2}>
-          <Column span={2}>
-            <Button
-              className="secondary"
-              onClick={() => (window.location = '/login')}
-            >
-              Login
-            </Button>
-          </Column>
+        <Row>
+          <Button
+            className="secondary"
+            onClick={() => (window.location = '/login')}
+          >
+            Login
+          </Button>
         </Row>
       </Card>
     );

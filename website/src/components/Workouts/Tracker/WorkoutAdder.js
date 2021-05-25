@@ -85,18 +85,10 @@ export default class WorkoutAdder extends React.Component {
             onUpdate={this.onUpdate}
           />
         ))}
-        <Row>
-          <Column>
-            <Button onClick={this.onSubmit}>Submit</Button>
-          </Column>
-        </Row>
-        <Row>
-          <Column>
-            <ErrorButton onClick={() => (window.location = '/workoutTracker')}>
-              Cancel
-            </ErrorButton>
-          </Column>
-        </Row>
+        <Button onClick={this.onSubmit}>Submit</Button>
+        <ErrorButton onClick={() => (window.location = '/workoutTracker')}>
+          Cancel
+        </ErrorButton>
       </div>
     );
   }

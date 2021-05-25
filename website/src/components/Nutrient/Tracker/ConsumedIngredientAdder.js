@@ -1,6 +1,5 @@
 import React from 'react';
 import { Button } from '../../../style/buttons';
-import { Row, Column } from '../../../style/table';
 import MealIngredientAdder from './MealIngredientAdder';
 
 export default class ConsumedIngredientAdder extends React.Component {
@@ -25,16 +24,12 @@ export default class ConsumedIngredientAdder extends React.Component {
         />
       );
     return (
-      <Row>
-        <Column>
-          <Button
-            className="maxWidth thin"
-            onClick={() => this.setState({ isAdding: true })}
-          >
-            Add
-          </Button>
-        </Column>
-      </Row>
+      <Button
+        className="maxWidth thin"
+        onClick={() => this.setState({ isAdding: true })}
+      >
+        Add
+      </Button>
     );
   }
 }

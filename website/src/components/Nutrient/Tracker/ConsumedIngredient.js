@@ -1,5 +1,5 @@
 import React from 'react';
-import { Row, Column, Subtitle } from '../../../style/table';
+import { Row, Column } from '../../../style/table';
 import {
   Text,
   Calories,
@@ -93,30 +93,12 @@ export default class ConsumedIngredient extends React.Component {
         return (
           <Row columns={9} isTitle>
             <Column span={2} />
-            <Column>
-              <div>Calories</div>
-              <Subtitle>kcal</Subtitle>
-            </Column>
-            <Column>
-              <div>Weight</div>
-              <Subtitle>grams</Subtitle>
-            </Column>
-            <Column>
-              <div>Fat</div>
-              <Subtitle>grams</Subtitle>
-            </Column>
-            <Column>
-              <div>Carbs</div>
-              <Subtitle>grams</Subtitle>
-            </Column>
-            <Column>
-              <div>Protein</div>
-              <Subtitle>grams</Subtitle>
-            </Column>
-            <Column>
-              <div>Ethanol</div>
-              <Subtitle>grams</Subtitle>
-            </Column>
+            <Column>Calories</Column>
+            <Column>Weight</Column>
+            <Column>Fat</Column>
+            <Column>Carbs</Column>
+            <Column>Protein</Column>
+            <Column>Ethanol</Column>
             <Column />
           </Row>
         );
@@ -125,44 +107,32 @@ export default class ConsumedIngredient extends React.Component {
         <Column span={2}>
           <Text value={this.props.name} readOnly />
         </Column>
-        <Column>
-          <Calories value={this.getCalories()} readOnly />
-        </Column>
-        <Column>
-          <Weight
-            value={this.state.weight}
-            readOnly={!this.state.isEditing}
-            name="weight"
-            onChange={this.onChange}
-          />
-        </Column>
-        <Column>
-          <Fat
-            value={(this.props.macros.fat * this.state.weight) / 100}
-            readOnly
-          />
-        </Column>
-        <Column>
-          <Carbohydrate
-            value={(this.props.macros.carbohydrate * this.state.weight) / 100}
-            readOnly
-          />
-        </Column>
-        <Column>
-          <Protein
-            value={(this.props.macros.protein * this.state.weight) / 100}
-            readOnly
-          />
-        </Column>
-        <Column>
-          <Ethanol
-            value={(this.props.macros.ethanol * this.state.weight) / 100}
-            readOnly
-          />
-        </Column>
+        <Calories value={this.getCalories()} readOnly />
+        <Weight
+          value={this.state.weight}
+          readOnly={!this.state.isEditing}
+          name="weight"
+          onChange={this.onChange}
+        />
+        <Fat
+          value={(this.props.macros.fat * this.state.weight) / 100}
+          readOnly
+        />
+        <Carbohydrate
+          value={(this.props.macros.carbohydrate * this.state.weight) / 100}
+          readOnly
+        />
+        <Protein
+          value={(this.props.macros.protein * this.state.weight) / 100}
+          readOnly
+        />
+        <Ethanol
+          value={(this.props.macros.ethanol * this.state.weight) / 100}
+          readOnly
+        />
         <Column>
           {!this.state.isEditing && (
-            <div>
+            <>
               <Button
                 onClick={() => {
                   this.setState({ isEditing: true });
@@ -171,10 +141,10 @@ export default class ConsumedIngredient extends React.Component {
                 Edit
               </Button>
               <DeleteButton onClick={this.onRemove}>Remove</DeleteButton>
-            </div>
+            </>
           )}
           {this.state.isEditing && (
-            <div>
+            <>
               <SuccessButton onClick={this.onSubmit}>Submit</SuccessButton>
               <ErrorButton
                 onClick={() => {
@@ -184,7 +154,7 @@ export default class ConsumedIngredient extends React.Component {
               >
                 Cancel
               </ErrorButton>
-            </div>
+            </>
           )}
         </Column>
       </Row>

@@ -1,6 +1,7 @@
 import React from 'react';
 import { Row, Column } from '../../../style/table';
 import {
+  Text,
   Calories,
   Fat,
   Carbohydrate,
@@ -56,23 +57,15 @@ export default class ConsumedIngredientSummary extends React.Component {
   render() {
     return (
       <Row columns={9} className="emphasis">
-        <Column span={2}>Summary</Column>
-        <Column>
-          <Calories value={this.getCalories()} readOnly />
+        <Column span={2}>
+          <Text value="Summary" readOnly />
         </Column>
+        <Calories value={this.getCalories()} readOnly />
         <Column />
-        <Column>
-          <Fat value={this.state.fat} readOnly />
-        </Column>
-        <Column>
-          <Carbohydrate value={this.state.carbohydrate} readOnly />
-        </Column>
-        <Column>
-          <Protein value={this.state.protein} readOnly />
-        </Column>
-        <Column>
-          <Ethanol value={this.state.ethanol} readOnly />
-        </Column>
+        <Fat value={this.state.fat} readOnly />
+        <Carbohydrate value={this.state.carbohydrate} readOnly />
+        <Protein value={this.state.protein} readOnly />
+        <Ethanol value={this.state.ethanol} readOnly />
         <Column />
       </Row>
     );

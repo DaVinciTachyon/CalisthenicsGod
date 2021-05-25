@@ -125,106 +125,86 @@ export default class Exercises extends React.Component {
   render() {
     return (
       <Row columns={11}>
-        <Column>
-          <Text
-            name="name"
-            value={this.state.name}
-            onChange={this.onChange}
-            required
-          />
-        </Column>
-        <Column>
-          <Text
-            name="abbreviation"
-            value={this.state.abbreviation}
-            onChange={this.onChange}
-          />
-        </Column>
-        <Column>
-          <Radio
-            name="motion"
-            value={this.state.motion}
-            options={[
-              { label: 'Isometric', value: 'isometric' },
-              { label: 'Isotonic', value: 'isotonic' },
-              { label: 'Distance', value: 'distance' },
-            ]}
-            onChange={this.onChange}
-          />
-        </Column>
+        <Text
+          name="name"
+          value={this.state.name}
+          onChange={this.onChange}
+          required
+        />
+        <Text
+          name="abbreviation"
+          value={this.state.abbreviation}
+          onChange={this.onChange}
+        />
+        <Radio
+          name="motion"
+          value={this.state.motion}
+          options={[
+            { label: 'Isometric', value: 'isometric' },
+            { label: 'Isotonic', value: 'isotonic' },
+            { label: 'Distance', value: 'distance' },
+          ]}
+          onChange={this.onChange}
+        />
         {this.state.motion === 'distance' && <Column span={4} />}
         {this.state.motion !== 'distance' && (
           <>
-            <Column>
-              <Radio
-                name="transversePlane"
-                value={this.state.transversePlane}
-                options={[
-                  { label: 'Upper', value: 'upper' },
-                  { label: 'Lower', value: 'lower' },
-                ]}
-                onChange={this.onChange}
-              />
-            </Column>
-            <Column>
-              <Radio
-                name="kineticChain"
-                value={this.state.kineticChain}
-                options={[
-                  { label: 'Closed', value: 'closed' },
-                  { label: 'Open', value: 'open' },
-                ]}
-                onChange={this.onChange}
-              />
-            </Column>
-            <Column>
-              <Radio
-                name="verticality"
-                value={this.state.verticality}
-                options={[
-                  { label: 'Horizontal', value: 'horizontal' },
-                  { label: 'Vertical', value: 'vertical' },
-                ]}
-                onChange={this.onChange}
-              />
-            </Column>
-            <Column>
-              <Radio
-                name="frontalPlane"
-                value={this.state.frontalPlane}
-                options={[
-                  { label: 'Push', value: 'push' },
-                  { label: 'Pull', value: 'pull' },
-                ]}
-                onChange={this.onChange}
-              />
-            </Column>
+            <Radio
+              name="transversePlane"
+              value={this.state.transversePlane}
+              options={[
+                { label: 'Upper', value: 'upper' },
+                { label: 'Lower', value: 'lower' },
+              ]}
+              onChange={this.onChange}
+            />
+            <Radio
+              name="kineticChain"
+              value={this.state.kineticChain}
+              options={[
+                { label: 'Closed', value: 'closed' },
+                { label: 'Open', value: 'open' },
+              ]}
+              onChange={this.onChange}
+            />
+            <Radio
+              name="verticality"
+              value={this.state.verticality}
+              options={[
+                { label: 'Horizontal', value: 'horizontal' },
+                { label: 'Vertical', value: 'vertical' },
+              ]}
+              onChange={this.onChange}
+            />
+            <Radio
+              name="frontalPlane"
+              value={this.state.frontalPlane}
+              options={[
+                { label: 'Push', value: 'push' },
+                { label: 'Pull', value: 'pull' },
+              ]}
+              onChange={this.onChange}
+            />
           </>
         )}
-        <Column>
-          <StageSelect
-            name="potentialStages"
-            onChange={this.onSelectChange}
-            value={this.state.potentialStages}
-            isMulti
-          />
-        </Column>
-        <Column>
-          <ExerciseSelect
-            name="requirements"
-            onChange={this.onSelectChange}
-            value={this.state.requirements}
-            isMulti
-          />
-        </Column>
-        <Column>
-          <Text
-            name="description"
-            value={this.state.description}
-            onChange={this.onChange}
-            placeholder="Description"
-          />
-        </Column>
+        <StageSelect
+          name="potentialStages"
+          onChange={this.onSelectChange}
+          value={this.state.potentialStages}
+          isMulti
+        />
+        <ExerciseSelect
+          name="requirements"
+          onChange={this.onSelectChange}
+          value={this.state.requirements}
+          isMulti
+        />
+        <Text
+          name="description"
+          value={this.state.description}
+          onChange={this.onChange}
+          placeholder="Description"
+        />
         <Column>
           <Button onClick={this.onSubmit}>Submit</Button>
           <ErrorButton onClick={this.onCancel}>Cancel</ErrorButton>

@@ -1,5 +1,5 @@
 import React from 'react';
-import { Row, Column, Subtitle } from '../../../style/table';
+import { Row, Column } from '../../../style/table';
 import {
   Text,
   Calories,
@@ -113,26 +113,11 @@ export default class MealRow extends React.Component {
       return (
         <Row columns={8} isTitle>
           <Column span={2} />
-          <Column>
-            <div>Calories</div>
-            <Subtitle>kcal</Subtitle>
-          </Column>
-          <Column>
-            <div>Fat</div>
-            <Subtitle>grams</Subtitle>
-          </Column>
-          <Column>
-            <div>Carbs</div>
-            <Subtitle>grams</Subtitle>
-          </Column>
-          <Column>
-            <div>Protein</div>
-            <Subtitle>grams</Subtitle>
-          </Column>
-          <Column>
-            <div>Ethanol</div>
-            <Subtitle>grams</Subtitle>
-          </Column>
+          <Column>Calories</Column>
+          <Column>Fat</Column>
+          <Column>Carbs</Column>
+          <Column>Protein</Column>
+          <Column>Ethanol</Column>
           <Column />
         </Row>
       );
@@ -147,21 +132,11 @@ export default class MealRow extends React.Component {
               onChange={this.onChange}
             />
           </Column>
-          <Column>
-            <Calories value={this.getCalories()} readOnly />
-          </Column>
-          <Column>
-            <Fat value={this.state.fat} readOnly />
-          </Column>
-          <Column>
-            <Carbohydrate value={this.state.carbohydrate} readOnly />
-          </Column>
-          <Column>
-            <Protein value={this.state.protein} readOnly />
-          </Column>
-          <Column>
-            <Ethanol value={this.state.ethanol} readOnly />
-          </Column>
+          <Calories value={this.getCalories()} readOnly />
+          <Fat value={this.state.fat} readOnly />
+          <Carbohydrate value={this.state.carbohydrate} readOnly />
+          <Protein value={this.state.protein} readOnly />
+          <Ethanol value={this.state.ethanol} readOnly />
           <Column>
             {!this.state.isEditing && (
               <>
