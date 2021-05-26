@@ -1,6 +1,6 @@
 import React from 'react';
 import Card from '../../style/card';
-import { Row, Column } from '../../style/table';
+import { Row } from '../../style/table';
 import { Button } from '../../style/buttons';
 import { Weight, Length } from '../../style/inputs';
 
@@ -125,14 +125,12 @@ export default class MeasurementSummary extends React.Component {
           {this.state.neck > 0 && (
             <Length label="Neck" unit="cm" value={this.state.neck} readOnly />
           )}
-          <Row columns={2}>
-            <Column span={2}>
-              <Button
-                onClick={() => (window.location = '/measurementTracker/new')}
-              >
-                New Measurements
-              </Button>
-            </Column>
+          <Row>
+            <Button
+              onClick={() => (window.location = '/measurementTracker/new')}
+            >
+              New Measurements
+            </Button>
           </Row>
         </Card>
       </>

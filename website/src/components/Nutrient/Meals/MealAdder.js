@@ -32,31 +32,21 @@ export default class MealAdder extends React.Component {
   render() {
     if (this.state.isAdding)
       return (
-        <Row columns={8}>
-          <Column span={4}>
-            <Text
-              name="name"
-              value={this.state.name}
-              onChange={this.onChange}
-            />
-          </Column>
-          <Column span={4}>
+        <Row columns={2}>
+          <Text name="name" value={this.state.name} onChange={this.onChange} />
+          <Column>
             <Button onClick={this.onSubmit}>Add</Button>
             <ErrorButton onClick={this.set}>Cancel</ErrorButton>
           </Column>
         </Row>
       );
     return (
-      <Row columns={8}>
-        <Column span={8}>
-          <Button
-            className="maxWidth"
-            onClick={() => this.setState({ isAdding: true })}
-          >
-            Add
-          </Button>
-        </Column>
-      </Row>
+      <Button
+        className="maxWidth"
+        onClick={() => this.setState({ isAdding: true })}
+      >
+        Add
+      </Button>
     );
   }
 }

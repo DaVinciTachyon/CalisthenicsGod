@@ -1,7 +1,6 @@
 import React from 'react';
 import StageAdder from './StageAdder';
 import StageRow from './StageRow';
-import { Row, Column } from '../../../style/table';
 
 export default class Stages extends React.Component {
   constructor() {
@@ -34,11 +33,7 @@ export default class Stages extends React.Component {
     return (
       <div>
         <StageRow isTitle />
-        <Row columns={5}>
-          <Column span={5}>
-            <StageAdder index={0} />
-          </Column>
-        </Row>
+        <StageAdder index={0} />
         {this.state.stages.map((stage, i) => (
           <div key={stage._id}>
             <StageRow
@@ -47,11 +42,7 @@ export default class Stages extends React.Component {
               description={stage.description}
               onUpdate={this.getStages}
             />
-            <Row columns={5}>
-              <Column span={5}>
-                <StageAdder index={i + 1} />
-              </Column>
-            </Row>
+            <StageAdder index={i + 1} />
           </div>
         ))}
       </div>

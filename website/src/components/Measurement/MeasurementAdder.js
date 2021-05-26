@@ -1,5 +1,5 @@
 import React from 'react';
-import { Row, Column } from '../../style/table';
+import { Row } from '../../style/table';
 import { Button } from '../../style/buttons';
 import { Error } from '../../style/notification';
 import { Length, Weight } from '../../style/inputs';
@@ -66,14 +66,10 @@ export default class MeasurementAdder extends React.Component {
   render() {
     return (
       <div>
-        <Row columns={2}>
-          <Column span={2}>
-            <Error
-              text={this.state.error}
-              dismiss={() => this.setState({ error: '' })}
-            />
-          </Column>
-        </Row>
+        <Error
+          text={this.state.error}
+          dismiss={() => this.setState({ error: '' })}
+        />
         <Weight
           name="weight"
           value={this.state.weight}
@@ -151,12 +147,10 @@ export default class MeasurementAdder extends React.Component {
           label="Neck"
           unit="cm"
         />
-        <Row columns={2}>
-          <Column span={2}>
-            <Button onClick={this.submitMeasurement.bind(this)}>
-              Add Measurements
-            </Button>
-          </Column>
+        <Row>
+          <Button onClick={this.submitMeasurement.bind(this)}>
+            Add Measurements
+          </Button>
         </Row>
       </div>
     );

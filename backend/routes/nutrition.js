@@ -31,25 +31,27 @@ router.use(verify, async (req, res, next) => {
   } else next();
 });
 
-router
-  .route('/calorieOffset')
-  .get(async (req, res) => {
-    const nutrients = await Nutrients.findOne({ userId: req.user._id });
-    res.send({ calorieOffset: nutrients.calorieOffset });
-  })
-  .post(async (req, res) => {
-    const { error } = nutrientValidation.calorieOffset(req.body);
-    if (error) return res.status(400).send({ error: error.details[0].message });
+router.route('/calorieOffset').get(async (req, res) => {
+  const nutrients = await Nutrients.findOne({ userId: req.user._id });
+  res.send({ calorieOffset: nutrients.calorieOffset });
+});
 
-    const nutrients = await Nutrients.findOne({ userId: req.user._id });
-    nutrients.calorieOffset = req.body.calorieOffset;
-    try {
-      await nutrients.save();
-      res.sendStatus(200);
-    } catch (err) {
-      res.status(400).send({ error: err });
-    }
-  });
+router.route('/userInfo').post(async (req, res) => {
+  const { error } = nutrientValidation.userInfo(req.body);
+  if (error) return res.status(400).send({ error: error.details[0].message });
+
+  const nutrients = await Nutrients.findOne({ userId: req.user._id });
+  nutrients.calorieOffset = req.body.calorieOffset;
+  nutrients.caloriesPerKg = req.body.caloriesPerKg;
+  nutrients.proteinGramsPerKg = req.body.proteinGramsPerKg;
+  nutrients.fatCalorieProportion = req.body.fatCalorieProportion;
+  try {
+    await nutrients.save();
+    res.sendStatus(200);
+  } catch (err) {
+    res.status(400).send({ error: err });
+  }
+});
 
 router.route('/goals').get(async (req, res) => {
   const measurements = await Measurements.findOne({ userId: req.user._id });

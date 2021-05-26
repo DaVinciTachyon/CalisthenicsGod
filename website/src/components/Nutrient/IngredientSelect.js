@@ -11,27 +11,25 @@ export default class IngredientSelect extends React.Component {
     this.getIngredients();
   }
 
-  onChange = (evt) => {
+  onChange = (evt) =>
     this.props.onChange(
       this.state.ingredients.filter(
         (ingredient) => evt.value === ingredient._id
       )[0]
     );
-  };
 
   render() {
+    const { name, onChange, ...rest } = this.props;
     return (
       <Select
-        name={this.props.name || 'ingredient'}
+        name={name || 'ingredient'}
         options={[{ label: 'New Ingredient', value: '' }].concat(
           this.state.ingredients.map((ingredient) => {
             return { label: ingredient.name, value: ingredient._id };
           })
         )}
-        value={this.props.value}
         onChange={this.onChange}
-        readOnly={this.props.readOnly}
-        label={this.props.label}
+        {...rest}
       />
     );
   }

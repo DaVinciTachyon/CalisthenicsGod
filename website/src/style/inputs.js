@@ -16,14 +16,24 @@ const Input = styled(
   )
 )`
   position: relative;
-  margin: 10px;
-  border: 1px solid currentColor;
+  margin: ${({ label }) => (label ? '10px' : '2px')};
+  border: ${({ label, readOnly }) =>
+    label || !readOnly ? '1px solid currentColor' : 'none'};
   border-radius: 4px;
   display: flex;
   height: fit-content;
+  background-color: ${({ primaryColor }) => primaryColor || 'transparent'};
+  border-color: ${({ secondaryColor }) => secondaryColor || 'currentColor'};
+
+  ${({ readOnly }) =>
+    readOnly
+      ? ``
+      : `  &:focus-within {
+    border-width: 2px;
+  }`}
 
   & span.unit {
-    font-size: 1.2em;
+    font-size: 0.8em;
     color: gray;
     padding-right: 8px;
     display: flex;
@@ -47,15 +57,12 @@ const Input = styled(
   }
 
   & input {
-    box-sizing: border-box;
-    display: block;
     width: 100%;
-    outline: 0;
     padding: calc(0.5rem * 1.5) 0.5rem;
     color: currentColor;
     background: transparent;
 
-    ${(props) => (props.readOnly ? '' : '&:focus,')}
+    ${({ readOnly }) => (readOnly ? '' : '&:focus,')}
     &:not(:placeholder-shown) {
       & + span.label {
         transform: translate(0.25rem, -65%) scale(0.8);
@@ -83,9 +90,12 @@ const Date = styled(Input).attrs({
   }
 `;
 
-const Number = styled(Input).attrs({
+const Number = styled(Input).attrs(({ value, decimalPlaces }) => ({
+  value:
+    Math.round(value * Math.pow(10, decimalPlaces || 0)) /
+    Math.pow(10, decimalPlaces || 0),
   type: 'number',
-})`
+}))`
   & input {
     -moz-appearance: textfield;
     text-align: center;
@@ -97,10 +107,11 @@ const Number = styled(Input).attrs({
   }
 `;
 
-const Weight = styled(Number).attrs({
+const Weight = styled(Number).attrs(({ unit, step }) => ({
+  unit: unit || 'g',
   min: 0,
-  step: 0.1,
-})``;
+  step: step || 0.1,
+}))``;
 
 const Length = styled(Number).attrs({
   min: 0,
@@ -110,27 +121,28 @@ const Length = styled(Number).attrs({
 const Calories = styled(Number).attrs({
   min: 0,
   step: 1,
+  unit: 'kcal',
 })``;
 
-const Fat = styled(Weight)`
-  background-color: ${Nutrients.fat.light};
-  border-color: ${Nutrients.fat.dark};
-`;
+const Fat = styled(Weight).attrs({
+  primaryColor: Nutrients.fat.light,
+  secondaryColor: Nutrients.fat.dark,
+})``;
 
-const Carbohydrate = styled(Weight)`
-  background-color: ${Nutrients.carbohydrate.light};
-  border-color: ${Nutrients.carbohydrate.dark};
-`;
+const Carbohydrate = styled(Weight).attrs({
+  primaryColor: Nutrients.carbohydrate.light,
+  secondaryColor: Nutrients.carbohydrate.dark,
+})``;
 
-const Protein = styled(Weight)`
-  background-color: ${Nutrients.protein.light};
-  border-color: ${Nutrients.protein.dark};
-`;
+const Protein = styled(Weight).attrs({
+  primaryColor: Nutrients.protein.light,
+  secondaryColor: Nutrients.protein.dark,
+})``;
 
-const Ethanol = styled(Weight)`
-  background-color: ${Nutrients.ethanol.light};
-  border-color: ${Nutrients.ethanol.dark};
-`;
+const Ethanol = styled(Weight).attrs({
+  primaryColor: Nutrients.ethanol.light,
+  secondaryColor: Nutrients.ethanol.dark,
+})``;
 
 const RadioOption = styled(({ className, label, value, ...rest }) => (
   <div className={className}>
@@ -140,7 +152,7 @@ const RadioOption = styled(({ className, label, value, ...rest }) => (
 )).attrs({
   type: 'radio',
 })`
-  display: ${(props) => (props.isHorizontal ? `inline-block` : `block`)};
+  display: ${({ isHorizontal }) => (isHorizontal ? `inline-block` : `block`)};
   margin: 3px;
   cursor: pointer;
   height: fit-content;
@@ -204,8 +216,8 @@ const SelectedOption = styled(({ className, label, ...rest }) => (
     padding: 3px;
   }
 
-  ${(props) =>
-    !props.readOnly
+  ${({ readOnly }) =>
+    !readOnly
       ? `
   &:hover {
     background: crimson;
@@ -313,7 +325,7 @@ const SelectChoices = styled(
     color: darkgrey;
     justify-content: center;
     align-items: center;
-    display: ${(props) => (props.readOnly ? `none` : `flex`)};
+    display: ${({ readOnly }) => (readOnly ? `none` : `flex`)};
   }
 `;
 
@@ -337,46 +349,47 @@ class BaseSelect extends React.Component {
     });
 
   onChange = (evt, isAdding = true) => {
-    if (this.props.readOnly) return;
+    const { readOnly, isMulti, name, onChange } = this.props;
+    if (readOnly) return;
     let value = this.props.value;
-    if (this.props.isMulti && isAdding) value = value.concat(evt.value);
-    else if (this.props.isMulti) value = value.filter((id) => id !== evt.value);
+    if (isMulti && isAdding) value = value.concat(evt.value);
+    else if (isMulti) value = value.filter((id) => id !== evt.value);
     else value = evt.value;
-    this.props.onChange({ name: this.props.name, value });
+    onChange({ name, value });
   };
 
   render() {
+    const { isMulti, readOnly, className, options, value, label } = this.props;
     return (
-      <div className={this.props.className}>
+      <div className={className}>
         <SelectChoices
-          options={this.props.options}
-          value={this.props.value}
+          options={options}
+          value={value}
           onSelect={(option) => this.onChange(option, false)}
-          readOnly={this.props.readOnly}
-          isMulti={this.props.isMulti}
-          label={this.props.label}
+          readOnly={readOnly}
+          isMulti={isMulti}
+          label={label}
         />
-        {!this.props.readOnly && (
+        {!readOnly && (
           <SelectDropdown
-            options={this.props.options}
-            value={this.props.value}
+            options={options}
+            value={value}
             onSelect={(option) => this.onChange(option, true)}
-            isMulti={this.props.isMulti}
+            isMulti={isMulti}
           />
         )}
-        {this.props.label && (
+        {label && (
           <span
             className="label"
             style={(() =>
-              (this.props.isMulti && this.props.value.length > 0) ||
-              (!this.props.isMulti && this.props.value !== undefined)
+              (isMulti && value.length > 0) || (!isMulti && value !== undefined)
                 ? {
                     transform: 'translate(0.25rem, -65%) scale(0.8)',
                     background: 'white',
                   }
                 : {})()}
           >
-            {this.props.label}
+            {label}
           </span>
         )}
       </div>
@@ -392,7 +405,6 @@ const Select = styled(BaseSelect)`
     border: 1px solid currentColor;
     border-radius: 4px;
     box-sizing: border-box;
-    outline: 0;
     padding: calc(0.5rem * 1.5) 0.5rem;
     width: 100%;
   }
@@ -416,12 +428,127 @@ const Select = styled(BaseSelect)`
     transform: translate(0, 0);
   }
 
-  ${(props) =>
-    props.readOnly
+  ${({ readOnly }) =>
+    readOnly
       ? `& option:not(:checked) {
     display: none;
   }`
       : ``}
+`;
+
+const Range = styled(
+  ({
+    className,
+    value,
+    step,
+    min,
+    max,
+    label,
+    unit,
+    isPercentage,
+    ...rest
+  }) => (
+    <div className={className}>
+      <span className="label">{label}</span>
+      <span className="value">{`${(() => {
+        let decimalPlaces = 0;
+        let nStep = step;
+        while (nStep % 1 !== 0) {
+          nStep *= 10;
+          decimalPlaces++;
+        }
+        return (
+          Math.round(
+            value * Math.pow(10, decimalPlaces + (isPercentage ? 2 : 0))
+          ) / Math.pow(10, decimalPlaces)
+        );
+      })()} ${unit}`}</span>
+      <input
+        type="range"
+        step={step || 1}
+        min={min || 0}
+        max={max || 10}
+        value={value}
+        {...rest}
+      />
+    </div>
+  )
+)`
+  width: 100%;
+  padding: 3px 10px;
+  text-align: center;
+  position: relative;
+
+  & span.label {
+    position: absolute;
+    left: 0;
+    top: 0;
+    padding: 2px 0.5em;
+    white-space: nowrap;
+    font-size: 0.8em;
+    font-weight: bold;
+    border-radius: 10px;
+  }
+
+  & span.value {
+    font-size: 0.8rem;
+  }
+
+  & input {
+    border: 1px solid currentColor;
+    border-radius: 4px;
+    -webkit-appearance: none;
+    appearance: none;
+    width: 100%;
+    height: 1.5em;
+    overflow: hidden;
+
+    &::before,
+    &::after {
+      padding: 5px;
+    }
+
+    &::before {
+      content: '${({ isPercentage, min, unit }) =>
+        `${(isPercentage ? 100 : 1) * min} ${unit}`}';
+      left: 0;
+      border-right: 1px solid currentColor;
+    }
+
+    &::after {
+      content: '${({ isPercentage, max, unit }) =>
+        `${(isPercentage ? 100 : 1) * max} ${unit}`}';
+      right: 0;
+      border-left: 1px solid currentColor;
+    }
+
+    &::-webkit-slider-thumb {
+      -webkit-appearance: none;
+      appearance: none;
+      border: 1px solid currentColor;
+      width: 1.5em;
+      height: 1.5em;
+      border-radius: 50%;
+      background: lightgray;
+      cursor: pointer;
+    }
+
+    &::-webkit-slider-thumb {
+      border: 1px solid currentColor;
+      width: 1.5em;
+      height: 1.5em;
+      border-radius: 50%;
+      background: lightgray;
+      cursor: pointer;
+    }
+
+    ${({ readOnly }) =>
+      readOnly
+        ? ``
+        : `&:focus {
+      border-width: 2px;
+    }`}
+  }
 `;
 
 export {
@@ -438,4 +565,5 @@ export {
   Protein,
   Ethanol,
   Select,
+  Range,
 };

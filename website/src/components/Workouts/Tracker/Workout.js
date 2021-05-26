@@ -35,21 +35,15 @@ export default class Workout extends React.Component {
                   {exercise.sets.map((set) => {
                     if (exercise.type === 'isotonic')
                       return (
-                        <Column>
-                          <Number value={set.repetitions} unit="r" readOnly />
-                        </Column>
+                        <Number value={set.repetitions} unit="r" readOnly />
                       );
                     else if (exercise.type === 'isometric')
-                      return (
-                        <Column>
-                          <Number value={set.time} unit="s" readOnly />
-                        </Column>
-                      );
+                      return <Number value={set.time} unit="s" readOnly />;
                     else if (exercise.type === 'distance')
                       return (
                         <Column columns={3}>
                           <Number value={set.distance} unit="m" readOnly />
-                          <div>in</div>
+                          <span>in</span>
                           <Number value={set.time} unit="s" readOnly />
                         </Column>
                       );
@@ -57,25 +51,17 @@ export default class Workout extends React.Component {
                       return (
                         <Column columns={3}>
                           <Number value={set.repetitions} unit="r" readOnly />
-                          <div>*</div>
+                          <span>*</span>
                           <Number value={set.time} unit="s" readOnly />
                         </Column>
                       );
                   })}
                 </Column>
-                <Column>
-                  <Text value={exercise.type} readOnly />
-                </Column>
-                <Column>
-                  <Text value={exercise.name} readOnly />
-                </Column>
+                <Text value={exercise.type} readOnly />
+                <Text value={exercise.name} readOnly />
                 <Column columns={2}>
-                  <Column>
-                    <Number value={exercise.rest.intraset} unit="s" readOnly />
-                  </Column>
-                  <Column>
-                    <Number value={exercise.rest.interset} unit="s" readOnly />
-                  </Column>
+                  <Number value={exercise.rest.intraset} unit="s" readOnly />
+                  <Number value={exercise.rest.interset} unit="s" readOnly />
                 </Column>
               </Row>
             ))}

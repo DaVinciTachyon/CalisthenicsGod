@@ -99,66 +99,52 @@ export default class ExerciseRow extends React.Component {
             />
           ))}
           <Row columns={2}>
-            <Column>
-              <Button
-                className="minWidth"
-                onClick={() => this.addSet(this.state.sets.length)}
-              >
-                +
-              </Button>
-            </Column>
-            <Column>
-              <DeleteButton
-                className="minWidth"
-                onClick={() => this.removeSet(this.state.sets.length)}
-              >
-                -
-              </DeleteButton>
-            </Column>
+            <Button
+              className="minWidth"
+              onClick={() => this.addSet(this.state.sets.length)}
+            >
+              +
+            </Button>
+            <DeleteButton
+              className="minWidth"
+              onClick={() => this.removeSet(this.state.sets.length)}
+            >
+              -
+            </DeleteButton>
           </Row>
         </Column>
-        <Column>
-          <Select
-            name="type"
-            options={typeOptions}
-            value={this.state.type}
-            onChange={this.onSelectChange}
-          />
-        </Column>
-        <Column>
-          <ExerciseSelect
-            name="id"
-            stage={this.props.stageId}
-            value={this.state.id}
-            onChange={this.onExerciseChange}
-          />
-        </Column>
+        <Select
+          name="type"
+          options={typeOptions}
+          value={this.state.type}
+          onChange={this.onSelectChange}
+        />
+        <ExerciseSelect
+          name="id"
+          stage={this.props.stageId}
+          value={this.state.id}
+          onChange={this.onExerciseChange}
+        />
         <Column columns={2}>
           {this.state.intrasetRest === undefined && <Column />}
           {this.state.intrasetRest !== undefined && (
-            <Column>
-              <Number
-                name="intrasetRest"
-                min={0}
-                value={this.state.intrasetRest}
-                onChange={this.onChange}
-                unit="s"
-              />
-            </Column>
-          )}
-          <Column>
             <Number
-              name="intersetRest"
+              name="intrasetRest"
               min={0}
-              value={this.state.intersetRest}
+              value={this.state.intrasetRest}
               onChange={this.onChange}
               unit="s"
             />
-          </Column>
+          )}
+          <Number
+            name="intersetRest"
+            min={0}
+            value={this.state.intersetRest}
+            onChange={this.onChange}
+            unit="s"
+          />
         </Column>
-        <Column>
-          <DeleteButton onClick={this.props.onRemove}>Remove</DeleteButton>
-        </Column>
+        <DeleteButton onClick={this.props.onRemove}>Remove</DeleteButton>
       </Row>
     );
   }

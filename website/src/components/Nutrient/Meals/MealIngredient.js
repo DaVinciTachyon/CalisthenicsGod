@@ -1,5 +1,5 @@
 import React from 'react';
-import { Row, Column, Subtitle } from '../../../style/table';
+import { Row, Column } from '../../../style/table';
 import {
   Text,
   Calories,
@@ -37,27 +37,37 @@ export default class MealIngredient extends React.Component {
     if (prevProps !== this.props && !this.props.isTitle) this.set();
   }
 
-  set = () =>
+  set = () => {
+    const { weight, macronutrients } = this.props;
+    const { fat, carbohydrate, protein, ethanol } = macronutrients;
     this.setState({
-      weight: this.props.weight,
+      weight,
       isEditing: false,
-      fat: this.props.macronutrients.fat,
-      carbohydrate: this.props.macronutrients.carbohydrate,
-      protein: this.props.macronutrients.protein,
-      ethanol: this.props.macronutrients.ethanol,
+      fat,
+      carbohydrate,
+      protein,
+      ethanol,
     });
+  };
 
-  getCalories = () =>
-    ((this.state.fat * this.props.macroDensities.fat +
-      this.state.carbohydrate * this.props.macroDensities.carbohydrate +
-      this.state.protein * this.props.macroDensities.protein +
-      this.state.ethanol * this.props.macroDensities.ethanol) *
-      this.state.weight) /
-    100;
+  getCalories = () => {
+    const { fat, carbohydrate, protein, ethanol, weight } = this.state;
+    const { macroDensities } = this.props;
+    return (
+      ((fat * macroDensities.fat +
+        carbohydrate * macroDensities.carbohydrate +
+        protein * macroDensities.protein +
+        ethanol * macroDensities.ethanol) *
+        weight) /
+      100
+    );
+  };
 
   onChange = (evt) => this.setState({ [evt.target.name]: evt.target.value });
 
   onSubmit = async () => {
+    const { mealId, id, onUpdate } = this.props;
+    const { weight } = this.state;
     await fetch(
       `${process.env.REACT_APP_API_URL}/nutrition/meals/preset/ingredient/edit`,
       {
@@ -67,19 +77,20 @@ export default class MealIngredient extends React.Component {
           'auth-token': localStorage.getItem('authToken'),
         },
         body: JSON.stringify({
-          _id: this.props.mealId,
+          _id: mealId,
           ingredient: {
-            id: this.props.id,
-            weight: this.state.weight,
+            id,
+            weight,
           },
         }),
       }
     );
     await this.setState({ isEditing: false });
-    this.props.onUpdate();
+    onUpdate();
   };
 
   onRemove = async () => {
+    const { mealId, id, onUpdate } = this.props;
     await fetch(
       `${process.env.REACT_APP_API_URL}/nutrition/meals/preset/ingredient/remove`,
       {
@@ -89,86 +100,50 @@ export default class MealIngredient extends React.Component {
           'auth-token': localStorage.getItem('authToken'),
         },
         body: JSON.stringify({
-          ingredientId: this.props.id,
-          _id: this.props.mealId,
+          ingredientId: id,
+          _id: mealId,
         }),
       }
     );
     await this.setState({ isEditing: false });
-    this.props.onUpdate();
+    onUpdate();
   };
 
   render() {
-    if (this.props.isTitle)
+    const { isTitle, name } = this.props;
+    const { isEditing, weight, fat, carbohydrate, protein, ethanol } =
+      this.state;
+    if (isTitle)
       return (
         <Row columns={9} isTitle>
           <Column span={2} />
-          <Column>
-            <div>Calories</div>
-            <Subtitle>kcal</Subtitle>
-          </Column>
-          <Column>
-            <div>Weight</div>
-            <Subtitle>grams</Subtitle>
-          </Column>
-          <Column>
-            <div>Fat</div>
-            <Subtitle>grams</Subtitle>
-          </Column>
-          <Column>
-            <div>Carbs</div>
-            <Subtitle>grams</Subtitle>
-          </Column>
-          <Column>
-            <div>Protein</div>
-            <Subtitle>grams</Subtitle>
-          </Column>
-          <Column>
-            <div>Ethanol</div>
-            <Subtitle>grams</Subtitle>
-          </Column>
+          <Column>Calories</Column>
+          <Column>Weight</Column>
+          <Column>Fat</Column>
+          <Column>Carbs</Column>
+          <Column>Protein</Column>
+          <Column>Ethanol</Column>
           <Column />
         </Row>
       );
     return (
       <Row columns={9}>
         <Column span={2}>
-          <Text value={this.props.name} readOnly />
+          <Text value={name} readOnly />
         </Column>
+        <Calories value={this.getCalories()} readOnly />
+        <Weight
+          name="weight"
+          value={weight}
+          readOnly={!isEditing}
+          onChange={this.onChange}
+        />
+        <Fat value={(fat * weight) / 100} readOnly />
+        <Carbohydrate value={(carbohydrate * weight) / 100} readOnly />
+        <Protein value={(protein * weight) / 100} readOnly />
+        <Ethanol value={(ethanol * weight) / 100} readOnly />
         <Column>
-          <Calories value={this.getCalories()} readOnly />
-        </Column>
-        <Column>
-          <Weight
-            name="weight"
-            value={this.state.weight}
-            readOnly={!this.state.isEditing}
-            onChange={this.onChange}
-          />
-        </Column>
-        <Column>
-          <Fat value={(this.state.fat * this.state.weight) / 100} readOnly />
-        </Column>
-        <Column>
-          <Carbohydrate
-            value={(this.state.carbohydrate * this.state.weight) / 100}
-            readOnly
-          />
-        </Column>
-        <Column>
-          <Protein
-            value={(this.state.protein * this.state.weight) / 100}
-            readOnly
-          />
-        </Column>
-        <Column>
-          <Ethanol
-            value={(this.state.ethanol * this.state.weight) / 100}
-            readOnly
-          />
-        </Column>
-        <Column>
-          {!this.state.isEditing && (
+          {!isEditing && (
             <>
               <Button onClick={() => this.setState({ isEditing: true })}>
                 Edit
@@ -176,7 +151,7 @@ export default class MealIngredient extends React.Component {
               <DeleteButton onClick={this.onRemove}>Remove</DeleteButton>
             </>
           )}
-          {this.state.isEditing && (
+          {isEditing && (
             <>
               <SuccessButton onClick={this.onSubmit}>Submit</SuccessButton>
               <ErrorButton onClick={this.set}>Cancel</ErrorButton>

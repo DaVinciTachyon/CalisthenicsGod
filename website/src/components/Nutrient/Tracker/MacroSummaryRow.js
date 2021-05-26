@@ -1,6 +1,7 @@
 import React from 'react';
-import { Row, Column, Subtitle } from '../../../style/table';
+import { Row, Column } from '../../../style/table';
 import {
+  Text,
   Calories,
   Fat,
   Carbohydrate,
@@ -20,46 +21,23 @@ export default class MacroSummaryRow extends React.Component {
       return (
         <Row columns={7} isTitle>
           <Column span={2} />
-          <Column>
-            <div>Calories</div>
-            <Subtitle>kcal</Subtitle>
-          </Column>
-          <Column>
-            <div>Fat</div>
-            <Subtitle>grams</Subtitle>
-          </Column>
-          <Column>
-            <div>Carbs</div>
-            <Subtitle>grams</Subtitle>
-          </Column>
-          <Column>
-            <div>Protein</div>
-            <Subtitle>grams</Subtitle>
-          </Column>
-          <Column>
-            <div>Ethanol</div>
-            <Subtitle>grams</Subtitle>
-          </Column>
+          <Column>Calories</Column>
+          <Column>Fat</Column>
+          <Column>Carbs</Column>
+          <Column>Protein</Column>
+          <Column>Ethanol</Column>
         </Row>
       );
     return (
       <Row columns={7} className="emphasis">
-        <Column span={2}>{this.props.name}</Column>
-        <Column>
-          <Calories value={this.getCalories()} readOnly />
+        <Column span={2}>
+          <Text value={this.props.name} readOnly />
         </Column>
-        <Column>
-          <Fat value={this.props.fat} readOnly />
-        </Column>
-        <Column>
-          <Carbohydrate value={this.props.carbohydrate} readOnly />
-        </Column>
-        <Column>
-          <Protein value={this.props.protein} readOnly />
-        </Column>
-        <Column>
-          <Ethanol value={this.props.ethanol} readOnly />
-        </Column>
+        <Calories value={this.getCalories()} readOnly />
+        <Fat value={this.props.fat} readOnly />
+        <Carbohydrate value={this.props.carbohydrate} readOnly />
+        <Protein value={this.props.protein} readOnly />
+        <Ethanol value={this.props.ethanol} readOnly />
       </Row>
     );
   }

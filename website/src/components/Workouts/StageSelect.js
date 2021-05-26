@@ -37,22 +37,17 @@ export default class StageSelect extends React.Component {
   };
 
   render() {
+    const { isMulti, onChange, ...rest } = this.props;
     return (
       <Select
-        options={(this.props.isMulti
-          ? []
-          : [{ label: 'Choose Stage', value: '' }]
-        ).concat(
+        options={(isMulti ? [] : [{ label: 'Choose Stage', value: '' }]).concat(
           this.state.stages.map((stage) => {
             return { label: stage.name, value: stage._id };
           })
         )}
-        name={this.props.name}
         onChange={this.onChange}
-        value={this.props.value}
-        isMulti={this.props.isMulti}
-        readOnly={this.props.readOnly}
-        label={this.props.label}
+        isMulti={isMulti}
+        {...rest}
       />
     );
   }

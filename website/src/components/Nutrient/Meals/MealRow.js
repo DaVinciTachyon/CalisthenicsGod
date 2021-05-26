@@ -1,5 +1,5 @@
 import React from 'react';
-import { Row, Column, Subtitle } from '../../../style/table';
+import { Row, Column } from '../../../style/table';
 import {
   Text,
   Calories,
@@ -48,11 +48,16 @@ export default class MealRow extends React.Component {
 
   onChange = (evt) => this.setState({ [evt.target.name]: evt.target.value });
 
-  getCalories = () =>
-    this.state.fat * this.props.macroDensities.fat +
-    this.state.carbohydrate * this.props.macroDensities.carbohydrate +
-    this.state.protein * this.props.macroDensities.protein +
-    this.state.ethanol * this.props.macroDensities.ethanol;
+  getCalories = () => {
+    const { fat, carbohydrate, protein, ethanol } = this.state;
+    const { macroDensities } = this.props;
+    return (
+      fat * macroDensities.fat +
+      carbohydrate * macroDensities.carbohydrate +
+      protein * macroDensities.protein +
+      ethanol * macroDensities.ethanol
+    );
+  };
 
   getIngredients = async () => {
     const response = await fetch(
@@ -109,30 +114,25 @@ export default class MealRow extends React.Component {
   };
 
   render() {
-    if (this.props.isTitle)
+    const { isTitle, id, macroDensities } = this.props;
+    const {
+      isEditing,
+      ingredients,
+      name,
+      fat,
+      carbohydrate,
+      protein,
+      ethanol,
+    } = this.state;
+    if (isTitle)
       return (
         <Row columns={8} isTitle>
           <Column span={2} />
-          <Column>
-            <div>Calories</div>
-            <Subtitle>kcal</Subtitle>
-          </Column>
-          <Column>
-            <div>Fat</div>
-            <Subtitle>grams</Subtitle>
-          </Column>
-          <Column>
-            <div>Carbs</div>
-            <Subtitle>grams</Subtitle>
-          </Column>
-          <Column>
-            <div>Protein</div>
-            <Subtitle>grams</Subtitle>
-          </Column>
-          <Column>
-            <div>Ethanol</div>
-            <Subtitle>grams</Subtitle>
-          </Column>
+          <Column>Calories</Column>
+          <Column>Fat</Column>
+          <Column>Carbs</Column>
+          <Column>Protein</Column>
+          <Column>Ethanol</Column>
           <Column />
         </Row>
       );
@@ -142,28 +142,18 @@ export default class MealRow extends React.Component {
           <Column span={2}>
             <Text
               name="name"
-              value={this.state.name}
-              readOnly={!this.state.isEditing}
+              value={name}
+              readOnly={!isEditing}
               onChange={this.onChange}
             />
           </Column>
+          <Calories value={this.getCalories()} readOnly />
+          <Fat value={fat} readOnly />
+          <Carbohydrate value={carbohydrate} readOnly />
+          <Protein value={protein} readOnly />
+          <Ethanol value={ethanol} readOnly />
           <Column>
-            <Calories value={this.getCalories()} readOnly />
-          </Column>
-          <Column>
-            <Fat value={this.state.fat} readOnly />
-          </Column>
-          <Column>
-            <Carbohydrate value={this.state.carbohydrate} readOnly />
-          </Column>
-          <Column>
-            <Protein value={this.state.protein} readOnly />
-          </Column>
-          <Column>
-            <Ethanol value={this.state.ethanol} readOnly />
-          </Column>
-          <Column>
-            {!this.state.isEditing && (
+            {!isEditing && (
               <>
                 <Button onClick={() => this.setState({ isEditing: true })}>
                   Edit
@@ -171,7 +161,7 @@ export default class MealRow extends React.Component {
                 <DeleteButton onClick={this.onDelete}>Delete</DeleteButton>
               </>
             )}
-            {this.state.isEditing && (
+            {isEditing && (
               <>
                 <SuccessButton onClick={this.onSubmit}>Submit</SuccessButton>
                 <ErrorButton onClick={this.set}>Cancel</ErrorButton>
@@ -179,12 +169,12 @@ export default class MealRow extends React.Component {
             )}
           </Column>
         </Row>
-        {this.state.isEditing && (
+        {isEditing && (
           <MealEditor
-            id={this.props.id}
-            ingredients={this.state.ingredients}
+            id={id}
+            ingredients={ingredients}
             onUpdate={this.getIngredients}
-            macroDensities={this.props.macroDensities}
+            macroDensities={macroDensities}
           />
         )}
       </div>

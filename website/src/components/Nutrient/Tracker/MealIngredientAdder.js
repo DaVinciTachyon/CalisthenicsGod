@@ -110,7 +110,7 @@ export default class MealIngredientAdder extends React.Component {
           <IngredientSelect
             value={this.state.id}
             onChange={this.onIngredientChange}
-            label="Ingredient" //color
+            label="Ingredient"
           />
           {this.state.id === '' && (
             <Text
@@ -120,9 +120,7 @@ export default class MealIngredientAdder extends React.Component {
             />
           )}
         </Column>
-        <Column>
-          <Calories value={this.getCalories()} readOnly />
-        </Column>
+        <Calories value={this.getCalories()} readOnly />
         <Column span={7}>
           <IngredientMacroRow isTitle />
           <IngredientMacroRow

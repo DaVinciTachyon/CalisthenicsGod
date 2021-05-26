@@ -1,5 +1,4 @@
 import React from 'react';
-import { Row, Column } from '../../../style/table';
 import { Button } from '../../../style/buttons';
 import ExerciseRow from './ExerciseRow';
 import ExerciseAdder from './ExerciseAdder';
@@ -51,24 +50,20 @@ export default class Exercises extends React.Component {
     return (
       <div>
         <ExerciseRow isTitle />
-        <Row columns={11}>
-          <Column span={11}>
-            {!this.state.isAdding && (
-              <Button
-                className="maxWidth"
-                onClick={() => this.setState({ isAdding: true })}
-              >
-                +
-              </Button>
-            )}
-            {this.state.isAdding && (
-              <ExerciseAdder
-                onSubmit={this.onSubmit}
-                onCancel={() => this.setState({ isAdding: false })}
-              />
-            )}
-          </Column>
-        </Row>
+        {!this.state.isAdding && (
+          <Button
+            className="maxWidth"
+            onClick={() => this.setState({ isAdding: true })}
+          >
+            +
+          </Button>
+        )}
+        {this.state.isAdding && (
+          <ExerciseAdder
+            onSubmit={this.onSubmit}
+            onCancel={() => this.setState({ isAdding: false })}
+          />
+        )}
         {this.state.exercises.map((exercise) => (
           <ExerciseRow
             key={exercise._id}

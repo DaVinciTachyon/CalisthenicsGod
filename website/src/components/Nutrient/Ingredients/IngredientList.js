@@ -1,6 +1,6 @@
 import React from 'react';
 import IngredientRow from './IngredientRow';
-import { Row, Column, Title } from '../../../style/table';
+import { Title } from '../../../style/table';
 import IngredientAdder from './IngredientAdder';
 
 export default class IngredientList extends React.Component {
@@ -30,37 +30,36 @@ export default class IngredientList extends React.Component {
         'auth-token': localStorage.getItem('authToken'),
       },
     });
-    const data = await response.json();
-    this.setState({ ingredients: data.ingredients });
+    const { ingredients } = await response.json();
+    this.setState({ ingredients });
   };
 
   render() {
-    if (this.state.ingredients.length === 0 && this.props.isUnavailable)
-      return <></>;
+    const { isUnavailable, macroDensities, onUpdate } = this.props;
+    const { ingredients } = this.state;
+    if (ingredients.length === 0 && isUnavailable) return <></>;
     return (
       <div>
-        <Row columns={9}>
-          <Column span={9}>
-            {!this.props.isUnavailable && <Title>Available</Title>}
-            {this.props.isUnavailable && <Title>Unavailable</Title>}
-          </Column>
-        </Row>
+        <Title>
+          {!isUnavailable && <>Available</>}
+          {isUnavailable && <>Unavailable</>}
+        </Title>
         <IngredientRow isTitle />
-        {!this.props.isUnavailable && (
+        {!isUnavailable && (
           <IngredientAdder
-            onSubmit={this.props.onUpdate}
-            macroDensities={this.props.macroDensities}
+            onSubmit={onUpdate}
+            macroDensities={macroDensities}
           />
         )}
-        {this.state.ingredients.map((ingredient) => (
+        {ingredients.map(({ _id, name, macronutrients }) => (
           <IngredientRow
-            key={ingredient._id}
-            id={ingredient._id}
-            name={ingredient.name}
-            macronutrients={ingredient.macronutrients}
-            macroDensities={this.props.macroDensities}
-            onUpdate={this.props.onUpdate}
-            isAvailable={!this.props.isUnavailable}
+            key={_id}
+            id={_id}
+            name={name}
+            macronutrients={macronutrients}
+            macroDensities={macroDensities}
+            onUpdate={onUpdate}
+            isAvailable={!isUnavailable}
           />
         ))}
       </div>

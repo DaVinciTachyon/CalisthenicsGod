@@ -66,13 +66,18 @@ export default class IngredientAdder extends React.Component {
 
   onChange = (evt) => this.setState({ [evt.target.name]: evt.target.value });
 
-  getCalories = () =>
-    ((this.state.fat * this.props.macroDensities.fat +
-      this.state.carbohydrate * this.props.macroDensities.carbohydrate +
-      this.state.protein * this.props.macroDensities.protein +
-      this.state.ethanol * this.props.macroDensities.ethanol) *
-      this.state.weight) /
-    100;
+  getCalories = () => {
+    const { fat, carbohydrate, protein, ethanol, weight } = this.state;
+    const { macroDensities } = this.props;
+    return (
+      ((fat * macroDensities.fat +
+        carbohydrate * macroDensities.carbohydrate +
+        protein * macroDensities.protein +
+        ethanol * macroDensities.ethanol) *
+        weight) /
+      100
+    );
+  };
 
   render() {
     if (this.state.isAdding)
@@ -85,36 +90,24 @@ export default class IngredientAdder extends React.Component {
               value={this.state.name}
             />
           </Column>
-          <Column>
-            <Calories value={this.getCalories()} readOnly />
-          </Column>
-          <Column>
-            <Weight value={this.state.weight} readOnly />
-          </Column>
-          <Column>
-            <Fat name="fat" onChange={this.onChange} value={this.state.fat} />
-          </Column>
-          <Column>
-            <Carbohydrate
-              name="carbohydrate"
-              onChange={this.onChange}
-              value={this.state.carbohydrate}
-            />
-          </Column>
-          <Column>
-            <Protein
-              name="protein"
-              onChange={this.onChange}
-              value={this.state.protein}
-            />
-          </Column>
-          <Column>
-            <Ethanol
-              name="ethanol"
-              onChange={this.onChange}
-              value={this.state.ethanol}
-            />
-          </Column>
+          <Calories value={this.getCalories()} readOnly />
+          <Weight value={this.state.weight} readOnly />
+          <Fat name="fat" onChange={this.onChange} value={this.state.fat} />
+          <Carbohydrate
+            name="carbohydrate"
+            onChange={this.onChange}
+            value={this.state.carbohydrate}
+          />
+          <Protein
+            name="protein"
+            onChange={this.onChange}
+            value={this.state.protein}
+          />
+          <Ethanol
+            name="ethanol"
+            onChange={this.onChange}
+            value={this.state.ethanol}
+          />
           <Column>
             <Button onClick={this.onSubmit}>Submit</Button>
             <ErrorButton onClick={this.resetState}>Cancel</ErrorButton>
@@ -122,16 +115,12 @@ export default class IngredientAdder extends React.Component {
         </Row>
       );
     return (
-      <Row columns={9}>
-        <Column span={9}>
-          <Button
-            className="maxWidth thin"
-            onClick={() => this.setState({ isAdding: true })}
-          >
-            Add
-          </Button>
-        </Column>
-      </Row>
+      <Button
+        className="maxWidth thin"
+        onClick={() => this.setState({ isAdding: true })}
+      >
+        Add
+      </Button>
     );
   }
 }

@@ -1,6 +1,6 @@
 import React from 'react';
 import { Error } from '../../style/notification';
-import { Row, Column } from '../../style/table';
+import { Row } from '../../style/table';
 import Card from '../../style/card';
 import { Button } from '../../style/buttons';
 import { Text, Password } from '../../style/inputs';
@@ -46,50 +46,34 @@ export default class Login extends React.Component {
   render() {
     return (
       <Card>
-        <Row columns={2}>
-          <Column span={2}>
-            <Error
-              text={this.state.error}
-              dismiss={() => this.setState({ error: '' })}
-            />
-          </Column>
+        <Error
+          text={this.state.error}
+          dismiss={() => this.setState({ error: '' })}
+        />
+        <Text
+          name="email"
+          value={this.state.email}
+          onChange={this.onChange}
+          label="Email"
+        />
+        <Password
+          name="password"
+          value={this.state.password}
+          onChange={this.onChange}
+          label="Password"
+        />
+        <Row>
+          <Button data-test="signInButton" onClick={this.onSubmit}>
+            Sign In
+          </Button>
         </Row>
         <Row>
-          <Column>
-            <Text
-              name="email"
-              value={this.state.email}
-              onChange={this.onChange}
-              label="Email"
-            />
-          </Column>
-        </Row>
-        <Row>
-          <Column>
-            <Password
-              name="password"
-              value={this.state.password}
-              onChange={this.onChange}
-              label="Password"
-            />
-          </Column>
-        </Row>
-        <Row columns={2}>
-          <Column span={2}>
-            <Button data-test="signInButton" onClick={this.onSubmit}>
-              Sign In
-            </Button>
-          </Column>
-        </Row>
-        <Row columns={2}>
-          <Column span={2}>
-            <Button
-              className="secondary"
-              onClick={() => (window.location = '/register')}
-            >
-              Register
-            </Button>
-          </Column>
+          <Button
+            className="secondary"
+            onClick={() => (window.location = '/register')}
+          >
+            Register
+          </Button>
         </Row>
       </Card>
     );
