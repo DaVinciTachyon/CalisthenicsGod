@@ -38,26 +38,35 @@ export default class IngredientRow extends React.Component {
     if (prevProps !== this.props && !this.props.isTitle) this.setMacros();
   }
 
-  getCalories = () =>
-    ((this.state.fat * this.props.macroDensities.fat +
-      this.state.carbohydrate * this.props.macroDensities.carbohydrate +
-      this.state.protein * this.props.macroDensities.protein +
-      this.state.ethanol * this.props.macroDensities.ethanol) *
-      this.state.weight) /
-    100;
+  getCalories = () => {
+    const { fat, carbohydrate, protein, ethanol, weight } = this.state;
+    const { macroDensities } = this.props;
+    return (
+      ((fat * macroDensities.fat +
+        carbohydrate * macroDensities.carbohydrate +
+        protein * macroDensities.protein +
+        ethanol * macroDensities.ethanol) *
+        weight) /
+      100
+    );
+  };
 
-  setMacros = () =>
+  setMacros = () => {
+    const { name, macronutrients } = this.props;
+    const { fat, carbohydrate, protein, ethanol } = macronutrients;
     this.setState({
-      name: this.props.name,
-      fat: this.props.macronutrients.fat,
-      carbohydrate: this.props.macronutrients.carbohydrate,
-      protein: this.props.macronutrients.protein,
-      ethanol: this.props.macronutrients.ethanol,
+      name,
+      fat,
+      carbohydrate,
+      protein,
+      ethanol,
     });
+  };
 
   onChangeAvailability = async () => {
+    const { isAvailable, id, onUpdate } = this.props;
     let url = `${process.env.REACT_APP_API_URL}/nutrition/ingredients/makeAvailable/`;
-    if (this.props.isAvailable)
+    if (isAvailable)
       url = `${process.env.REACT_APP_API_URL}/nutrition/ingredients/makeUnavailable/`;
     const response = await fetch(url, {
       method: 'POST',
@@ -66,11 +75,11 @@ export default class IngredientRow extends React.Component {
         'auth-token': localStorage.getItem('authToken'),
       },
       body: JSON.stringify({
-        _id: this.props.id,
+        _id: id,
       }),
     });
     if (response.status === 200) {
-      await this.props.onUpdate();
+      await onUpdate();
       this.setState({ isEditing: false });
     } else {
       const data = await response.json();
@@ -81,6 +90,8 @@ export default class IngredientRow extends React.Component {
   onChange = (evt) => this.setState({ [evt.target.name]: evt.target.value });
 
   onSubmit = async () => {
+    const { id, onUpdate } = this.props;
+    const { name, fat, carbohydrate, protein, ethanol } = this.state;
     const response = await fetch(
       `${process.env.REACT_APP_API_URL}/nutrition/ingredients/edit/`,
       {
@@ -90,19 +101,19 @@ export default class IngredientRow extends React.Component {
           'auth-token': localStorage.getItem('authToken'),
         },
         body: JSON.stringify({
-          _id: this.props.id,
-          name: this.state.name,
+          _id: id,
+          name,
           macronutrients: {
-            fat: this.state.fat,
-            carbohydrate: this.state.carbohydrate,
-            protein: this.state.protein,
-            ethanol: this.state.ethanol,
+            fat,
+            carbohydrate,
+            protein,
+            ethanol,
           },
         }),
       }
     );
     if (response.status === 200) {
-      await this.props.onUpdate();
+      await onUpdate();
       this.setState({ isEditing: false });
     } else {
       const data = await response.json();
@@ -111,7 +122,10 @@ export default class IngredientRow extends React.Component {
   };
 
   render() {
-    if (this.props.isTitle)
+    const { isTitle, isAvailable } = this.props;
+    const { isEditing, name, weight, fat, carbohydrate, protein, ethanol } =
+      this.state;
+    if (isTitle)
       return (
         <Row columns={9} isTitle>
           <Column span={2} />
@@ -130,54 +144,54 @@ export default class IngredientRow extends React.Component {
           <Text
             name="name"
             onChange={this.onChange}
-            value={this.state.name}
-            readOnly={!this.state.isEditing}
+            value={name}
+            readOnly={!isEditing}
           />
         </Column>
         <Calories value={this.getCalories()} readOnly />
-        <Weight value={this.state.weight} readOnly />
+        <Weight value={weight} readOnly />
         <Fat
           name="fat"
           onChange={this.onChange}
-          value={this.state.fat}
-          readOnly={!this.state.isEditing}
+          value={fat}
+          readOnly={!isEditing}
         />
         <Carbohydrate
           name="carbohydrate"
           onChange={this.onChange}
-          value={this.state.carbohydrate}
-          readOnly={!this.state.isEditing}
+          value={carbohydrate}
+          readOnly={!isEditing}
         />
         <Protein
           name="protein"
           onChange={this.onChange}
-          value={this.state.protein}
-          readOnly={!this.state.isEditing}
+          value={protein}
+          readOnly={!isEditing}
         />
         <Ethanol
           name="ethanol"
           onChange={this.onChange}
-          value={this.state.ethanol}
-          readOnly={!this.state.isEditing}
+          value={ethanol}
+          readOnly={!isEditing}
         />
-        {!this.state.isEditing && (
+        {!isEditing && (
           <div>
             <Button onClick={() => this.setState({ isEditing: true })}>
               Edit
             </Button>
-            {this.props.isAvailable && (
+            {isAvailable && (
               <DeleteButton onClick={this.onChangeAvailability}>
                 Unavailable
               </DeleteButton>
             )}
-            {!this.props.isAvailable && (
+            {!isAvailable && (
               <SuccessButton onClick={this.onChangeAvailability}>
                 Available
               </SuccessButton>
             )}
           </div>
         )}
-        {this.state.isEditing && (
+        {isEditing && (
           <div>
             <SuccessButton className="primary" onClick={this.onSubmit}>
               Submit

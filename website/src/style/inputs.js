@@ -16,18 +16,21 @@ const Input = styled(
   )
 )`
   position: relative;
-  margin: ${(props) => (props.label ? '10px' : '2px')};
-  border: ${(props) =>
-    props.label || !props.readOnly ? '1px solid currentColor' : 'none'};
+  margin: ${({ label }) => (label ? '10px' : '2px')};
+  border: ${({ label, readOnly }) =>
+    label || !readOnly ? '1px solid currentColor' : 'none'};
   border-radius: 4px;
   display: flex;
   height: fit-content;
-  background-color: ${(props) => props.primaryColor || 'transparent'};
-  border-color: ${(props) => props.secondaryColor || 'currentColor'};
+  background-color: ${({ primaryColor }) => primaryColor || 'transparent'};
+  border-color: ${({ secondaryColor }) => secondaryColor || 'currentColor'};
 
-  &:focus-within {
+  ${({ readOnly }) =>
+    readOnly
+      ? ``
+      : `  &:focus-within {
     border-width: 2px;
-  }
+  }`}
 
   & span.unit {
     font-size: 0.8em;
@@ -59,7 +62,7 @@ const Input = styled(
     color: currentColor;
     background: transparent;
 
-    ${(props) => (props.readOnly ? '' : '&:focus,')}
+    ${({ readOnly }) => (readOnly ? '' : '&:focus,')}
     &:not(:placeholder-shown) {
       & + span.label {
         transform: translate(0.25rem, -65%) scale(0.8);
@@ -87,10 +90,10 @@ const Date = styled(Input).attrs({
   }
 `;
 
-const Number = styled(Input).attrs((props) => ({
+const Number = styled(Input).attrs(({ value, decimalPlaces }) => ({
   value:
-    Math.round(props.value * Math.pow(10, props.decimalPlaces || 0)) /
-    Math.pow(10, props.decimalPlaces || 0),
+    Math.round(value * Math.pow(10, decimalPlaces || 0)) /
+    Math.pow(10, decimalPlaces || 0),
   type: 'number',
 }))`
   & input {
@@ -104,10 +107,10 @@ const Number = styled(Input).attrs((props) => ({
   }
 `;
 
-const Weight = styled(Number).attrs((props) => ({
-  unit: props.unit || 'g',
+const Weight = styled(Number).attrs(({ unit, step }) => ({
+  unit: unit || 'g',
   min: 0,
-  step: props.step || 0.1,
+  step: step || 0.1,
 }))``;
 
 const Length = styled(Number).attrs({
@@ -149,7 +152,7 @@ const RadioOption = styled(({ className, label, value, ...rest }) => (
 )).attrs({
   type: 'radio',
 })`
-  display: ${(props) => (props.isHorizontal ? `inline-block` : `block`)};
+  display: ${({ isHorizontal }) => (isHorizontal ? `inline-block` : `block`)};
   margin: 3px;
   cursor: pointer;
   height: fit-content;
@@ -213,8 +216,8 @@ const SelectedOption = styled(({ className, label, ...rest }) => (
     padding: 3px;
   }
 
-  ${(props) =>
-    !props.readOnly
+  ${({ readOnly }) =>
+    !readOnly
       ? `
   &:hover {
     background: crimson;
@@ -322,7 +325,7 @@ const SelectChoices = styled(
     color: darkgrey;
     justify-content: center;
     align-items: center;
-    display: ${(props) => (props.readOnly ? `none` : `flex`)};
+    display: ${({ readOnly }) => (readOnly ? `none` : `flex`)};
   }
 `;
 
@@ -346,46 +349,47 @@ class BaseSelect extends React.Component {
     });
 
   onChange = (evt, isAdding = true) => {
-    if (this.props.readOnly) return;
+    const { readOnly, isMulti, name, onChange } = this.props;
+    if (readOnly) return;
     let value = this.props.value;
-    if (this.props.isMulti && isAdding) value = value.concat(evt.value);
-    else if (this.props.isMulti) value = value.filter((id) => id !== evt.value);
+    if (isMulti && isAdding) value = value.concat(evt.value);
+    else if (isMulti) value = value.filter((id) => id !== evt.value);
     else value = evt.value;
-    this.props.onChange({ name: this.props.name, value });
+    onChange({ name, value });
   };
 
   render() {
+    const { isMulti, readOnly, className, options, value, label } = this.props;
     return (
-      <div className={this.props.className}>
+      <div className={className}>
         <SelectChoices
-          options={this.props.options}
-          value={this.props.value}
+          options={options}
+          value={value}
           onSelect={(option) => this.onChange(option, false)}
-          readOnly={this.props.readOnly}
-          isMulti={this.props.isMulti}
-          label={this.props.label}
+          readOnly={readOnly}
+          isMulti={isMulti}
+          label={label}
         />
-        {!this.props.readOnly && (
+        {!readOnly && (
           <SelectDropdown
-            options={this.props.options}
-            value={this.props.value}
+            options={options}
+            value={value}
             onSelect={(option) => this.onChange(option, true)}
-            isMulti={this.props.isMulti}
+            isMulti={isMulti}
           />
         )}
-        {this.props.label && (
+        {label && (
           <span
             className="label"
             style={(() =>
-              (this.props.isMulti && this.props.value.length > 0) ||
-              (!this.props.isMulti && this.props.value !== undefined)
+              (isMulti && value.length > 0) || (!isMulti && value !== undefined)
                 ? {
                     transform: 'translate(0.25rem, -65%) scale(0.8)',
                     background: 'white',
                   }
                 : {})()}
           >
-            {this.props.label}
+            {label}
           </span>
         )}
       </div>
@@ -424,8 +428,8 @@ const Select = styled(BaseSelect)`
     transform: translate(0, 0);
   }
 
-  ${(props) =>
-    props.readOnly
+  ${({ readOnly }) =>
+    readOnly
       ? `& option:not(:checked) {
     display: none;
   }`
@@ -537,6 +541,13 @@ const Range = styled(
       background: lightgray;
       cursor: pointer;
     }
+
+    ${({ readOnly }) =>
+      readOnly
+        ? ``
+        : `&:focus {
+      border-width: 2px;
+    }`}
   }
 `;
 

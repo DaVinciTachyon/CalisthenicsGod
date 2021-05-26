@@ -14,7 +14,7 @@ export default class MealSelect extends React.Component {
   }
 
   render() {
-    const { value, onChange, ...rest } = this.props;
+    const { value, onChange, onSubmit, ...rest } = this.props;
     return (
       <Row columns={2}>
         <Select
@@ -23,9 +23,7 @@ export default class MealSelect extends React.Component {
           onChange={(evt) => this.setState({ id: evt.value })}
           {...rest}
         />
-        <Button onClick={() => this.props.onSubmit(this.state.id)}>
-          Select
-        </Button>
+        <Button onClick={() => onSubmit(this.state.id)}>Select</Button>
       </Row>
     );
   }

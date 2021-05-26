@@ -9,25 +9,26 @@ export default class MealEditor extends React.Component {
   }
 
   render() {
+    const { ingredients, id, macroDensities, onUpdate } = this.props;
     return (
       <div>
         <MealIngredient isTitle />
-        {this.props.ingredients.map((ingredient) => (
+        {ingredients.map(({ _id, name, weight, macronutrients }) => (
           <MealIngredient
-            key={ingredient._id}
-            id={ingredient._id}
-            mealId={this.props.id}
-            name={ingredient.name}
-            weight={ingredient.weight}
-            macronutrients={ingredient.macronutrients}
-            macroDensities={this.props.macroDensities}
-            onUpdate={this.props.onUpdate}
+            key={_id}
+            id={_id}
+            mealId={id}
+            name={name}
+            weight={weight}
+            macronutrients={macronutrients}
+            macroDensities={macroDensities}
+            onUpdate={onUpdate}
           />
         ))}
         <MealIngredientAdd
-          id={this.props.id}
-          macroDensities={this.props.macroDensities}
-          onUpdate={this.props.onUpdate}
+          id={id}
+          macroDensities={macroDensities}
+          onUpdate={onUpdate}
         />
       </div>
     );

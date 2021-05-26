@@ -27,6 +27,8 @@ export default class ConsumedIngredient extends React.Component {
   }
 
   onSubmit = async () => {
+    const { mealId, _id } = this.props;
+    const { weight } = this.state;
     const response = await fetch(
       `${process.env.REACT_APP_API_URL}/nutrition/meals/edit/`,
       {
@@ -36,10 +38,10 @@ export default class ConsumedIngredient extends React.Component {
           'auth-token': localStorage.getItem('authToken'),
         },
         body: JSON.stringify({
-          _id: this.props.mealId,
+          _id: mealId,
           ingredient: {
-            _id: this.props._id,
-            weight: this.state.weight,
+            _id,
+            weight,
           },
         }),
       }
@@ -48,6 +50,7 @@ export default class ConsumedIngredient extends React.Component {
   };
 
   onRemove = async () => {
+    const { mealId, _id } = this.props;
     const response = await fetch(
       `${process.env.REACT_APP_API_URL}/nutrition/meals/remove/`,
       {
@@ -57,8 +60,8 @@ export default class ConsumedIngredient extends React.Component {
           'auth-token': localStorage.getItem('authToken'),
         },
         body: JSON.stringify({
-          _id: this.props.mealId,
-          ingredientId: this.props._id,
+          _id: mealId,
+          ingredientId: _id,
         }),
       }
     );
@@ -77,61 +80,55 @@ export default class ConsumedIngredient extends React.Component {
 
   setWeight = () => this.setState({ weight: this.props.weight });
 
-  getCalories = () =>
-    ((this.props.macros.fat * this.props.macroDensities.fat +
-      this.props.macros.carbohydrate * this.props.macroDensities.carbohydrate +
-      this.props.macros.protein * this.props.macroDensities.protein +
-      this.props.macros.ethanol * this.props.macroDensities.ethanol) *
-      this.state.weight) /
-    100;
+  getCalories = () => {
+    const { fat, carbohydrate, protein, ethanol, weight, macroDensities } =
+      this.props;
+    return (
+      ((fat * macroDensities.fat +
+        carbohydrate * macroDensities.carbohydrate +
+        protein * macroDensities.protein +
+        ethanol * macroDensities.ethanol) *
+        weight) /
+      100
+    );
+  };
 
   onChange = (evt) => this.setState({ [evt.target.name]: evt.target.value });
 
   render() {
-    if (this.props.isTitle)
-      if (this.props.isTitle)
-        return (
-          <Row columns={9} isTitle>
-            <Column span={2} />
-            <Column>Calories</Column>
-            <Column>Weight</Column>
-            <Column>Fat</Column>
-            <Column>Carbs</Column>
-            <Column>Protein</Column>
-            <Column>Ethanol</Column>
-            <Column />
-          </Row>
-        );
+    const { isTitle, name, macros } = this.props;
+    const { isEditing, weight } = this.state;
+    if (isTitle)
+      return (
+        <Row columns={9} isTitle>
+          <Column span={2} />
+          <Column>Calories</Column>
+          <Column>Weight</Column>
+          <Column>Fat</Column>
+          <Column>Carbs</Column>
+          <Column>Protein</Column>
+          <Column>Ethanol</Column>
+          <Column />
+        </Row>
+      );
     return (
       <Row columns={9}>
         <Column span={2}>
-          <Text value={this.props.name} readOnly />
+          <Text value={name} readOnly />
         </Column>
         <Calories value={this.getCalories()} readOnly />
         <Weight
-          value={this.state.weight}
-          readOnly={!this.state.isEditing}
+          value={weight}
+          readOnly={!isEditing}
           name="weight"
           onChange={this.onChange}
         />
-        <Fat
-          value={(this.props.macros.fat * this.state.weight) / 100}
-          readOnly
-        />
-        <Carbohydrate
-          value={(this.props.macros.carbohydrate * this.state.weight) / 100}
-          readOnly
-        />
-        <Protein
-          value={(this.props.macros.protein * this.state.weight) / 100}
-          readOnly
-        />
-        <Ethanol
-          value={(this.props.macros.ethanol * this.state.weight) / 100}
-          readOnly
-        />
+        <Fat value={(macros.fat * weight) / 100} readOnly />
+        <Carbohydrate value={(macros.carbohydrate * weight) / 100} readOnly />
+        <Protein value={(macros.protein * weight) / 100} readOnly />
+        <Ethanol value={(macros.ethanol * weight) / 100} readOnly />
         <Column>
-          {!this.state.isEditing && (
+          {!isEditing && (
             <>
               <Button
                 onClick={() => {
@@ -143,7 +140,7 @@ export default class ConsumedIngredient extends React.Component {
               <DeleteButton onClick={this.onRemove}>Remove</DeleteButton>
             </>
           )}
-          {this.state.isEditing && (
+          {isEditing && (
             <>
               <SuccessButton onClick={this.onSubmit}>Submit</SuccessButton>
               <ErrorButton
