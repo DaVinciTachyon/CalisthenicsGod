@@ -25,6 +25,10 @@ const Input = styled(
   background-color: ${(props) => props.primaryColor || 'transparent'};
   border-color: ${(props) => props.secondaryColor || 'currentColor'};
 
+  &:focus-within {
+    border-width: 2px;
+  }
+
   & span.unit {
     font-size: 0.8em;
     color: gray;
@@ -50,10 +54,7 @@ const Input = styled(
   }
 
   & input {
-    box-sizing: border-box;
-    display: block;
     width: 100%;
-    outline: 0;
     padding: calc(0.5rem * 1.5) 0.5rem;
     color: currentColor;
     background: transparent;
@@ -400,7 +401,6 @@ const Select = styled(BaseSelect)`
     border: 1px solid currentColor;
     border-radius: 4px;
     box-sizing: border-box;
-    outline: 0;
     padding: calc(0.5rem * 1.5) 0.5rem;
     width: 100%;
   }
@@ -497,7 +497,6 @@ const Range = styled(
     appearance: none;
     width: 100%;
     height: 1.5em;
-    outline: none;
     overflow: hidden;
 
     &::before,
