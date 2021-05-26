@@ -22,9 +22,12 @@ const _id = Joi.string();
 const name = Joi.string().min(1).required();
 
 module.exports = {
-  calorieOffset: (data) =>
+  userInfo: (data) =>
     Joi.object({
-      calorieOffset: Joi.number(),
+      calorieOffset: Joi.number().required(),
+      caloriesPerKg: Joi.number().min(0).required(),
+      proteinGramsPerKg: Joi.number().min(0).required(),
+      fatCalorieProportion: Joi.number().min(0).max(1).required(),
     }).validate(data),
   ingredient: (data) =>
     Joi.object({

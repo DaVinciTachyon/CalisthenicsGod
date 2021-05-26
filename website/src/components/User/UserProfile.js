@@ -84,7 +84,7 @@ export default class UserProfile extends React.Component {
   };
 
   onSubmit = async () => {
-    await fetch(`${process.env.REACT_APP_API_URL}/nutrition/calorieOffset`, {
+    await fetch(`${process.env.REACT_APP_API_URL}/nutrition/userInfo`, {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
@@ -92,6 +92,9 @@ export default class UserProfile extends React.Component {
       },
       body: JSON.stringify({
         calorieOffset: this.state.calorieOffset,
+        caloriesPerKg: this.state.caloriesPerKg,
+        proteinGramsPerKg: this.state.proteinGramsPerKg,
+        fatCalorieProportion: this.state.fatCalorieProportion,
       }),
     });
     this.getUserInfo();
@@ -186,7 +189,9 @@ export default class UserProfile extends React.Component {
         />
         <DateInput value={this.state.birthDate} label="Birth Date" readOnly />
         <DateInput value={this.state.dateJoined} label="Date Joined" readOnly />
-        <Button onClick={this.onSubmit}>Edit Profile</Button>
+        <Row>
+          <Button onClick={this.onSubmit}>Submit</Button>
+        </Row>
       </div>
     );
   }
