@@ -432,6 +432,115 @@ const Select = styled(BaseSelect)`
       : ``}
 `;
 
+const Range = styled(
+  ({
+    className,
+    value,
+    step,
+    min,
+    max,
+    label,
+    unit,
+    isPercentage,
+    ...rest
+  }) => (
+    <div className={className}>
+      <span className="label">{label}</span>
+      <span className="value">{`${(() => {
+        let decimalPlaces = 0;
+        let nStep = step;
+        while (nStep % 1 !== 0) {
+          nStep *= 10;
+          decimalPlaces++;
+        }
+        return (
+          Math.round(
+            value * Math.pow(10, decimalPlaces + (isPercentage ? 2 : 0))
+          ) / Math.pow(10, decimalPlaces)
+        );
+      })()} ${unit}`}</span>
+      <input
+        type="range"
+        step={step || 1}
+        min={min || 0}
+        max={max || 10}
+        value={value}
+        {...rest}
+      />
+    </div>
+  )
+)`
+  width: 100%;
+  padding: 3px 10px;
+  text-align: center;
+  position: relative;
+
+  & span.label {
+    position: absolute;
+    left: 0;
+    top: 0;
+    padding: 2px 0.5em;
+    white-space: nowrap;
+    font-size: 0.8em;
+    font-weight: bold;
+    border-radius: 10px;
+  }
+
+  & span.value {
+    font-size: 0.8rem;
+  }
+
+  & input {
+    border: 1px solid currentColor;
+    border-radius: 4px;
+    -webkit-appearance: none;
+    appearance: none;
+    width: 100%;
+    height: 1.5em;
+    outline: none;
+    overflow: hidden;
+
+    &::before,
+    &::after {
+      padding: 5px;
+    }
+
+    &::before {
+      content: '${({ isPercentage, min, unit }) =>
+        `${(isPercentage ? 100 : 1) * min} ${unit}`}';
+      left: 0;
+      border-right: 1px solid currentColor;
+    }
+
+    &::after {
+      content: '${({ isPercentage, max, unit }) =>
+        `${(isPercentage ? 100 : 1) * max} ${unit}`}';
+      right: 0;
+      border-left: 1px solid currentColor;
+    }
+
+    &::-webkit-slider-thumb {
+      -webkit-appearance: none;
+      appearance: none;
+      border: 1px solid currentColor;
+      width: 1.5em;
+      height: 1.5em;
+      border-radius: 50%;
+      background: lightgray;
+      cursor: pointer;
+    }
+
+    &::-webkit-slider-thumb {
+      border: 1px solid currentColor;
+      width: 1.5em;
+      height: 1.5em;
+      border-radius: 50%;
+      background: lightgray;
+      cursor: pointer;
+    }
+  }
+`;
+
 export {
   Text,
   Password,
@@ -446,4 +555,5 @@ export {
   Protein,
   Ethanol,
   Select,
+  Range,
 };

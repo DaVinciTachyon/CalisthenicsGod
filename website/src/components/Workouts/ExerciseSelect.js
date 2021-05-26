@@ -43,9 +43,10 @@ export default class ExerciseSelect extends React.Component {
   };
 
   render() {
+    const { isMulti, onChange, ...rest } = this.props;
     return (
       <Select
-        options={(this.props.isMulti
+        options={(isMulti
           ? []
           : [{ label: 'Choose Exercise', value: '' }]
         ).concat(
@@ -53,12 +54,9 @@ export default class ExerciseSelect extends React.Component {
             return { label: exercise.name, value: exercise._id };
           })
         )}
-        name={this.props.name}
-        value={this.props.value}
         onChange={this.onChange}
-        isMulti={this.props.isMulti}
-        readOnly={this.props.readOnly}
-        label={this.props.label}
+        isMulti={isMulti}
+        {...rest}
       />
     );
   }

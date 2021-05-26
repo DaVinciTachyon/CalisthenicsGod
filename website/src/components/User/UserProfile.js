@@ -1,8 +1,13 @@
 import React from 'react';
 import { Row, Column } from '../../style/table';
 import { Button } from '../../style/buttons';
-import { Number, Calories, Text, Date as DateInput } from '../../style/inputs';
-import { Select } from '../../style/inputs';
+import {
+  Calories,
+  Text,
+  Date as DateInput,
+  Select,
+  Range,
+} from '../../style/inputs';
 
 export default class UserProfile extends React.Component {
   constructor() {
@@ -62,7 +67,8 @@ export default class UserProfile extends React.Component {
     });
   };
 
-  onCalorieModeChange = (evt) =>
+  onCalorieModeChange = (evt) => {
+    this.onSelectChange(evt);
     this.setState({
       calorieOffset:
         evt.value === 'deficit'
@@ -74,8 +80,8 @@ export default class UserProfile extends React.Component {
             ? this.state.currentCalorieOffset
             : 200
           : 0,
-      calorieMode: evt.value,
     });
+  };
 
   onSubmit = async () => {
     await fetch(`${process.env.REACT_APP_API_URL}/nutrition/calorieOffset`, {
@@ -92,6 +98,7 @@ export default class UserProfile extends React.Component {
   };
 
   onChange = (evt) => this.setState({ [evt.target.name]: evt.target.value });
+  onSelectChange = (evt) => this.setState({ [evt.name]: evt.value });
 
   render() {
     return (
@@ -135,26 +142,36 @@ export default class UserProfile extends React.Component {
           unit="kcal"
           readOnly
         />
-        <Calories
+        <Range
           value={this.state.caloriesPerKg}
+          min={28}
+          max={52}
+          step={1}
           label="Calories Per Kilogram of Bodyweight"
           unit="kcal"
-          readOnly
+          name="caloriesPerKg"
+          onChange={this.onChange}
         />
-        <Number
-          min="0"
-          step="0.05"
+        <Range
           value={this.state.proteinGramsPerKg}
+          min={1}
+          max={3}
+          step={0.1}
           label="Protein Amount"
           unit="g/kg"
-          readOnly
+          name="proteinGramsPerKg"
+          onChange={this.onChange}
         />
-        <Number
-          min="0"
-          value={this.state.fatCalorieProportion * 100}
+        <Range
+          value={this.state.fatCalorieProportion}
+          min={0.15}
+          max={0.5}
+          step={0.01}
           label="Fat Partition"
           unit="%"
-          readOnly
+          name="fatCalorieProportion"
+          onChange={this.onChange}
+          isPercentage
         />
         <Select
           name="gender"
