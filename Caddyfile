@@ -1,1 +1,4 @@
-reverse_proxy website:5000
+localhost
+
+file_server
+reverse_proxy /* website:5000
