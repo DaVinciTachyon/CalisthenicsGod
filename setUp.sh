@@ -13,4 +13,4 @@ sudo apt-get install -y docker-ce docker-ce-cli containerd.io docker-compose
 sudo apt-get update
 sudo apt-get install -y nodejs npm
 
-suod apt-get autoremove
+sudo apt-get autoremove
