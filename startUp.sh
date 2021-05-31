@@ -4,17 +4,14 @@
 
 if [ -n "$1" ] && [ "$1" = "production" ]; then
     env=.production.local
-    # sudo docker-compose --env-file ./config/.env.production.local build
-    # sudo docker-compose --env-file ./config/.env.production.local up -d
+    options=-d
 elif [ -n "$1" ] && [ "$1" = "test" ]; then
     env=.test.local
-    # sudo docker-compose --env-file ./config/.env.test.local build
-    # sudo docker-compose --env-file ./config/.env.test.local up -d backend
+    options=-d backend
 else
     env=.test.local
-    # sudo docker-compose --env-file ./config/.env.development.local build
-    # sudo docker-compose --env-file ./config/.env.development.local up backend
+    options=backend
 fi
 
 sudo docker-compose --env-file ./config/.env$env build
-sudo docker-compose --env-file ./config/.env$env up backend
+sudo docker-compose --env-file ./config/.env$env up $options
