@@ -9,10 +9,8 @@ jobs:
         working-directory: .
     steps:
       - uses: actions/checkout@v1
-      - name: build
-        run: sudo docker-compose build backend
-      - name: deploy
-        run: sudo docker-compose up -d backend
+      - name: build and deploy
+        run: ./startUp test backend
   buildWebsite:
     name: Build Website
     runs-on: ubuntu-latest
@@ -21,10 +19,8 @@ jobs:
         working-directory: .
     steps:
       - uses: actions/checkout@v1
-      - name: build
-        run: sudo docker-compose build website
-      - name: deploy
-        run: sudo docker-compose up -d website
+      - name: build and deploy
+        run: ./startUp.sh test website
   buildAPK:
     name: Build APK
     runs-on: ubuntu-latest
@@ -73,7 +69,7 @@ jobs:
     steps:
       - uses: actions/checkout@v1
       - name: deploy for test
-        run: ./startUp.sh test
+        run: ./startUp.sh test backend
       - name: test
         run: |
           cd backend/
@@ -89,7 +85,7 @@ jobs:
     steps:
       - uses: actions/checkout@v1
       - name: deploy for test
-        run: ./startUp.sh test
+        run: ./startUp.sh test backend
       - name: test
         run: |
           cd website/

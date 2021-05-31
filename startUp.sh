@@ -7,7 +7,11 @@ if [ -n "$1" ] && [ "$1" = "production" ]; then
     options=-d
 elif [ -n "$1" ] && [ "$1" = "test" ]; then
     env=.test.local
-    options=-d backend
+    if [ -n "$2" ]; then
+        options=-d $2
+    else
+        options=-d
+    fi
 else
     env=.development.local
     options=backend
