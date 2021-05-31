@@ -1,6 +1,6 @@
 # !/bin/bash
 
-./setUp.sh
+# ./setUp.sh
 
 if [ -n "$1" ] && [ "$1" = "production" ]; then
     env=.production.local
