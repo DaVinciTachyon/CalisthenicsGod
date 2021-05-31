@@ -8,11 +8,11 @@ jobs:
       run:
         working-directory: .
     steps:
-    - uses: actions/checkout@v1
-    - name: build
-      run: sudo docker-compose build backend
-    - name: deploy
-      run: sudo docker-compose up -d backend
+      - uses: actions/checkout@v1
+      - name: build
+        run: sudo docker-compose build backend
+      - name: deploy
+        run: sudo docker-compose up -d backend
   buildWebsite:
     name: Build Website
     runs-on: ubuntu-latest
@@ -20,11 +20,11 @@ jobs:
       run:
         working-directory: .
     steps:
-    - uses: actions/checkout@v1
-    - name: build
-      run: sudo docker-compose build website
-    - name: deploy
-      run: sudo docker-compose up -d website
+      - uses: actions/checkout@v1
+      - name: build
+        run: sudo docker-compose build website
+      - name: deploy
+        run: sudo docker-compose up -d website
   buildAPK:
     name: Build APK
     runs-on: ubuntu-latest
@@ -71,33 +71,33 @@ jobs:
       run:
         working-directory: .
     steps:
-    - uses: actions/checkout@v1
-    - name: deploy for test
-      run: sudo docker-compose up -d backend
-    - name: test
-      run: |
-        cd backend/
-        npm install
-        npm run test
+      - uses: actions/checkout@v1
+      - name: deploy for test
+        run: sudo docker-compose up -d backend --service-ports
+      - name: test
+        run: |
+          cd backend/
+          npm install
+          npm run test
   testWebsite:
     name: Test Website
-    needs: [ buildWebsite, buildAPI ]
+    needs: [buildWebsite, buildAPI]
     runs-on: ubuntu-latest
     defaults:
       run:
         working-directory: .
     steps:
-    - uses: actions/checkout@v1
-    - name: deploy for test
-      run: sudo docker-compose up -d backend
-    - name: test
-      run: |
-        cd website/
-        npm install
-        npm run test
+      - uses: actions/checkout@v1
+      - name: deploy for test
+        run: sudo docker-compose up -d backend --service-ports
+      - name: test
+        run: |
+          cd website/
+          npm install
+          npm run test
   testApp:
     name: Test App
-    needs: [ buildIOS, buildAPK, buildAPI ]
+    needs: [buildIOS, buildAPK, buildAPI]
     runs-on: ubuntu-latest
     defaults:
       run:
