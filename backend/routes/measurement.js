@@ -1,6 +1,6 @@
 const router = require('express').Router();
 const verify = require('./tokenVerification');
-const Measurements = require('../models/Measurements');
+const Measurement = require('../models/Measurement');
 const measurementValidation = require('../validation/measurement');
 
 router.use(verify, (req, res, next) => {
@@ -11,7 +11,7 @@ router.post('/weight', async (req, res) => {
   const { error } = measurementValidation.weight(req.body);
   if (error) return res.status(400).send({ error: error.details[0].message });
 
-  const measurements = await Measurements.findOne({ userId: req.user._id });
+  const measurements = await Measurement.findOne({ userId: req.user._id });
   measurements.weight.unshift({
     value: req.body.weight,
   });
@@ -24,14 +24,14 @@ router.post('/weight', async (req, res) => {
 });
 
 router.get('/weight', async (req, res) => {
-  const measurements = await Measurements.findOne({ userId: req.user._id });
+  const measurements = await Measurement.findOne({ userId: req.user._id });
   if (measurements.weight.length > 0)
     res.send({ weight: measurements.weight[0].value });
   else res.status(404);
 });
 
 router.get('/weight/history', async (req, res) => {
-  const measurements = await Measurements.findOne({ userId: req.user._id });
+  const measurements = await Measurement.findOne({ userId: req.user._id });
   if (measurements.weight.length > 0) res.send({ weight: measurements.weight });
   else res.status(404);
 });
@@ -40,7 +40,7 @@ router.post('/', async (req, res) => {
   const { error } = measurementValidation.all(req.body);
   if (error) return res.status(400).send({ error: error.details[0].message });
 
-  const measurements = await Measurements.findOne({ userId: req.user._id });
+  const measurements = await Measurement.findOne({ userId: req.user._id });
   if (req.body.weight) {
     measurements.weight.unshift({
       value: req.body.weight,
@@ -105,7 +105,7 @@ router.post('/', async (req, res) => {
 });
 
 router.get('/', async (req, res) => {
-  const measurements = await Measurements.findOne({ userId: req.user._id });
+  const measurements = await Measurement.findOne({ userId: req.user._id });
   if (measurements.weight.length > 0)
     res.send({
       weight: measurements.weight[0].value,

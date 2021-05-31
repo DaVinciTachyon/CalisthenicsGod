@@ -62,10 +62,7 @@ export default class Register extends React.Component {
       .then((response) => response.json())
       .then((data) => {
         if (data.user) window.location = '/login';
-        this.setState({ error: data.error });
-      })
-      .catch((err) => {
-        console.error(err);
+        else this.setState({ error: data.error });
       });
   };
 

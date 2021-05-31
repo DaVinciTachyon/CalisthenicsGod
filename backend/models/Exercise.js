@@ -8,10 +8,12 @@ module.exports = mongoose.model(
       required: true,
       unique: true,
       trim: true,
+      lowercase: true,
     },
     abbreviation: {
       type: String,
       trim: true,
+      uppercase: true,
       index: {
         partialFilterExpression: {
           abbreviation: { $type: 'string' },

@@ -1,5 +1,5 @@
 const router = require('express').Router();
-const Ingredients = require('../models/Ingredients');
+const Ingredient = require('../models/Ingredient');
 const nutrientValidation = require('../validation/nutrition');
 
 router.use((req, res, next) => {
@@ -7,35 +7,35 @@ router.use((req, res, next) => {
 });
 
 router.get('/', async (req, res) => {
-  const ingredients = await Ingredients.find({
+  const ingredients = await Ingredient.find({
     userId: req.user._id,
     isAvailable: true,
   });
 
-  res.send({ ingredients: ingredients });
+  res.send({ ingredients });
 });
 
 router.get('/unavailable', async (req, res) => {
-  const ingredients = await Ingredients.find({
+  const ingredients = await Ingredient.find({
     userId: req.user._id,
     isAvailable: false,
   });
 
-  res.send({ ingredients: ingredients });
+  res.send({ ingredients });
 });
 
 router.post('/', async (req, res) => {
   const { error } = nutrientValidation.ingredient(req.body);
   if (error) return res.status(400).send({ error: error.details[0].message });
 
-  const ingredientName = await Ingredients.findOne({
+  const ingredientName = await Ingredient.findOne({
     userId: req.user._id,
     name: req.body.name,
   });
   if (ingredientName)
     return res.status(400).send({ error: 'Name already in use.' });
 
-  const ingredient = new Ingredients({
+  const ingredient = new Ingredient({
     name: req.body.name,
     macronutrients: req.body.macronutrients,
     userId: req.user._id,
@@ -53,7 +53,7 @@ router.post('/makeUnavailable', async (req, res) => {
   const { error } = nutrientValidation.id(req.body);
   if (error) return res.status(400).send({ error: error.details[0].message });
 
-  const ingredient = await Ingredients.findOne({
+  const ingredient = await Ingredient.findOne({
     userId: req.user._id,
     _id: req.body._id,
   });
@@ -73,7 +73,7 @@ router.post('/makeAvailable', async (req, res) => {
   const { error } = nutrientValidation.id(req.body);
   if (error) return res.status(400).send({ error: error.details[0].message });
 
-  const ingredient = await Ingredients.findOne({
+  const ingredient = await Ingredient.findOne({
     userId: req.user._id,
     _id: req.body._id,
   });
@@ -93,7 +93,7 @@ router.post('/edit', async (req, res) => {
   const { error } = nutrientValidation.editIngredient(req.body);
   if (error) return res.status(400).send({ error: error.details[0].message });
 
-  const ingredient = await Ingredients.findOne({
+  const ingredient = await Ingredient.findOne({
     userId: req.user._id,
     _id: req.body._id,
   });

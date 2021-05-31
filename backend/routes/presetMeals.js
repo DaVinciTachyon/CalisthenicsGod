@@ -1,7 +1,7 @@
 const router = require('express').Router();
 const verify = require('./tokenVerification');
-const Meals = require('../models/Meals');
-const Ingredients = require('../models/Ingredients');
+const Meal = require('../models/Meal');
+const Ingredient = require('../models/Ingredient');
 const nutrientValidation = require('../validation/nutrition');
 
 router.use(verify, (req, res, next) => {
@@ -9,7 +9,7 @@ router.use(verify, (req, res, next) => {
 });
 
 router.get('/', async (req, res) => {
-  const meals = await Meals.find({ userId: req.user._id });
+  const meals = await Meal.find({ userId: req.user._id });
 
   res.send({
     meals: meals,
@@ -20,12 +20,12 @@ router.post('/ingredients', async (req, res) => {
   const { error } = nutrientValidation.id(req.body);
   if (error) return res.status(400).send({ error: error.details[0].message });
 
-  const meal = await Meals.findById(req.body._id);
+  const meal = await Meal.findById(req.body._id);
   if (!meal) return res.status(400).send({ error: '_id invalid' });
 
   let ingredients = [];
   for (let i = 0; i < meal.ingredients.length; i++) {
-    const ingredient = await Ingredients.findById(meal.ingredients[i].id);
+    const ingredient = await Ingredient.findById(meal.ingredients[i].id);
     ingredients.push({
       _id: ingredient._id,
       name: ingredient.name,
@@ -40,7 +40,7 @@ router.post('/ingredients', async (req, res) => {
 });
 
 router.get('/names', async (req, res) => {
-  const meals = await Meals.find({ userId: req.user._id });
+  const meals = await Meal.find({ userId: req.user._id });
 
   res.send({
     meals: meals.map((val) => {
@@ -53,7 +53,7 @@ router.post('/', async (req, res) => {
   const { error } = nutrientValidation.presetMeal(req.body);
   if (error) return res.status(400).send({ error: error.details[0].message });
 
-  const meal = new Meals({
+  const meal = new Meal({
     name: req.body.name,
     ingredients: req.body.ingredients,
     userId: req.user._id,
@@ -71,7 +71,7 @@ router.post('/remove', async (req, res) => {
   const { error } = nutrientValidation.id(req.body);
   if (error) return res.status(400).send({ error: error.details[0].message });
 
-  await Meals.findByIdAndDelete(req.body._id);
+  await Meal.findByIdAndDelete(req.body._id);
 
   res.sendStatus(200);
 });
@@ -80,7 +80,7 @@ router.post('/ingredient/add', async (req, res) => {
   const { error } = nutrientValidation.mealIngredient(req.body);
   if (error) return res.status(400).send({ error: error.details[0].message });
 
-  const meal = await Meals.findById(req.body._id);
+  const meal = await Meal.findById(req.body._id);
 
   meal.ingredients.push(req.body.ingredient);
 
@@ -96,7 +96,7 @@ router.post('/ingredient/remove', async (req, res) => {
   const { error } = nutrientValidation.mealIngredientId(req.body);
   if (error) return res.status(400).send({ error: error.details[0].message });
 
-  const meal = await Meals.findById(req.body._id);
+  const meal = await Meal.findById(req.body._id);
   if (!meal) return res.status(400).send({ error: 'Invalid Meal ID' });
 
   const index = meal.ingredients.findIndex(
@@ -119,7 +119,7 @@ router.post('/ingredient/edit', async (req, res) => {
   const { error } = nutrientValidation.mealIngredient(req.body);
   if (error) return res.status(400).send({ error: error.details[0].message });
 
-  const meal = await Meals.findById(req.body._id);
+  const meal = await Meal.findById(req.body._id);
   if (!meal) return res.status(400).send({ error: 'Invalid Meal ID' });
 
   const index = meal.ingredients.findIndex(

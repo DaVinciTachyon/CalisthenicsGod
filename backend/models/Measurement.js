@@ -1,7 +1,7 @@
 const mongoose = require('mongoose');
 
 module.exports = mongoose.model(
-  'Measurements',
+  'Measurement',
   new mongoose.Schema({
     userId: {
       type: mongoose.Schema.Types.ObjectId,

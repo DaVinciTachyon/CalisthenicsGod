@@ -42,17 +42,35 @@ services:
     restart: unless-stopped
     ports:
       - '5000:5000'
-    expose:
-      - 5000
+    # expose:
+    #   - 5000
     volumes:
       - .:/home/node/app
       - node_modules:/home/node/app/node_modules
+    environment:
+      - REACT_APP_API_URL=${REACT_APP_API_URL}
+    networks:
+      - app-network
+  caddy:
+    image: caddy/caddy:2.2.1-alpine
+    container_name: caddy-service
+    restart: unless-stopped
+    ports:
+      - '80:80'
+      - '443:443'
+    volumes:
+      - $PWD/Caddyfile:/etc/caddy/Caddyfile
+      - $PWD/site:/srv
+      - caddy_data:/data
+      - caddy_config:/config
     networks:
       - app-network
 
 volumes:
   dbdata:
   node_modules:
+  caddy_data:
+  caddy_config:
 
 networks:
   app-network:

@@ -1,17 +1,19 @@
 const mongoose = require('mongoose');
 
 module.exports = mongoose.model(
-  'Meals',
+  'Meal',
   new mongoose.Schema({
     name: {
       type: String,
       required: true,
+      lowercase: true,
+      trim: true,
     },
     ingredients: [
       {
         id: {
           type: mongoose.Schema.Types.ObjectId,
-          ref: 'Ingredients',
+          ref: 'Ingredient',
           required: true,
         },
         weight: {

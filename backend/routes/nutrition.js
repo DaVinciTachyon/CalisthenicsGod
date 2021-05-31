@@ -1,7 +1,7 @@
 const router = require('express').Router();
 const verify = require('./tokenVerification');
-const Nutrients = require('../models/Nutrients');
-const Measurements = require('../models/Measurements');
+const NutrientInfo = require('../models/NutrientInfo');
+const Measurement = require('../models/Measurement');
 const nutrientValidation = require('../validation/nutrition');
 const mealsRoute = require('./meals');
 const ingredientsRoute = require('./ingredients');
@@ -17,10 +17,10 @@ const {
 } = require('./nutrientUtil');
 
 router.use(verify, async (req, res, next) => {
-  let nutrients = await Nutrients.findOne({ userId: req.user._id });
+  let nutrients = await NutrientInfo.findOne({ userId: req.user._id });
 
   if (!nutrients) {
-    nutrients = new Nutrients({ userId: req.user._id });
+    nutrients = new NutrientInfo({ userId: req.user._id });
 
     try {
       await nutrients.save();
@@ -54,12 +54,12 @@ router.route('/userInfo').post(async (req, res) => {
 });
 
 router.route('/goals').get(async (req, res) => {
-  const measurements = await Measurements.findOne({ userId: req.user._id });
+  const measurements = await Measurement.findOne({ userId: req.user._id });
 
   if (measurements.weight.length == 0) return res.status(404);
   const weight = measurements.weight[0].value;
 
-  const nutrients = await Nutrients.findOne({ userId: req.user._id });
+  const nutrients = await NutrientInfo.findOne({ userId: req.user._id });
 
   const calories = Math.round(
     getMaintenanceCalories(weight, nutrients.caloriesPerKg) +
