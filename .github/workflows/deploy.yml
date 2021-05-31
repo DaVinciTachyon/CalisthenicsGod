@@ -21,3 +21,4 @@ jobs:
         host: ${{ secrets.HOST }}
         user: ${{ secrets.HOST_USERNAME }}
         key: ${{ secrets.SERVER_KEY}}
+        port: 22
