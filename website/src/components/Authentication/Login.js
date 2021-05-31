@@ -37,8 +37,7 @@ export default class Login extends React.Component {
     if (data['auth-token']) {
       localStorage.setItem('authToken', data['auth-token']);
       window.location = '/';
-    }
-    this.setState({ error: data.error });
+    } else this.setState({ error: data.error });
   };
 
   onChange = (evt) => this.setState({ [evt.target.name]: evt.target.value });
