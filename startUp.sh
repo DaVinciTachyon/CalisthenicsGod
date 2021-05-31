@@ -1,6 +1,6 @@
 # !/bin/bash
 
-./setUp
+./setUp.sh
 
 if [$1 == 'production']
 then
