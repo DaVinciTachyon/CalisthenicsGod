@@ -33,6 +33,7 @@ export default class Login extends React.Component {
         }),
       }
     );
+    console.log(response);
     const data = await response.json();
     if (data['auth-token']) {
       localStorage.setItem('authToken', data['auth-token']);
