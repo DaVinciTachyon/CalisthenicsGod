@@ -1,6 +1,6 @@
 # !/bin/bash
 
-# ./setUp.sh
+./setUp.sh
 
 if [ -n "$1" ] && [ "$1" = "production" ]; then
     env=.production.local
@@ -9,7 +9,7 @@ elif [ -n "$1" ] && [ "$1" = "test" ]; then
     env=.test.local
     options=-d backend
 else
-    env=.test.local
+    env=.development.local
     options=backend
 fi
 
