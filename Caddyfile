@@ -1,3 +1,9 @@
 cgod.michaelmcguinness.net {
-  reverse_proxy website:5000
+  handle /api/* {
+    reverse_proxy backend:8080
+  }
+
+  handle /* {
+    reverse_proxy website:5000
+  }
 }
