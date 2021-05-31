@@ -10,7 +10,7 @@ jobs:
     steps:
       - uses: actions/checkout@v1
       - name: build and deploy
-        run: ./startUp test backend
+        run: ./startUp.sh test backend
   buildWebsite:
     name: Build Website
     runs-on: ubuntu-latest
