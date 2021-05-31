@@ -18,7 +18,7 @@ const sampleUser = {
 describe('Auth', () => {
   describe('/POST register', () => {
     it('it should get 400 status with no body', (done) => {
-      post('/auth/register', {}, (err, res) => {
+      post('/api/auth/register', {}, (err, res) => {
         if (err) console.error(err);
         res.should.have.status(400);
         done();
@@ -26,7 +26,7 @@ describe('Auth', () => {
     });
 
     it('it should get 200 status with correctly formed body', (done) => {
-      post('/auth/register', sampleUser, (err, res) => {
+      post('/api/auth/register', sampleUser, (err, res) => {
         if (err) console.error(err);
         res.should.have.status(200);
         done();
