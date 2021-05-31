@@ -8,7 +8,7 @@ if [ -n "$1" ] && [ "$1" = "production" ]; then
 elif [ -n "$1" ] && [ "$1" = "test" ]; then
     env=.test.local
     if [ -n "$2" ]; then
-        options=-d "$2"
+        options=`-d $2`
     else
         options=-d
     fi
