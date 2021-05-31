@@ -22,6 +22,10 @@ jobs:
         user: ${{ secrets.HOST_USERNAME }}
         key: ${{ secrets.SERVER_KEY}}
 <<<<<<< HEAD
+<<<<<<< HEAD
         port: 22
 =======
 >>>>>>> auto deploy script
+=======
+        port: 22
+>>>>>>> port
