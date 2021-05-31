@@ -16,7 +16,7 @@ export default class ExerciseRow extends React.Component {
 
   onSubmit = async (exercise) => {
     const response = await fetch(
-      `${process.env.REACT_APP_API_URL}/exercise/edit`,
+      `${process.env.REACT_APP_API_URL}/exercise/edit/`,
       {
         method: 'POST',
         headers: {
@@ -36,7 +36,7 @@ export default class ExerciseRow extends React.Component {
   };
 
   onRemove = async () => {
-    await fetch(`${process.env.REACT_APP_API_URL}/exercise/remove`, {
+    await fetch(`${process.env.REACT_APP_API_URL}/exercise/remove/`, {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',

@@ -22,7 +22,7 @@ export default class IngredientList extends React.Component {
   getIngredients = async () => {
     let url = `${process.env.REACT_APP_API_URL}/nutrition/ingredients/`;
     if (this.props.isUnavailable)
-      url = `${process.env.REACT_APP_API_URL}/nutrition/ingredients/unavailable`;
+      url = `${process.env.REACT_APP_API_URL}/nutrition/ingredients/unavailable/`;
     const response = await fetch(url, {
       method: 'GET',
       headers: {

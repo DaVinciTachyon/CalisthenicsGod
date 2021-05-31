@@ -84,7 +84,7 @@ export default class UserProfile extends React.Component {
   };
 
   onSubmit = async () => {
-    await fetch(`${process.env.REACT_APP_API_URL}/nutrition/userInfo`, {
+    await fetch(`${process.env.REACT_APP_API_URL}/nutrition/userInfo/`, {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',

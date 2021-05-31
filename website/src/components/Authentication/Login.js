@@ -23,7 +23,7 @@ export default class Login extends React.Component {
     if (!this.state.password)
       return this.setState({ error: 'Password is required' });
     const response = await fetch(
-      `${process.env.REACT_APP_API_URL}/auth/login`,
+      `${process.env.REACT_APP_API_URL}/auth/login/`,
       {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
