@@ -32,7 +32,7 @@ export default class StageRow extends React.Component {
   onChange = (evt) => this.setState({ [evt.target.name]: evt.target.value });
 
   onSubmit = async () => {
-    await fetch(`${process.env.REACT_APP_API_URL}/workout/stage/edit`, {
+    await fetch(`${process.env.REACT_APP_API_URL}/workout/stage/edit/`, {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
@@ -49,7 +49,7 @@ export default class StageRow extends React.Component {
   };
 
   onRemove = async () => {
-    await fetch(`${process.env.REACT_APP_API_URL}/workout/stage/remove`, {
+    await fetch(`${process.env.REACT_APP_API_URL}/workout/stage/remove/`, {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',

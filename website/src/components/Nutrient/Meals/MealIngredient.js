@@ -69,7 +69,7 @@ export default class MealIngredient extends React.Component {
     const { mealId, id, onUpdate } = this.props;
     const { weight } = this.state;
     await fetch(
-      `${process.env.REACT_APP_API_URL}/nutrition/meals/preset/ingredient/edit`,
+      `${process.env.REACT_APP_API_URL}/nutrition/meals/preset/ingredient/edit/`,
       {
         method: 'POST',
         headers: {
@@ -92,7 +92,7 @@ export default class MealIngredient extends React.Component {
   onRemove = async () => {
     const { mealId, id, onUpdate } = this.props;
     await fetch(
-      `${process.env.REACT_APP_API_URL}/nutrition/meals/preset/ingredient/remove`,
+      `${process.env.REACT_APP_API_URL}/nutrition/meals/preset/ingredient/remove/`,
       {
         method: 'POST',
         headers: {
