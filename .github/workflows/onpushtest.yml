@@ -73,7 +73,7 @@ jobs:
     steps:
       - uses: actions/checkout@v1
       - name: deploy for test
-        run: sudo docker-compose up -d backend --service-ports
+        run: sudo docker-compose up -d backend
       - name: test
         run: |
           cd backend/
@@ -89,7 +89,7 @@ jobs:
     steps:
       - uses: actions/checkout@v1
       - name: deploy for test
-        run: sudo docker-compose up -d backend --service-ports
+        run: sudo docker-compose up -d backend
       - name: test
         run: |
           cd website/
