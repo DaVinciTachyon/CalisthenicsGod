@@ -7,7 +7,6 @@ const exerciseRoute = require('./exercises');
 const workoutRoute = require('./workout');
 
 router.use(function (req, res, next) {
-  console.log('start');
   next();
 });
 
