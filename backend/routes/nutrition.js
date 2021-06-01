@@ -31,11 +31,6 @@ router.use(verify, async (req, res, next) => {
   } else next();
 });
 
-router.route('/calorieOffset').get(async (req, res) => {
-  const nutrients = await NutrientInfo.findOne({ userId: req.user._id });
-  res.send({ calorieOffset: nutrients.calorieOffset });
-});
-
 router.route('/userInfo').post(async (req, res) => {
   const { error } = nutrientValidation.userInfo(req.body);
   if (error) return res.status(400).send({ error: error.details[0].message });
