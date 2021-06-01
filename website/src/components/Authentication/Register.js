@@ -114,6 +114,7 @@ export default class Register extends React.Component {
           value={this.state.weight}
           onChange={this.onChange}
           label="Weight"
+          unit="kg"
           required
         />
         <Select

@@ -92,8 +92,8 @@ const Date = styled(Input).attrs({
 
 const Number = styled(Input).attrs(({ value, decimalPlaces }) => ({
   value:
-    Math.round(value * Math.pow(10, decimalPlaces || 0)) /
-    Math.pow(10, decimalPlaces || 0),
+    Math.round(value * Math.pow(10, decimalPlaces || 1)) /
+    Math.pow(10, decimalPlaces || 1),
   type: 'number',
 }))`
   & input {
@@ -107,7 +107,7 @@ const Number = styled(Input).attrs(({ value, decimalPlaces }) => ({
   }
 `;
 
-const Weight = styled(Number).attrs(({ unit, step }) => ({
+const Weight = styled(Number).attrs(({ unit, step, decimalPlaces }) => ({
   unit: unit || 'g',
   min: 0,
   step: step || 0.1,
