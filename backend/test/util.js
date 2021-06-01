@@ -91,11 +91,15 @@ const randomAlphaNumeric = (length) =>
 const randomEmail = () =>
   randomAlphaNumeric(10) + '@' + randomString(5) + '.com';
 
-const randomFloat = (min = 0, max = 100) =>
+const randomFloat = (
+  min = 0,
+  max = 100 //FIXME
+) => Math.floor(Math.random() * (max - min + 1) + min);
+
+const randomInt = (min = 0, max = 100) =>
   Math.floor(Math.random() * (max - min + 1) + min);
 
-const randomOption = (options) =>
-  options[Math.floor(Math.random() * options.length)];
+const randomOption = (options) => options[randomInt(0, options.length)];
 
 const randomGender = () => randomOption(['male', 'female']);
 
@@ -140,6 +144,12 @@ const buildRandomIngredient = () => ({
   },
 });
 
+const buildRandomStage = () => ({
+  name: randomString(6),
+  description: randomString(50),
+  chronologicalRanking: randomInt(),
+});
+
 module.exports = {
   post,
   get,
@@ -148,11 +158,13 @@ module.exports = {
   buildRandomUser,
   buildRandomExercise,
   buildRandomIngredient,
+  buildRandomStage,
   randomString,
   randomLowerCaseString,
   randomAlphaNumeric,
   randomEmail,
   randomFloat,
+  randomInt,
   randomOption,
   randomGender,
   randomDate,
