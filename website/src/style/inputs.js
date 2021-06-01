@@ -107,7 +107,7 @@ const Number = styled(Input).attrs(({ value, decimalPlaces }) => ({
   }
 `;
 
-const Weight = styled(Number).attrs(({ unit, step, decimalPlaces }) => ({
+const Weight = styled(Number).attrs(({ unit, step }) => ({
   unit: unit || 'g',
   min: 0,
   step: step || 0.1,
