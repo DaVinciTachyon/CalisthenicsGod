@@ -91,10 +91,7 @@ const randomAlphaNumeric = (length) =>
 const randomEmail = () =>
   randomAlphaNumeric(10) + '@' + randomString(5) + '.com';
 
-const randomFloat = (
-  min = 0,
-  max = 100 //FIXME
-) => Math.random() * (max - min) + min;
+const randomFloat = (min = 0, max = 100) => Math.random() * (max - min) + min;
 
 const randomInt = (min, max) => Math.floor(randomFloat(min, max));
 
