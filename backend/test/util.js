@@ -31,6 +31,32 @@ const get = (url, authToken = '', headers = {}) =>
       });
   });
 
+const deleteRequest = (url, body, authToken = '', headers = {}) =>
+  new Promise((resolve, reject) => {
+    app
+      .delete(url)
+      .set('auth-token', authToken)
+      .set(headers)
+      .send(body)
+      .end((err, res) => {
+        if (err) reject(err);
+        resolve(res);
+      });
+  });
+
+const patch = (url, body, authToken = '', headers = {}) =>
+  new Promise((resolve, reject) => {
+    app
+      .patch(url)
+      .set('auth-token', authToken)
+      .set(headers)
+      .send(body)
+      .end((err, res) => {
+        if (err) reject(err);
+        resolve(res);
+      });
+  });
+
 const login = async () => {
   const user = buildRandomUser();
   await post('/api/auth/register', user);
@@ -107,6 +133,8 @@ const buildRandomExercise = () => ({
 module.exports = {
   post,
   get,
+  deleteRequest,
+  patch,
   buildRandomUser,
   buildRandomExercise,
   randomString,

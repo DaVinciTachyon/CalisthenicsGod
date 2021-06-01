@@ -6,24 +6,24 @@ const expectedUser = buildRandomUser();
 
 describe('Auth', () => {
   describe('/POST register', () => {
-    it('it should get 400 status with no body', async () => {
+    it('no body', async () => {
       const res = await post('/api/auth/register', {});
       res.should.have.status(400);
     });
 
-    it('it should get 200 status with correctly formed body', async () => {
+    it('valid user', async () => {
       const res = await post('/api/auth/register', expectedUser);
       res.should.have.status(200);
     });
   });
 
   describe('/POST login', () => {
-    it('it should get 400 status with no body', async () => {
+    it('no body', async () => {
       const res = await post('/api/auth/login', {});
       res.should.have.status(400);
     });
 
-    it('it should get 400 status with incorrect user', async () => {
+    it('invalid user', async () => {
       const res = await post('/api/auth/login', {
         email: expectedUser.email,
         password: randomAlphaNumeric(10),
@@ -31,7 +31,7 @@ describe('Auth', () => {
       res.should.have.status(400);
     });
 
-    it('it should get 200 status with correctly formed body', async () => {
+    it('valid user', async () => {
       const res = await post('/api/auth/login', {
         email: expectedUser.email,
         password: expectedUser.password,

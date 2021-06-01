@@ -1,4 +1,12 @@
-const { get, post, login, buildRandomExercise } = require('./util');
+const {
+  get,
+  post,
+  login,
+  patch,
+  buildRandomExercise,
+  deleteRequest,
+  randomString,
+} = require('./util');
 const chai = require('chai');
 const should = chai.should();
 let authToken = '';
@@ -11,20 +19,51 @@ before(async () => {
 
 describe('Exercises', () => {
   describe('/GET', () => {
-    it('it should get 200 status', async () => {
+    it('valid request', async () => {
       const res = await get('/api/exercise', authToken);
       res.should.have.status(200);
     });
   });
 
   describe('/POST', () => {
-    it('it should get 400 status with empty body', async () => {
+    it('empty body', async () => {
       const res = await post('/api/exercise', {}, authToken);
       res.should.have.status(400);
     });
 
-    it('it should get 200 status with valid body', async () => {
+    it('valid exercise', async () => {
       const res = await post('/api/exercise', expectedExercise, authToken);
+      expectedExercise._id = res.body._id;
+      res.should.have.status(200);
+    });
+  });
+
+  describe('/PATCH', () => {
+    it('empty body', async () => {
+      const res = await patch('/api/exercise', {}, authToken);
+      res.should.have.status(400);
+    });
+
+    it('valid exercise', async () => {
+      const patchedExercise = JSON.parse(JSON.stringify(expectedExercise));
+      patchedExercise.name = randomString(5);
+      const res = await patch('/api/exercise', patchedExercise, authToken);
+      res.should.have.status(200);
+    });
+  });
+
+  describe('/DELETE', () => {
+    it('empty body', async () => {
+      const res = await deleteRequest('/api/exercise', {}, authToken);
+      res.should.have.status(400);
+    });
+
+    it('valid id', async () => {
+      const res = await deleteRequest(
+        '/api/exercise',
+        { _id: expectedExercise._id },
+        authToken
+      );
       res.should.have.status(200);
     });
   });
