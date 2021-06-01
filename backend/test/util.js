@@ -150,6 +150,45 @@ const buildRandomStage = () => ({
   chronologicalRanking: randomInt(),
 });
 
+const buildRandomWorkout = async () => {
+  const authToken = await login();
+  const stageId = (
+    await post('/api/workout/stage', buildRandomStage(), authToken)
+  ).body._id;
+  const exerciseId = (
+    await post('/api/workout/exercise', buildRandomExercise(), authToken)
+  ).body._id;
+  return {
+    stages: [
+      {
+        id: stageId,
+        exercises: [
+          {
+            id: exerciseId,
+            sets: [
+              {
+                repetitions: randomInt(),
+                time: randomInt(),
+                distance: randomInt(),
+              },
+            ],
+            type: randomOption([
+              'isotonic',
+              'eccentric',
+              'isometric',
+              'distance',
+            ]),
+            rest: {
+              intraset: randomInt(),
+              interset: randomInt(),
+            },
+          },
+        ],
+      },
+    ],
+  };
+};
+
 module.exports = {
   post,
   get,
@@ -159,6 +198,7 @@ module.exports = {
   buildRandomExercise,
   buildRandomIngredient,
   buildRandomStage,
+  buildRandomWorkout,
   randomString,
   randomLowerCaseString,
   randomAlphaNumeric,
