@@ -17,7 +17,7 @@ const {
 } = require('./nutrientUtil');
 
 router.use(verify, async (req, res, next) => {
-  let nutrients = await NutrientInfo.findOne({ userId: req.user._id });
+  const nutrients = await NutrientInfo.findOne({ userId: req.user._id });
 
   if (!nutrients) {
     nutrients = new NutrientInfo({ userId: req.user._id });
@@ -31,16 +31,11 @@ router.use(verify, async (req, res, next) => {
   } else next();
 });
 
-router.route('/calorieOffset').get(async (req, res) => {
-  const nutrients = await Nutrients.findOne({ userId: req.user._id });
-  res.send({ calorieOffset: nutrients.calorieOffset });
-});
-
 router.route('/userInfo').post(async (req, res) => {
   const { error } = nutrientValidation.userInfo(req.body);
   if (error) return res.status(400).send({ error: error.details[0].message });
 
-  const nutrients = await Nutrients.findOne({ userId: req.user._id });
+  const nutrients = await NutrientInfo.findOne({ userId: req.user._id });
   nutrients.calorieOffset = req.body.calorieOffset;
   nutrients.caloriesPerKg = req.body.caloriesPerKg;
   nutrients.proteinGramsPerKg = req.body.proteinGramsPerKg;
