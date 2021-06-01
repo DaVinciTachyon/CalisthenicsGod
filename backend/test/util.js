@@ -6,15 +6,39 @@ const app = supertest(appUrl);
 
 chai.use(chaiHttp);
 
-const post = (url, body, callback) => {
-  app
-    .post(url)
-    .send(body)
-    .end((err, res) => callback(err, res));
-};
+const post = (url, body, authToken = '', headers = {}) =>
+  new Promise((resolve, reject) => {
+    app
+      .post(url)
+      .set('auth-token', authToken)
+      .set(headers)
+      .send(body)
+      .end((err, res) => {
+        if (err) reject(err);
+        resolve(res);
+      });
+  });
 
-const get = (url, callback) => {
-  app.post(url).end((err, res) => callback(err, res));
+const get = (url, authToken = '', headers = {}) =>
+  new Promise((resolve, reject) => {
+    app
+      .get(url)
+      .set('auth-token', authToken)
+      .set(headers)
+      .end((err, res) => {
+        if (err) reject(err);
+        resolve(res);
+      });
+  });
+
+const login = async () => {
+  const user = buildRandomUser();
+  await post('/api/auth/register', user);
+  const res = await post('/api/auth/login', {
+    email: user.email,
+    password: user.password,
+  });
+  return res.body['auth-token'];
 };
 
 const randomString = (
@@ -65,10 +89,26 @@ const buildRandomUser = () => ({
   gender: randomGender(),
 });
 
+const buildRandomExercise = () => ({
+  name: randomString(6),
+  abbreviation: randomString(2),
+  motionType: {
+    transversePlane: randomOption(['upper', 'lower']),
+    verticality: randomOption(['horizontal', 'vertical']),
+    frontalPlane: randomOption(['push', 'pull']),
+    kineticChain: randomOption(['closed', 'open']),
+    motion: randomOption(['isometric', 'isotonic', 'distance']),
+  },
+  potentialStages: [],
+  requirements: [],
+  description: randomAlphaNumeric(50),
+});
+
 module.exports = {
   post,
   get,
   buildRandomUser,
+  buildRandomExercise,
   randomString,
   randomLowerCaseString,
   randomAlphaNumeric,
@@ -77,4 +117,5 @@ module.exports = {
   randomOption,
   randomGender,
   randomDate,
+  login,
 };
