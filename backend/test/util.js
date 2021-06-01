@@ -59,7 +59,7 @@ const patch = (url, body, authToken = '', headers = {}) =>
 
 const login = async () => {
   const user = buildRandomUser();
-  await post('/api/auth/register', user);
+  let r = await post('/api/auth/register', user);
   const res = await post('/api/auth/login', {
     email: user.email,
     password: user.password,
@@ -94,10 +94,9 @@ const randomEmail = () =>
 const randomFloat = (
   min = 0,
   max = 100 //FIXME
-) => Math.floor(Math.random() * (max - min + 1) + min);
+) => Math.random() * (max - min) + min;
 
-const randomInt = (min = 0, max = 100) =>
-  Math.floor(Math.random() * (max - min + 1) + min);
+const randomInt = (min, max) => Math.floor(randomFloat(min, max));
 
 const randomOption = (options) => options[randomInt(0, options.length)];
 
