@@ -37,34 +37,4 @@ describe('Workout', () => {
       res.should.have.status(200);
     });
   });
-
-  //   describe('/PATCH', () => {
-  //     it('empty body', async () => {
-  //       const res = await patch('/api/workout', {}, authToken);
-  //       res.should.have.status(400);
-  //     });
-
-  //     it('valid workout', async () => {
-  //       const patchedWorkout = JSON.parse(JSON.stringify(expectedWorkout));
-  //       patchedWorkout.name = randomString(5);
-  //       const res = await patch('/api/workout', patchedWorkout, authToken);
-  //       res.should.have.status(200);
-  //     });
-  //   });
-
-  //   describe('/DELETE', () => {
-  //     it('empty body', async () => {
-  //       const res = await deleteRequest('/api/workout', {}, authToken);
-  //       res.should.have.status(400);
-  //     });
-
-  //     it('valid id', async () => {
-  //       const res = await deleteRequest(
-  //         '/api/workout',
-  //         { _id: expectedWorkout._id },
-  //         authToken
-  //       );
-  //       res.should.have.status(200);
-  //     });
-  //   });
 });
