@@ -130,6 +130,16 @@ const buildRandomExercise = () => ({
   description: randomAlphaNumeric(50),
 });
 
+const buildRandomIngredient = () => ({
+  name: randomLowerCaseString(5),
+  macronutrients: {
+    fat: randomFloat(0, 100),
+    carbohydrate: randomFloat(0, 100),
+    protein: randomFloat(0, 100),
+    ethanol: randomFloat(0, 100),
+  },
+});
+
 module.exports = {
   post,
   get,
@@ -137,6 +147,7 @@ module.exports = {
   patch,
   buildRandomUser,
   buildRandomExercise,
+  buildRandomIngredient,
   randomString,
   randomLowerCaseString,
   randomAlphaNumeric,

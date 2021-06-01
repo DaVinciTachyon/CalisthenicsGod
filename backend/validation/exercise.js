@@ -32,7 +32,9 @@ module.exports = {
         verticality: Joi.string().valid('horizontal', 'vertical'),
         frontalPlane: Joi.string().valid('push', 'pull'),
         kineticChain: Joi.string().valid('closed', 'open'),
-        motion: Joi.string().valid('isometric', 'isotonic'),
+        motion: Joi.string()
+          .valid('isometric', 'isotonic', 'distance')
+          .required(),
       }),
       potentialStages: Joi.array().items(Joi.string()),
       requirements: Joi.array().items(Joi.string()),

@@ -17,7 +17,7 @@ const {
 } = require('./nutrientUtil');
 
 router.use(verify, async (req, res, next) => {
-  const nutrients = await NutrientInfo.findOne({ userId: req.user._id });
+  let nutrients = await NutrientInfo.findOne({ userId: req.user._id });
 
   if (!nutrients) {
     nutrients = new NutrientInfo({ userId: req.user._id });
