@@ -117,7 +117,7 @@ const buildRandomUser = () => ({
 
 const buildRandomExercise = () => ({
   name: randomString(6),
-  abbreviation: randomString(2),
+  abbreviation: randomAlphaNumeric(4),
   motionType: {
     transversePlane: randomOption(['upper', 'lower']),
     verticality: randomOption(['horizontal', 'vertical']),

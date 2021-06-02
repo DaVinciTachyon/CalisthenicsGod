@@ -1,12 +1,4 @@
-const {
-  get,
-  post,
-  deleteRequest,
-  patch,
-  login,
-  randomString,
-  buildRandomWorkout,
-} = require('./util');
+const { get, post, login, buildRandomWorkout } = require('./util');
 const chai = require('chai');
 const should = chai.should();
 

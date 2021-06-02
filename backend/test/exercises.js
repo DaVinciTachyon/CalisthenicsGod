@@ -33,8 +33,8 @@ describe('Exercises', () => {
 
     it('valid exercise', async () => {
       const res = await post('/api/exercise', expectedExercise, authToken);
-      expectedExercise._id = res.body._id;
       res.should.have.status(200);
+      expectedExercise._id = res.body._id;
     });
   });
 
