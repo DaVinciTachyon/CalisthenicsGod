@@ -1,36 +1,42 @@
-const { post } = require('./util');
+const { post, buildRandomUser, randomAlphaNumeric } = require('./util');
 const chai = require('chai');
 const should = chai.should();
 
-const sampleUser = {
-  name: {
-    first: 'John',
-    middle: 'Joseph',
-    last: 'Doe',
-  },
-  email: 'john.doe@mail.com',
-  password: 'johndoepassword',
-  weight: 75.3,
-  birthDate: new Date(),
-  gender: 'male',
-};
+const expectedUser = buildRandomUser();
 
 describe('Auth', () => {
   describe('/POST register', () => {
-    it('it should get 400 status with no body', (done) => {
-      post('/api/auth/register', {}, (err, res) => {
-        if (err) console.error(err);
-        res.should.have.status(400);
-        done();
-      });
+    it('no body', async () => {
+      const res = await post('/api/auth/register', {});
+      res.should.have.status(400);
     });
 
-    it('it should get 200 status with correctly formed body', (done) => {
-      post('/api/auth/register', sampleUser, (err, res) => {
-        if (err) console.error(err);
-        res.should.have.status(200);
-        done();
+    it('valid user', async () => {
+      const res = await post('/api/auth/register', expectedUser);
+      res.should.have.status(200);
+    });
+  });
+
+  describe('/POST login', () => {
+    it('no body', async () => {
+      const res = await post('/api/auth/login', {});
+      res.should.have.status(400);
+    });
+
+    it('invalid user', async () => {
+      const res = await post('/api/auth/login', {
+        email: expectedUser.email,
+        password: randomAlphaNumeric(10),
       });
+      res.should.have.status(400);
+    });
+
+    it('valid user', async () => {
+      const res = await post('/api/auth/login', {
+        email: expectedUser.email,
+        password: expectedUser.password,
+      });
+      res.should.have.status(200);
     });
   });
 });

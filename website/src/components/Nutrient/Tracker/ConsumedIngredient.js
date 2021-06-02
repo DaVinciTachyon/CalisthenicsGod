@@ -30,9 +30,9 @@ export default class ConsumedIngredient extends React.Component {
     const { mealId, _id } = this.props;
     const { weight } = this.state;
     const response = await fetch(
-      `${process.env.REACT_APP_API_URL}/nutrition/meals/edit/`,
+      `${process.env.REACT_APP_API_URL}/nutrition/meals/`,
       {
-        method: 'POST',
+        method: 'PATCH',
         headers: {
           'Content-Type': 'application/json',
           'auth-token': localStorage.getItem('authToken'),
@@ -52,16 +52,16 @@ export default class ConsumedIngredient extends React.Component {
   onRemove = async () => {
     const { mealId, _id } = this.props;
     const response = await fetch(
-      `${process.env.REACT_APP_API_URL}/nutrition/meals/remove/`,
+      `${process.env.REACT_APP_API_URL}/nutrition/meals/`,
       {
-        method: 'POST',
+        method: 'DELETE',
         headers: {
           'Content-Type': 'application/json',
           'auth-token': localStorage.getItem('authToken'),
         },
         body: JSON.stringify({
           _id: mealId,
-          ingredientId: _id,
+          ingredient: { _id },
         }),
       }
     );

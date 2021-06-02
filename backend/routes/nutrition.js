@@ -17,7 +17,7 @@ const {
 } = require('./nutrientUtil');
 
 router.use(verify, async (req, res, next) => {
-  const nutrients = await NutrientInfo.findOne({ userId: req.user._id });
+  let nutrients = await NutrientInfo.findOne({ userId: req.user._id });
 
   if (!nutrients) {
     nutrients = new NutrientInfo({ userId: req.user._id });
@@ -31,22 +31,33 @@ router.use(verify, async (req, res, next) => {
   } else next();
 });
 
-router.route('/userInfo').post(async (req, res) => {
-  const { error } = nutrientValidation.userInfo(req.body);
-  if (error) return res.status(400).send({ error: error.details[0].message });
+router
+  .route('/')
+  .get(async (req, res) => {
+    const nutrients = await NutrientInfo.findOne({ userId: req.user._id });
+    res.send({
+      caloriesPerKg: nutrients.caloriesPerKg,
+      calorieOffset: nutrients.calorieOffset,
+      proteinGramsPerKg: nutrients.proteinGramsPerKg,
+      fatCalorieProportion: nutrients.fatCalorieProportion,
+    });
+  })
+  .post(async (req, res) => {
+    const { error } = nutrientValidation.userInfo(req.body);
+    if (error) return res.status(400).send({ error: error.details[0].message });
 
-  const nutrients = await NutrientInfo.findOne({ userId: req.user._id });
-  nutrients.calorieOffset = req.body.calorieOffset;
-  nutrients.caloriesPerKg = req.body.caloriesPerKg;
-  nutrients.proteinGramsPerKg = req.body.proteinGramsPerKg;
-  nutrients.fatCalorieProportion = req.body.fatCalorieProportion;
-  try {
-    await nutrients.save();
-    res.sendStatus(200);
-  } catch (err) {
-    res.status(400).send({ error: err });
-  }
-});
+    const nutrients = await NutrientInfo.findOne({ userId: req.user._id });
+    nutrients.calorieOffset = req.body.calorieOffset;
+    nutrients.caloriesPerKg = req.body.caloriesPerKg;
+    nutrients.proteinGramsPerKg = req.body.proteinGramsPerKg;
+    nutrients.fatCalorieProportion = req.body.fatCalorieProportion;
+    try {
+      await nutrients.save();
+      res.sendStatus(200);
+    } catch (err) {
+      res.status(400).send({ error: err });
+    }
+  });
 
 router.route('/goals').get(async (req, res) => {
   const measurements = await Measurement.findOne({ userId: req.user._id });

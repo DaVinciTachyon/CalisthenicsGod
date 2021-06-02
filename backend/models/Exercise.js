@@ -58,5 +58,9 @@ module.exports = mongoose.model(
     description: {
       type: String,
     },
+    isAvailable: {
+      type: Boolean,
+      default: true,
+    },
   })
 );

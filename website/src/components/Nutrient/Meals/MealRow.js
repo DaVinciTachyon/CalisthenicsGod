@@ -77,17 +77,14 @@ export default class MealRow extends React.Component {
   };
 
   onDelete = async () => {
-    await fetch(
-      `${process.env.REACT_APP_API_URL}/nutrition/meals/preset/remove/`,
-      {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-          'auth-token': localStorage.getItem('authToken'),
-        },
-        body: JSON.stringify({ _id: this.props.id }),
-      }
-    );
+    await fetch(`${process.env.REACT_APP_API_URL}/nutrition/meals/preset/`, {
+      method: 'DELETE',
+      headers: {
+        'Content-Type': 'application/json',
+        'auth-token': localStorage.getItem('authToken'),
+      },
+      body: JSON.stringify({ _id: this.props.id }),
+    });
     this.props.onUpdate();
   };
 

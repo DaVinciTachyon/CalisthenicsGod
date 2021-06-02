@@ -23,138 +23,145 @@ router.use(verify, (req, res, next) => {
   next();
 });
 
-router.post('/edit', async (req, res) => {
-  const { error } = nutrientValidation.mealIngredientEdit(req.body);
-  if (error) return res.status(400).send({ error: error.details[0].message });
-
-  const nutrients = await NutrientInfo.findOne({ userId: req.user._id });
-  const day = nutrients.history[0];
-  const mealIndex = day.meals.findIndex((val) => val._id == req.body._id);
-  if (mealIndex === -1)
-    return res.status(400).send({ error: 'Invalid Meal ID' });
-
-  const ingredients = day.meals[mealIndex].ingredients;
-  const ingredientIndex = ingredients.findIndex(
-    (val) => val._id == req.body.ingredient._id
-  );
-  if (ingredientIndex === -1)
-    return res.status(400).send({ error: 'Invalid Ingredient ID' });
-
-  ingredients[ingredientIndex].weight = req.body.ingredient.weight;
-
-  try {
-    await nutrients.save();
-    res.sendStatus(200);
-  } catch (err) {
-    res.status(400).send({ error: err });
-  }
-});
-
-router.get('/today', async (req, res) => {
-  const nutrients = await NutrientInfo.findOne({ userId: req.user._id });
-  const day = nutrients.history[0];
-  let meals = [];
-  if (hasHistory(nutrients) && isToday(day.date)) {
-    for (const meal of day.meals) {
-      const fullMeal = {
-        _id: meal._id,
-        ingredients: [],
-      };
-      for (const ingredient of meal.ingredients) {
-        const fullIngredient = await Ingredient.findOne({
-          _id: ingredient.id,
-          userId: req.user._id,
-        });
-        fullMeal.ingredients.push({
-          _id: ingredient._id,
-          id: ingredient.id,
-          name: fullIngredient.name,
-          weight: ingredient.weight,
-          macronutrients: fullIngredient.macronutrients,
-        });
+router
+  .route('/')
+  .get(async (req, res) => {
+    const nutrients = await NutrientInfo.findOne({ userId: req.user._id });
+    const day = nutrients.history[0];
+    let meals = [];
+    if (hasHistory(nutrients) && isToday(day.date)) {
+      for (const meal of day.meals) {
+        const fullMeal = {
+          _id: meal._id,
+          ingredients: [],
+        };
+        for (const ingredient of meal.ingredients) {
+          const fullIngredient = await Ingredient.findOne({
+            _id: ingredient.id,
+            userId: req.user._id,
+          });
+          fullMeal.ingredients.push({
+            _id: ingredient._id,
+            id: ingredient.id,
+            name: fullIngredient.name,
+            weight: ingredient.weight,
+            macronutrients: fullIngredient.macronutrients,
+          });
+        }
+        meals.push(fullMeal);
       }
-      meals.push(fullMeal);
     }
-  }
-  res.status(200).send({ meals });
-});
+    res.status(200).send({ meals });
+  })
+  .patch(async (req, res) => {
+    const { error } = nutrientValidation.mealIngredientEdit(req.body);
+    if (error) return res.status(400).send({ error: error.details[0].message });
+
+    const nutrients = await NutrientInfo.findOne({ userId: req.user._id });
+    const day = nutrients.history[0];
+    const mealIndex = day.meals.findIndex((val) => val._id == req.body._id);
+    if (mealIndex === -1)
+      return res.status(400).send({ error: 'Invalid Meal ID' });
+
+    const ingredients = day.meals[mealIndex].ingredients;
+    const ingredientIndex = ingredients.findIndex(
+      (val) => val._id == req.body.ingredient._id
+    );
+    if (ingredientIndex === -1)
+      return res.status(400).send({ error: 'Invalid Ingredient ID' });
+
+    ingredients[ingredientIndex].weight = req.body.ingredient.weight;
+
+    try {
+      await nutrients.save();
+      res.sendStatus(200);
+    } catch (err) {
+      res.status(400).send({ error: err });
+    }
+  })
+  .post(async (req, res) => {
+    const { error } = nutrientValidation.meal(req.body);
+    if (error) return res.status(400).send({ error: error.details[0].message });
+
+    const ingredient = await Ingredient.findOne({
+      userId: req.user._id,
+      _id: req.body.ingredient.id,
+    });
+    if (!ingredient)
+      return res.status(400).send({ error: 'Invalid Ingredient ID' });
+
+    const nutrients = await NutrientInfo.findOne({ userId: req.user._id });
+
+    if (
+      req.body._id &&
+      hasHistory(nutrients) &&
+      hasMeals(nutrients.history[0])
+    ) {
+      const day = nutrients.history[0];
+      const meal = day.meals.findIndex((info) => info._id == req.body._id);
+      if (meal === -1)
+        return res.status(400).send({ error: 'Incorrect Meal ID' });
+
+      day.meals[meal].ingredients.push(req.body.ingredient);
+    } else if (hasHistory(nutrients) && isToday(nutrient.history[0].date))
+      day.meals.unshift({
+        ingredients: [req.body.ingredient],
+      });
+    else
+      nutrients.history.unshift({
+        meals: [
+          {
+            ingredients: [req.body.ingredient],
+          },
+        ],
+      });
+
+    const meal = nutrients.history[0].meals[0];
+    try {
+      await nutrients.save();
+      res.status(200).send({
+        _id: req.body._id ? req.body._id : meal._id,
+        ingredient: {
+          _id: meal.ingredients[meal.ingredients.length - 1]._id,
+        },
+      });
+    } catch (err) {
+      res.status(400).send({ error: err });
+    }
+  })
+  .delete(async (req, res) => {
+    const { error } = nutrientValidation.mealIngredientId(req.body);
+    if (error) return res.status(400).send({ error: error.details[0].message });
+
+    const nutrients = await NutrientInfo.findOne({ userId: req.user._id });
+    const meals = nutrients.history[0].meals;
+
+    const mealIndex = meals.findIndex((meal) => meal._id == req.body._id);
+    if (mealIndex === -1)
+      return res.status(400).send({ error: 'Invalid Meal ID' });
+    const ingredients = meals[mealIndex].ingredients;
+
+    const ingredientIndex = ingredients.findIndex(
+      (ingredient) => ingredient._id == req.body.ingredient._id
+    );
+    if (ingredientIndex === -1)
+      return res.status(400).send({ error: 'Invalid Ingredient ID' });
+
+    if (ingredients.length > 1) ingredients.splice(ingredientIndex, 1);
+    else meals.splice(mealIndex, 1);
+
+    try {
+      await nutrients.save();
+      res.sendStatus(200);
+    } catch (err) {
+      res.status(400).send({ error: err });
+    }
+  });
 
 const hasHistory = (nutrients) =>
   nutrients.history !== undefined && nutrients.history.length > 0;
 
 const hasMeals = (day) => day.meals !== undefined && day.meals.length > 0;
-
-router.post('/', async (req, res) => {
-  const { error } = nutrientValidation.meal(req.body);
-  if (error) return res.status(400).send({ error: error.details[0].message });
-
-  const ingredient = await Ingredient.findOne({
-    userId: req.user._id,
-    _id: req.body.ingredient.id,
-  });
-  if (!ingredient)
-    return res.status(400).send({ error: 'Invalid Ingredient ID' });
-
-  const nutrients = await NutrientInfo.findOne({ userId: req.user._id });
-  const day = nutrients.history[0];
-
-  if (req.body._id && hasHistory(nutrients) && hasMeals(day)) {
-    const meal = day.meals.findIndex((info) => info._id == req.body._id);
-    if (meal === -1)
-      return res.status(400).send({ error: 'Incorrect Meal ID' });
-
-    day.meals[meal].ingredients.push(req.body.ingredient);
-  } else if (hasHistory(nutrients) && isToday(day.date))
-    day.meals.unshift({
-      ingredients: [req.body.ingredient],
-    });
-  else
-    nutrients.history.unshift({
-      meals: [
-        {
-          ingredients: [req.body.ingredient],
-        },
-      ],
-    });
-
-  try {
-    await nutrients.save();
-    res.status(200).send({
-      _id: req.body._id ? req.body._id : day.meals[0]._id,
-    });
-  } catch (err) {
-    res.status(400).send({ error: err });
-  }
-});
-
-router.post('/remove', async (req, res) => {
-  const { error } = nutrientValidation.mealIngredientId(req.body);
-  if (error) return res.status(400).send({ error: error.details[0].message });
-
-  const nutrients = await NutrientInfo.findOne({ userId: req.user._id });
-  const meals = nutrients.history[0].meals;
-
-  const mealIndex = meals.findIndex((meal) => meal._id == req.body._id);
-  if (mealIndex === -1)
-    return res.status(400).send({ error: 'Invalid Meal ID' });
-  const ingredients = meals[mealIndex].ingredients;
-
-  const ingredientIndex = ingredients.findIndex(
-    (ingredient) => ingredient._id == req.body.ingredientId
-  );
-  if (ingredientIndex === -1)
-    return res.status(400).send({ error: 'Invalid Ingredient ID' });
-
-  if (ingredients.length > 1) ingredients.splice(ingredientIndex, 1);
-  else meals.splice(mealIndex, 1);
-
-  try {
-    await nutrients.save();
-    res.sendStatus(200);
-  } catch (err) {
-    res.status(400).send({ error: err });
-  }
-});
 
 router.post('/addPreset', async (req, res) => {
   const { error } = nutrientValidation.id(req.body);
