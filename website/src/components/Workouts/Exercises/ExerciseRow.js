@@ -15,17 +15,14 @@ export default class ExerciseRow extends React.Component {
   }
 
   onSubmit = async (exercise) => {
-    const response = await fetch(
-      `${process.env.REACT_APP_API_URL}/exercise/edit/`,
-      {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-          'auth-token': localStorage.getItem('authToken'),
-        },
-        body: JSON.stringify(exercise),
-      }
-    );
+    const response = await fetch(`${process.env.REACT_APP_API_URL}/exercise/`, {
+      method: 'PATCH',
+      headers: {
+        'Content-Type': 'application/json',
+        'auth-token': localStorage.getItem('authToken'),
+      },
+      body: JSON.stringify(exercise),
+    });
     if (response.status === 200) {
       await this.props.onUpdate();
       this.setState({ isEditing: false });
@@ -36,8 +33,8 @@ export default class ExerciseRow extends React.Component {
   };
 
   onRemove = async () => {
-    await fetch(`${process.env.REACT_APP_API_URL}/exercise/remove/`, {
-      method: 'POST',
+    await fetch(`${process.env.REACT_APP_API_URL}/exercise/`, {
+      method: 'DELETE',
       headers: {
         'Content-Type': 'application/json',
         'auth-token': localStorage.getItem('authToken'),

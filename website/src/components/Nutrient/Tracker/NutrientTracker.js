@@ -26,7 +26,7 @@ export default class NutrientTracker extends React.Component {
 
   getMeals = async () => {
     const response = await fetch(
-      `${process.env.REACT_APP_API_URL}/nutrition/meals/today/`,
+      `${process.env.REACT_APP_API_URL}/nutrition/meals/`,
       {
         method: 'GET',
         headers: {

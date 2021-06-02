@@ -55,7 +55,7 @@ export default class MealIngredientAdder extends React.Component {
       (await this.addIngredient());
     let url = `${process.env.REACT_APP_API_URL}/nutrition/meals/`;
     if (this.props.isPreset)
-      url = `${process.env.REACT_APP_API_URL}/nutrition/meals/preset/ingredient/add/`;
+      url = `${process.env.REACT_APP_API_URL}/nutrition/meals/preset/ingredient/`;
     const response = await fetch(url, {
       method: 'POST',
       headers: {

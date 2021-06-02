@@ -38,30 +38,52 @@ export default class UserProfile extends React.Component {
   }
 
   getUserInfo = async () => {
-    const response = await fetch(`${process.env.REACT_APP_API_URL}/user/`, {
+    const userResponse = await fetch(`${process.env.REACT_APP_API_URL}/user/`, {
       method: 'GET',
       headers: {
         'Content-Type': 'application/json',
         'auth-token': localStorage.getItem('authToken'),
       },
     });
-    const data = await response.json();
+    const userData = await userResponse.json();
+    const nutritionResponse = await fetch(
+      `${process.env.REACT_APP_API_URL}/nutrition/`,
+      {
+        method: 'GET',
+        headers: {
+          'Content-Type': 'application/json',
+          'auth-token': localStorage.getItem('authToken'),
+        },
+      }
+    );
+    const nutritionData = await nutritionResponse.json();
+    const measurementResponse = await fetch(
+      `${process.env.REACT_APP_API_URL}/measurement/weight/`,
+      {
+        method: 'GET',
+        headers: {
+          'Content-Type': 'application/json',
+          'auth-token': localStorage.getItem('authToken'),
+        },
+      }
+    );
+    const measurementData = await measurementResponse.json();
     this.setState({
-      name: data.name,
-      email: data.email,
-      dateJoined: this.formatDate(new Date(data.dateJoined)),
-      birthDate: this.formatDate(new Date(data.birthDate)),
-      gender: data.gender,
-      weight: data.weight,
-      caloriesPerKg: data.caloriesPerKg,
-      proteinGramsPerKg: data.proteinGramsPerKg,
-      fatCalorieProportion: data.fatCalorieProportion,
-      calorieOffset: data.calorieOffset,
-      currentCalorieOffset: data.calorieOffset,
+      name: userData.name,
+      email: userData.email,
+      dateJoined: this.formatDate(new Date(userData.dateJoined)),
+      birthDate: this.formatDate(new Date(userData.birthDate)),
+      gender: userData.gender,
+      weight: measurementData.weight,
+      caloriesPerKg: nutritionData.caloriesPerKg,
+      proteinGramsPerKg: nutritionData.proteinGramsPerKg,
+      fatCalorieProportion: nutritionData.fatCalorieProportion,
+      calorieOffset: nutritionData.calorieOffset,
+      currentCalorieOffset: nutritionData.calorieOffset,
       calorieMode:
-        data.calorieOffset > 0
+        nutritionData.calorieOffset > 0
           ? 'bulk'
-          : data.calorieOffset < 0
+          : nutritionData.calorieOffset < 0
           ? 'deficit'
           : 'maintenance',
     });
@@ -84,7 +106,7 @@ export default class UserProfile extends React.Component {
   };
 
   onSubmit = async () => {
-    await fetch(`${process.env.REACT_APP_API_URL}/nutrition/userInfo/`, {
+    await fetch(`${process.env.REACT_APP_API_URL}/nutrition/`, {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',

@@ -32,8 +32,8 @@ export default class StageRow extends React.Component {
   onChange = (evt) => this.setState({ [evt.target.name]: evt.target.value });
 
   onSubmit = async () => {
-    await fetch(`${process.env.REACT_APP_API_URL}/workout/stage/edit/`, {
-      method: 'POST',
+    await fetch(`${process.env.REACT_APP_API_URL}/workout/stage/`, {
+      method: 'PATCH',
       headers: {
         'Content-Type': 'application/json',
         'auth-token': localStorage.getItem('authToken'),
@@ -49,8 +49,8 @@ export default class StageRow extends React.Component {
   };
 
   onRemove = async () => {
-    await fetch(`${process.env.REACT_APP_API_URL}/workout/stage/remove/`, {
-      method: 'POST',
+    await fetch(`${process.env.REACT_APP_API_URL}/workout/stage/`, {
+      method: 'DELETE',
       headers: {
         'Content-Type': 'application/json',
         'auth-token': localStorage.getItem('authToken'),

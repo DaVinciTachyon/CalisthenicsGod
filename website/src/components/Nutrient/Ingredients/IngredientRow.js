@@ -65,11 +65,11 @@ export default class IngredientRow extends React.Component {
 
   onChangeAvailability = async () => {
     const { isAvailable, id, onUpdate } = this.props;
-    let url = `${process.env.REACT_APP_API_URL}/nutrition/ingredients/makeAvailable/`;
+    let url = `${process.env.REACT_APP_API_URL}/nutrition/ingredients/unavailable/`;
     if (isAvailable)
-      url = `${process.env.REACT_APP_API_URL}/nutrition/ingredients/makeUnavailable/`;
+      url = `${process.env.REACT_APP_API_URL}/nutrition/ingredients/`;
     const response = await fetch(url, {
-      method: 'POST',
+      method: 'DELETE',
       headers: {
         'Content-Type': 'application/json',
         'auth-token': localStorage.getItem('authToken'),
@@ -93,9 +93,9 @@ export default class IngredientRow extends React.Component {
     const { id, onUpdate } = this.props;
     const { name, fat, carbohydrate, protein, ethanol } = this.state;
     const response = await fetch(
-      `${process.env.REACT_APP_API_URL}/nutrition/ingredients/edit/`,
+      `${process.env.REACT_APP_API_URL}/nutrition/ingredients/`,
       {
-        method: 'POST',
+        method: 'PATCH',
         headers: {
           'Content-Type': 'application/json',
           'auth-token': localStorage.getItem('authToken'),
