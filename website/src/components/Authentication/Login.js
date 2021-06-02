@@ -34,7 +34,6 @@ export default class Login extends React.Component {
       }
     );
     const data = await response.json();
-    console.log(data);
     if (data['auth-token']) {
       localStorage.setItem('authToken', data['auth-token']);
       window.location = '/';
