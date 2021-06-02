@@ -37,8 +37,8 @@ describe('Ingredients', () => {
         expectedIngredient,
         authToken
       );
-      expectedIngredient._id = res.body._id;
       res.should.have.status(200);
+      expectedIngredient._id = res.body._id;
     });
   });
 

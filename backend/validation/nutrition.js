@@ -56,9 +56,10 @@ module.exports = {
       data
     ),
   mealIngredientId: (data) =>
-    Joi.object({ _id: _id.required(), ingredientId: _id.required() }).validate(
-      data
-    ),
+    Joi.object({
+      _id: _id.required(),
+      ingredient: { _id: _id.required() },
+    }).validate(data),
   meal: (data) =>
     Joi.object({ _id, ingredient: ingredientRef.required() }).validate(data),
 };

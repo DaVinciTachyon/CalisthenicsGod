@@ -34,8 +34,8 @@ describe('Workout', () => {
 
     it('valid workout', async () => {
       const res = await post('/api/workout', expectedWorkout, authToken);
-      expectedWorkout._id = res.body._id;
       res.should.have.status(200);
+      expectedWorkout._id = res.body._id;
     });
   });
 });

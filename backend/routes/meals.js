@@ -91,15 +91,19 @@ router
       return res.status(400).send({ error: 'Invalid Ingredient ID' });
 
     const nutrients = await NutrientInfo.findOne({ userId: req.user._id });
-    const day = nutrients.history[0];
 
-    if (req.body._id && hasHistory(nutrients) && hasMeals(day)) {
+    if (
+      req.body._id &&
+      hasHistory(nutrients) &&
+      hasMeals(nutrients.history[0])
+    ) {
+      const day = nutrients.history[0];
       const meal = day.meals.findIndex((info) => info._id == req.body._id);
       if (meal === -1)
         return res.status(400).send({ error: 'Incorrect Meal ID' });
 
       day.meals[meal].ingredients.push(req.body.ingredient);
-    } else if (hasHistory(nutrients) && isToday(day.date))
+    } else if (hasHistory(nutrients) && isToday(nutrient.history[0].date))
       day.meals.unshift({
         ingredients: [req.body.ingredient],
       });
@@ -112,10 +116,14 @@ router
         ],
       });
 
+    const meal = nutrients.history[0].meals[0];
     try {
       await nutrients.save();
       res.status(200).send({
-        _id: req.body._id ? req.body._id : day.meals[0]._id,
+        _id: req.body._id ? req.body._id : meal._id,
+        ingredient: {
+          _id: meal.ingredients[meal.ingredients.length - 1]._id,
+        },
       });
     } catch (err) {
       res.status(400).send({ error: err });
@@ -134,7 +142,7 @@ router
     const ingredients = meals[mealIndex].ingredients;
 
     const ingredientIndex = ingredients.findIndex(
-      (ingredient) => ingredient._id == req.body.ingredientId
+      (ingredient) => ingredient._id == req.body.ingredient._id
     );
     if (ingredientIndex === -1)
       return res.status(400).send({ error: 'Invalid Ingredient ID' });

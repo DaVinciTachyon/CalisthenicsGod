@@ -33,8 +33,8 @@ describe('Stage', () => {
 
     it('valid stage', async () => {
       const res = await post('/api/workout/stage', expectedStage, authToken);
-      expectedStage._id = res.body._id;
       res.should.have.status(200);
+      expectedStage._id = res.body._id;
     });
   });
 

@@ -194,6 +194,23 @@ const buildRandomIngredientReference = async (authToken) => {
   };
 };
 
+const buildRandomPresetMeal = async (authToken) => {
+  const ingredient = await buildRandomIngredientReference(authToken);
+  return {
+    name: randomString(10),
+    ingredients: [ingredient],
+  };
+};
+
+const buildRandomPresetMealReference = async (authToken) =>
+  (
+    await post(
+      '/api/nutrition/meals/preset',
+      await buildRandomPresetMeal(authToken),
+      authToken
+    )
+  ).body._id;
+
 module.exports = {
   post,
   get,
@@ -205,6 +222,8 @@ module.exports = {
   buildRandomStage,
   buildRandomWorkout,
   buildRandomIngredientReference,
+  buildRandomPresetMeal,
+  buildRandomPresetMealReference,
   randomString,
   randomLowerCaseString,
   randomAlphaNumeric,
