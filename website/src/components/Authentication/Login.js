@@ -34,6 +34,7 @@ export default class Login extends React.Component {
       }
     );
     const data = await response.json();
+    console.log(data);
     if (data['auth-token']) {
       localStorage.setItem('authToken', data['auth-token']);
       window.location = '/';
@@ -54,15 +55,17 @@ export default class Login extends React.Component {
           value={this.state.email}
           onChange={this.onChange}
           label="Email"
+          data-testid="email"
         />
         <Password
           name="password"
           value={this.state.password}
           onChange={this.onChange}
           label="Password"
+          data-testid="password"
         />
         <Row>
-          <Button data-test="signInButton" onClick={this.onSubmit}>
+          <Button data-testid="signInButton" onClick={this.onSubmit}>
             Sign In
           </Button>
         </Row>

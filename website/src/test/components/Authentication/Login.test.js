@@ -1,27 +1,56 @@
 import React from 'react';
-import { render, unmountComponentAtNode } from 'react-dom';
-import { act } from 'react-dom/test-utils';
-
+import {
+  render,
+  cleanup,
+  fireEvent,
+  waitForElement,
+} from '@testing-library/react';
 import Login from '../../../components/Authentication/Login';
+import { randomAlphaNumeric, randomEmail } from '../../util';
 
-let container = null;
-beforeEach(() => {
-  container = document.createElement('div');
-  document.body.appendChild(container);
-});
+afterEach(cleanup);
 
-afterEach(() => {
-  unmountComponentAtNode(container);
-  container.remove();
-  container = null;
-});
+describe('Login', () => {
+  it('Empty', async () => {
+    const { getByTestId } = render(<Login />);
+    expect(getByTestId('signInButton')).toHaveTextContent('Sign In');
 
-it('renders Login Widget', async () => {
-  await act(async () => {
-    render(<Login />, container);
+    fireEvent.click(getByTestId('signInButton'));
+
+    expect(getByTestId('notification')).toHaveTextContent('Email is required');
   });
 
-  expect(
-    container.querySelector('[data-test="signInButton"]').textContent
-  ).toBe('Sign In');
+  it('No password', async () => {
+    const { getByTestId } = render(<Login />);
+    expect(getByTestId('signInButton')).toHaveTextContent('Sign In');
+
+    const email = randomEmail();
+    fireEvent.change(getByTestId('email'), { target: { value: email } });
+    expect(getByTestId('email').value).toBe(email);
+    fireEvent.click(getByTestId('signInButton'));
+
+    expect(getByTestId('notification')).toHaveTextContent(
+      'Password is required'
+    );
+  });
+
+  it('Incorrect details', async () => {
+    const { getByTestId } = render(<Login />);
+    expect(getByTestId('signInButton')).toHaveTextContent('Sign In');
+
+    const email = randomEmail();
+    fireEvent.change(getByTestId('email'), { target: { value: email } });
+    expect(getByTestId('email').value).toBe(email);
+
+    const password = randomAlphaNumeric(6);
+    fireEvent.change(getByTestId('password'), { target: { value: password } });
+    expect(getByTestId('password').value).toBe(password);
+
+    fireEvent.click(getByTestId('signInButton'));
+
+    await waitForElement(() => getByTestId('notification'));
+    expect(getByTestId('notification')).toHaveTextContent(
+      'Email does not exist'
+    );
+  });
 });
