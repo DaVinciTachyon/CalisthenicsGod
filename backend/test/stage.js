@@ -9,7 +9,7 @@ const {
 } = require('./util');
 const chai = require('chai');
 const should = chai.should();
-let authToken = '';
+let authToken;
 
 const expectedStage = buildRandomStage();
 

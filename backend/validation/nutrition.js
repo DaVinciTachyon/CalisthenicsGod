@@ -1,3 +1,4 @@
+const { required } = require('@hapi/joi');
 const Joi = require('@hapi/joi');
 
 const macronutrients = Joi.object({
@@ -58,5 +59,6 @@ module.exports = {
     Joi.object({ _id: _id.required(), ingredientId: _id.required() }).validate(
       data
     ),
-  meal: (data) => Joi.object({ _id, ingredient: ingredientRef }).validate(data),
+  meal: (data) =>
+    Joi.object({ _id, ingredient: ingredientRef.required() }).validate(data),
 };

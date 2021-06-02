@@ -1,7 +1,7 @@
 const { get, login } = require('./util');
 const chai = require('chai');
 const should = chai.should();
-let authToken = '';
+let authToken;
 
 before(async () => {
   authToken = await login();

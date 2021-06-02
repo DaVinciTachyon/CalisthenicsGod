@@ -59,7 +59,7 @@ const patch = (url, body, authToken = '', headers = {}) =>
 
 const login = async () => {
   const user = buildRandomUser();
-  let r = await post('/api/auth/register', user);
+  await post('/api/auth/register', user);
   const res = await post('/api/auth/login', {
     email: user.email,
     password: user.password,
@@ -146,13 +146,12 @@ const buildRandomStage = () => ({
   chronologicalRanking: randomInt(),
 });
 
-const buildRandomWorkout = async () => {
-  const authToken = await login();
+const buildRandomWorkout = async (authToken) => {
   const stageId = (
     await post('/api/workout/stage', buildRandomStage(), authToken)
   ).body._id;
   const exerciseId = (
-    await post('/api/workout/exercise', buildRandomExercise(), authToken)
+    await post('/api/exercise', buildRandomExercise(), authToken)
   ).body._id;
   return {
     stages: [
@@ -185,6 +184,16 @@ const buildRandomWorkout = async () => {
   };
 };
 
+const buildRandomIngredientReference = async (authToken) => {
+  const ingredientId = (
+    await post('/api/nutrition/ingredients', buildRandomIngredient(), authToken)
+  ).body._id;
+  return {
+    id: ingredientId,
+    weight: randomFloat(),
+  };
+};
+
 module.exports = {
   post,
   get,
@@ -195,6 +204,7 @@ module.exports = {
   buildRandomIngredient,
   buildRandomStage,
   buildRandomWorkout,
+  buildRandomIngredientReference,
   randomString,
   randomLowerCaseString,
   randomAlphaNumeric,
