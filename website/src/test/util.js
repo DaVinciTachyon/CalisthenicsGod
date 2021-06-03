@@ -53,17 +53,17 @@ const register = async (user, page) => {
 const login = async (user, page) => {
   await register(user, page);
   await page.goto(`${process.env.REACT_APP_WEBSITE_URL}/login`);
-  await page.waitForSelector('[data-id="signInButton"]');
+  await page.waitForSelector('[data-id="logInButton"]');
 
   await page.click('[name="email"]');
   await page.type('[name="email"]', user.email);
   await page.click('[name="password"]');
   await page.type('[name="password"]', user.password);
 
-  const signInButton = await page.$('[data-id="signInButton"]');
-  signInButton.click();
+  const logInButton = await page.$('[data-id="logInButton"]');
+  logInButton.click();
 
-  await page.waitForSelector('[data-id="signInButton"]', { hidden: true });
+  await page.waitForSelector('[data-id="logInButton"]', { hidden: true });
 };
 
 module.exports = {

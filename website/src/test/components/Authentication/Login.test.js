@@ -19,13 +19,13 @@ afterAll(() => {
 beforeEach(async () => {
   page = await browser.newPage();
   await page.goto(`${process.env.REACT_APP_WEBSITE_URL}/login`);
-  await page.waitForSelector('[data-id="signInButton"]');
+  await page.waitForSelector('[data-id="logInButton"]');
 });
 
 describe('Login', () => {
   it('Empty', async () => {
-    const signInButton = await page.$('[data-id="signInButton"]');
-    signInButton.click();
+    const logInButton = await page.$('[data-id="logInButton"]');
+    logInButton.click();
 
     await page.waitForSelector('[data-id="notification"]');
     const notification = await page.$eval(
@@ -39,8 +39,8 @@ describe('Login', () => {
     await page.click('[name="email"]');
     await page.type('[name="email"]', user.email);
 
-    const signInButton = await page.$('[data-id="signInButton"]');
-    signInButton.click();
+    const logInButton = await page.$('[data-id="logInButton"]');
+    logInButton.click();
 
     await page.waitForSelector('[data-id="notification"]');
     const notification = await page.$eval(
@@ -56,8 +56,8 @@ describe('Login', () => {
     await page.click('[name="password"]');
     await page.type('[name="password"]', randomAlphaNumeric(7));
 
-    const signInButton = await page.$('[data-id="signInButton"]');
-    signInButton.click();
+    const logInButton = await page.$('[data-id="logInButton"]');
+    logInButton.click();
 
     await page.waitForSelector('[data-id="notification"]');
     const notification = await page.$eval(
@@ -73,9 +73,9 @@ describe('Login', () => {
     await page.click('[name="password"]');
     await page.type('[name="password"]', user.password);
 
-    const signInButton = await page.$('[data-id="signInButton"]');
-    signInButton.click();
+    const logInButton = await page.$('[data-id="logInButton"]');
+    logInButton.click();
 
-    await page.waitForSelector('[data-id="signInButton"]', { hidden: true });
+    await page.waitForSelector('[data-id="logInButton"]', { hidden: true });
   });
 });

@@ -59,7 +59,7 @@ export default class Login extends React.Component {
           label="Password"
         />
         <Row>
-          <Button dataId="signInButton" onClick={this.onSubmit}>
+          <Button dataId="logInButton" onClick={this.onSubmit}>
             Sign In
           </Button>
         </Row>
