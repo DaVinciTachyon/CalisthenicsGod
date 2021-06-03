@@ -42,8 +42,8 @@ services:
     restart: unless-stopped
     ports:
       - '5000:5000'
-    # expose:
-    #   - 5000
+    expose:
+      - 5000
     volumes:
       - .:/home/node/app
       - node_modules:/home/node/app/node_modules
