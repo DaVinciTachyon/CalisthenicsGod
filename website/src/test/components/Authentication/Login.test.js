@@ -1,76 +1,81 @@
-import React from 'react';
-import {
-  render,
-  cleanup,
-  fireEvent,
-  waitForElement,
-} from '@testing-library/react';
-import Login from '../../../components/Authentication/Login';
-import { randomAlphaNumeric, randomEmail } from '../../util';
+import puppeteer from 'puppeteer';
+import { buildRandomUser, register, randomAlphaNumeric } from '../../util';
 
-afterEach(cleanup);
+let browser;
+let page;
+let user;
 
-xdescribe('Login', () => {
+beforeAll(async () => {
+  browser = await puppeteer.launch({});
+  page = await browser.newPage();
+  user = buildRandomUser();
+  await register(user, page);
+});
+
+afterAll(() => {
+  browser.close();
+});
+
+beforeEach(async () => {
+  page = await browser.newPage();
+  await page.goto(`${process.env.REACT_APP_WEBSITE_URL}/login`);
+  await page.waitForSelector('[data-id="signInButton"]');
+});
+
+describe('Login', () => {
   it('Empty', async () => {
-    const { getByTestId } = render(<Login />);
-    expect(getByTestId('signInButton')).toHaveTextContent('Sign In');
+    const signInButton = await page.$('[data-id="signInButton"]');
+    signInButton.click();
 
-    fireEvent.click(getByTestId('signInButton'));
-
-    expect(getByTestId('notification')).toHaveTextContent('Email is required');
+    await page.waitForSelector('[data-id="notification"]');
+    const notification = await page.$eval(
+      '[data-id="notification"]',
+      (el) => el.innerHTML
+    );
+    expect(notification).toMatch('"email" is not allowed to be empty');
   });
 
   it('No password', async () => {
-    const { getByTestId } = render(<Login />);
-    expect(getByTestId('signInButton')).toHaveTextContent('Sign In');
+    await page.click('[name="email"]');
+    await page.type('[name="email"]', user.email);
 
-    const email = randomEmail();
-    fireEvent.change(getByTestId('email'), { target: { value: email } });
-    expect(getByTestId('email').value).toBe(email);
-    fireEvent.click(getByTestId('signInButton'));
+    const signInButton = await page.$('[data-id="signInButton"]');
+    signInButton.click();
 
-    expect(getByTestId('notification')).toHaveTextContent(
-      'Password is required'
+    await page.waitForSelector('[data-id="notification"]');
+    const notification = await page.$eval(
+      '[data-id="notification"]',
+      (el) => el.innerHTML
     );
+    expect(notification).toMatch('"password" is not allowed to be empty');
   });
 
   it('Incorrect details', async () => {
-    const { getByTestId } = render(<Login />);
-    expect(getByTestId('signInButton')).toHaveTextContent('Sign In');
+    await page.click('[name="email"]');
+    await page.type('[name="email"]', user.email);
+    await page.click('[name="password"]');
+    await page.type('[name="password"]', randomAlphaNumeric(7));
 
-    const email = randomEmail();
-    fireEvent.change(getByTestId('email'), { target: { value: email } });
-    expect(getByTestId('email').value).toBe(email);
+    const signInButton = await page.$('[data-id="signInButton"]');
+    signInButton.click();
 
-    const password = randomAlphaNumeric(6);
-    fireEvent.change(getByTestId('password'), { target: { value: password } });
-    expect(getByTestId('password').value).toBe(password);
-
-    fireEvent.click(getByTestId('signInButton'));
-
-    await waitForElement(() => getByTestId('notification'));
-    expect(getByTestId('notification')).toHaveTextContent(
-      'Email does not exist'
+    await page.waitForSelector('[data-id="notification"]');
+    const notification = await page.$eval(
+      '[data-id="notification"]',
+      (el) => el.innerHTML
     );
+    expect(notification).toMatch('Invalid Password');
   });
 
-  xit('Correct details', async () => {
-    //TODO
-    const { getByTestId } = render(<Login />);
-    expect(getByTestId('signInButton')).toHaveTextContent('Sign In');
+  it('Correct details', async () => {
+    await page.click('[name="email"]');
+    await page.type('[name="email"]', user.email);
+    await page.click('[name="password"]');
+    await page.type('[name="password"]', user.password);
 
-    const email = randomEmail();
-    fireEvent.change(getByTestId('email'), { target: { value: email } });
-    expect(getByTestId('email').value).toBe(email);
+    const signInButton = await page.$('[data-id="signInButton"]');
+    signInButton.click();
 
-    const password = randomAlphaNumeric(6);
-    fireEvent.change(getByTestId('password'), { target: { value: password } });
-    expect(getByTestId('password').value).toBe(password);
-
-    fireEvent.click(getByTestId('signInButton'));
-
-    await waitForElement(() => getByTestId('notification'));
-    expect(getByTestId('notification')).toHaveTextContent('Yas');
-    expect(window.localStorage.getItem('authToken')).toEqual('');
+    await page.waitForSelector('[data-id="signInButton"]', { hidden: true });
   });
 });

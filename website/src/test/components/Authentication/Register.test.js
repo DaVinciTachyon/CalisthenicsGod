@@ -63,6 +63,6 @@ describe('Register', () => {
 
     await page.click('[data-id="registerButton"]');
 
-    await page.waitForSelector('[data-id="signInButton"]');
+    await page.waitForSelector('[data-id="registerButton"]', { hidden: true });
   });
 });
