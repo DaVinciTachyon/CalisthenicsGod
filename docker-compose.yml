@@ -30,7 +30,7 @@ services:
     depends_on:
       - calisthenicsgoddb
     environment:
-      - DB_CONNECT=${DB_CONNECT}
+      - DB_CONNECT=mongodb://calisthenicsGodDB/database
       - PORT=${PORT}
       - TOKEN_SECRET=${TOKEN_SECRET}
     networks:
