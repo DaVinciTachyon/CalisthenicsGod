@@ -1,10 +1,11 @@
 import styled from 'styled-components';
 import { Background, Shadow, Success, Error, Colours } from './constants';
 
-const Button = styled.button.attrs({
+const Button = styled.button.attrs((props) => ({
   background: Colours.primary.standard,
   color: Background.primary,
-})`
+  ['data-id']: props.dataId || 'button',
+}))`
   text-decoration: none;
   border-radius: 1vw;
   text-align: center;

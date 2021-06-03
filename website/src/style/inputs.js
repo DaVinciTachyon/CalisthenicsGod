@@ -92,7 +92,7 @@ const Date = styled(Input).attrs({
 
 const Number = styled(Input).attrs(({ value, decimalPlaces }) => ({
   value:
-    Math.round(value * Math.pow(10, decimalPlaces || 1)) /
+    Math.round(parseFloat(value) * Math.pow(10, decimalPlaces || 1)) /
     Math.pow(10, decimalPlaces || 1),
   type: 'number',
 }))`
@@ -144,9 +144,9 @@ const Ethanol = styled(Weight).attrs({
   secondaryColor: Nutrients.ethanol.dark,
 })``;
 
-const RadioOption = styled(({ className, label, value, ...rest }) => (
+const RadioOption = styled(({ className, label, value, name, ...rest }) => (
   <div className={className}>
-    <input id={value} value={value} {...rest} />
+    <input id={value} value={value} name={name || 'input'} {...rest} />
     <label for={value}>{label}</label>
   </div>
 )).attrs({
@@ -230,8 +230,8 @@ const SelectedOption = styled(({ className, label, ...rest }) => (
   `}
 `;
 
-const DropdownOption = styled(({ className, label, ...rest }) => (
-  <div className={className} {...rest}>
+const DropdownOption = styled(({ className, label, value, ...rest }) => (
+  <div className={className} value={value} data-id={value} {...rest}>
     {label}
   </div>
 ))`
@@ -252,6 +252,7 @@ const SelectDropdown = styled(
           <></>
         ) : (
           <DropdownOption
+            key={option.value}
             label={option.label}
             value={option.value}
             onClick={() => onSelect(option)}
@@ -273,7 +274,22 @@ const EmptySpan = <span className="empty">&#8203;</span>;
 
 const SelectChoices = styled(
   ({ className, options, value, onSelect, readOnly, isMulti, ...rest }) => (
-    <div className={className} {...rest}>
+    <div
+      className={className}
+      data-id={`select-${
+        isMulti
+          ? value
+              .map((id) => {
+                const option = options.find((option) => option.value === id);
+                return option ? option.value : undefined;
+              })
+              .join('-')
+          : options.find((option) => option.value === value)
+          ? options.find((option) => option.value === value).value
+          : ''
+      }`}
+      {...rest}
+    >
       <div>
         {isMulti
           ? (() => {
@@ -281,6 +297,7 @@ const SelectChoices = styled(
                 const option = options.find((option) => option.value === id);
                 return option ? (
                   <SelectedOption
+                    key={option.value}
                     label={option.label}
                     value={option.value}
                     onClick={() => onSelect(option)}
@@ -359,9 +376,10 @@ class BaseSelect extends React.Component {
   };
 
   render() {
-    const { isMulti, readOnly, className, options, value, label } = this.props;
+    const { isMulti, readOnly, className, options, value, label, name } =
+      this.props;
     return (
-      <div className={className}>
+      <div className={className} name={name || 'select'}>
         <SelectChoices
           options={options}
           value={value}
@@ -446,6 +464,7 @@ const Range = styled(
     label,
     unit,
     isPercentage,
+    name,
     ...rest
   }) => (
     <div className={className}>
@@ -469,6 +488,7 @@ const Range = styled(
         min={min || 0}
         max={max || 10}
         value={value}
+        name={name || 'range'}
         {...rest}
       />
     </div>

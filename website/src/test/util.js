@@ -7,6 +7,10 @@ const {
   randomInt,
   randomOption,
   randomDate,
+  buildRandomUser,
+  buildRandomExercise,
+  buildRandomIngredient,
+  buildRandomStage,
 } = require('../../../util/util');
 
 module.exports = {
@@ -18,4 +22,8 @@ module.exports = {
   randomInt,
   randomOption,
   randomDate,
+  buildRandomUser,
+  buildRandomExercise,
+  buildRandomIngredient,
+  buildRandomStage,
 };

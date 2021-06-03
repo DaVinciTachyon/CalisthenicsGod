@@ -12,6 +12,10 @@ const {
   randomInt,
   randomOption,
   randomDate,
+  buildRandomUser,
+  buildRandomExercise,
+  buildRandomIngredient,
+  buildRandomStage,
 } = require('../../util/util');
 
 chai.use(chaiHttp);
@@ -56,58 +60,6 @@ const login = async () => {
   });
   return res.body['auth-token'];
 };
-
-const randomGender = () => randomOption(['male', 'female']);
-
-const buildRandomUser = () => ({
-  name: {
-    first: randomString(5),
-    middle: randomString(5),
-    last: randomString(5),
-  },
-  email: randomEmail(),
-  password: randomAlphaNumeric(10),
-  weight: randomFloat(),
-  birthDate: randomDate(new Date(1950, 0, 1)),
-  gender: randomGender(),
-});
-
-const buildRandomExercise = async (authToken) => {
-  const stageId = (await post('/workout/stage', buildRandomStage(), authToken))
-    .body._id;
-  return {
-    name: randomString(6),
-    abbreviation: randomAlphaNumeric(4),
-    motionType: {
-      componentExercises: randomOption([[]]), //FIXME
-      transversePlane: randomOption(['upper', 'lower', 'core']),
-      verticality: randomOption(['horizontal', 'vertical']),
-      frontalPlane: randomOption(['push', 'pull', 'rotational', 'lateral']),
-      kineticChain: randomOption(['closed', 'open']),
-      motion: randomOption(['isometric', 'isotonic', 'distance', 'timed']),
-      sagittalPlane: randomOption(['bilateral', 'unilateral']),
-    },
-    potentialStages: [stageId],
-    requirements: [],
-    description: randomAlphaNumeric(50),
-  };
-};
-
-const buildRandomIngredient = () => ({
-  name: randomLowerCaseString(5),
-  macronutrients: {
-    fat: randomFloat(0, 100),
-    carbohydrate: randomFloat(0, 100),
-    protein: randomFloat(0, 100),
-    ethanol: randomFloat(0, 100),
-  },
-});
-
-const buildRandomStage = () => ({
-  name: randomString(6),
-  description: randomString(50),
-  chronologicalRanking: randomInt(),
-});
 
 const buildRandomWorkout = async (authToken) => {
   const exercise = await buildRandomExercise(authToken);
@@ -185,7 +137,6 @@ module.exports = {
   buildRandomIngredientReference,
   buildRandomPresetMeal,
   buildRandomPresetMealReference,
-  randomGender,
   login,
   randomString,
   randomLowerCaseString,
