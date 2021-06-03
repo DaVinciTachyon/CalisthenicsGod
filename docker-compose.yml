@@ -49,6 +49,8 @@ services:
     volumes:
       - .:/home/node/app
       - node_modules:/home/node/app/node_modules
+    depends_on:
+      - backend
     environment:
       - REACT_APP_API_URL=${REACT_APP_API_URL}
     networks:
@@ -65,6 +67,9 @@ services:
       - $PWD/site:/srv
       - caddy_data:/data
       - caddy_config:/config
+    depends_on:
+      - backend
+      - website
     networks:
       - app-network
 
