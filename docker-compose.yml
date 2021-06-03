@@ -9,7 +9,7 @@ services:
       - ./data:/data/db
     ports:
       - '27017:27017'
-    ports:
+    expose:
       - 27017
     networks:
       - app-network
