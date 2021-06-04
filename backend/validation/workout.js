@@ -1,5 +1,12 @@
 const Joi = require('@hapi/joi');
 
+const set = {
+  repetitions: Joi.number().min(0),
+  time: Joi.number().min(0),
+  distance: Joi.number().min(0),
+  weight: Joi.number().min(0),
+};
+
 module.exports = {
   stage: (data) =>
     Joi.object({
@@ -23,11 +30,7 @@ module.exports = {
         id: Joi.string().required(),
         exercises: Joi.array().items({
           id: Joi.string().required(),
-          sets: Joi.array().items({
-            repetitions: Joi.number().min(0),
-            time: Joi.number().min(0),
-            distance: Joi.number().min(0),
-          }),
+          sets: Joi.array().items(set),
           type: Joi.string()
             .valid('isotonic', 'eccentric', 'isometric', 'distance')
             .required(),

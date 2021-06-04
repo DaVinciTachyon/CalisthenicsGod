@@ -165,6 +165,7 @@ const buildRandomWorkout = async (authToken) => {
                 repetitions: randomInt(),
                 time: randomInt(),
                 distance: randomInt(),
+                weight: randomInt(),
               },
             ],
             type: randomOption([

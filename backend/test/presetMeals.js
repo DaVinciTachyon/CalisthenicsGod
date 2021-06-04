@@ -107,7 +107,6 @@ describe('Preset Meals', () => {
         },
         authToken
       );
-      console.log(res.body);
       res.should.have.status(200);
     });
   });

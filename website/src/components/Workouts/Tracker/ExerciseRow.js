@@ -15,6 +15,7 @@ export default class ExerciseRow extends React.Component {
       intrasetRest: undefined,
       intersetRest: 0,
       exercise: undefined,
+      isWeighted: false,
     };
   }
 
@@ -89,12 +90,13 @@ export default class ExerciseRow extends React.Component {
         { value: 'eccentric', label: 'Eccentric' }
       );
     return (
-      <Row columns={5}>
+      <Row columns={6}>
         <Column>
           {this.state.sets.map((set, i) => (
             <SetEditor
               key={i}
               type={this.state.type}
+              isWeighted={this.state.isWeighted}
               onUpdate={(set) => this.onUpdateSet(i, set)}
             />
           ))}
@@ -113,6 +115,15 @@ export default class ExerciseRow extends React.Component {
             </DeleteButton>
           </Row>
         </Column>
+        <Select
+          name="isWeighted"
+          options={[
+            { label: 'Bodyweight', value: false },
+            { label: 'Weighted', value: true },
+          ]}
+          value={this.state.isWeighted}
+          onChange={this.onSelectChange}
+        />
         <Select
           name="type"
           options={typeOptions}

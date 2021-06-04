@@ -41,6 +41,10 @@ module.exports = mongoose.model(
                       type: Number,
                       min: 0,
                     },
+                    weight: {
+                      type: Number,
+                      min: 0,
+                    },
                   },
                 ],
                 type: {
