@@ -1,6 +1,7 @@
 import React from 'react';
 import { Row, Column, Title } from '../../../style/table';
 import { Number, Text } from '../../../style/inputs';
+import SetEditor from './SetEditor';
 
 export default class Workout extends React.Component {
   constructor() {
@@ -32,30 +33,15 @@ export default class Workout extends React.Component {
             {stage.exercises.map((exercise) => (
               <Row columns={4} key={exercise._id} id={exercise.id}>
                 <Column>
-                  {exercise.sets.map((set) => {
-                    if (exercise.type === 'isotonic')
-                      return (
-                        <Number value={set.repetitions} unit="r" readOnly />
-                      );
-                    else if (exercise.type === 'isometric')
-                      return <Number value={set.time} unit="s" readOnly />;
-                    else if (exercise.type === 'distance')
-                      return (
-                        <Column columns={3}>
-                          <Number value={set.distance} unit="m" readOnly />
-                          <span>in</span>
-                          <Number value={set.time} unit="s" readOnly />
-                        </Column>
-                      );
-                    else
-                      return (
-                        <Column columns={3}>
-                          <Number value={set.repetitions} unit="r" readOnly />
-                          <span>*</span>
-                          <Number value={set.time} unit="s" readOnly />
-                        </Column>
-                      );
-                  })}
+                  {exercise.sets.map((set, index) => (
+                    <SetEditor
+                      key={`${exercise._id}-${index}`}
+                      value={set}
+                      type={exercise.type}
+                      isWeighted={set.weight}
+                      readOnly
+                    />
+                  ))}
                 </Column>
                 <Text value={exercise.type} readOnly />
                 <Text value={exercise.name} readOnly />
