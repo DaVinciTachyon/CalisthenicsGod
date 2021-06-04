@@ -25,8 +25,7 @@ export default class StageAdder extends React.Component {
 
   onChange = (evt) => this.setState({ [evt.target.name]: evt.target.value });
 
-  onSubmit = async (evt) => {
-    evt.preventDefault();
+  onSubmit = async () => {
     if (!this.state.name) return this.setState({ error: 'Name is required' });
     if (this.props.index < 0 || this.props.index % 1 !== 0)
       return this.setState({ error: 'Chronological Ranking is invalid' });
