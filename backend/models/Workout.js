@@ -49,7 +49,13 @@ module.exports = mongoose.model(
                 ],
                 type: {
                   type: String,
-                  enum: ['isotonic', 'eccentric', 'isometric', 'distance'],
+                  enum: [
+                    'isotonic',
+                    'eccentric',
+                    'isometric',
+                    'distance',
+                    'timed',
+                  ],
                   required: true,
                 },
                 rest: {

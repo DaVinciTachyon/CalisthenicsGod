@@ -119,11 +119,11 @@ const buildRandomExercise = () => ({
   name: randomString(6),
   abbreviation: randomAlphaNumeric(4),
   motionType: {
-    transversePlane: randomOption(['upper', 'lower']),
+    transversePlane: randomOption(['upper', 'lower', 'core']),
     verticality: randomOption(['horizontal', 'vertical']),
     frontalPlane: randomOption(['push', 'pull']),
     kineticChain: randomOption(['closed', 'open']),
-    motion: randomOption(['isometric', 'isotonic', 'distance']),
+    motion: randomOption(['isometric', 'isotonic', 'distance', 'timed']),
   },
   potentialStages: [],
   requirements: [],
@@ -173,6 +173,7 @@ const buildRandomWorkout = async (authToken) => {
               'eccentric',
               'isometric',
               'distance',
+              'timed',
             ]),
             rest: {
               intraset: randomInt(),
