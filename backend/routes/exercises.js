@@ -89,12 +89,7 @@ router
     }
 
     const exercise = await Exercise.findById(req.body._id);
-    exercise.name = req.body.name;
-    exercise.abbreviation = req.body.abbreviation;
-    exercise.motionType = req.body.motionType;
-    exercise.potentialStages = req.body.potentialStages;
-    exercise.requirements = req.body.requirements;
-    exercise.description = req.body.description;
+    Object.keys(req.body).forEach((name) => (exercise[name] = req.body[name]));
 
     try {
       await exercise.save();

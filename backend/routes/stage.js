@@ -58,8 +58,7 @@ router
     const stage = await WorkoutStage.findById(req.body._id);
     if (!stage) return res.status(400).send({ error: 'Stage not found' });
 
-    stage.name = req.body.name;
-    stage.description = req.body.description;
+    Object.keys(req.body).forEach((name) => (stage[name] = req.body[name]));
 
     try {
       await stage.save();

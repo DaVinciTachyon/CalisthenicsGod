@@ -1,5 +1,5 @@
 import React from 'react';
-import { Row, Column } from '../../style/table';
+import { Row, Column, Section } from '../../style/table';
 import { Button } from '../../style/buttons';
 import {
   Calories,
@@ -16,7 +16,9 @@ export default class UserProfile extends React.Component {
       calorieOffset: 0,
       currentCalorieOffset: 0,
       calorieMode: 'maintenance',
-      name: '',
+      firstname: '',
+      middlename: '',
+      lastname: '',
       email: '',
       dateJoined: '',
       birthDate: '',
@@ -69,7 +71,9 @@ export default class UserProfile extends React.Component {
     );
     const measurementData = await measurementResponse.json();
     this.setState({
-      name: userData.name,
+      firstname: userData.name.first,
+      middlename: userData.name.middle,
+      lastname: userData.name.last,
       email: userData.email,
       dateJoined: this.formatDate(new Date(userData.dateJoined)),
       birthDate: this.formatDate(new Date(userData.birthDate)),
@@ -106,6 +110,23 @@ export default class UserProfile extends React.Component {
   };
 
   onSubmit = async () => {
+    await fetch(`${process.env.REACT_APP_API_URL}/user/`, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+        'auth-token': localStorage.getItem('authToken'),
+      },
+      body: JSON.stringify({
+        name: {
+          first: this.state.firstname,
+          middle: this.state.middlename,
+          last: this.state.lastname,
+        },
+        email: this.state.email,
+        birthDate: this.state.birthDate,
+        gender: this.state.gender,
+      }),
+    });
     await fetch(`${process.env.REACT_APP_API_URL}/nutrition/`, {
       method: 'POST',
       headers: {
@@ -128,12 +149,65 @@ export default class UserProfile extends React.Component {
   render() {
     return (
       <div>
-        <Text label="First Name" value={this.state.name.first} readOnly />
-        <Text label="Middle Name(s)" value={this.state.name.middle} readOnly />
-        <Text label="Last Name" value={this.state.name.last} readOnly />
-        <Text label="Email" value={this.state.email} readOnly />
-        <Row columns={2}>
-          <Column span={this.state.calorieOffset === 0 ? 2 : 1}>
+        <Section label="General">
+          <Row columns={3}>
+            <Text
+              name="firstname"
+              label="First Name"
+              value={this.state.firstname}
+              onChange={this.onChange}
+            />
+            <Text
+              name="middlename"
+              label="Middle Name(s)"
+              value={this.state.middlename}
+              onChange={this.onChange}
+            />
+            <Text
+              name="lastname"
+              label="Last Name"
+              value={this.state.lastname}
+              onChange={this.onChange}
+            />
+          </Row>
+          <Text
+            name="email"
+            label="Email"
+            value={this.state.email}
+            onChange={this.onChange}
+          />
+          <Row columns={2}>
+            <Select
+              name="gender"
+              options={[
+                { label: 'Male', value: 'male' },
+                { label: 'Female', value: 'female' },
+              ]}
+              value={this.state.gender}
+              onChange={this.onSelectChange}
+              label="Gender"
+            />
+            <DateInput
+              name="birthDate"
+              value={this.state.birthDate}
+              label="Birth Date"
+              onChange={this.onChange}
+            />
+          </Row>
+          <DateInput
+            value={this.state.dateJoined}
+            label="Date Joined"
+            readOnly
+          />
+        </Section>
+        <Section label="Nutrient Information">
+          <Row columns={this.state.calorieOffset !== 0 ? 3 : 2}>
+            <Calories
+              value={this.state.caloriesPerKg * this.state.weight}
+              label="Maintenance Calories"
+              unit="kcal"
+              readOnly
+            />
             <Select
               name="calorieMode"
               options={[
@@ -145,72 +219,54 @@ export default class UserProfile extends React.Component {
               onChange={this.onCalorieModeChange}
               label="Calorie Mode"
             />
-          </Column>
-          {this.state.calorieOffset !== 0 && (
-            <Calories
-              name="calorieOffset"
-              value={
-                (this.state.calorieMode === 'deficit' ? -1 : 1) *
-                this.state.calorieOffset
-              }
-              onChange={(evt) => {
-                evt.target.value *=
-                  this.state.calorieMode === 'deficit' ? -1 : 1;
-                this.onChange(evt);
-              }}
-            />
-          )}
-        </Row>
-        <Calories
-          value={this.state.caloriesPerKg * this.state.weight}
-          label="Maintenance Calories"
-          unit="kcal"
-          readOnly
-        />
-        <Range
-          value={this.state.caloriesPerKg}
-          min={28}
-          max={52}
-          step={1}
-          label="Calories Per Kilogram of Bodyweight"
-          unit="kcal"
-          name="caloriesPerKg"
-          onChange={this.onChange}
-        />
-        <Range
-          value={this.state.proteinGramsPerKg}
-          min={1}
-          max={3}
-          step={0.1}
-          label="Protein Amount"
-          unit="g/kg"
-          name="proteinGramsPerKg"
-          onChange={this.onChange}
-        />
-        <Range
-          value={this.state.fatCalorieProportion}
-          min={0.15}
-          max={0.5}
-          step={0.01}
-          label="Fat Partition"
-          unit="%"
-          name="fatCalorieProportion"
-          onChange={this.onChange}
-          isPercentage
-        />
-        <Select
-          name="gender"
-          options={[
-            { label: 'Male', value: 'male' },
-            { label: 'Female', value: 'female' },
-          ]}
-          value={this.state.gender}
-          onChange={this.onChange}
-          label="Gender"
-          readOnly
-        />
-        <DateInput value={this.state.birthDate} label="Birth Date" readOnly />
-        <DateInput value={this.state.dateJoined} label="Date Joined" readOnly />
+            {this.state.calorieOffset !== 0 && (
+              <Calories
+                name="calorieOffset"
+                label="Calorie Offset"
+                value={
+                  (this.state.calorieMode === 'deficit' ? -1 : 1) *
+                  this.state.calorieOffset
+                }
+                onChange={(evt) => {
+                  evt.target.value *=
+                    this.state.calorieMode === 'deficit' ? -1 : 1;
+                  this.onChange(evt);
+                }}
+              />
+            )}
+          </Row>
+          <Range
+            value={this.state.caloriesPerKg}
+            min={28}
+            max={52}
+            step={1}
+            label="Calories Per Kilogram of Bodyweight"
+            unit="kcal"
+            name="caloriesPerKg"
+            onChange={this.onChange}
+          />
+          <Range
+            value={this.state.proteinGramsPerKg}
+            min={1}
+            max={3}
+            step={0.1}
+            label="Protein Amount"
+            unit="g/kg"
+            name="proteinGramsPerKg"
+            onChange={this.onChange}
+          />
+          <Range
+            value={this.state.fatCalorieProportion}
+            min={0.15}
+            max={0.5}
+            step={0.01}
+            label="Fat Partition"
+            unit="%"
+            name="fatCalorieProportion"
+            onChange={this.onChange}
+            isPercentage
+          />
+        </Section>
         <Row>
           <Button onClick={this.onSubmit}>Submit</Button>
         </Row>

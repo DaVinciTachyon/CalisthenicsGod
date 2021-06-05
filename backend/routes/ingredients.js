@@ -69,8 +69,9 @@ router
     });
     if (!ingredient) return res.status(400).send({ error: '_id not found' });
 
-    ingredient.name = req.body.name;
-    ingredient.macronutrients = req.body.macronutrients;
+    Object.keys(req.body).forEach(
+      (name) => (ingredient[name] = req.body[name])
+    );
 
     try {
       await ingredient.save();
