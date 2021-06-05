@@ -124,6 +124,7 @@ const buildRandomExercise = () => ({
     frontalPlane: randomOption(['push', 'pull', 'rotational', 'lateral']),
     kineticChain: randomOption(['closed', 'open']),
     motion: randomOption(['isometric', 'isotonic', 'distance', 'timed']),
+    sagittalPlane: randomOption(['bilateral', 'unilateral']),
   },
   potentialStages: [],
   requirements: [],

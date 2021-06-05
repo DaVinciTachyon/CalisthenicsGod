@@ -42,6 +42,11 @@ module.exports = mongoose.model(
         enum: ['isometric', 'isotonic', 'distance', 'timed'],
         required: true,
       },
+      sagittalPlane: {
+        type: String,
+        enum: ['bilateral', 'unilateral'],
+        required: true,
+      },
     },
     potentialStages: [
       {

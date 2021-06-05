@@ -15,6 +15,8 @@ const kineticChain = Joi.string().valid('closed', 'open');
 
 const motion = Joi.string().valid('isometric', 'isotonic', 'distance', 'timed');
 
+const sagittalPlane = Joi.string().valid('bilateral', 'unilateral');
+
 module.exports = {
   exercise: (data) =>
     Joi.object({
@@ -25,6 +27,7 @@ module.exports = {
         verticality,
         frontalPlane,
         kineticChain,
+        sagittalPlane,
         motion: motion.required(),
       },
       potentialStages: Joi.array().items(Joi.string()),
@@ -45,6 +48,7 @@ module.exports = {
         verticality,
         frontalPlane,
         kineticChain,
+        sagittalPlane,
         motion: motion.required(),
       }),
       potentialStages: Joi.array().items(Joi.string()),

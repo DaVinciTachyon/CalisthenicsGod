@@ -40,6 +40,7 @@ router
         frontalPlane: req.body.motionType.frontalPlane,
         kineticChain: req.body.motionType.kineticChain,
         motion: req.body.motionType.motion,
+        sagittalPlane: req.body.motionType.sagittalPlane,
       },
       potentialStages: req.body.potentialStages,
       requirements: req.body.requirements,
