@@ -8,7 +8,7 @@ import {
   Select,
   Range,
 } from '../../style/inputs';
-import { Notification, Error } from '../../style/notification';
+import { Success, Error } from '../../style/notification';
 
 export default class UserProfile extends React.Component {
   constructor() {
@@ -29,6 +29,7 @@ export default class UserProfile extends React.Component {
       proteinGramsPerKg: 0,
       fatCalorieProportion: 0,
       error: '',
+      success: '',
     };
   }
 
@@ -153,7 +154,7 @@ export default class UserProfile extends React.Component {
       const nutritionData = await nutritionResponse.json();
       return this.setState({ error: nutritionData.error });
     }
-    this.setState({ notification: 'Success!' });
+    this.setState({ success: 'Success!' });
   };
 
   onChange = (evt) => this.setState({ [evt.target.name]: evt.target.value });
@@ -162,9 +163,9 @@ export default class UserProfile extends React.Component {
   render() {
     return (
       <div>
-        <Notification
-          text={this.state.notification}
-          dismiss={() => this.setState({ notification: '' })}
+        <Success
+          text={this.state.success}
+          dismiss={() => this.setState({ success: '' })}
         />
         <Error
           text={this.state.error}
