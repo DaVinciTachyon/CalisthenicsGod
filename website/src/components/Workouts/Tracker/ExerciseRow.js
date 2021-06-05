@@ -49,6 +49,7 @@ export default class ExerciseRow extends React.Component {
     if (!exercise) type = undefined;
     else if (exercise.motionType.motion === 'distance') type = 'distance';
     else if (exercise.motionType.motion === 'isometric') type = 'isometric';
+    else if (exercise.motionType.motion === 'timed') type = 'timed';
     await this.setState({ [evt.name]: evt.value, exercise, type });
     this.onUpdate();
   };
@@ -84,6 +85,8 @@ export default class ExerciseRow extends React.Component {
       typeOptions.push({ value: 'distance', label: 'Distance' });
     else if (this.state.exercise?.motionType.motion === 'isometric')
       typeOptions.push({ value: 'isometric', label: 'Isometric' });
+    else if (this.state.exercise?.motionType.motion === 'timed')
+      typeOptions.push({ value: 'timed', label: 'Timed' });
     else
       typeOptions.push(
         { value: 'isotonic', label: 'Isotonic' },

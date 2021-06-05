@@ -23,7 +23,9 @@ export default class SetEditor extends React.Component {
       repetitions: ['isotonic', 'eccentric'].includes(this.props.type)
         ? this.state.repetitions
         : undefined,
-      time: ['isometric', 'eccentric', 'distance'].includes(this.props.type)
+      time: ['isometric', 'eccentric', 'distance', 'timed'].includes(
+        this.props.type
+      )
         ? this.state.time
         : undefined,
       distance: ['distance'].includes(this.props.type)
@@ -39,7 +41,8 @@ export default class SetEditor extends React.Component {
 
   render() {
     let columns = this.props.isWeighted ? 1 : 0;
-    if (['isotonic', 'isometric'].includes(this.props.type)) columns += 1;
+    if (['isotonic', 'isometric', 'timed'].includes(this.props.type))
+      columns += 1;
     else if (['eccentric', 'distance'].includes(this.props.type)) columns += 2;
     return (
       <Row columns={columns}>
@@ -50,6 +53,7 @@ export default class SetEditor extends React.Component {
             value={this.state.repetitions}
             onChange={this.onChange}
             unit="r"
+            readOnly={this.props.readOnly}
           />
         )}
         {['distance'].includes(this.props.type) && (
@@ -59,15 +63,19 @@ export default class SetEditor extends React.Component {
             value={this.state.distance}
             onChange={this.onChange}
             unit="m"
+            readOnly={this.props.readOnly}
           />
         )}
-        {['isometric', 'eccentric', 'distance'].includes(this.props.type) && (
+        {['isometric', 'eccentric', 'distance', 'timed'].includes(
+          this.props.type
+        ) && (
           <Number
             name="time"
             min={1}
             value={this.state.time}
             onChange={this.onChange}
             unit="s"
+            readOnly={this.props.readOnly}
           />
         )}
         {this.props.isWeighted && (
@@ -77,6 +85,7 @@ export default class SetEditor extends React.Component {
             value={this.state.weight}
             onChange={this.onChange}
             unit="kg"
+            readOnly={this.props.readOnly}
           />
         )}
       </Row>
