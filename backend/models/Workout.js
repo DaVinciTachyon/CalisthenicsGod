@@ -48,7 +48,12 @@ module.exports = mongoose.model(
                 ],
                 variation: {
                   type: String,
-                  enum: ['clockwise', 'anti-clockwise', 'eccentric'],
+                  enum: [
+                    'clockwise',
+                    'anti-clockwise',
+                    'eccentric',
+                    'concentric',
+                  ],
                 },
                 rest: {
                   intraset: {

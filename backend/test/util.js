@@ -170,6 +170,7 @@ const buildRandomWorkout = async (authToken) => {
             ],
             variation: randomOption([
               'eccentric',
+              'concentric',
               'clockwise',
               'anti-clockwise',
             ]),

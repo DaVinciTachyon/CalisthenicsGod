@@ -34,7 +34,8 @@ module.exports = {
           variation: Joi.string().valid(
             'clockwise',
             'anti-clockwise',
-            'eccentric'
+            'eccentric',
+            'concentric'
           ),
           rest: Joi.object({
             intraset: Joi.number().min(0),
