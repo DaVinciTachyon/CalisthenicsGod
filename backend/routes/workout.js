@@ -40,7 +40,7 @@ router
             id: exercise.id,
             name: fullExercise.name,
             sets: exercise.sets,
-            type: exercise.type,
+            variation: exercise.variation,
             rest: exercise.rest,
           });
         }
