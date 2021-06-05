@@ -5,33 +5,51 @@ import { Number } from '../../../style/inputs';
 export default class SetEditor extends React.Component {
   constructor() {
     super();
-    this.state = { repetitions: 1, time: 1, distance: 1, weight: 1 };
+    this.state = {
+      repetitions: undefined,
+      time: undefined,
+      distance: undefined,
+      weight: undefined,
+    };
   }
 
-  componentDidMount() {
-    if (this.props.readOnly) this.setState(this.props.value);
-    else this.onUpdate();
+  async componentDidMount() {
+    await this.setParams();
+    if (!this.props.readOnly) this.onUpdate();
   }
 
   componentDidUpdate(prevProps) {
-    if (prevProps.type !== this.props.type)
-      this.setState({ repetitions: 1, time: 1, distance: 1, weight: 1 });
+    if (
+      prevProps.type !== this.props.type ||
+      prevProps.isWeighted !== this.props.isWeighted
+    )
+      this.setParams();
   }
+
+  setParams = async () => {
+    let repetitions, time, distance, weight;
+    if (['isotonic', 'eccentric'].includes(this.props.type) || !this.props.type)
+      repetitions = this.props.repetitions || 1;
+    if (
+      ['isometric', 'eccentric', 'distance', 'timed'].includes(this.props.type)
+    )
+      time = 1;
+    if (['distance'].includes(this.props.type))
+      distance = this.props.distance || 1;
+    if (this.props.isWeighted && this.props.isWeighted !== 0)
+      weight = this.props.weight ? Math.abs(this.props.weight) : 1;
+    await this.setState({ repetitions, time, distance, weight });
+  };
 
   onUpdate = () =>
     this.props.onUpdate({
-      repetitions: ['isotonic', 'eccentric'].includes(this.props.type)
-        ? this.state.repetitions
-        : undefined,
-      time: ['isometric', 'eccentric', 'distance', 'timed'].includes(
-        this.props.type
-      )
-        ? this.state.time
-        : undefined,
-      distance: ['distance'].includes(this.props.type)
-        ? this.state.distance
-        : undefined,
-      weight: this.props.isWeighted ? this.state.weight : undefined,
+      repetitions: this.state.repetitions,
+      time: this.state.time,
+      distance: this.state.distance,
+      weight:
+        this.props.isWeighted && this.props.isWeighted !== 0
+          ? this.state.weight * this.props.isWeighted
+          : undefined,
     });
 
   onChange = async (evt) => {
@@ -40,13 +58,14 @@ export default class SetEditor extends React.Component {
   };
 
   render() {
-    let columns = this.props.isWeighted ? 1 : 0;
-    if (['isotonic', 'isometric', 'timed'].includes(this.props.type))
-      columns += 1;
-    else if (['eccentric', 'distance'].includes(this.props.type)) columns += 2;
     return (
-      <Row columns={columns}>
-        {['isotonic', 'eccentric'].includes(this.props.type) && (
+      <Row
+        columns={
+          Object.keys(this.state).filter((key) => this.state[key] !== undefined)
+            .length
+        }
+      >
+        {this.state.repetitions && (
           <Number
             name="repetitions"
             min={1}
@@ -56,7 +75,7 @@ export default class SetEditor extends React.Component {
             readOnly={this.props.readOnly}
           />
         )}
-        {['distance'].includes(this.props.type) && (
+        {this.state.distance && (
           <Number
             name="distance"
             min={1}
@@ -66,9 +85,7 @@ export default class SetEditor extends React.Component {
             readOnly={this.props.readOnly}
           />
         )}
-        {['isometric', 'eccentric', 'distance', 'timed'].includes(
-          this.props.type
-        ) && (
+        {this.state.time && (
           <Number
             name="time"
             min={1}
@@ -78,10 +95,10 @@ export default class SetEditor extends React.Component {
             readOnly={this.props.readOnly}
           />
         )}
-        {this.props.isWeighted && (
+        {this.state.weight && (
           <Number
             name="weight"
-            min={1}
+            min={0.1}
             value={this.state.weight}
             onChange={this.onChange}
             unit="kg"

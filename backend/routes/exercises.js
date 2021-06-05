@@ -15,7 +15,6 @@ router
     res.send({ exercises: exercises });
   })
   .post(async (req, res) => {
-    //FIXME when adding requirements only add highest level, no need to add two things where one is a sub requirement of the other
     const { error } = exerciseValidation.exercise(req.body);
     if (error) return res.status(400).send({ error: error.details[0].message });
 
@@ -69,7 +68,6 @@ router
     }
   })
   .patch(async (req, res) => {
-    //FIXME when adding requirements only add highest level, no need to add two things where one is a sub requirement of the other
     const { error } = exerciseValidation.editExercise(req.body);
     if (error) return res.status(400).send({ error: error.details[0].message });
 

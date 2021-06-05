@@ -10,12 +10,12 @@ export default class ExerciseRow extends React.Component {
     super();
     this.state = {
       sets: [],
-      type: undefined,
+      type: 'isotonic',
       id: '',
       intrasetRest: undefined,
       intersetRest: 0,
       exercise: undefined,
-      isWeighted: false,
+      isWeighted: 0,
     };
   }
 
@@ -63,21 +63,25 @@ export default class ExerciseRow extends React.Component {
     this.onUpdate();
   };
 
-  addSet = (length) =>
-    this.setState((state) => {
+  addSet = async (length) => {
+    await this.setState((state) => {
       if (state.sets.length < length + 1) state.sets.push({});
       if (state.sets.length > 1) state.intrasetRest = 0;
 
       return { sets: state.sets, intrasetRest: state.intrasetRest };
     });
+    this.onUpdate();
+  };
 
-  removeSet = (length) =>
-    this.setState((state) => {
+  removeSet = async (length) => {
+    await this.setState((state) => {
       if (state.sets.length > length - 1) state.sets.pop();
       if (state.sets.length <= 1) state.intrasetRest = undefined;
 
       return { sets: state.sets, intrasetRest: state.intrasetRest };
     });
+    this.onUpdate();
+  };
 
   render() {
     const typeOptions = [];
@@ -121,8 +125,9 @@ export default class ExerciseRow extends React.Component {
         <Select
           name="isWeighted"
           options={[
-            { label: 'Bodyweight', value: false },
-            { label: 'Weighted', value: true },
+            { label: 'Bodyweight', value: 0 },
+            { label: 'Weighted', value: 1 },
+            { label: 'Assisted', value: -1 },
           ]}
           value={this.state.isWeighted}
           onChange={this.onSelectChange}

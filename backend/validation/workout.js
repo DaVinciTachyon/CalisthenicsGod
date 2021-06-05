@@ -4,7 +4,7 @@ const set = {
   repetitions: Joi.number().min(0),
   time: Joi.number().min(0),
   distance: Joi.number().min(0),
-  weight: Joi.number().min(0),
+  weight: Joi.number(),
 };
 
 module.exports = {

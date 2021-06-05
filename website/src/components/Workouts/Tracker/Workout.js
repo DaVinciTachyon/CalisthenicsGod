@@ -13,8 +13,9 @@ export default class Workout extends React.Component {
     return (
       <div>
         <Title>{this.props.details.date}</Title>
-        <Row columns={4} isTitle>
+        <Row columns={5} isTitle>
           <Column>Sets</Column>
+          <Column>Weighted</Column>
           <Column>Type</Column>
           <Column>Name</Column>
           <Column>
@@ -31,7 +32,7 @@ export default class Workout extends React.Component {
               {stage.name}
             </Row>
             {stage.exercises.map((exercise) => (
-              <Row columns={4} key={exercise._id} id={exercise.id}>
+              <Row columns={5} key={exercise._id} id={exercise.id}>
                 <Column>
                   {exercise.sets.map((set, index) => (
                     <SetEditor
@@ -43,10 +44,23 @@ export default class Workout extends React.Component {
                     />
                   ))}
                 </Column>
+                <Text
+                  value={
+                    exercise.sets[0] && exercise.sets[0].weight
+                      ? exercise.sets[0].weight > 0
+                        ? 'Weighted'
+                        : 'Assisted'
+                      : 'Bodyweight'
+                  }
+                  readOnly
+                />
                 <Text value={exercise.type} readOnly />
                 <Text value={exercise.name} readOnly />
                 <Column columns={2}>
-                  <Number value={exercise.rest.intraset} unit="s" readOnly />
+                  {exercise.rest.intraset && (
+                    <Number value={exercise.rest.intraset} unit="s" readOnly />
+                  )}
+                  {!exercise.rest.intraset && <Column />}
                   <Number value={exercise.rest.interset} unit="s" readOnly />
                 </Column>
               </Row>
