@@ -4,7 +4,12 @@ const transversePlane = Joi.string().valid('upper', 'lower', 'core');
 
 const verticality = Joi.string().valid('horizontal', 'vertical');
 
-const frontalPlane = Joi.string().valid('push', 'pull', 'rotational');
+const frontalPlane = Joi.string().valid(
+  'push',
+  'pull',
+  'rotational',
+  'lateral'
+);
 
 const kineticChain = Joi.string().valid('closed', 'open');
 

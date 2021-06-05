@@ -35,7 +35,9 @@ module.exports = {
             'clockwise',
             'anti-clockwise',
             'eccentric',
-            'concentric'
+            'concentric',
+            'right',
+            'left'
           ),
           rest: Joi.object({
             intraset: Joi.number().min(0),

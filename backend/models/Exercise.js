@@ -31,7 +31,7 @@ module.exports = mongoose.model(
       },
       frontalPlane: {
         type: String,
-        enum: ['push', 'pull', 'rotational'],
+        enum: ['push', 'pull', 'rotational', 'lateral'],
       },
       kineticChain: {
         type: String,

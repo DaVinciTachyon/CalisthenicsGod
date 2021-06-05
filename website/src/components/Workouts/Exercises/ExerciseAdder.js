@@ -153,6 +153,7 @@ export default class Exercises extends React.Component {
               { label: 'Push', value: 'push' },
               { label: 'Pull', value: 'pull' },
               { label: 'Rotational', value: 'rotational' },
+              { label: 'Lateral', value: 'lateral' },
             ]}
             onChange={this.onChange}
           />

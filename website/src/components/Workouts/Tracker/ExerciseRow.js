@@ -52,6 +52,11 @@ export default class ExerciseRow extends React.Component {
         { value: 'clockwise', label: 'Clockwise' },
         { value: 'anti-clockwise', label: 'Anti-clockwise' }
       );
+    else if (motionType?.frontalPlane === 'lateral')
+      variationOptions.push(
+        { value: 'right', label: 'Right' },
+        { value: 'left', label: 'Left' }
+      );
     else if (motionType?.motion === 'isotonic')
       variationOptions.push(
         { value: undefined, label: 'Isotonic' },
@@ -64,6 +69,7 @@ export default class ExerciseRow extends React.Component {
 
   getDefaultVariation = (motionType) => {
     if (motionType?.frontalPlane === 'rotational') return 'clockwise';
+    else if (motionType?.frontalPlane === 'lateral') return 'right';
     return undefined;
   };
 

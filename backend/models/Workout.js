@@ -53,6 +53,8 @@ module.exports = mongoose.model(
                     'anti-clockwise',
                     'eccentric',
                     'concentric',
+                    'right',
+                    'left',
                   ],
                 },
                 rest: {
