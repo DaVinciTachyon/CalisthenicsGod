@@ -16,7 +16,7 @@ export default class Workout extends React.Component {
         <Row columns={5} isTitle>
           <Column>Sets</Column>
           <Column>Weighted</Column>
-          <Column>Type</Column>
+          <Column>Variation</Column>
           <Column>Name</Column>
           <Column>
             <Column>Rest</Column>
@@ -31,40 +31,46 @@ export default class Workout extends React.Component {
             <Row columns={1} id={stage.id}>
               {stage.name}
             </Row>
-            {stage.exercises.map((exercise) => (
-              <Row columns={5} key={exercise._id} id={exercise.id}>
-                <Column>
-                  {exercise.sets.map((set, index) => (
-                    <SetEditor
-                      key={`${exercise._id}-${index}`}
-                      value={set}
-                      type={exercise.type}
-                      isWeighted={set.weight}
-                      readOnly
-                    />
-                  ))}
-                </Column>
-                <Text
-                  value={
-                    exercise.sets[0] && exercise.sets[0].weight
-                      ? exercise.sets[0].weight > 0
-                        ? 'Weighted'
-                        : 'Assisted'
-                      : 'Bodyweight'
-                  }
-                  readOnly
-                />
-                <Text value={exercise.type} readOnly />
-                <Text value={exercise.name} readOnly />
-                <Column columns={2}>
-                  {exercise.rest.intraset && (
-                    <Number value={exercise.rest.intraset} unit="s" readOnly />
-                  )}
-                  {!exercise.rest.intraset && <Column />}
-                  <Number value={exercise.rest.interset} unit="s" readOnly />
-                </Column>
-              </Row>
-            ))}
+            {stage.exercises.map((exercise) => {
+              console.log(exercise.variation);
+              return (
+                <Row columns={5} key={exercise._id} id={exercise.id}>
+                  <Column>
+                    {exercise.sets.map((set, index) => (
+                      <SetEditor
+                        key={`${exercise._id}-${index}`}
+                        value={set}
+                        isWeighted={set.weight}
+                        readOnly
+                      />
+                    ))}
+                  </Column>
+                  <Text
+                    value={
+                      exercise.sets[0] && exercise.sets[0].weight
+                        ? exercise.sets[0].weight > 0
+                          ? 'Weighted'
+                          : 'Assisted'
+                        : 'Bodyweight'
+                    }
+                    readOnly
+                  />
+                  <Text value={exercise.variation} readOnly />
+                  <Text value={exercise.name} readOnly />
+                  <Column columns={2}>
+                    {exercise.rest.intraset && (
+                      <Number
+                        value={exercise.rest.intraset}
+                        unit="s"
+                        readOnly
+                      />
+                    )}
+                    {!exercise.rest.intraset && <Column />}
+                    <Number value={exercise.rest.interset} unit="s" readOnly />
+                  </Column>
+                </Row>
+              );
+            })}
           </div>
         ))}
       </div>

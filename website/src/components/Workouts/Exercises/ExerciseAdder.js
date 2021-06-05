@@ -162,6 +162,7 @@ export default class Exercises extends React.Component {
           options={[
             { label: 'Push', value: 'push' },
             { label: 'Pull', value: 'pull' },
+            { label: 'Rotational', value: 'rotational' },
           ]}
           onChange={this.onChange}
         />

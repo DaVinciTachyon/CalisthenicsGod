@@ -28,16 +28,21 @@ export default class SetEditor extends React.Component {
 
   setParams = async () => {
     let repetitions, time, distance, weight;
-    if (['isotonic', 'eccentric'].includes(this.props.type) || !this.props.type)
-      repetitions = this.props.repetitions || 1;
     if (
+      this.props.value?.repetitions ||
+      ['isotonic', 'eccentric'].includes(this.props.type) ||
+      (!this.props.type && !this.props.readOnly)
+    )
+      repetitions = this.props.value?.repetitions || 1;
+    if (
+      this.props.value?.time ||
       ['isometric', 'eccentric', 'distance', 'timed'].includes(this.props.type)
     )
-      time = 1;
-    if (['distance'].includes(this.props.type))
-      distance = this.props.distance || 1;
+      time = this.props.value?.time || 1;
+    if (this.props.value?.distance || ['distance'].includes(this.props.type))
+      distance = this.props.value?.distance || 1;
     if (this.props.isWeighted && this.props.isWeighted !== 0)
-      weight = this.props.weight ? Math.abs(this.props.weight) : 1;
+      weight = this.props.value?.weight ? Math.abs(this.props.value.weight) : 1;
     await this.setState({ repetitions, time, distance, weight });
   };
 
