@@ -62,6 +62,7 @@ export default class StageEditor extends React.Component {
         {this.state.exercises.map((exercise, i, exercises) => (
           <ExerciseRow
             key={i}
+            stageId={this.props.id}
             onUpdate={(exercise) => this.onUpdate(i, exercise)}
             onRemove={() => this.onRemove(i, exercises.length)}
           />

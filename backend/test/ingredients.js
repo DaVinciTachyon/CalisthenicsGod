@@ -40,6 +40,29 @@ describe('Ingredients', () => {
       res.should.have.status(200);
       expectedIngredient._id = res.body._id;
     });
+
+    it('duplicate name', async () => {
+      const duplicateIngredient = buildRandomIngredient();
+      duplicateIngredient.name = expectedIngredient.name;
+      const res = await post(
+        '/api/nutrition/ingredients',
+        duplicateIngredient,
+        authToken
+      );
+      res.should.have.status(400);
+    });
+
+    it('duplicate name - different user', async () => {
+      const duplicateIngredient = buildRandomIngredient();
+      duplicateIngredient.name = expectedIngredient.name;
+      const secondAuthToken = await login();
+      const res = await post(
+        '/api/nutrition/ingredients',
+        duplicateIngredient,
+        secondAuthToken
+      );
+      res.should.have.status(200);
+    });
   });
 
   describe('/DELETE', () => {
