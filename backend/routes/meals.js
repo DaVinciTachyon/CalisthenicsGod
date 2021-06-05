@@ -95,6 +95,7 @@ router
     if (
       req.body._id &&
       hasHistory(nutrients) &&
+      isToday(nutrients.history[0].date) &&
       hasMeals(nutrients.history[0])
     ) {
       const day = nutrients.history[0];
@@ -103,8 +104,8 @@ router
         return res.status(400).send({ error: 'Incorrect Meal ID' });
 
       day.meals[meal].ingredients.push(req.body.ingredient);
-    } else if (hasHistory(nutrients) && isToday(nutrient.history[0].date))
-      day.meals.unshift({
+    } else if (hasHistory(nutrients) && isToday(nutrients.history[0].date))
+      nutrients.history[0].meals.unshift({
         ingredients: [req.body.ingredient],
       });
     else
