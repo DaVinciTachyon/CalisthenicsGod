@@ -34,15 +34,9 @@ router
         const fullStage = await WorkoutStage.findOne({ _id: stage.id });
         const exercises = [];
         for (const exercise of stage.exercises) {
-          const fullExercise = await Exercise.findOne({ _id: exercise.id });
-          exercises.push({
-            _id: exercise._id,
-            id: exercise.id,
-            name: fullExercise.name,
-            sets: exercise.sets,
-            variation: exercise.variation,
-            rest: exercise.rest,
-          });
+          const { name } = await Exercise.findOne({ _id: exercise.id });
+          const { _id, id, sets, variation, rest } = exercise;
+          exercises.push({ _id, id, name, sets, variation, rest });
         }
         stages.push({
           _id: stage._id,
