@@ -46,16 +46,9 @@ module.exports = mongoose.model(
                     },
                   },
                 ],
-                type: {
+                variation: {
                   type: String,
-                  enum: [
-                    'isotonic',
-                    'eccentric',
-                    'isometric',
-                    'distance',
-                    'timed',
-                  ],
-                  required: true,
+                  enum: ['clockwise', 'anti-clockwise', 'eccentric'],
                 },
                 rest: {
                   intraset: {

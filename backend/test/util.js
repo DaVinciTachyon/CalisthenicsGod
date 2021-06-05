@@ -121,7 +121,7 @@ const buildRandomExercise = () => ({
   motionType: {
     transversePlane: randomOption(['upper', 'lower', 'core']),
     verticality: randomOption(['horizontal', 'vertical']),
-    frontalPlane: randomOption(['push', 'pull']),
+    frontalPlane: randomOption(['push', 'pull', 'rotational']),
     kineticChain: randomOption(['closed', 'open']),
     motion: randomOption(['isometric', 'isotonic', 'distance', 'timed']),
   },
@@ -168,12 +168,10 @@ const buildRandomWorkout = async (authToken) => {
                 weight: randomInt(),
               },
             ],
-            type: randomOption([
-              'isotonic',
+            variation: randomOption([
               'eccentric',
-              'isometric',
-              'distance',
-              'timed',
+              'clockwise',
+              'anti-clockwise',
             ]),
             rest: {
               intraset: randomInt(),

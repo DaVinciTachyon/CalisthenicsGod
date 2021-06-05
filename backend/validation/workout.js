@@ -31,9 +31,11 @@ module.exports = {
         exercises: Joi.array().items({
           id: Joi.string().required(),
           sets: Joi.array().items(set),
-          type: Joi.string()
-            .valid('isotonic', 'eccentric', 'isometric', 'distance', 'timed')
-            .required(),
+          variation: Joi.string().valid(
+            'clockwise',
+            'anti-clockwise',
+            'eccentric'
+          ),
           rest: Joi.object({
             intraset: Joi.number().min(0),
             interset: Joi.number().min(0).required(),
