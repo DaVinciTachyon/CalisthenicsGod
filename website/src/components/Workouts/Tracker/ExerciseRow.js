@@ -50,7 +50,9 @@ export default class ExerciseRow extends React.Component {
     if (motionType?.frontalPlane === 'rotational')
       variationOptions.push(
         { value: 'clockwise', label: 'Clockwise' },
-        { value: 'anti-clockwise', label: 'Anti-clockwise' }
+        { value: 'anti-clockwise', label: 'Anti-clockwise' },
+        { value: 'right', label: 'Right' },
+        { value: 'left', label: 'Left' }
       );
     else if (motionType?.frontalPlane === 'lateral')
       variationOptions.push(
