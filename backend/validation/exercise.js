@@ -6,12 +6,12 @@ module.exports = {
       name: Joi.string().required(),
       abbreviation: Joi.string().allow(''),
       motionType: {
-        transversePlane: Joi.string().valid('upper', 'lower'),
+        transversePlane: Joi.string().valid('upper', 'lower', 'core'),
         verticality: Joi.string().valid('horizontal', 'vertical'),
         frontalPlane: Joi.string().valid('push', 'pull'),
         kineticChain: Joi.string().valid('closed', 'open'),
         motion: Joi.string()
-          .valid('isometric', 'isotonic', 'distance')
+          .valid('isometric', 'isotonic', 'distance', 'timed')
           .required(),
       },
       potentialStages: Joi.array().items(Joi.string()),
@@ -28,12 +28,12 @@ module.exports = {
       name: Joi.string().required(),
       abbreviation: Joi.string().allow(''),
       motionType: Joi.object({
-        transversePlane: Joi.string().valid('upper', 'lower'),
+        transversePlane: Joi.string().valid('upper', 'lower', 'core'),
         verticality: Joi.string().valid('horizontal', 'vertical'),
         frontalPlane: Joi.string().valid('push', 'pull'),
         kineticChain: Joi.string().valid('closed', 'open'),
         motion: Joi.string()
-          .valid('isometric', 'isotonic', 'distance')
+          .valid('isometric', 'isotonic', 'distance', 'timed')
           .required(),
       }),
       potentialStages: Joi.array().items(Joi.string()),

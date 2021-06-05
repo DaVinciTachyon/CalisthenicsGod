@@ -23,7 +23,7 @@ module.exports = mongoose.model(
     motionType: {
       transversePlane: {
         type: String,
-        enum: ['upper', 'lower'],
+        enum: ['upper', 'lower', 'core'],
       },
       verticality: {
         type: String,
@@ -39,7 +39,7 @@ module.exports = mongoose.model(
       },
       motion: {
         type: String,
-        enum: ['isometric', 'isotonic', 'distance'],
+        enum: ['isometric', 'isotonic', 'distance', 'timed'],
         required: true,
       },
     },

@@ -32,7 +32,7 @@ module.exports = {
           id: Joi.string().required(),
           sets: Joi.array().items(set),
           type: Joi.string()
-            .valid('isotonic', 'eccentric', 'isometric', 'distance')
+            .valid('isotonic', 'eccentric', 'isometric', 'distance', 'timed')
             .required(),
           rest: Joi.object({
             intraset: Joi.number().min(0),

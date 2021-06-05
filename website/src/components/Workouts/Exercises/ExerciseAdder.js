@@ -143,6 +143,7 @@ export default class Exercises extends React.Component {
             { label: 'Isometric', value: 'isometric' },
             { label: 'Isotonic', value: 'isotonic' },
             { label: 'Distance', value: 'distance' },
+            { label: 'Timed', value: 'timed' },
           ]}
           onChange={this.onChange}
         />
@@ -155,6 +156,7 @@ export default class Exercises extends React.Component {
               options={[
                 { label: 'Upper', value: 'upper' },
                 { label: 'Lower', value: 'lower' },
+                { label: 'Core', value: 'core' },
               ]}
               onChange={this.onChange}
             />
