@@ -47,10 +47,8 @@ router
     if (error) return res.status(400).send({ error: error.details[0].message });
 
     const nutrients = await NutrientInfo.findOne({ userId: req.user._id });
-    nutrients.calorieOffset = req.body.calorieOffset;
-    nutrients.caloriesPerKg = req.body.caloriesPerKg;
-    nutrients.proteinGramsPerKg = req.body.proteinGramsPerKg;
-    nutrients.fatCalorieProportion = req.body.fatCalorieProportion;
+    Object.keys(req.body).forEach((name) => (nutrients[name] = req.body[name]));
+
     try {
       await nutrients.save();
       res.sendStatus(200);

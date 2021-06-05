@@ -1,3 +1,4 @@
+import React from 'react';
 import styled from 'styled-components';
 import { Background, Text } from './constants';
 
@@ -36,4 +37,22 @@ const Subtitle = styled.div`
   font-size: 0.8rem;
 `;
 
-export { Row, Column, Title, Subtitle };
+const Section = styled(({ className, label, children, ...rest }) => (
+  <div className={className} {...rest}>
+    <span className="titleLabel">{label}</span>
+    <div>{children}</div>
+  </div>
+))`
+  border: 2px solid gray;
+  border-radius: 5px;
+  margin: 5px;
+  position: relative;
+
+  & span.titleLabel {
+    font-weight: bold;
+    margin: 10px;
+    font-size: 1.1rem;
+  }
+`;
+
+export { Row, Column, Title, Subtitle, Section };
