@@ -1,5 +1,5 @@
 import React from 'react';
-import { Row, Column, Section } from '../../style/table';
+import { Row, Section } from '../../style/table';
 import { Button } from '../../style/buttons';
 import {
   Calories,
@@ -8,6 +8,7 @@ import {
   Select,
   Range,
 } from '../../style/inputs';
+import { Notification, Error } from '../../style/notification';
 
 export default class UserProfile extends React.Component {
   constructor() {
@@ -27,6 +28,7 @@ export default class UserProfile extends React.Component {
       caloriesPerKg: 0,
       proteinGramsPerKg: 0,
       fatCalorieProportion: 0,
+      error: '',
     };
   }
 
@@ -110,7 +112,7 @@ export default class UserProfile extends React.Component {
   };
 
   onSubmit = async () => {
-    await fetch(`${process.env.REACT_APP_API_URL}/user/`, {
+    const userResponse = await fetch(`${process.env.REACT_APP_API_URL}/user/`, {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
@@ -127,20 +129,31 @@ export default class UserProfile extends React.Component {
         gender: this.state.gender,
       }),
     });
-    await fetch(`${process.env.REACT_APP_API_URL}/nutrition/`, {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-        'auth-token': localStorage.getItem('authToken'),
-      },
-      body: JSON.stringify({
-        calorieOffset: this.state.calorieOffset,
-        caloriesPerKg: this.state.caloriesPerKg,
-        proteinGramsPerKg: this.state.proteinGramsPerKg,
-        fatCalorieProportion: this.state.fatCalorieProportion,
-      }),
-    });
-    this.getUserInfo();
+    if (userResponse.status !== 200) {
+      const userData = await userResponse.json();
+      return this.setState({ error: userData.error });
+    }
+    const nutritionResponse = await fetch(
+      `${process.env.REACT_APP_API_URL}/nutrition/`,
+      {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          'auth-token': localStorage.getItem('authToken'),
+        },
+        body: JSON.stringify({
+          calorieOffset: this.state.calorieOffset,
+          caloriesPerKg: this.state.caloriesPerKg,
+          proteinGramsPerKg: this.state.proteinGramsPerKg,
+          fatCalorieProportion: this.state.fatCalorieProportion,
+        }),
+      }
+    );
+    if (nutritionResponse.status !== 200) {
+      const nutritionData = await nutritionResponse.json();
+      return this.setState({ error: nutritionData.error });
+    }
+    this.setState({ notification: 'Success!' });
   };
 
   onChange = (evt) => this.setState({ [evt.target.name]: evt.target.value });
@@ -149,6 +162,14 @@ export default class UserProfile extends React.Component {
   render() {
     return (
       <div>
+        <Notification
+          text={this.state.notification}
+          dismiss={() => this.setState({ notification: '' })}
+        />
+        <Error
+          text={this.state.error}
+          dismiss={() => this.setState({ error: '' })}
+        />
         <Section label="General">
           <Row columns={3}>
             <Text
