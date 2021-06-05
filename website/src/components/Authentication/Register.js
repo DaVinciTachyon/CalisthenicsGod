@@ -87,7 +87,7 @@ export default class Register extends React.Component {
           name="middlename"
           value={this.state.middlename}
           onChange={this.onChange}
-          label="Middle Name"
+          label="Middle Name(s)"
         />
         <Text
           name="lastname"

@@ -129,7 +129,7 @@ export default class UserProfile extends React.Component {
     return (
       <div>
         <Text label="First Name" value={this.state.name.first} readOnly />
-        <Text label="Middle Name" value={this.state.name.middle} readOnly />
+        <Text label="Middle Name(s)" value={this.state.name.middle} readOnly />
         <Text label="Last Name" value={this.state.name.last} readOnly />
         <Text label="Email" value={this.state.email} readOnly />
         <Row columns={2}>
