@@ -49,19 +49,11 @@ export default class ExerciseRow extends React.Component {
   render() {
     if (this.props.isTitle)
       return (
-        <Row columns={11} isTitle>
+        <Row columns={8} isTitle>
           <Column>Name</Column>
           <Column>Abbreviation</Column>
-          <Column span={5}>
-            <Column span={5}>Motion Type</Column>
-            <Column span={5} columns={5}>
-              <Column>Motion</Column>
-              <Column>Transverse Plane</Column>
-              <Column>Kinetic Chain</Column>
-              <Column>Verticality</Column>
-              <Column>Frontal Plane</Column>
-            </Column>
-          </Column>
+          <Column>Motion</Column>
+          <Column>Kinetic Chain</Column>
           <Column>Potential Stages</Column>
           <Column>Requirements</Column>
           <Column>Description</Column>
@@ -70,25 +62,11 @@ export default class ExerciseRow extends React.Component {
       );
     if (!this.state.isEditing)
       return (
-        <Row columns={11}>
+        <Row columns={8}>
           <Text value={this.props.exercise.name} readOnly />
           <Text value={this.props.exercise.abbreviation} readOnly />
-          <Column span={5} columns={5}>
-            <Text value={this.props.exercise.motionType.motion} readOnly />
-            <Text
-              value={this.props.exercise.motionType.transversePlane}
-              readOnly
-            />
-            <Text
-              value={this.props.exercise.motionType.kineticChain}
-              readOnly
-            />
-            <Text value={this.props.exercise.motionType.verticality} readOnly />
-            <Text
-              value={this.props.exercise.motionType.frontalPlane}
-              readOnly
-            />
-          </Column>
+          <Text value={this.props.exercise.motionType.motion} readOnly />
+          <Text value={this.props.exercise.motionType.kineticChain} readOnly />
           <StageSelect
             value={this.props.exercise.potentialStages}
             readOnly

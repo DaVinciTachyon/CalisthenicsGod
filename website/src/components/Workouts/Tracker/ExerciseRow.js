@@ -10,12 +10,13 @@ export default class ExerciseRow extends React.Component {
     super();
     this.state = {
       sets: [],
-      variation: undefined,
+      isWeighted: 0,
+      variation: this.getDefaultVariation(undefined),
+      variationOptions: this.getVariationOptions(undefined),
       id: '',
+      exercise: undefined,
       intrasetRest: undefined,
       intersetRest: 0,
-      exercise: undefined,
-      isWeighted: 0,
     };
   }
 
@@ -44,8 +45,36 @@ export default class ExerciseRow extends React.Component {
     this.onUpdate();
   };
 
+  getVariationOptions = (motionType) => {
+    const variationOptions = [];
+    if (motionType?.frontalPlane === 'rotational')
+      variationOptions.push(
+        { value: 'clockwise', label: 'Clockwise' },
+        { value: 'anti-clockwise', label: 'Anti-clockwise' }
+      );
+    else if (motionType?.motion === 'isotonic')
+      variationOptions.push(
+        { value: undefined, label: 'Isotonic' },
+        { value: 'eccentric', label: 'Eccentric' },
+        { value: 'concentric', label: 'Concentric' }
+      );
+    else variationOptions.push({ value: undefined, label: 'Standard' });
+    return variationOptions;
+  };
+
+  getDefaultVariation = (motionType) => {
+    if (motionType?.frontalPlane === 'rotational') return 'clockwise';
+    return undefined;
+  };
+
   onExerciseChange = async (evt, exercise) => {
-    await this.setState({ [evt.name]: evt.value, exercise });
+    await this.setState({
+      [evt.name]: evt.value,
+      exercise,
+      isWeighted: 0,
+      variation: this.getDefaultVariation(exercise.motionType),
+      variationOptions: this.getVariationOptions(exercise.motionType),
+    });
     this.onUpdate();
   };
 
@@ -79,17 +108,6 @@ export default class ExerciseRow extends React.Component {
   };
 
   render() {
-    const variationOptions = [{ value: undefined, label: 'Default' }];
-    if (this.state.exercise?.motionType.frontalPlane === 'rotational')
-      variationOptions.push(
-        { value: 'clockwise', label: 'Clockwise' },
-        { value: 'anti-clockwise', label: 'Anti-clockwise' }
-      );
-    else if (this.state.exercise?.motionType.motion === 'isotonic')
-      variationOptions.push(
-        { value: 'eccentric', label: 'Eccentric' },
-        { value: 'concentric', label: 'Concentric' }
-      );
     return (
       <Row columns={6}>
         <Column>
@@ -129,7 +147,7 @@ export default class ExerciseRow extends React.Component {
         />
         <Select
           name="variation"
-          options={variationOptions}
+          options={this.state.variationOptions}
           value={this.state.variation}
           onChange={this.onSelectChange}
         />
