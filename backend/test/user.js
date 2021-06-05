@@ -1,15 +1,10 @@
-const {
-  get,
-  login,
-  post,
-  randomString,
-  randomEmail,
-  randomDate,
-  randomGender,
-} = require('./util');
+const { get, login, post, randomEmail } = require('./util');
 const chai = require('chai');
+const { expect } = require('chai');
 const should = chai.should();
+
 let authToken;
+const expectedEmail = randomEmail();
 
 before(async () => {
   authToken = await login();
@@ -29,22 +24,30 @@ describe('Users', () => {
       res.should.have.status(200);
     });
 
-    it('valid user info', async () => {
+    it('email', async () => {
       const res = await post(
         '/api/user',
         {
-          name: {
-            first: randomString(5),
-            middle: randomString(5),
-            last: randomString(5),
-          },
-          email: randomEmail(),
-          birthDate: randomDate(new Date(1950, 0, 1)),
-          gender: randomGender(),
+          email: expectedEmail,
         },
         authToken
       );
       res.should.have.status(200);
+      const getRes = await get('/api/user', authToken);
+      getRes.should.have.status(200);
+      expect(getRes.body.email).to.equal(expectedEmail);
+    });
+
+    it('duplicate email', async () => {
+      const duplicateAuthToken = await login();
+      const res = await post(
+        '/api/user',
+        {
+          email: expectedEmail,
+        },
+        duplicateAuthToken
+      );
+      res.should.have.status(400);
     });
   });
 });

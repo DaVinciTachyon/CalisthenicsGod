@@ -89,7 +89,7 @@ const randomAlphaNumeric = (length) =>
   );
 
 const randomEmail = () =>
-  randomAlphaNumeric(10) + '@' + randomString(5) + '.com';
+  randomLowerCaseString(10) + '@' + randomLowerCaseString(5) + '.com';
 
 const randomFloat = (min = 0, max = 100) => Math.random() * (max - min) + min;
 

@@ -26,7 +26,7 @@ router
     const userEmail = await User.findOne({
       email: req.body.email,
     });
-    if (userEmail && userEmail._id !== req.user._id)
+    if (userEmail && !userEmail._id.equals(req.user._id))
       return res.status(400).send({ error: 'Email already in use.' });
 
     const user = await User.findById(req.user._id);
