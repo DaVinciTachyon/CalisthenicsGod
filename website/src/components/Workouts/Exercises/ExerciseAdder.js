@@ -61,24 +61,7 @@ export default class Exercises extends React.Component {
       });
   };
 
-  onChange = (evt) => {
-    if (evt.target.name === 'motion' && evt.target.value === 'distance')
-      this.setState({
-        transversePlane: undefined,
-        kineticChain: undefined,
-        verticality: undefined,
-        frontalPlane: undefined,
-      });
-    else if (evt.target.name === 'motion' && this.state.motion === ' distance')
-      this.setState({
-        transversePlane: 'upper',
-        kineticChain: 'closed',
-        verticality: 'horizontal',
-        frontalPlane: 'push',
-      });
-    this.setState({ [evt.target.name]: evt.target.value });
-  };
-
+  onChange = (evt) => this.setState({ [evt.target.name]: evt.target.value });
   onSelectChange = (evt) => {
     this.setState({ [evt.name]: evt.value });
   };
@@ -88,16 +71,14 @@ export default class Exercises extends React.Component {
     if (!this.state.name) return this.setState({ error: 'Name is required' });
     if (!this.state.motion)
       return this.setState({ error: 'Motion is required' });
-    if (this.state.motion !== 'distance') {
-      if (!this.state.transversePlane)
-        return this.setState({ error: 'Transverse Plane is required' });
-      if (!this.state.verticality)
-        return this.setState({ error: 'Verticality is required' });
-      if (!this.state.frontalPlane)
-        return this.setState({ error: 'Frontal Plane is required' });
-      if (!this.state.kineticChain)
-        return this.setState({ error: 'Kinetic Chain is required' });
-    }
+    if (!this.state.transversePlane)
+      return this.setState({ error: 'Transverse Plane is required' });
+    if (!this.state.verticality)
+      return this.setState({ error: 'Verticality is required' });
+    if (!this.state.frontalPlane)
+      return this.setState({ error: 'Frontal Plane is required' });
+    if (!this.state.kineticChain)
+      return this.setState({ error: 'Kinetic Chain is required' });
     if (!this.state.potentialStages || this.state.potentialStages.length === 0)
       return this.setState({ error: 'Potential Stages are required' });
     this.props.onSubmit({
@@ -147,48 +128,43 @@ export default class Exercises extends React.Component {
           ]}
           onChange={this.onChange}
         />
-        {this.state.motion === 'distance' && <Column span={4} />}
-        {this.state.motion !== 'distance' && (
-          <>
-            <Radio
-              name="transversePlane"
-              value={this.state.transversePlane}
-              options={[
-                { label: 'Upper', value: 'upper' },
-                { label: 'Lower', value: 'lower' },
-                { label: 'Core', value: 'core' },
-              ]}
-              onChange={this.onChange}
-            />
-            <Radio
-              name="kineticChain"
-              value={this.state.kineticChain}
-              options={[
-                { label: 'Closed', value: 'closed' },
-                { label: 'Open', value: 'open' },
-              ]}
-              onChange={this.onChange}
-            />
-            <Radio
-              name="verticality"
-              value={this.state.verticality}
-              options={[
-                { label: 'Horizontal', value: 'horizontal' },
-                { label: 'Vertical', value: 'vertical' },
-              ]}
-              onChange={this.onChange}
-            />
-            <Radio
-              name="frontalPlane"
-              value={this.state.frontalPlane}
-              options={[
-                { label: 'Push', value: 'push' },
-                { label: 'Pull', value: 'pull' },
-              ]}
-              onChange={this.onChange}
-            />
-          </>
-        )}
+        <Radio
+          name="transversePlane"
+          value={this.state.transversePlane}
+          options={[
+            { label: 'Upper', value: 'upper' },
+            { label: 'Lower', value: 'lower' },
+            { label: 'Core', value: 'core' },
+          ]}
+          onChange={this.onChange}
+        />
+        <Radio
+          name="kineticChain"
+          value={this.state.kineticChain}
+          options={[
+            { label: 'Closed', value: 'closed' },
+            { label: 'Open', value: 'open' },
+          ]}
+          onChange={this.onChange}
+        />
+        <Radio
+          name="verticality"
+          value={this.state.verticality}
+          options={[
+            { label: 'Horizontal', value: 'horizontal' },
+            { label: 'Vertical', value: 'vertical' },
+          ]}
+          onChange={this.onChange}
+        />
+        <Radio
+          name="frontalPlane"
+          value={this.state.frontalPlane}
+          options={[
+            { label: 'Push', value: 'push' },
+            { label: 'Pull', value: 'pull' },
+          ]}
+          onChange={this.onChange}
+        />
         <StageSelect
           name="potentialStages"
           onChange={this.onSelectChange}
