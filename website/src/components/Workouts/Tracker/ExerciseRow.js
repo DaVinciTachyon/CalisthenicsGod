@@ -11,7 +11,7 @@ export default class ExerciseRow extends React.Component {
     this.state = {
       sets: [],
       isWeighted: 0,
-      variation: this.getDefaultVariation(undefined),
+      variation: undefined,
       variationOptions: this.getVariationOptions(undefined),
       sagittalPlane: undefined,
       id: '',
@@ -68,14 +68,12 @@ export default class ExerciseRow extends React.Component {
     return variationOptions;
   };
 
-  getDefaultVariation = (motionType) => undefined;
-
   onExerciseChange = async (evt, exercise) => {
     await this.setState({
       [evt.name]: evt.value,
       exercise,
       isWeighted: 0,
-      variation: this.getDefaultVariation(exercise.motionType),
+      variation: undefined,
       variationOptions: this.getVariationOptions(exercise.motionType),
       sagittalPlane:
         exercise.motionType.sagittalPlane === 'unilateral'
