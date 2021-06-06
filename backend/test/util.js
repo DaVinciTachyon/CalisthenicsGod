@@ -20,7 +20,7 @@ const get = (url, authToken = undefined, headers = {}) =>
   new Promise((resolve, reject) => {
     const request = app.get(url).set(headers);
     if (authToken) request.set('auth-token', authToken);
-    request.send(body).end((err, res) => {
+    request.end((err, res) => {
       if (err) reject(err);
       resolve(res);
     });
