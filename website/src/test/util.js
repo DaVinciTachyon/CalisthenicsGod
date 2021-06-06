@@ -27,10 +27,7 @@ const register = async (user, page) => {
   await page.click('[name="password"]');
   await page.type('[name="password"]', user.password);
   await page.click('[name="weight"]');
-  await page.type(
-    '[name="weight"]',
-    user.weight.toString().replace(/\./g, ',')
-  );
+  await page.type('[name="weight"]', user.weight.toString());
   expect(await page.$eval('[name="weight"]', (el) => el.value)).toEqual(
     user.weight.toString()
   );
