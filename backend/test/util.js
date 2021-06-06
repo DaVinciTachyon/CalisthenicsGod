@@ -1,17 +1,22 @@
 const chai = require('chai');
 const chaiHttp = require('chai-http');
 const supertest = require('supertest');
-const appUrl = process.env.APP_URL || 'http://localhost:8080';
+const appUrl = process.env.APP_URL || 'http://localhost:8080/api';
 const app = supertest(appUrl);
 
 chai.use(chaiHttp);
 
-const post = (url, body, authToken = undefined, headers = {}) =>
+const request = (
+  method,
+  url,
+  body = undefined,
+  authToken = undefined,
+  headers = {}
+) =>
   new Promise((resolve, reject) => {
     if (authToken) headers['auth-token'] = authToken;
     headers['Accept'] = 'application/json';
-    app
-      .post(url)
+    app[method](url)
       .set(headers)
       .send(body)
       .end((err, res) => {
@@ -19,52 +24,23 @@ const post = (url, body, authToken = undefined, headers = {}) =>
         resolve(res);
       });
   });
+
+const post = (url, body, authToken = undefined, headers = {}) =>
+  request('post', url, body, authToken, headers);
 
 const get = (url, authToken = undefined, headers = {}) =>
-  new Promise((resolve, reject) => {
-    if (authToken) headers['auth-token'] = authToken;
-    headers['Accept'] = 'application/json';
-    app
-      .get(url)
-      .set(headers)
-      .end((err, res) => {
-        if (err) reject(err);
-        resolve(res);
-      });
-  });
+  request('get', url, undefined, authToken, headers);
 
 const deleteRequest = (url, body, authToken = undefined, headers = {}) =>
-  new Promise((resolve, reject) => {
-    if (authToken) headers['auth-token'] = authToken;
-    headers['Accept'] = 'application/json';
-    app
-      .delete(url)
-      .set(headers)
-      .send(body)
-      .end((err, res) => {
-        if (err) reject(err);
-        resolve(res);
-      });
-  });
+  request('delete', url, body, authToken, headers);
 
 const patch = (url, body, authToken = undefined, headers = {}) =>
-  new Promise((resolve, reject) => {
-    if (authToken) headers['auth-token'] = authToken;
-    headers['Accept'] = 'application/json';
-    app
-      .patch(url)
-      .set(headers)
-      .send(body)
-      .end((err, res) => {
-        if (err) reject(err);
-        resolve(res);
-      });
-  });
+  request('patch', url, body, authToken, headers);
 
 const login = async () => {
   const user = buildRandomUser();
-  await post('/api/auth/register', user);
-  const res = await post('/api/auth/login', {
+  await post('/auth/register', user);
+  const res = await post('/auth/login', {
     email: user.email,
     password: user.password,
   });
@@ -120,9 +96,8 @@ const buildRandomUser = () => ({
 });
 
 const buildRandomExercise = async (authToken) => {
-  const stageId = (
-    await post('/api/workout/stage', buildRandomStage(), authToken)
-  ).body._id;
+  const stageId = (await post('/workout/stage', buildRandomStage(), authToken))
+    .body._id;
   return {
     name: randomString(6),
     abbreviation: randomAlphaNumeric(4),
@@ -159,8 +134,7 @@ const buildRandomStage = () => ({
 
 const buildRandomWorkout = async (authToken) => {
   const exercise = await buildRandomExercise(authToken);
-  const exerciseId = (await post('/api/exercise', exercise, authToken)).body
-    ._id;
+  const exerciseId = (await post('/exercise', exercise, authToken)).body._id;
   return {
     stages: [
       {
@@ -196,7 +170,7 @@ const buildRandomWorkout = async (authToken) => {
 
 const buildRandomIngredientReference = async (authToken) => {
   const ingredientId = (
-    await post('/api/nutrition/ingredients', buildRandomIngredient(), authToken)
+    await post('/nutrition/ingredients', buildRandomIngredient(), authToken)
   ).body._id;
   return {
     id: ingredientId,
@@ -215,7 +189,7 @@ const buildRandomPresetMeal = async (authToken) => {
 const buildRandomPresetMealReference = async (authToken) =>
   (
     await post(
-      '/api/nutrition/meals/preset',
+      '/nutrition/meals/preset',
       await buildRandomPresetMeal(authToken),
       authToken
     )

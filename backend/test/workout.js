@@ -13,19 +13,19 @@ describe('Workout', () => {
 
   describe('/GET', () => {
     it('valid request', async () => {
-      const res = await get('/api/workout', authToken);
+      const res = await get('/workout', authToken);
       res.should.have.status(200);
     });
   });
 
   describe('/POST', () => {
     it('empty body', async () => {
-      const res = await post('/api/workout', {}, authToken);
+      const res = await post('/workout', {}, authToken);
       res.should.have.status(200);
     });
 
     it('valid workout', async () => {
-      const res = await post('/api/workout', expectedWorkout, authToken);
+      const res = await post('/workout', expectedWorkout, authToken);
       res.should.have.status(200);
       expectedWorkout._id = res.body._id;
     });

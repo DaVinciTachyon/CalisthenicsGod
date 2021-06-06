@@ -21,20 +21,20 @@ describe('Ingredients', () => {
 
   describe('/GET', () => {
     it('valid request', async () => {
-      const res = await get('/api/nutrition/ingredients', authToken);
+      const res = await get('/nutrition/ingredients', authToken);
       res.should.have.status(200);
     });
   });
 
   describe('/POST', () => {
     it('empty body', async () => {
-      const res = await post('/api/nutrition/ingredients', {}, authToken);
+      const res = await post('/nutrition/ingredients', {}, authToken);
       res.should.have.status(400);
     });
 
     it('valid', async () => {
       const res = await post(
-        '/api/nutrition/ingredients',
+        '/nutrition/ingredients',
         expectedIngredient,
         authToken
       );
@@ -46,7 +46,7 @@ describe('Ingredients', () => {
       const duplicateIngredient = buildRandomIngredient();
       duplicateIngredient.name = expectedIngredient.name;
       const res = await post(
-        '/api/nutrition/ingredients',
+        '/nutrition/ingredients',
         duplicateIngredient,
         authToken
       );
@@ -58,7 +58,7 @@ describe('Ingredients', () => {
       duplicateIngredient.name = expectedIngredient.name;
       const secondAuthToken = await login();
       const res = await post(
-        '/api/nutrition/ingredients',
+        '/nutrition/ingredients',
         duplicateIngredient,
         secondAuthToken
       );
@@ -68,17 +68,13 @@ describe('Ingredients', () => {
 
   describe('/DELETE', () => {
     it('empty body', async () => {
-      const res = await deleteRequest(
-        '/api/nutrition/ingredients',
-        {},
-        authToken
-      );
+      const res = await deleteRequest('/nutrition/ingredients', {}, authToken);
       res.should.have.status(400);
     });
 
     it('valid', async () => {
       const res = await deleteRequest(
-        '/api/nutrition/ingredients',
+        '/nutrition/ingredients',
         { _id: expectedIngredient._id },
         authToken
       );
@@ -88,7 +84,7 @@ describe('Ingredients', () => {
 
   describe('/PATCH', () => {
     it('empty body', async () => {
-      const res = await patch('/api/nutrition/ingredients', {}, authToken);
+      const res = await patch('/nutrition/ingredients', {}, authToken);
       res.should.have.status(400);
     });
 
@@ -96,7 +92,7 @@ describe('Ingredients', () => {
       const patchedIngredient = JSON.parse(JSON.stringify(expectedIngredient));
       patchedIngredient.name = randomString(5);
       const res = await patch(
-        '/api/nutrition/ingredients',
+        '/nutrition/ingredients',
         patchedIngredient,
         authToken
       );
@@ -106,27 +102,20 @@ describe('Ingredients', () => {
 
   describe('/GET unavailable', () => {
     it('valid request', async () => {
-      const res = await get(
-        '/api/nutrition/ingredients/unavailable',
-        authToken
-      );
+      const res = await get('/nutrition/ingredients/unavailable', authToken);
       res.should.have.status(200);
     });
   });
 
   describe('/DELETE unavailable', () => {
     it('empty body', async () => {
-      const res = await deleteRequest(
-        '/api/nutrition/ingredients',
-        {},
-        authToken
-      );
+      const res = await deleteRequest('/nutrition/ingredients', {}, authToken);
       res.should.have.status(400);
     });
 
     it('valid', async () => {
       const res = await deleteRequest(
-        '/api/nutrition/ingredients',
+        '/nutrition/ingredients',
         { _id: expectedIngredient._id },
         authToken
       );

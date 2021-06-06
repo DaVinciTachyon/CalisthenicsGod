@@ -24,20 +24,20 @@ describe('Preset Meals', () => {
 
   describe('/GET', () => {
     it('valid request', async () => {
-      const res = await get('/api/nutrition/meals/preset', authToken);
+      const res = await get('/nutrition/meals/preset', authToken);
       res.should.have.status(200);
     });
   });
 
   describe('/POST', () => {
     it('empty body', async () => {
-      const res = await post('/api/nutrition/meals/preset', {}, authToken);
+      const res = await post('/nutrition/meals/preset', {}, authToken);
       res.should.have.status(400);
     });
 
     it('valid meal', async () => {
       const res = await post(
-        '/api/nutrition/meals/preset',
+        '/nutrition/meals/preset',
         expectedPresetMeal,
         authToken
       );
@@ -49,7 +49,7 @@ describe('Preset Meals', () => {
   describe('/POST /ingredients', () => {
     it('empty body', async () => {
       const res = await post(
-        '/api/nutrition/meals/preset/ingredients',
+        '/nutrition/meals/preset/ingredients',
         {},
         authToken
       );
@@ -58,7 +58,7 @@ describe('Preset Meals', () => {
 
     it('valid meal', async () => {
       const res = await post(
-        '/api/nutrition/meals/preset/ingredients',
+        '/nutrition/meals/preset/ingredients',
         { _id: expectedPresetMeal._id },
         authToken
       );
@@ -69,7 +69,7 @@ describe('Preset Meals', () => {
   describe('/POST /ingredient', () => {
     it('empty body', async () => {
       const res = await post(
-        '/api/nutrition/meals/preset/ingredient',
+        '/nutrition/meals/preset/ingredient',
         {},
         authToken
       );
@@ -78,7 +78,7 @@ describe('Preset Meals', () => {
 
     it('valid request', async () => {
       const res = await post(
-        '/api/nutrition/meals/preset/ingredient',
+        '/nutrition/meals/preset/ingredient',
         {
           _id: expectedPresetMeal._id,
           ingredient: expectedIngredientReference,
@@ -93,7 +93,7 @@ describe('Preset Meals', () => {
   describe('/DELETE /ingredient', () => {
     it('empty body', async () => {
       const res = await deleteRequest(
-        '/api/nutrition/meals/preset/ingredient',
+        '/nutrition/meals/preset/ingredient',
         {},
         authToken
       );
@@ -102,7 +102,7 @@ describe('Preset Meals', () => {
 
     it('valid request', async () => {
       const res = await deleteRequest(
-        '/api/nutrition/meals/preset/ingredient',
+        '/nutrition/meals/preset/ingredient',
         {
           _id: expectedPresetMeal._id,
           ingredient: { _id: expectedIngredientReference._id },
@@ -115,7 +115,7 @@ describe('Preset Meals', () => {
 
   describe('/GET', () => {
     it('valid request', async () => {
-      const res = await get('/api/nutrition/meals/preset/names', authToken);
+      const res = await get('/nutrition/meals/preset/names', authToken);
       res.should.have.status(200);
     });
   });

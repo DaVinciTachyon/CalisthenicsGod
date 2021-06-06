@@ -14,7 +14,7 @@ describe('Measurements', () => {
 
   describe('/GET', () => {
     it('valid request', async () => {
-      const res = await get('/api/measurement', authToken);
+      const res = await get('/measurement', authToken);
       res.should.have.status(200);
       expect(res.body.weight).to.not.be.an('undefined');
     });
@@ -22,13 +22,13 @@ describe('Measurements', () => {
 
   describe('/POST', () => {
     it('valid request', async () => {
-      const res = await post('/api/measurement', {}, authToken);
+      const res = await post('/measurement', {}, authToken);
       res.should.have.status(200);
     });
 
     it('valid request - weight', async () => {
       const res = await post(
-        '/api/measurement',
+        '/measurement',
         { weight: expectedWeight },
         authToken
       );
@@ -38,27 +38,27 @@ describe('Measurements', () => {
 
   describe('/GET /:name', () => {
     it('valid request', async () => {
-      const res = await get('/api/measurement/weight', authToken);
+      const res = await get('/measurement/weight', authToken);
       res.should.have.status(200);
       expect(res.body.weight).to.not.be.an('undefined');
       res.body.weight.should.equal(expectedWeight);
     });
 
     it('invalid parameter', async () => {
-      const res = await get(`/api/measurement/${randomString(5)}`, authToken);
+      const res = await get(`/measurement/${randomString(5)}`, authToken);
       res.should.have.status(400);
     });
   });
 
   describe('/POST /:name', () => {
     it('empty body', async () => {
-      const res = await post('/api/measurement/weight', {}, authToken);
+      const res = await post('/measurement/weight', {}, authToken);
       res.should.have.status(400);
     });
 
     it('valid request', async () => {
       const res = await post(
-        '/api/measurement/weight',
+        '/measurement/weight',
         { weight: randomFloat() },
         authToken
       );
@@ -66,24 +66,20 @@ describe('Measurements', () => {
     });
 
     it('invalid parameter', async () => {
-      const res = await post(
-        `/api/measurement/${randomString(5)}`,
-        {},
-        authToken
-      );
+      const res = await post(`/measurement/${randomString(5)}`, {}, authToken);
       res.should.have.status(400);
     });
   });
 
   describe('/GET /:name/history', () => {
     it('valid request', async () => {
-      const res = await get('/api/measurement/weight/history', authToken);
+      const res = await get('/measurement/weight/history', authToken);
       res.should.have.status(200);
     });
 
     it('invalid parameter', async () => {
       const res = await get(
-        `/api/measurement/${randomString(5)}/history`,
+        `/measurement/${randomString(5)}/history`,
         authToken
       );
       res.should.have.status(400);
