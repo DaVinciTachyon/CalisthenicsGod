@@ -8,15 +8,12 @@ chai.use(chaiHttp);
 
 const post = (url, body, authToken = undefined, headers = {}) =>
   new Promise((resolve, reject) => {
-    app
-      .post(url)
-      .set('auth-token', authToken)
-      .set(headers)
-      .send(body)
-      .end((err, res) => {
-        if (err) reject(err);
-        resolve(res);
-      });
+    const request = app.post(url).set(headers);
+    if (authToken) request.set('auth-token', authToken);
+    request.send(body).end((err, res) => {
+      if (err) reject(err);
+      resolve(res);
+    });
   });
 
 const get = (url, authToken = '', headers = {}) =>
