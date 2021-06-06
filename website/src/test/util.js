@@ -35,10 +35,10 @@ const register = async (user, page) => {
   await page.click(`[data-id="${user.gender}"]`);
   await page.waitForSelector(`[data-id="select-${user.gender}"]`);
   await page.click('[name="birthDate"]');
-  const date = user.birthDate.toString('yyyyMMdd');
+  const date = user.birthDate.toLocaleDateString().replace(/\//g, '');
   await page.type('[name="birthDate"]', date);
   expect(await page.$eval('[name="birthDate"]', (el) => el.value)).toEqual(
-    user.birthDate.toString('yyyy-MM-dd')
+    user.birthDate.toLocaleDateString().replace(/\//g, '-')
   );
 
   await page.click('[data-id="registerButton"]');
