@@ -23,8 +23,7 @@ module.exports = mongoose.model(
     motionType: {
       componentExercises: {
         type: [{ type: mongoose.Schema.Types.ObjectId, ref: 'Exercise' }],
-        validate: (exercises) =>
-          exercises?.length === 0 || exercises?.length > 1,
+        validate: (exercises) => exercises.length === 0 || exercises.length > 1,
       },
       transversePlane: {
         type: String,
@@ -53,7 +52,7 @@ module.exports = mongoose.model(
     },
     potentialStages: {
       type: [{ type: mongoose.Schema.Types.ObjectId, ref: 'WorkoutStage' }],
-      validate: (stages) => stages?.length > 0,
+      validate: (stages) => stages.length > 0,
     },
     requirements: [
       {
