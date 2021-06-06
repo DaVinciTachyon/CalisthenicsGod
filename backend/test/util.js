@@ -174,9 +174,8 @@ const buildRandomWorkout = async (authToken) => {
               'concentric',
               'clockwise',
               'anti-clockwise',
-              'right',
-              'left',
             ]),
+            sagittalPlane: randomOption(['right', 'left']),
             rest: {
               intraset: randomInt(),
               interset: randomInt(),

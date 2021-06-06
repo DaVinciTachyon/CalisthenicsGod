@@ -53,9 +53,11 @@ module.exports = mongoose.model(
                     'anti-clockwise',
                     'eccentric',
                     'concentric',
-                    'right',
-                    'left',
                   ],
+                },
+                sagittalPlane: {
+                  type: String,
+                  enum: ['right', 'left'],
                 },
                 rest: {
                   intraset: {

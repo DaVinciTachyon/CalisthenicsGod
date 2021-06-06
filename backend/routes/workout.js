@@ -35,8 +35,16 @@ router
         const exercises = [];
         for (const exercise of stage.exercises) {
           const { name } = await Exercise.findOne({ _id: exercise.id });
-          const { _id, id, sets, variation, rest } = exercise;
-          exercises.push({ _id, id, name, sets, variation, rest });
+          const { _id, id, sets, variation, sagittalPlane, rest } = exercise;
+          exercises.push({
+            _id,
+            id,
+            name,
+            sets,
+            variation,
+            sagittalPlane,
+            rest,
+          });
         }
         stages.push({
           _id: stage._id,

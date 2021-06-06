@@ -35,10 +35,9 @@ module.exports = {
             'clockwise',
             'anti-clockwise',
             'eccentric',
-            'concentric',
-            'right',
-            'left'
+            'concentric'
           ),
+          sagittalPlane: Joi.string().valid('right', 'left'),
           rest: Joi.object({
             intraset: Joi.number().min(0),
             interset: Joi.number().min(0).required(),
