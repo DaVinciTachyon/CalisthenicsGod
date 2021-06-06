@@ -1,6 +1,10 @@
 import React from 'react';
 import { Row, Column } from '../style/table';
-import { Error as ErrorColours } from '../style/constants';
+import {
+  Text,
+  Error as ErrorColours,
+  Success as SuccessColours,
+} from '../style/constants';
 import styled from 'styled-components';
 
 class BaseNotification extends React.Component {
@@ -26,10 +30,15 @@ class BaseNotification extends React.Component {
 
 const Notification = styled(BaseNotification)`
   border-radius: 4px;
+  background-color: ${Text.secondary.alternative};
 `;
 
 const Error = styled(Notification)`
   background-color: ${ErrorColours.primary};
 `;
 
-export { Notification, Error };
+const Success = styled(Notification)`
+  background-color: ${SuccessColours.primary};
+`;
+
+export { Notification, Error, Success };

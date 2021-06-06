@@ -15,7 +15,6 @@ router
     res.send({ exercises: exercises });
   })
   .post(async (req, res) => {
-    //FIXME when adding requirements only add highest level, no need to add two things where one is a sub requirement of the other
     const { error } = exerciseValidation.exercise(req.body);
     if (error) return res.status(400).send({ error: error.details[0].message });
 
@@ -32,20 +31,8 @@ router
         return res.status(400).send({ error: 'Abbreviation already in use.' });
     }
 
-    const exercise = new Exercise({
-      name: req.body.name,
-      abbreviation: req.body.abbreviation,
-      motionType: {
-        transversePlane: req.body.motionType.transversePlane,
-        verticality: req.body.motionType.verticality,
-        frontalPlane: req.body.motionType.frontalPlane,
-        kineticChain: req.body.motionType.kineticChain,
-        motion: req.body.motionType.motion,
-      },
-      potentialStages: req.body.potentialStages,
-      requirements: req.body.requirements,
-      description: req.body.description,
-    });
+    const exercise = new Exercise();
+    Object.keys(req.body).forEach((name) => (exercise[name] = req.body[name]));
 
     try {
       await exercise.save();
@@ -69,7 +56,6 @@ router
     }
   })
   .patch(async (req, res) => {
-    //FIXME when adding requirements only add highest level, no need to add two things where one is a sub requirement of the other
     const { error } = exerciseValidation.editExercise(req.body);
     if (error) return res.status(400).send({ error: error.details[0].message });
 

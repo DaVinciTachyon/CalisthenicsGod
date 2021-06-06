@@ -11,34 +11,34 @@ const {
 const chai = require('chai');
 const should = chai.should();
 
-let authToken;
-let expectedIngredient;
-let expectedMealId;
-let expectedPresetMealId;
-
-before(async () => {
-  authToken = await login();
-  expectedIngredient = await buildRandomIngredientReference(authToken);
-  expectedPresetMealId = await buildRandomPresetMealReference(authToken);
-});
-
 describe('Meals', () => {
+  let authToken;
+  let expectedIngredient;
+  let expectedMealId;
+  let expectedPresetMealId;
+
+  before(async () => {
+    authToken = await login();
+    expectedIngredient = await buildRandomIngredientReference(authToken);
+    expectedPresetMealId = await buildRandomPresetMealReference(authToken);
+  });
+
   describe('/GET', () => {
     it('valid request', async () => {
-      const res = await get('/api/nutrition/meals', authToken);
+      const res = await get('/nutrition/meals', authToken);
       res.should.have.status(200);
     });
   });
 
   describe('/POST', () => {
     it('empty body', async () => {
-      const res = await post('/api/nutrition/meals', {}, authToken);
+      const res = await post('/nutrition/meals', {}, authToken);
       res.should.have.status(400);
     });
 
     it('valid meal', async () => {
       const res = await post(
-        '/api/nutrition/meals',
+        '/nutrition/meals',
         {
           ingredient: expectedIngredient,
         },
@@ -52,7 +52,7 @@ describe('Meals', () => {
 
   describe('/PATCH', () => {
     it('empty body', async () => {
-      const res = await patch('/api/nutrition/meals', {}, authToken);
+      const res = await patch('/nutrition/meals', {}, authToken);
       res.should.have.status(400);
     });
 
@@ -61,7 +61,7 @@ describe('Meals', () => {
       patchedIngredient.weight = randomFloat();
       patchedIngredient.id = undefined;
       const res = await patch(
-        '/api/nutrition/meals',
+        '/nutrition/meals',
         {
           _id: expectedMealId,
           ingredient: patchedIngredient,
@@ -74,13 +74,13 @@ describe('Meals', () => {
 
   describe('/DELETE', () => {
     it('empty body', async () => {
-      const res = await deleteRequest('/api/nutrition/meals', {}, authToken);
+      const res = await deleteRequest('/nutrition/meals', {}, authToken);
       res.should.have.status(400);
     });
 
     it('valid request', async () => {
       const res = await deleteRequest(
-        '/api/nutrition/meals',
+        '/nutrition/meals',
         {
           _id: expectedMealId,
           ingredient: { _id: expectedIngredient._id },
@@ -93,13 +93,13 @@ describe('Meals', () => {
 
   describe('/POST /addPreset', () => {
     it('empty body', async () => {
-      const res = await post('/api/nutrition/meals/addPreset', {}, authToken);
+      const res = await post('/nutrition/meals/addPreset', {}, authToken);
       res.should.have.status(400);
     });
 
     it('valid request', async () => {
       const res = await post(
-        '/api/nutrition/meals/addPreset',
+        '/nutrition/meals/addPreset',
         { _id: expectedPresetMealId },
         authToken
       );

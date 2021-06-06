@@ -21,6 +21,10 @@ module.exports = mongoose.model(
       },
     },
     motionType: {
+      componentExercises: {
+        type: [{ type: mongoose.Schema.Types.ObjectId, ref: 'Exercise' }],
+        validate: (exercises) => exercises.length === 0 || exercises.length > 1,
+      },
       transversePlane: {
         type: String,
         enum: ['upper', 'lower', 'core'],
@@ -31,7 +35,7 @@ module.exports = mongoose.model(
       },
       frontalPlane: {
         type: String,
-        enum: ['push', 'pull'],
+        enum: ['push', 'pull', 'rotational', 'lateral'],
       },
       kineticChain: {
         type: String,
@@ -40,15 +44,16 @@ module.exports = mongoose.model(
       motion: {
         type: String,
         enum: ['isometric', 'isotonic', 'distance', 'timed'],
-        required: true,
+      },
+      sagittalPlane: {
+        type: String,
+        enum: ['bilateral', 'unilateral'],
       },
     },
-    potentialStages: [
-      {
-        type: mongoose.Schema.Types.ObjectId,
-        ref: 'WorkoutStage',
-      },
-    ],
+    potentialStages: {
+      type: [{ type: mongoose.Schema.Types.ObjectId, ref: 'WorkoutStage' }],
+      validate: (stages) => stages.length > 0,
+    },
     requirements: [
       {
         type: mongoose.Schema.Types.ObjectId,

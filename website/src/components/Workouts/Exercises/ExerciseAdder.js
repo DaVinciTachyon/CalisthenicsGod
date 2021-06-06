@@ -1,7 +1,7 @@
 import React from 'react';
-import { Row, Column } from '../../../style/table';
+import { Row, Column, Section } from '../../../style/table';
 import { Button, ErrorButton } from '../../../style/buttons';
-import { Text, Radio } from '../../../style/inputs';
+import { Text, Select, Radio } from '../../../style/inputs';
 import StageSelect from '../StageSelect';
 import ExerciseSelect from '../ExerciseSelect';
 
@@ -12,13 +12,16 @@ export default class Exercises extends React.Component {
       name: '',
       abbreviation: '',
       description: '',
+      componentExercises: [],
       transversePlane: '',
       kineticChain: '',
       verticality: '',
       frontalPlane: '',
       motion: '',
+      sagittalPlane: '',
       potentialStages: [],
       requirements: [],
+      hasComponents: '',
     };
     this.onSubmit = this.onSubmit.bind(this);
   }
@@ -27,95 +30,138 @@ export default class Exercises extends React.Component {
     this.set();
   }
 
-  componentDidUpdate(prevProps) {
-    if (prevProps !== this.props) this.set();
-  }
-
   set = () => {
-    if (this.props.exercise)
-      this.setState({
-        name: this.props.exercise.name || '',
-        abbreviation: this.props.exercise.abbreviation || '',
-        description: this.props.exercise.description || '',
+    if (this.props.exercise) {
+      const {
+        name,
+        abbreviation,
+        description,
+        motionType,
+        potentialStages,
+        requirements,
+      } = this.props.exercise;
+      return this.setState({
+        name: name || '',
+        abbreviation: abbreviation || '',
+        description: description || '',
+        hasComponents:
+          motionType?.componentExercises &&
+          motionType?.componentExercises.length > 0
+            ? 'combinational'
+            : 'singular',
+        componentExercises: motionType?.componentExercises || [],
         transversePlane:
-          this.props.exercise.motionType.transversePlane || 'upper',
-        kineticChain: this.props.exercise.motionType.kineticChain || 'closed',
-        verticality: this.props.exercise.motionType.verticality || 'horizontal',
-        frontalPlane: this.props.exercise.motionType.frontalPlane || 'push',
-        motion: this.props.exercise.motionType.motion || 'isometric',
-        potentialStages: this.props.exercise.potentialStages || [],
-        requirements: this.props.exercise.requirements || [],
+          motionType?.transversePlane ||
+          (motionType?.componentExercises &&
+          motionType?.componentExercises.length > 0
+            ? undefined
+            : 'upper'),
+        kineticChain:
+          motionType?.kineticChain ||
+          (motionType?.componentExercises &&
+          motionType?.componentExercises.length > 0
+            ? undefined
+            : 'closed'),
+        sagittalPlane:
+          motionType?.sagittalPlane ||
+          (motionType?.componentExercises &&
+          motionType?.componentExercises.length > 0
+            ? undefined
+            : 'bilateral'),
+        verticality:
+          motionType?.verticality ||
+          (motionType?.componentExercises &&
+          motionType?.componentExercises.length > 0
+            ? undefined
+            : 'horizontal'),
+        frontalPlane:
+          motionType?.frontalPlane ||
+          (motionType?.componentExercises &&
+          motionType?.componentExercises.length > 0
+            ? undefined
+            : 'push'),
+        motion:
+          motionType?.motion ||
+          (motionType?.componentExercises &&
+          motionType?.componentExercises.length > 0
+            ? undefined
+            : 'isometric'),
+        potentialStages: potentialStages || [],
+        requirements: requirements || [],
       });
-    else
-      this.setState({
-        name: '',
-        abbreviation: '',
-        description: '',
-        transversePlane: 'upper',
-        kineticChain: 'closed',
-        verticality: 'horizontal',
-        frontalPlane: 'push',
-        motion: 'isometric',
-        potentialStages: [],
-        requirements: [],
-      });
+    }
+    this.setState({
+      name: '',
+      abbreviation: '',
+      description: '',
+      hasComponents: 'singular',
+      componentExercises: [],
+      transversePlane: 'upper',
+      kineticChain: 'closed',
+      sagittalPlane: 'bilateral',
+      verticality: 'horizontal',
+      frontalPlane: 'push',
+      motion: 'isometric',
+      potentialStages: [],
+      requirements: [],
+    });
   };
 
-  onChange = (evt) => {
-    if (evt.target.name === 'motion' && evt.target.value === 'distance')
+  onChange = (evt) => this.setState({ [evt.target.name]: evt.target.value });
+  onSelectChange = (evt) => this.setState({ [evt.name]: evt.value });
+  onHasComponentsChange = (evt) => {
+    this.onChange(evt);
+    if (evt.target.value === 'singular')
       this.setState({
+        componentExercises: undefined,
+        transversePlane:
+          this.props.exercise?.motionType?.transversePlane || 'upper',
+        kineticChain: this.props.exercise?.motionType?.kineticChain || 'closed',
+        verticality:
+          this.props.exercise?.motionType?.verticality || 'horizontal',
+        frontalPlane: this.props.exercise?.motionType?.frontalPlane || 'push',
+        sagittalPlane:
+          this.props.exercise?.motionType?.sagittalPlane || 'bilateral',
+        motion: this.props.exercise?.motionType?.motion || 'isometric',
+      });
+    else if (evt.target.value === 'combinational')
+      this.setState({
+        componentExercises:
+          this.props.exercise?.motionType?.componentExercises || [],
         transversePlane: undefined,
         kineticChain: undefined,
         verticality: undefined,
         frontalPlane: undefined,
+        sagittalPlane: undefined,
+        motion: undefined,
       });
-    else if (evt.target.name === 'motion' && this.state.motion === ' distance')
-      this.setState({
-        transversePlane: 'upper',
-        kineticChain: 'closed',
-        verticality: 'horizontal',
-        frontalPlane: 'push',
-      });
-    this.setState({ [evt.target.name]: evt.target.value });
   };
 
-  onSelectChange = (evt) => {
-    this.setState({ [evt.name]: evt.value });
-  };
-
-  async onSubmit(evt) {
-    evt.preventDefault();
-    if (!this.state.name) return this.setState({ error: 'Name is required' });
-    if (!this.state.motion)
-      return this.setState({ error: 'Motion is required' });
-    if (this.state.motion !== 'distance') {
-      if (!this.state.transversePlane)
-        return this.setState({ error: 'Transverse Plane is required' });
-      if (!this.state.verticality)
-        return this.setState({ error: 'Verticality is required' });
-      if (!this.state.frontalPlane)
-        return this.setState({ error: 'Frontal Plane is required' });
-      if (!this.state.kineticChain)
-        return this.setState({ error: 'Kinetic Chain is required' });
-    }
-    if (!this.state.potentialStages || this.state.potentialStages.length === 0)
-      return this.setState({ error: 'Potential Stages are required' });
+  onSubmit = async () => {
+    if (
+      this.state.hasComponents === 'combinational' &&
+      this.state.componentExercises &&
+      this.state.componentExercises.length === 0
+    )
+      return this.setState({ error: 'Component Exercises Required' });
     this.props.onSubmit({
-      _id: this.props.id || undefined,
+      _id: this.props.id,
       name: this.state.name,
       abbreviation: this.state.abbreviation,
       description: this.state.description,
       motionType: {
+        componentExercises: this.state.componentExercises,
         transversePlane: this.state.transversePlane,
         kineticChain: this.state.kineticChain,
         verticality: this.state.verticality,
         frontalPlane: this.state.frontalPlane,
         motion: this.state.motion,
+        sagittalPlane: this.state.sagittalPlane,
       },
       potentialStages: this.state.potentialStages,
       requirements: this.state.requirements,
     });
-  }
+  };
 
   onCancel = () => {
     this.set();
@@ -124,94 +170,142 @@ export default class Exercises extends React.Component {
 
   render() {
     return (
-      <Row columns={11}>
-        <Text
-          name="name"
-          value={this.state.name}
-          onChange={this.onChange}
-          required
-        />
-        <Text
-          name="abbreviation"
-          value={this.state.abbreviation}
-          onChange={this.onChange}
-        />
-        <Radio
-          name="motion"
-          value={this.state.motion}
-          options={[
-            { label: 'Isometric', value: 'isometric' },
-            { label: 'Isotonic', value: 'isotonic' },
-            { label: 'Distance', value: 'distance' },
-            { label: 'Timed', value: 'timed' },
-          ]}
-          onChange={this.onChange}
-        />
-        {this.state.motion === 'distance' && <Column span={4} />}
-        {this.state.motion !== 'distance' && (
-          <>
-            <Radio
-              name="transversePlane"
-              value={this.state.transversePlane}
-              options={[
-                { label: 'Upper', value: 'upper' },
-                { label: 'Lower', value: 'lower' },
-                { label: 'Core', value: 'core' },
-              ]}
-              onChange={this.onChange}
-            />
-            <Radio
-              name="kineticChain"
-              value={this.state.kineticChain}
-              options={[
-                { label: 'Closed', value: 'closed' },
-                { label: 'Open', value: 'open' },
-              ]}
-              onChange={this.onChange}
-            />
-            <Radio
-              name="verticality"
-              value={this.state.verticality}
-              options={[
-                { label: 'Horizontal', value: 'horizontal' },
-                { label: 'Vertical', value: 'vertical' },
-              ]}
-              onChange={this.onChange}
-            />
-            <Radio
-              name="frontalPlane"
-              value={this.state.frontalPlane}
-              options={[
-                { label: 'Push', value: 'push' },
-                { label: 'Pull', value: 'pull' },
-              ]}
-              onChange={this.onChange}
-            />
-          </>
-        )}
-        <StageSelect
-          name="potentialStages"
-          onChange={this.onSelectChange}
-          value={this.state.potentialStages}
-          isMulti
-        />
-        <ExerciseSelect
-          name="requirements"
-          onChange={this.onSelectChange}
-          value={this.state.requirements}
-          isMulti
-        />
-        <Text
-          name="description"
-          value={this.state.description}
-          onChange={this.onChange}
-          placeholder="Description"
-        />
-        <Column>
-          <Button onClick={this.onSubmit}>Submit</Button>
-          <ErrorButton onClick={this.onCancel}>Cancel</ErrorButton>
-        </Column>
-      </Row>
+      <>
+        <Row columns={13}>
+          <Text
+            name="name"
+            value={this.state.name}
+            onChange={this.onChange}
+            label="Name"
+            required
+          />
+          <Text
+            name="abbreviation"
+            value={this.state.abbreviation}
+            onChange={this.onChange}
+            label="Abbreviation"
+          />
+          <Column span={7}>
+            <Section label="Motion Type">
+              <Row columns={7}>
+                <Radio
+                  name="hasComponents"
+                  value={this.state.hasComponents}
+                  options={[
+                    { label: 'Combinational', value: 'combinational' },
+                    { label: 'Singular', value: 'singular' },
+                  ]}
+                  onChange={this.onHasComponentsChange}
+                />
+                {this.state.hasComponents === 'combinational' && (
+                  <Column span={6}>
+                    <ExerciseSelect
+                      name="componentExercises"
+                      onChange={this.onSelectChange}
+                      value={this.state.componentExercises}
+                      isMulti
+                      label="Component Exercises"
+                    />
+                  </Column>
+                )}
+                {this.state.hasComponents === 'singular' && (
+                  <Column span={6} columns={6}>
+                    <Select
+                      name="transversePlane"
+                      value={this.state.transversePlane}
+                      options={[
+                        { label: 'Upper', value: 'upper' },
+                        { label: 'Lower', value: 'lower' },
+                        { label: 'Core', value: 'core' },
+                      ]}
+                      onChange={this.onSelectChange}
+                      label="Transverse Plane"
+                    />
+                    <Select
+                      name="frontalPlane"
+                      value={this.state.frontalPlane}
+                      options={[
+                        { label: 'Push', value: 'push' },
+                        { label: 'Pull', value: 'pull' },
+                        { label: 'Rotational', value: 'rotational' },
+                        { label: 'Lateral', value: 'lateral' },
+                      ]}
+                      onChange={this.onSelectChange}
+                      label="Frontal Plane"
+                    />
+                    <Select
+                      name="verticality"
+                      value={this.state.verticality}
+                      options={[
+                        { label: 'Horizontal', value: 'horizontal' },
+                        { label: 'Vertical', value: 'vertical' },
+                      ]}
+                      onChange={this.onSelectChange}
+                      label="Verticality"
+                    />
+                    <Select
+                      name="motion"
+                      value={this.state.motion}
+                      options={[
+                        { label: 'Isometric', value: 'isometric' },
+                        { label: 'Isotonic', value: 'isotonic' },
+                        { label: 'Distance', value: 'distance' },
+                        { label: 'Timed', value: 'timed' },
+                      ]}
+                      onChange={this.onSelectChange}
+                      label="Motion"
+                    />
+                    <Select
+                      name="kineticChain"
+                      value={this.state.kineticChain}
+                      options={[
+                        { label: 'Closed', value: 'closed' },
+                        { label: 'Open', value: 'open' },
+                      ]}
+                      onChange={this.onSelectChange}
+                      label="Kinetic Chain"
+                    />
+                    <Select
+                      name="sagittalPlane"
+                      value={this.state.sagittalPlane}
+                      options={[
+                        { label: 'Bilateral', value: 'bilateral' },
+                        { label: 'Unilateral', value: 'unilateral' },
+                      ]}
+                      onChange={this.onSelectChange}
+                      label="Sagittal Plane"
+                    />
+                  </Column>
+                )}
+              </Row>
+            </Section>
+          </Column>
+          <StageSelect
+            name="potentialStages"
+            onChange={this.onSelectChange}
+            value={this.state.potentialStages}
+            isMulti
+            label="Potential Stages"
+          />
+          <ExerciseSelect
+            name="requirements"
+            onChange={this.onSelectChange}
+            value={this.state.requirements}
+            isMulti
+            label="Requirements"
+          />
+          <Text
+            name="description"
+            value={this.state.description}
+            onChange={this.onChange}
+            label="Description"
+          />
+          <Column>
+            <Button onClick={this.onSubmit}>Submit</Button>
+            <ErrorButton onClick={this.onCancel}>Cancel</ErrorButton>
+          </Column>
+        </Row>
+      </>
     );
   }
 }

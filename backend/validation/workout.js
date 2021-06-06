@@ -4,7 +4,7 @@ const set = {
   repetitions: Joi.number().min(0),
   time: Joi.number().min(0),
   distance: Joi.number().min(0),
-  weight: Joi.number().min(0),
+  weight: Joi.number(),
 };
 
 module.exports = {
@@ -31,9 +31,13 @@ module.exports = {
         exercises: Joi.array().items({
           id: Joi.string().required(),
           sets: Joi.array().items(set),
-          type: Joi.string()
-            .valid('isotonic', 'eccentric', 'isometric', 'distance', 'timed')
-            .required(),
+          variation: Joi.string().valid(
+            'clockwise',
+            'anti-clockwise',
+            'eccentric',
+            'concentric'
+          ),
+          sagittalPlane: Joi.string().valid('right', 'left'),
           rest: Joi.object({
             intraset: Joi.number().min(0),
             interset: Joi.number().min(0).required(),

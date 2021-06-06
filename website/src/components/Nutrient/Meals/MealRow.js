@@ -89,8 +89,7 @@ export default class MealRow extends React.Component {
   };
 
   onSubmit = () => {
-    //TODO submit name
-    //TODO submit all unsubmitted ingredients
+    //TODO submit name and submit all unsubmitted ingredients
     this.props.onUpdate();
     this.set();
   };

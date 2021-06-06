@@ -81,13 +81,12 @@ export default class ConsumedIngredient extends React.Component {
   setWeight = () => this.setState({ weight: this.props.weight });
 
   getCalories = () => {
-    const { fat, carbohydrate, protein, ethanol, weight, macroDensities } =
-      this.props;
+    const { weight, macros, macroDensities } = this.props;
     return (
-      ((fat * macroDensities.fat +
-        carbohydrate * macroDensities.carbohydrate +
-        protein * macroDensities.protein +
-        ethanol * macroDensities.ethanol) *
+      ((macros.fat * macroDensities.fat +
+        macros.carbohydrate * macroDensities.carbohydrate +
+        macros.protein * macroDensities.protein +
+        macros.ethanol * macroDensities.ethanol) *
         weight) /
       100
     );

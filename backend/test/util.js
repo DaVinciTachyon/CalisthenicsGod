@@ -1,16 +1,22 @@
 const chai = require('chai');
 const chaiHttp = require('chai-http');
 const supertest = require('supertest');
-const appUrl = process.env.APP_URL || 'http://127.0.0.1:8080';
+const appUrl = process.env.APP_URL || 'http://localhost:8080/api';
 const app = supertest(appUrl);
 
 chai.use(chaiHttp);
 
-const post = (url, body, authToken = '', headers = {}) =>
+const request = (
+  method,
+  url,
+  body = undefined,
+  authToken = undefined,
+  headers = {}
+) =>
   new Promise((resolve, reject) => {
-    app
-      .post(url)
-      .set('auth-token', authToken)
+    if (authToken) headers['auth-token'] = authToken;
+    headers['Accept'] = 'application/json';
+    app[method](url)
       .set(headers)
       .send(body)
       .end((err, res) => {
@@ -19,48 +25,22 @@ const post = (url, body, authToken = '', headers = {}) =>
       });
   });
 
-const get = (url, authToken = '', headers = {}) =>
-  new Promise((resolve, reject) => {
-    app
-      .get(url)
-      .set('auth-token', authToken)
-      .set(headers)
-      .end((err, res) => {
-        if (err) reject(err);
-        resolve(res);
-      });
-  });
+const post = (url, body, authToken = undefined, headers = {}) =>
+  request('post', url, body, authToken, headers);
 
-const deleteRequest = (url, body, authToken = '', headers = {}) =>
-  new Promise((resolve, reject) => {
-    app
-      .delete(url)
-      .set('auth-token', authToken)
-      .set(headers)
-      .send(body)
-      .end((err, res) => {
-        if (err) reject(err);
-        resolve(res);
-      });
-  });
+const get = (url, authToken = undefined, headers = {}) =>
+  request('get', url, undefined, authToken, headers);
 
-const patch = (url, body, authToken = '', headers = {}) =>
-  new Promise((resolve, reject) => {
-    app
-      .patch(url)
-      .set('auth-token', authToken)
-      .set(headers)
-      .send(body)
-      .end((err, res) => {
-        if (err) reject(err);
-        resolve(res);
-      });
-  });
+const deleteRequest = (url, body, authToken = undefined, headers = {}) =>
+  request('delete', url, body, authToken, headers);
+
+const patch = (url, body, authToken = undefined, headers = {}) =>
+  request('patch', url, body, authToken, headers);
 
 const login = async () => {
   const user = buildRandomUser();
-  await post('/api/auth/register', user);
-  const res = await post('/api/auth/login', {
+  await post('/auth/register', user);
+  const res = await post('/auth/login', {
     email: user.email,
     password: user.password,
   });
@@ -115,20 +95,26 @@ const buildRandomUser = () => ({
   gender: randomGender(),
 });
 
-const buildRandomExercise = () => ({
-  name: randomString(6),
-  abbreviation: randomAlphaNumeric(4),
-  motionType: {
-    transversePlane: randomOption(['upper', 'lower', 'core']),
-    verticality: randomOption(['horizontal', 'vertical']),
-    frontalPlane: randomOption(['push', 'pull']),
-    kineticChain: randomOption(['closed', 'open']),
-    motion: randomOption(['isometric', 'isotonic', 'distance', 'timed']),
-  },
-  potentialStages: [],
-  requirements: [],
-  description: randomAlphaNumeric(50),
-});
+const buildRandomExercise = async (authToken) => {
+  const stageId = (await post('/workout/stage', buildRandomStage(), authToken))
+    .body._id;
+  return {
+    name: randomString(6),
+    abbreviation: randomAlphaNumeric(4),
+    motionType: {
+      componentExercises: randomOption([[]]), //FIXME
+      transversePlane: randomOption(['upper', 'lower', 'core']),
+      verticality: randomOption(['horizontal', 'vertical']),
+      frontalPlane: randomOption(['push', 'pull', 'rotational', 'lateral']),
+      kineticChain: randomOption(['closed', 'open']),
+      motion: randomOption(['isometric', 'isotonic', 'distance', 'timed']),
+      sagittalPlane: randomOption(['bilateral', 'unilateral']),
+    },
+    potentialStages: [stageId],
+    requirements: [],
+    description: randomAlphaNumeric(50),
+  };
+};
 
 const buildRandomIngredient = () => ({
   name: randomLowerCaseString(5),
@@ -147,16 +133,12 @@ const buildRandomStage = () => ({
 });
 
 const buildRandomWorkout = async (authToken) => {
-  const stageId = (
-    await post('/api/workout/stage', buildRandomStage(), authToken)
-  ).body._id;
-  const exerciseId = (
-    await post('/api/exercise', buildRandomExercise(), authToken)
-  ).body._id;
+  const exercise = await buildRandomExercise(authToken);
+  const exerciseId = (await post('/exercise', exercise, authToken)).body._id;
   return {
     stages: [
       {
-        id: stageId,
+        id: exercise.potentialStages[0],
         exercises: [
           {
             id: exerciseId,
@@ -168,13 +150,13 @@ const buildRandomWorkout = async (authToken) => {
                 weight: randomInt(),
               },
             ],
-            type: randomOption([
-              'isotonic',
+            variation: randomOption([
               'eccentric',
-              'isometric',
-              'distance',
-              'timed',
+              'concentric',
+              'clockwise',
+              'anti-clockwise',
             ]),
+            sagittalPlane: randomOption(['right', 'left']),
             rest: {
               intraset: randomInt(),
               interset: randomInt(),
@@ -188,7 +170,7 @@ const buildRandomWorkout = async (authToken) => {
 
 const buildRandomIngredientReference = async (authToken) => {
   const ingredientId = (
-    await post('/api/nutrition/ingredients', buildRandomIngredient(), authToken)
+    await post('/nutrition/ingredients', buildRandomIngredient(), authToken)
   ).body._id;
   return {
     id: ingredientId,
@@ -207,7 +189,7 @@ const buildRandomPresetMeal = async (authToken) => {
 const buildRandomPresetMealReference = async (authToken) =>
   (
     await post(
-      '/api/nutrition/meals/preset',
+      '/nutrition/meals/preset',
       await buildRandomPresetMeal(authToken),
       authToken
     )

@@ -13,9 +13,11 @@ export default class Workout extends React.Component {
     return (
       <div>
         <Title>{this.props.details.date}</Title>
-        <Row columns={4} isTitle>
+        <Row columns={6} isTitle>
           <Column>Sets</Column>
-          <Column>Type</Column>
+          <Column>Weighted</Column>
+          <Column>Variation</Column>
+          <Column>Sagittal Plane</Column>
           <Column>Name</Column>
           <Column>
             <Column>Rest</Column>
@@ -27,26 +29,37 @@ export default class Workout extends React.Component {
         </Row>
         {this.props.details.stages.map((stage) => (
           <div key={stage._id}>
-            <Row columns={1} id={stage.id}>
-              {stage.name}
-            </Row>
+            <Row>{stage.name}</Row>
             {stage.exercises.map((exercise) => (
-              <Row columns={4} key={exercise._id} id={exercise.id}>
+              <Row columns={6} key={exercise._id} id={exercise.id}>
                 <Column>
                   {exercise.sets.map((set, index) => (
                     <SetEditor
                       key={`${exercise._id}-${index}`}
                       value={set}
-                      type={exercise.type}
                       isWeighted={set.weight}
                       readOnly
                     />
                   ))}
                 </Column>
-                <Text value={exercise.type} readOnly />
+                <Text
+                  value={
+                    exercise.sets[0] && exercise.sets[0].weight
+                      ? exercise.sets[0].weight > 0
+                        ? 'Weighted'
+                        : 'Assisted'
+                      : 'Bodyweight'
+                  }
+                  readOnly
+                />
+                <Text value={exercise.variation} readOnly />
+                <Text value={exercise.sagittalPlane} readOnly />
                 <Text value={exercise.name} readOnly />
                 <Column columns={2}>
-                  <Number value={exercise.rest.intraset} unit="s" readOnly />
+                  {exercise.rest.intraset && (
+                    <Number value={exercise.rest.intraset} unit="s" readOnly />
+                  )}
+                  {!exercise.rest.intraset && <Column />}
                   <Number value={exercise.rest.interset} unit="s" readOnly />
                 </Column>
               </Row>

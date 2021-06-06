@@ -43,20 +43,21 @@ module.exports = mongoose.model(
                     },
                     weight: {
                       type: Number,
-                      min: 0,
                     },
                   },
                 ],
-                type: {
+                variation: {
                   type: String,
                   enum: [
-                    'isotonic',
+                    'clockwise',
+                    'anti-clockwise',
                     'eccentric',
-                    'isometric',
-                    'distance',
-                    'timed',
+                    'concentric',
                   ],
-                  required: true,
+                },
+                sagittalPlane: {
+                  type: String,
+                  enum: ['right', 'left'],
                 },
                 rest: {
                   intraset: {

@@ -10,12 +10,14 @@ export default class ExerciseRow extends React.Component {
     super();
     this.state = {
       sets: [],
-      type: undefined,
+      isWeighted: 0,
+      variation: undefined,
+      variationOptions: this.getVariationOptions(undefined),
+      sagittalPlane: undefined,
       id: '',
+      exercise: undefined,
       intrasetRest: undefined,
       intersetRest: 0,
-      exercise: undefined,
-      isWeighted: false,
     };
   }
 
@@ -23,16 +25,20 @@ export default class ExerciseRow extends React.Component {
     this.onUpdate();
   }
 
-  onUpdate = () =>
+  onUpdate = () => {
+    const { sets, variation, sagittalPlane, id, intersetRest, intrasetRest } =
+      this.state;
     this.props.onUpdate({
-      sets: this.state.sets,
-      type: this.state.type,
-      id: this.state.id,
+      sets,
+      variation,
+      sagittalPlane,
+      id,
       rest: {
-        intraset: this.state.intrasetRest,
-        interset: this.state.intersetRest,
+        intraset: intrasetRest,
+        interset: intersetRest,
       },
     });
+  };
 
   onChange = async (evt) => {
     await this.setState({ [evt.target.name]: evt.target.value });
@@ -44,13 +50,36 @@ export default class ExerciseRow extends React.Component {
     this.onUpdate();
   };
 
+  getVariationOptions = (motionType) => {
+    const variationOptions = [];
+    if (motionType?.frontalPlane === 'rotational')
+      variationOptions.push(
+        { value: undefined, label: 'Bidirectional' },
+        { value: 'clockwise', label: 'Clockwise' },
+        { value: 'anti-clockwise', label: 'Anti-clockwise' }
+      );
+    else if (motionType?.motion === 'isotonic')
+      variationOptions.push(
+        { value: undefined, label: 'Isotonic' },
+        { value: 'eccentric', label: 'Eccentric' },
+        { value: 'concentric', label: 'Concentric' }
+      );
+    else variationOptions.push({ value: undefined, label: 'Standard' });
+    return variationOptions;
+  };
+
   onExerciseChange = async (evt, exercise) => {
-    let type = 'isotonic';
-    if (!exercise) type = undefined;
-    else if (exercise.motionType.motion === 'distance') type = 'distance';
-    else if (exercise.motionType.motion === 'isometric') type = 'isometric';
-    else if (exercise.motionType.motion === 'timed') type = 'timed';
-    await this.setState({ [evt.name]: evt.value, exercise, type });
+    await this.setState({
+      [evt.name]: evt.value,
+      exercise,
+      isWeighted: 0,
+      variation: undefined,
+      variationOptions: this.getVariationOptions(exercise.motionType),
+      sagittalPlane:
+        exercise.motionType.sagittalPlane === 'unilateral'
+          ? 'right'
+          : undefined,
+    });
     this.onUpdate();
   };
 
@@ -63,42 +92,35 @@ export default class ExerciseRow extends React.Component {
     this.onUpdate();
   };
 
-  addSet = (length) =>
-    this.setState((state) => {
+  addSet = async (length) => {
+    await this.setState((state) => {
       if (state.sets.length < length + 1) state.sets.push({});
       if (state.sets.length > 1) state.intrasetRest = 0;
 
       return { sets: state.sets, intrasetRest: state.intrasetRest };
     });
+    this.onUpdate();
+  };
 
-  removeSet = (length) =>
-    this.setState((state) => {
+  removeSet = async (length) => {
+    await this.setState((state) => {
       if (state.sets.length > length - 1) state.sets.pop();
       if (state.sets.length <= 1) state.intrasetRest = undefined;
 
       return { sets: state.sets, intrasetRest: state.intrasetRest };
     });
+    this.onUpdate();
+  };
 
   render() {
-    const typeOptions = [];
-    if (this.state.exercise?.motionType.motion === 'distance')
-      typeOptions.push({ value: 'distance', label: 'Distance' });
-    else if (this.state.exercise?.motionType.motion === 'isometric')
-      typeOptions.push({ value: 'isometric', label: 'Isometric' });
-    else if (this.state.exercise?.motionType.motion === 'timed')
-      typeOptions.push({ value: 'timed', label: 'Timed' });
-    else
-      typeOptions.push(
-        { value: 'isotonic', label: 'Isotonic' },
-        { value: 'eccentric', label: 'Eccentric' }
-      );
     return (
-      <Row columns={6}>
+      <Row columns={7}>
         <Column>
           {this.state.sets.map((set, i) => (
             <SetEditor
               key={i}
-              type={this.state.type}
+              type={this.state.exercise?.motionType.motion}
+              variation={this.state.variation}
               isWeighted={this.state.isWeighted}
               onUpdate={(set) => this.onUpdateSet(i, set)}
             />
@@ -121,16 +143,30 @@ export default class ExerciseRow extends React.Component {
         <Select
           name="isWeighted"
           options={[
-            { label: 'Bodyweight', value: false },
-            { label: 'Weighted', value: true },
+            { label: 'Bodyweight', value: 0 },
+            { label: 'Weighted', value: 1 },
+            { label: 'Assisted', value: -1 },
           ]}
           value={this.state.isWeighted}
           onChange={this.onSelectChange}
         />
         <Select
-          name="type"
-          options={typeOptions}
-          value={this.state.type}
+          name="variation"
+          options={this.state.variationOptions}
+          value={this.state.variation}
+          onChange={this.onSelectChange}
+        />
+        <Select
+          name="sagittalPlane"
+          options={
+            this.state.exercise?.motionType.sagittalPlane === 'unilateral'
+              ? [
+                  { value: 'right', label: 'Right' },
+                  { value: 'left', label: 'Left' },
+                ]
+              : [{ value: undefined, label: 'Bilateral' }]
+          }
+          value={this.state.sagittalPlane}
           onChange={this.onSelectChange}
         />
         <ExerciseSelect
