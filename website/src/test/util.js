@@ -37,13 +37,13 @@ const register = async (user, page) => {
   await page.click('[name="birthDate"]');
   await page.type(
     '[name="birthDate"]',
-    user.birthDate.toLocaleDateString().replace(/\//g, '')
+    user.birthDate.toLocaleString().split(', ')[0].replace(/\//g, '')
   );
   expect(await page.$eval('[name="birthDate"]', (el) => el.value)).toEqual(
     [
-      user.birthDate.getFullYear(),
-      user.birthDate.getMonth(),
-      user.birthDate.getDate(),
+      user.birthDate.getFullYear().padStart(4, '0'),
+      (user.birthDate.getMonth() + 1).padStart(2, '0'),
+      user.birthDate.getDate().padStart(2, '0'),
     ].join('-')
   );
 
