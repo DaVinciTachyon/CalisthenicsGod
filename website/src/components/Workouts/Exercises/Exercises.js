@@ -48,7 +48,6 @@ export default class Exercises extends React.Component {
   };
 
   render() {
-    // motion, kinetic chain
     const exercises = this.state.exercises.reduce((exercises, exercise) => {
       let transversePlane = exercise.motionType.transversePlane;
       exercises[transversePlane] = exercises[transversePlane] || [];

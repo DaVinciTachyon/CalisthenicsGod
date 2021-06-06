@@ -31,21 +31,8 @@ router
         return res.status(400).send({ error: 'Abbreviation already in use.' });
     }
 
-    const exercise = new Exercise({
-      name: req.body.name,
-      abbreviation: req.body.abbreviation,
-      motionType: {
-        transversePlane: req.body.motionType.transversePlane,
-        verticality: req.body.motionType.verticality,
-        frontalPlane: req.body.motionType.frontalPlane,
-        kineticChain: req.body.motionType.kineticChain,
-        motion: req.body.motionType.motion,
-        sagittalPlane: req.body.motionType.sagittalPlane,
-      },
-      potentialStages: req.body.potentialStages,
-      requirements: req.body.requirements,
-      description: req.body.description,
-    });
+    const exercise = new Exercise();
+    Object.keys(req.body).forEach((name) => (exercise[name] = req.body[name]));
 
     try {
       await exercise.save();

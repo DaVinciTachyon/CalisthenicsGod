@@ -123,6 +123,7 @@ const buildRandomExercise = async (authToken) => {
     name: randomString(6),
     abbreviation: randomAlphaNumeric(4),
     motionType: {
+      componentExercises: randomOption([[]]), //FIXME
       transversePlane: randomOption(['upper', 'lower', 'core']),
       verticality: randomOption(['horizontal', 'vertical']),
       frontalPlane: randomOption(['push', 'pull', 'rotational', 'lateral']),

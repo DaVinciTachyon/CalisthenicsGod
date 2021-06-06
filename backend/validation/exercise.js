@@ -1,5 +1,7 @@
 const Joi = require('@hapi/joi');
 
+const componentExercises = Joi.array().items(Joi.string());
+
 const transversePlane = Joi.string().valid('upper', 'lower', 'core');
 
 const verticality = Joi.string().valid('horizontal', 'vertical');
@@ -23,12 +25,13 @@ module.exports = {
       name: Joi.string().required(),
       abbreviation: Joi.string().allow(''),
       motionType: {
+        componentExercises,
         transversePlane,
         verticality,
         frontalPlane,
         kineticChain,
         sagittalPlane,
-        motion: motion.required(),
+        motion,
       },
       potentialStages: Joi.array().items(Joi.string()),
       requirements: Joi.array().items(Joi.string()),
@@ -44,12 +47,13 @@ module.exports = {
       name: Joi.string().required(),
       abbreviation: Joi.string().allow(''),
       motionType: Joi.object({
+        componentExercises,
         transversePlane,
         verticality,
         frontalPlane,
         kineticChain,
         sagittalPlane,
-        motion: motion.required(),
+        motion,
       }),
       potentialStages: Joi.array().items(Joi.string()), //.min(1),
       requirements: Joi.array().items(Joi.string()),

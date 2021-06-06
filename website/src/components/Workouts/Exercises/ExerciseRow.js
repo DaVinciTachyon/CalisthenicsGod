@@ -66,9 +66,32 @@ export default class ExerciseRow extends React.Component {
         <Row columns={9}>
           <Text value={this.props.exercise.name} readOnly />
           <Text value={this.props.exercise.abbreviation} readOnly />
-          <Text value={this.props.exercise.motionType.motion} readOnly />
-          <Text value={this.props.exercise.motionType.kineticChain} readOnly />
-          <Text value={this.props.exercise.motionType.sagittalPlane} readOnly />
+          {this.props.exercise.motionType.componentExercises &&
+            this.props.exercise.motionType.componentExercises.length > 0 && (
+              <Column span={3}>
+                <ExerciseSelect
+                  value={this.props.exercise.motionType.componentExercises}
+                  readOnly
+                  isMulti
+                  label="Component Exercises"
+                />
+              </Column>
+            )}
+          {(!this.props.exercise.motionType.componentExercises ||
+            this.props.exercise.motionType.componentExercises?.length ===
+              0) && (
+            <Column span={3} columns={3}>
+              <Text value={this.props.exercise.motionType.motion} readOnly />
+              <Text
+                value={this.props.exercise.motionType.kineticChain}
+                readOnly
+              />
+              <Text
+                value={this.props.exercise.motionType.sagittalPlane}
+                readOnly
+              />
+            </Column>
+          )}
           <StageSelect
             value={this.props.exercise.potentialStages}
             readOnly
