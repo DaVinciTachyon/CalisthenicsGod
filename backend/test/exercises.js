@@ -11,10 +11,11 @@ const chai = require('chai');
 const should = chai.should();
 let authToken;
 
-const expectedExercise = buildRandomExercise();
+let expectedExercise;
 
 before(async () => {
   authToken = await login();
+  expectedExercise = await buildRandomExercise(authToken);
 });
 
 describe('Exercises', () => {

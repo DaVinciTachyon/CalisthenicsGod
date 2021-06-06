@@ -115,21 +115,26 @@ const buildRandomUser = () => ({
   gender: randomGender(),
 });
 
-const buildRandomExercise = () => ({
-  name: randomString(6),
-  abbreviation: randomAlphaNumeric(4),
-  motionType: {
-    transversePlane: randomOption(['upper', 'lower', 'core']),
-    verticality: randomOption(['horizontal', 'vertical']),
-    frontalPlane: randomOption(['push', 'pull', 'rotational', 'lateral']),
-    kineticChain: randomOption(['closed', 'open']),
-    motion: randomOption(['isometric', 'isotonic', 'distance', 'timed']),
-    sagittalPlane: randomOption(['bilateral', 'unilateral']),
-  },
-  potentialStages: [],
-  requirements: [],
-  description: randomAlphaNumeric(50),
-});
+const buildRandomExercise = async (authToken) => {
+  const stageId = (
+    await post('/api/workout/stage', buildRandomStage(), authToken)
+  ).body._id;
+  return {
+    name: randomString(6),
+    abbreviation: randomAlphaNumeric(4),
+    motionType: {
+      transversePlane: randomOption(['upper', 'lower', 'core']),
+      verticality: randomOption(['horizontal', 'vertical']),
+      frontalPlane: randomOption(['push', 'pull', 'rotational', 'lateral']),
+      kineticChain: randomOption(['closed', 'open']),
+      motion: randomOption(['isometric', 'isotonic', 'distance', 'timed']),
+      sagittalPlane: randomOption(['bilateral', 'unilateral']),
+    },
+    potentialStages: [stageId],
+    requirements: [],
+    description: randomAlphaNumeric(50),
+  };
+};
 
 const buildRandomIngredient = () => ({
   name: randomLowerCaseString(5),
@@ -148,16 +153,13 @@ const buildRandomStage = () => ({
 });
 
 const buildRandomWorkout = async (authToken) => {
-  const stageId = (
-    await post('/api/workout/stage', buildRandomStage(), authToken)
-  ).body._id;
-  const exerciseId = (
-    await post('/api/exercise', buildRandomExercise(), authToken)
-  ).body._id;
+  const exercise = await buildRandomExercise(authToken);
+  const exerciseId = (await post('/api/exercise', exercise, authToken)).body
+    ._id;
   return {
     stages: [
       {
-        id: stageId,
+        id: exercise.potentialStages[0],
         exercises: [
           {
             id: exerciseId,

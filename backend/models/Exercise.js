@@ -47,12 +47,10 @@ module.exports = mongoose.model(
         enum: ['bilateral', 'unilateral'],
       },
     },
-    potentialStages: [
-      {
-        type: mongoose.Schema.Types.ObjectId,
-        ref: 'WorkoutStage',
-      },
-    ],
+    potentialStages: {
+      type: [{ type: mongoose.Schema.Types.ObjectId, ref: 'WorkoutStage' }],
+      validate: (stages) => stages?.length > 0,
+    },
     requirements: [
       {
         type: mongoose.Schema.Types.ObjectId,
