@@ -13,7 +13,6 @@ const {
   randomOption,
   randomDate,
   buildRandomUser,
-  buildRandomExercise,
   buildRandomIngredient,
   buildRandomStage,
 } = require('../../util/util');
@@ -59,6 +58,26 @@ const login = async () => {
     password: user.password,
   });
   return res.body['auth-token'];
+};
+
+const buildRandomExercise = async (authToken) => {
+  const stageId = (await post('/workout/stage', buildRandomStage(), authToken))
+    .body._id;
+  return {
+    name: randomString(6),
+    abbreviation: randomAlphaNumeric(4),
+    motionType: {
+      componentExercises: randomOption([[]]),
+      transversePlane: randomOption(['upper', 'lower']),
+      verticality: randomOption(['horizontal', 'vertical']),
+      frontalPlane: randomOption(['push', 'pull']),
+      kineticChain: randomOption(['closed', 'open']),
+      motion: randomOption(['isometric', 'isotonic', 'distance']),
+    },
+    potentialStages: [stageId],
+    requirements: [],
+    description: randomAlphaNumeric(50),
+  };
 };
 
 const buildRandomWorkout = async (authToken) => {

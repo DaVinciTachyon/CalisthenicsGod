@@ -47,21 +47,6 @@ const buildRandomUser = () => ({
   gender: randomOption(['male', 'female']),
 });
 
-const buildRandomExercise = () => ({
-  name: randomString(6),
-  abbreviation: randomAlphaNumeric(4),
-  motionType: {
-    transversePlane: randomOption(['upper', 'lower']),
-    verticality: randomOption(['horizontal', 'vertical']),
-    frontalPlane: randomOption(['push', 'pull']),
-    kineticChain: randomOption(['closed', 'open']),
-    motion: randomOption(['isometric', 'isotonic', 'distance']),
-  },
-  potentialStages: [],
-  requirements: [],
-  description: randomAlphaNumeric(50),
-});
-
 const buildRandomIngredient = () => ({
   name: randomLowerCaseString(5),
   macronutrients: {
@@ -88,7 +73,6 @@ module.exports = {
   randomOption,
   randomDate,
   buildRandomUser,
-  buildRandomExercise,
   buildRandomIngredient,
   buildRandomStage,
 };

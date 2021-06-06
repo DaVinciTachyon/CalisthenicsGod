@@ -8,7 +8,6 @@ const {
   randomOption,
   randomDate,
   buildRandomUser,
-  buildRandomExercise,
   buildRandomIngredient,
   buildRandomStage,
 } = require('../../../util/util');
@@ -78,7 +77,6 @@ module.exports = {
   randomOption,
   randomDate,
   buildRandomUser,
-  buildRandomExercise,
   buildRandomIngredient,
   buildRandomStage,
 };
