@@ -64,10 +64,11 @@ export default class WorkoutAdder extends React.Component {
     return (
       <div>
         <Title>New Workout</Title>
-        <Row columns={6} isTitle>
+        <Row columns={7} isTitle>
           <Column>Sets</Column>
           <Column>Weighted</Column>
           <Column>Variation</Column>
+          <Column>Sagittal Plane</Column>
           <Column>Exercise</Column>
           <Column>
             <Column>Rest</Column>

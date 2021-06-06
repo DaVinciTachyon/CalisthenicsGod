@@ -13,10 +13,11 @@ export default class Workout extends React.Component {
     return (
       <div>
         <Title>{this.props.details.date}</Title>
-        <Row columns={5} isTitle>
+        <Row columns={6} isTitle>
           <Column>Sets</Column>
           <Column>Weighted</Column>
           <Column>Variation</Column>
+          <Column>Sagittal Plane</Column>
           <Column>Name</Column>
           <Column>
             <Column>Rest</Column>
@@ -28,11 +29,9 @@ export default class Workout extends React.Component {
         </Row>
         {this.props.details.stages.map((stage) => (
           <div key={stage._id}>
-            <Row columns={1} id={stage.id}>
-              {stage.name}
-            </Row>
+            <Row>{stage.name}</Row>
             {stage.exercises.map((exercise) => (
-              <Row columns={5} key={exercise._id} id={exercise.id}>
+              <Row columns={6} key={exercise._id} id={exercise.id}>
                 <Column>
                   {exercise.sets.map((set, index) => (
                     <SetEditor
@@ -54,6 +53,7 @@ export default class Workout extends React.Component {
                   readOnly
                 />
                 <Text value={exercise.variation} readOnly />
+                <Text value={exercise.sagittalPlane} readOnly />
                 <Text value={exercise.name} readOnly />
                 <Column columns={2}>
                   {exercise.rest.intraset && (

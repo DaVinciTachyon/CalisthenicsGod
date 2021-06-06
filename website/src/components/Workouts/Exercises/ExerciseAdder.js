@@ -17,6 +17,7 @@ export default class Exercises extends React.Component {
       verticality: '',
       frontalPlane: '',
       motion: '',
+      sagittalPlane: '',
       potentialStages: [],
       requirements: [],
     };
@@ -32,21 +33,29 @@ export default class Exercises extends React.Component {
   }
 
   set = () => {
-    if (this.props.exercise)
+    if (this.props.exercise) {
+      const {
+        name,
+        abbreviation,
+        description,
+        motionType,
+        potentialStages,
+        requirements,
+      } = this.props.exercise;
       this.setState({
-        name: this.props.exercise.name || '',
-        abbreviation: this.props.exercise.abbreviation || '',
-        description: this.props.exercise.description || '',
-        transversePlane:
-          this.props.exercise.motionType.transversePlane || 'upper',
-        kineticChain: this.props.exercise.motionType.kineticChain || 'closed',
-        verticality: this.props.exercise.motionType.verticality || 'horizontal',
-        frontalPlane: this.props.exercise.motionType.frontalPlane || 'push',
-        motion: this.props.exercise.motionType.motion || 'isometric',
-        potentialStages: this.props.exercise.potentialStages || [],
-        requirements: this.props.exercise.requirements || [],
+        name: name || '',
+        abbreviation: abbreviation || '',
+        description: description || '',
+        transversePlane: motionType.transversePlane || 'upper',
+        kineticChain: motionType.kineticChain || 'closed',
+        sagittalPlane: motionType.sagittalPlane || 'bilateral',
+        verticality: motionType.verticality || 'horizontal',
+        frontalPlane: motionType.frontalPlane || 'push',
+        motion: motionType.motion || 'isometric',
+        potentialStages: potentialStages || [],
+        requirements: requirements || [],
       });
-    else
+    } else
       this.setState({
         name: '',
         abbreviation: '',
@@ -55,6 +64,7 @@ export default class Exercises extends React.Component {
         kineticChain: 'closed',
         verticality: 'horizontal',
         frontalPlane: 'push',
+        sagittalPlane: 'bilateral',
         motion: 'isometric',
         potentialStages: [],
         requirements: [],
@@ -79,6 +89,8 @@ export default class Exercises extends React.Component {
       return this.setState({ error: 'Frontal Plane is required' });
     if (!this.state.kineticChain)
       return this.setState({ error: 'Kinetic Chain is required' });
+    if (!this.state.sagittalPlane)
+      return this.setState({ error: 'Sagittal Plane is required' });
     if (!this.state.potentialStages || this.state.potentialStages.length === 0)
       return this.setState({ error: 'Potential Stages are required' });
     this.props.onSubmit({
@@ -92,6 +104,7 @@ export default class Exercises extends React.Component {
         verticality: this.state.verticality,
         frontalPlane: this.state.frontalPlane,
         motion: this.state.motion,
+        sagittalPlane: this.state.sagittalPlane,
       },
       potentialStages: this.state.potentialStages,
       requirements: this.state.requirements,
@@ -106,17 +119,18 @@ export default class Exercises extends React.Component {
   render() {
     return (
       <>
-        <Row columns={11} isTitle>
+        <Row columns={12} isTitle>
           <Column>Name</Column>
           <Column>Abbreviation</Column>
-          <Column span={5}>
-            <Column span={5}>Motion Type</Column>
-            <Column span={5} columns={5}>
+          <Column span={6}>
+            <Column span={6}>Motion Type</Column>
+            <Column span={6} columns={6}>
               <Column>Transverse Plane</Column>
               <Column>Frontal Plane</Column>
               <Column>Verticality</Column>
               <Column>Motion</Column>
               <Column>Kinetic Chain</Column>
+              <Column>Sagittal Plane</Column>
             </Column>
           </Column>
           <Column>Potential Stages</Column>
@@ -124,7 +138,7 @@ export default class Exercises extends React.Component {
           <Column>Description</Column>
           <Column />
         </Row>
-        <Row columns={11}>
+        <Row columns={12}>
           <Text
             name="name"
             value={this.state.name}
@@ -183,6 +197,15 @@ export default class Exercises extends React.Component {
             options={[
               { label: 'Closed', value: 'closed' },
               { label: 'Open', value: 'open' },
+            ]}
+            onChange={this.onChange}
+          />
+          <Radio
+            name="sagittalPlane"
+            value={this.state.sagittalPlane}
+            options={[
+              { label: 'Bilateral', value: 'bilateral' },
+              { label: 'Unilateral', value: 'unilateral' },
             ]}
             onChange={this.onChange}
           />

@@ -49,11 +49,12 @@ export default class ExerciseRow extends React.Component {
   render() {
     if (this.props.isTitle)
       return (
-        <Row columns={8} isTitle>
+        <Row columns={9} isTitle>
           <Column>Name</Column>
           <Column>Abbreviation</Column>
           <Column>Motion</Column>
           <Column>Kinetic Chain</Column>
+          <Column>Sagittal Plane</Column>
           <Column>Potential Stages</Column>
           <Column>Requirements</Column>
           <Column>Description</Column>
@@ -62,11 +63,12 @@ export default class ExerciseRow extends React.Component {
       );
     if (!this.state.isEditing)
       return (
-        <Row columns={8}>
+        <Row columns={9}>
           <Text value={this.props.exercise.name} readOnly />
           <Text value={this.props.exercise.abbreviation} readOnly />
           <Text value={this.props.exercise.motionType.motion} readOnly />
           <Text value={this.props.exercise.motionType.kineticChain} readOnly />
+          <Text value={this.props.exercise.motionType.sagittalPlane} readOnly />
           <StageSelect
             value={this.props.exercise.potentialStages}
             readOnly

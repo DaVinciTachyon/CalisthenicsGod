@@ -13,6 +13,7 @@ export default class ExerciseRow extends React.Component {
       isWeighted: 0,
       variation: this.getDefaultVariation(undefined),
       variationOptions: this.getVariationOptions(undefined),
+      sagittalPlane: undefined,
       id: '',
       exercise: undefined,
       intrasetRest: undefined,
@@ -24,16 +25,20 @@ export default class ExerciseRow extends React.Component {
     this.onUpdate();
   }
 
-  onUpdate = () =>
+  onUpdate = () => {
+    const { sets, variation, sagittalPlane, id, intersetRest, intrasetRest } =
+      this.state;
     this.props.onUpdate({
-      sets: this.state.sets,
-      variation: this.state.variation,
-      id: this.state.id,
+      sets,
+      variation,
+      sagittalPlane,
+      id,
       rest: {
-        intraset: this.state.intrasetRest,
-        interset: this.state.intersetRest,
+        intraset: intrasetRest,
+        interset: intersetRest,
       },
     });
+  };
 
   onChange = async (evt) => {
     await this.setState({ [evt.target.name]: evt.target.value });
@@ -49,15 +54,9 @@ export default class ExerciseRow extends React.Component {
     const variationOptions = [];
     if (motionType?.frontalPlane === 'rotational')
       variationOptions.push(
+        { value: undefined, label: 'Bidirectional' },
         { value: 'clockwise', label: 'Clockwise' },
-        { value: 'anti-clockwise', label: 'Anti-clockwise' },
-        { value: 'right', label: 'Right' },
-        { value: 'left', label: 'Left' }
-      );
-    else if (motionType?.frontalPlane === 'lateral')
-      variationOptions.push(
-        { value: 'right', label: 'Right' },
-        { value: 'left', label: 'Left' }
+        { value: 'anti-clockwise', label: 'Anti-clockwise' }
       );
     else if (motionType?.motion === 'isotonic')
       variationOptions.push(
@@ -69,11 +68,7 @@ export default class ExerciseRow extends React.Component {
     return variationOptions;
   };
 
-  getDefaultVariation = (motionType) => {
-    if (motionType?.frontalPlane === 'rotational') return 'clockwise';
-    else if (motionType?.frontalPlane === 'lateral') return 'right';
-    return undefined;
-  };
+  getDefaultVariation = (motionType) => undefined;
 
   onExerciseChange = async (evt, exercise) => {
     await this.setState({
@@ -82,6 +77,10 @@ export default class ExerciseRow extends React.Component {
       isWeighted: 0,
       variation: this.getDefaultVariation(exercise.motionType),
       variationOptions: this.getVariationOptions(exercise.motionType),
+      sagittalPlane:
+        exercise.motionType.sagittalPlane === 'unilateral'
+          ? 'right'
+          : undefined,
     });
     this.onUpdate();
   };
@@ -117,7 +116,7 @@ export default class ExerciseRow extends React.Component {
 
   render() {
     return (
-      <Row columns={6}>
+      <Row columns={7}>
         <Column>
           {this.state.sets.map((set, i) => (
             <SetEditor
@@ -157,6 +156,19 @@ export default class ExerciseRow extends React.Component {
           name="variation"
           options={this.state.variationOptions}
           value={this.state.variation}
+          onChange={this.onSelectChange}
+        />
+        <Select
+          name="sagittalPlane"
+          options={
+            this.state.exercise?.motionType.sagittalPlane === 'unilateral'
+              ? [
+                  { value: 'right', label: 'Right' },
+                  { value: 'left', label: 'Left' },
+                ]
+              : [{ value: undefined, label: 'Bilateral' }]
+          }
+          value={this.state.sagittalPlane}
           onChange={this.onSelectChange}
         />
         <ExerciseSelect
