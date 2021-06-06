@@ -6,7 +6,7 @@ const app = supertest(appUrl);
 
 chai.use(chaiHttp);
 
-const post = (url, body, authToken = '', headers = {}) =>
+const post = (url, body, authToken = undefined, headers = {}) =>
   new Promise((resolve, reject) => {
     app
       .post(url)
