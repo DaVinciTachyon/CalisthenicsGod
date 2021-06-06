@@ -21,6 +21,19 @@ const getInputDate = (date) =>
     date.getDate().toString().padStart(2, '0'),
   ].join('-');
 
+const getLocaleNumber = (number) =>
+  new Intl.NumberFormat(getLanguage()).format(number);
+
+const getLanguage = () =>
+  navigator.userLanguage ||
+  (navigator.languages &&
+    navigator.languages.length &&
+    navigator.languages[0]) ||
+  navigator.language ||
+  navigator.browserLanguage ||
+  navigator.systemLanguage ||
+  'en';
+
 const register = async (user, page) => {
   await page.goto(`${process.env.REACT_APP_WEBSITE_URL}/register`);
   await page.waitForSelector('[data-id="registerButton"]');
@@ -36,7 +49,7 @@ const register = async (user, page) => {
   await page.click('[name="password"]');
   await page.type('[name="password"]', user.password);
   await page.click('[name="weight"]');
-  await page.type('[name="weight"]', user.weight.toString());
+  await page.type('[name="weight"]', getLocaleNumber(user.weight));
   expect(await page.$eval('[name="weight"]', (el) => el.value)).toEqual(
     user.weight.toString()
   );
@@ -86,6 +99,7 @@ module.exports = {
   randomDate,
   getInputDate,
   getLocaleDate,
+  getLocaleNumber,
   buildRandomUser,
   buildRandomIngredient,
   buildRandomStage,

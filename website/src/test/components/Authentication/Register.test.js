@@ -1,5 +1,10 @@
 import puppeteer from 'puppeteer';
-import { buildRandomUser, getInputDate, getLocaleDate } from '../../util';
+import {
+  buildRandomUser,
+  getInputDate,
+  getLocaleDate,
+  getLocaleNumber,
+} from '../../util';
 
 let browser;
 let page;
@@ -44,7 +49,7 @@ describe('Register', () => {
     await page.click('[name="password"]');
     await page.type('[name="password"]', user.password);
     await page.click('[name="weight"]');
-    await page.type('[name="weight"]', user.weight.toString());
+    await page.type('[name="weight"]', getLocaleNumber(user.weight));
     expect(await page.$eval('[name="weight"]', (el) => el.value)).toEqual(
       user.weight.toString()
     );
