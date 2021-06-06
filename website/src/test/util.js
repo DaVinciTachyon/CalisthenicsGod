@@ -12,8 +12,6 @@ const {
   buildRandomStage,
 } = require('../../../util/util');
 
-const getLocaleDate = (date) => date.toLocaleString().split(', ')[0];
-
 const getInputDate = (date) =>
   [
     date.getFullYear().toString().padStart(4, '0'),
@@ -59,7 +57,7 @@ const register = async (user, page) => {
   await page.click('[name="birthDate"]');
   await page.type(
     '[name="birthDate"]',
-    getLocaleDate(user.birthDate).replace(/\//g, '')
+    user.birthDate.toLocaleDateString().replace(/\//g, '')
   );
   expect(await page.$eval('[name="birthDate"]', (el) => el.value)).toEqual(
     getInputDate(user.birthDate)
@@ -98,7 +96,6 @@ module.exports = {
   randomOption,
   randomDate,
   getInputDate,
-  getLocaleDate,
   getLocaleNumber,
   buildRandomUser,
   buildRandomIngredient,
