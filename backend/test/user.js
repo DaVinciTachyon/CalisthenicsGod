@@ -3,15 +3,15 @@ const chai = require('chai');
 const { expect } = require('chai');
 const should = chai.should();
 
-let authToken;
-let expectedEmail;
-
-before(async () => {
-  authToken = await login();
-  expectedEmail = randomEmail();
-});
-
 describe('Users', () => {
+  let authToken;
+  let expectedEmail;
+
+  before(async () => {
+    authToken = await login();
+    expectedEmail = randomEmail();
+  });
+
   describe('/GET', () => {
     it('valid request', async () => {
       const res = await get('/api/user', authToken);

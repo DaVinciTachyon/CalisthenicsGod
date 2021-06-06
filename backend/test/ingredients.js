@@ -10,15 +10,15 @@ const {
 const chai = require('chai');
 const should = chai.should();
 
-let authToken;
-let expectedIngredient;
-
-before(async () => {
-  authToken = await login();
-  expectedIngredient = buildRandomIngredient();
-});
-
 describe('Ingredients', () => {
+  let authToken;
+  let expectedIngredient;
+
+  before(async () => {
+    authToken = await login();
+    expectedIngredient = buildRandomIngredient();
+  });
+
   describe('/GET', () => {
     it('valid request', async () => {
       const res = await get('/api/nutrition/ingredients', authToken);

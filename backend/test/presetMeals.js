@@ -9,17 +9,19 @@ const {
 const chai = require('chai');
 const should = chai.should();
 
-let authToken;
-let expectedPresetMeal;
-let expectedIngredientReference;
-
-before(async () => {
-  authToken = await login();
-  expectedPresetMeal = await buildRandomPresetMeal(authToken);
-  expectedIngredientReference = await buildRandomIngredientReference(authToken);
-});
-
 describe('Preset Meals', () => {
+  let authToken;
+  let expectedPresetMeal;
+  let expectedIngredientReference;
+
+  before(async () => {
+    authToken = await login();
+    expectedPresetMeal = await buildRandomPresetMeal(authToken);
+    expectedIngredientReference = await buildRandomIngredientReference(
+      authToken
+    );
+  });
+
   describe('/GET', () => {
     it('valid request', async () => {
       const res = await get('/api/nutrition/meals/preset', authToken);

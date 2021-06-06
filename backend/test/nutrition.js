@@ -2,13 +2,13 @@ const { get, login, post, randomInt, randomFloat } = require('./util');
 const chai = require('chai');
 const should = chai.should();
 
-let authToken;
-
-before(async () => {
-  authToken = await login();
-});
-
 describe('Nutrition', () => {
+  let authToken;
+
+  before(async () => {
+    authToken = await login();
+  });
+
   describe('/GET', () => {
     it('valid request', async () => {
       const res = await get('/api/nutrition', authToken);

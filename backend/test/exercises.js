@@ -10,15 +10,15 @@ const {
 const chai = require('chai');
 const should = chai.should();
 
-let authToken;
-let expectedExercise;
-
-before(async () => {
-  authToken = await login();
-  expectedExercise = await buildRandomExercise(authToken);
-});
-
 describe('Exercises', () => {
+  let authToken;
+  let expectedExercise;
+
+  before(async () => {
+    authToken = await login();
+    expectedExercise = await buildRandomExercise(authToken);
+  });
+
   describe('/GET', () => {
     it('valid request', async () => {
       const res = await get('/api/exercise', authToken);

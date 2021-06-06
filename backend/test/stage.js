@@ -10,15 +10,15 @@ const {
 const chai = require('chai');
 const should = chai.should();
 
-let authToken;
-let expectedStage;
-
-before(async () => {
-  authToken = await login();
-  expectedStage = buildRandomStage();
-});
-
 describe('Stage', () => {
+  let authToken;
+  let expectedStage;
+
+  before(async () => {
+    authToken = await login();
+    expectedStage = buildRandomStage();
+  });
+
   describe('/GET', () => {
     it('valid request', async () => {
       const res = await get('/api/workout/stage', authToken);

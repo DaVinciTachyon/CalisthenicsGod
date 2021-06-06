@@ -11,18 +11,18 @@ const {
 const chai = require('chai');
 const should = chai.should();
 
-let authToken;
-let expectedIngredient;
-let expectedMealId;
-let expectedPresetMealId;
-
-before(async () => {
-  authToken = await login();
-  expectedIngredient = await buildRandomIngredientReference(authToken);
-  expectedPresetMealId = await buildRandomPresetMealReference(authToken);
-});
-
 describe('Meals', () => {
+  let authToken;
+  let expectedIngredient;
+  let expectedMealId;
+  let expectedPresetMealId;
+
+  before(async () => {
+    authToken = await login();
+    expectedIngredient = await buildRandomIngredientReference(authToken);
+    expectedPresetMealId = await buildRandomPresetMealReference(authToken);
+  });
+
   describe('/GET', () => {
     it('valid request', async () => {
       const res = await get('/api/nutrition/meals', authToken);

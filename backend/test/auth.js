@@ -2,9 +2,13 @@ const { post, buildRandomUser, randomAlphaNumeric } = require('./util');
 const chai = require('chai');
 const should = chai.should();
 
-const expectedUser = buildRandomUser();
-
 describe('Auth', () => {
+  let expectedUser;
+
+  before(async () => {
+    expectedUser = buildRandomUser();
+  });
+
   describe('/POST register', () => {
     it('no body', async () => {
       const res = await post('/api/auth/register', {});

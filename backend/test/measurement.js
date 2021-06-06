@@ -3,15 +3,15 @@ const chai = require('chai');
 const should = chai.should();
 const expect = chai.expect;
 
-let authToken;
-let expectedWeight;
-
-before(async () => {
-  authToken = await login();
-  expectedWeight = randomFloat();
-});
-
 describe('Measurements', () => {
+  let authToken;
+  let expectedWeight;
+
+  before(async () => {
+    authToken = await login();
+    expectedWeight = randomFloat();
+  });
+
   describe('/GET', () => {
     it('valid request', async () => {
       const res = await get('/api/measurement', authToken);
