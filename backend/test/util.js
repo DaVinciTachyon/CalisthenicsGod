@@ -9,6 +9,7 @@ chai.use(chaiHttp);
 const post = (url, body, authToken = undefined, headers = {}) =>
   new Promise((resolve, reject) => {
     if (authToken) headers['auth-token'] = authToken;
+    headers['Accept'] = 'application/json';
     app
       .post(url)
       .set(headers)
@@ -22,6 +23,7 @@ const post = (url, body, authToken = undefined, headers = {}) =>
 const get = (url, authToken = undefined, headers = {}) =>
   new Promise((resolve, reject) => {
     if (authToken) headers['auth-token'] = authToken;
+    headers['Accept'] = 'application/json';
     app
       .get(url)
       .set(headers)
@@ -34,6 +36,7 @@ const get = (url, authToken = undefined, headers = {}) =>
 const deleteRequest = (url, body, authToken = undefined, headers = {}) =>
   new Promise((resolve, reject) => {
     if (authToken) headers['auth-token'] = authToken;
+    headers['Accept'] = 'application/json';
     app
       .delete(url)
       .set(headers)
@@ -47,6 +50,7 @@ const deleteRequest = (url, body, authToken = undefined, headers = {}) =>
 const patch = (url, body, authToken = undefined, headers = {}) =>
   new Promise((resolve, reject) => {
     if (authToken) headers['auth-token'] = authToken;
+    headers['Accept'] = 'application/json';
     app
       .patch(url)
       .set(headers)
