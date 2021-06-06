@@ -1,27 +1,81 @@
-import React from 'react';
-import { render, unmountComponentAtNode } from 'react-dom';
-import { act } from 'react-dom/test-utils';
+import puppeteer from 'puppeteer';
+import { buildRandomUser, register, randomAlphaNumeric } from '../../util';
 
-import Login from '../../../components/Authentication/Login';
+let browser;
+let page;
+let user;
 
-let container = null;
-beforeEach(() => {
-  container = document.createElement('div');
-  document.body.appendChild(container);
+beforeAll(async () => {
+  browser = await puppeteer.launch({});
+  page = await browser.newPage();
+  user = buildRandomUser();
+  await register(user, page);
 });
 
-afterEach(() => {
-  unmountComponentAtNode(container);
-  container.remove();
-  container = null;
+afterAll(() => {
+  browser.close();
 });
 
-it('renders Login Widget', async () => {
-  await act(async () => {
-    render(<Login />, container);
+beforeEach(async () => {
+  page = await browser.newPage();
+  await page.goto(`${process.env.REACT_APP_WEBSITE_URL}/login`);
+  await page.waitForSelector('[data-id="logInButton"]');
+});
+
+describe('Login', () => {
+  it('Empty', async () => {
+    const logInButton = await page.$('[data-id="logInButton"]');
+    logInButton.click();
+
+    await page.waitForSelector('[data-id="notification"]');
+    const notification = await page.$eval(
+      '[data-id="notification"]',
+      (el) => el.innerHTML
+    );
+    expect(notification).toMatch('"email" is not allowed to be empty');
   });
 
-  expect(
-    container.querySelector('[data-test="signInButton"]').textContent
-  ).toBe('Sign In');
+  it('No password', async () => {
+    await page.click('[name="email"]');
+    await page.type('[name="email"]', user.email);
+
+    const logInButton = await page.$('[data-id="logInButton"]');
+    logInButton.click();
+
+    await page.waitForSelector('[data-id="notification"]');
+    const notification = await page.$eval(
+      '[data-id="notification"]',
+      (el) => el.innerHTML
+    );
+    expect(notification).toMatch('"password" is not allowed to be empty');
+  });
+
+  it('Incorrect details', async () => {
+    await page.click('[name="email"]');
+    await page.type('[name="email"]', user.email);
+    await page.click('[name="password"]');
+    await page.type('[name="password"]', randomAlphaNumeric(7));
+
+    const logInButton = await page.$('[data-id="logInButton"]');
+    logInButton.click();
+
+    await page.waitForSelector('[data-id="notification"]');
+    const notification = await page.$eval(
+      '[data-id="notification"]',
+      (el) => el.innerHTML
+    );
+    expect(notification).toMatch('Invalid Password');
+  });
+
+  it('Correct details', async () => {
+    await page.click('[name="email"]');
+    await page.type('[name="email"]', user.email);
+    await page.click('[name="password"]');
+    await page.type('[name="password"]', user.password);
+
+    const logInButton = await page.$('[data-id="logInButton"]');
+    logInButton.click();
+
+    await page.waitForSelector('[data-id="logInButton"]', { hidden: true });
+  });
 });

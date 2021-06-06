@@ -85,7 +85,7 @@ jobs:
     steps:
       - uses: actions/checkout@v1
       - name: deploy for test
-        run: ./startUp.sh test backend
+        run: ./startUp.sh test website
       - name: test
         run: |
           cd website/

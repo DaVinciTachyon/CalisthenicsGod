@@ -20,7 +20,9 @@ class BaseNotification extends React.Component {
           onClick={this.dismiss}
           className={this.props.className}
         >
-          <Column span={3}>{this.props.text}</Column>
+          <Column span={3} data-id={this.props.dataId || 'notification'}>
+            {this.props.text}
+          </Column>
           <Column onClick={this.dismiss}>✖</Column>
         </Row>
       );

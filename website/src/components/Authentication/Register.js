@@ -15,55 +15,45 @@ export default class Register extends React.Component {
   constructor() {
     super();
     this.state = {
-      firstname: undefined,
-      middlename: undefined,
-      lastname: undefined,
-      email: undefined,
-      password: undefined,
-      weight: undefined,
-      gender: undefined,
-      birthDate: undefined,
+      firstname: '',
+      middlename: '',
+      lastname: '',
+      email: '',
+      password: '',
+      weight: '',
+      gender: '',
+      birthDate: '',
       error: '',
     };
     this.onChange = this.onChange.bind(this);
     this.onSubmit = this.onSubmit.bind(this);
   }
 
-  onSubmit = () => {
-    if (!this.state.firstname)
-      return this.setState({ error: 'First Name is required' });
-    if (!this.state.lastname)
-      return this.setState({ error: 'Last Name is required' });
-    if (!this.state.email) return this.setState({ error: 'Email is required' });
-    if (!this.state.password)
-      return this.setState({ error: 'Password is required' });
-    if (!this.state.weight)
-      return this.setState({ error: 'Weight is required' });
-    if (!this.state.gender)
-      return this.setState({ error: 'Gender is required' });
-    if (!this.state.birthDate)
-      return this.setState({ error: 'Birth Date is required' });
-    fetch(`${process.env.REACT_APP_API_URL}/auth/register/`, {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({
-        name: {
-          first: this.state.firstname,
-          middle: this.state.middlename ? this.state.middlename : undefined,
-          last: this.state.lastname,
-        },
-        email: this.state.email,
-        password: this.state.password,
-        weight: this.state.weight,
-        gender: this.state.gender,
-        birthDate: this.state.birthDate,
-      }),
-    })
-      .then((response) => response.json())
-      .then((data) => {
-        if (data.user) window.location = '/login';
-        else this.setState({ error: data.error });
-      });
+  getValue = (value) => (value ? value : undefined);
+
+  onSubmit = async () => {
+    const response = await fetch(
+      `${process.env.REACT_APP_API_URL}/auth/register/`,
+      {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          name: {
+            first: this.getValue(this.state.firstname),
+            middle: this.getValue(this.state.middlename),
+            last: this.getValue(this.state.lastname),
+          },
+          email: this.getValue(this.state.email),
+          password: this.getValue(this.state.password),
+          weight: this.getValue(this.state.weight),
+          gender: this.getValue(this.state.gender),
+          birthDate: this.getValue(this.state.birthDate),
+        }),
+      }
+    );
+    const data = await response.json();
+    if (data.user) window.location = '/login';
+    else this.setState({ error: data.error });
   };
 
   onChange = (evt) => this.setState({ [evt.target.name]: evt.target.value });
@@ -137,7 +127,9 @@ export default class Register extends React.Component {
           required
         />
         <Row>
-          <Button onClick={this.onSubmit}>Register</Button>
+          <Button onClick={this.onSubmit} dataId="registerButton">
+            Register
+          </Button>
         </Row>
         <Row>
           <Button

@@ -36,7 +36,7 @@ describe('Users', () => {
       res.should.have.status(200);
       const getRes = await get('/user', authToken);
       getRes.should.have.status(200);
-      expect(getRes.body.email).to.equal(expectedEmail);
+      expect(getRes.body.email).to.equal(expectedEmail.toLowerCase());
     });
 
     it('duplicate email', async () => {

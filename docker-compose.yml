@@ -9,6 +9,8 @@ services:
       - ./data:/data/db
     ports:
       - '27017:27017'
+    expose:
+      - 27017
     networks:
       - app-network
   backend:
@@ -28,7 +30,7 @@ services:
     depends_on:
       - calisthenicsgoddb
     environment:
-      - DB_CONNECT=${DB_CONNECT}
+      - DB_CONNECT=mongodb://calisthenicsGodDB/database
       - PORT=${PORT}
       - TOKEN_SECRET=${TOKEN_SECRET}
     networks:
@@ -42,11 +44,13 @@ services:
     restart: unless-stopped
     ports:
       - '5000:5000'
-    # expose:
-    #   - 5000
+    expose:
+      - 5000
     volumes:
       - .:/home/node/app
       - node_modules:/home/node/app/node_modules
+    depends_on:
+      - backend
     environment:
       - REACT_APP_API_URL=${REACT_APP_API_URL}
     networks:
@@ -63,6 +67,9 @@ services:
       - $PWD/site:/srv
       - caddy_data:/data
       - caddy_config:/config
+    depends_on:
+      - backend
+      - website
     networks:
       - app-network
 

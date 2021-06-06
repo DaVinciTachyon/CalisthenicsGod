@@ -19,9 +19,6 @@ export default class Login extends React.Component {
   }
 
   onSubmit = async () => {
-    if (!this.state.email) return this.setState({ error: 'Email is required' });
-    if (!this.state.password)
-      return this.setState({ error: 'Password is required' });
     const response = await fetch(
       `${process.env.REACT_APP_API_URL}/auth/login/`,
       {
@@ -62,7 +59,7 @@ export default class Login extends React.Component {
           label="Password"
         />
         <Row>
-          <Button data-test="signInButton" onClick={this.onSubmit}>
+          <Button dataId="logInButton" onClick={this.onSubmit}>
             Sign In
           </Button>
         </Row>
