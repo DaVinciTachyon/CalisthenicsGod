@@ -52,10 +52,10 @@ describe('Register', () => {
     await page.click(`[data-id="${user.gender}"]`);
     await page.waitForSelector(`[data-id="select-${user.gender}"]`);
     await page.click('[name="birthDate"]');
-    const date = user.birthDate.toLocaleDateString().split('/').join('');
+    const date = user.birthDate.toString('yyyyMMdd');
     await page.type('[name="birthDate"]', date);
     expect(await page.$eval('[name="birthDate"]', (el) => el.value)).toEqual(
-      user.birthDate.toLocaleDateString().split('/').reverse().join('-')
+      user.birthDate.toString('yyyy-MM-dd')
     );
 
     await page.click('[data-id="registerButton"]');
