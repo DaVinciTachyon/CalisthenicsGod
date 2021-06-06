@@ -55,7 +55,7 @@ describe('Register', () => {
     const date = user.birthDate.toLocaleDateString().replace(/\//g, '');
     await page.type('[name="birthDate"]', date);
     expect(await page.$eval('[name="birthDate"]', (el) => el.value)).toEqual(
-      user.birthDate.toLocaleDateString().replace(/\//g, '-')
+      user.birthDate.toLocaleDateString().split('/').reverse().join('-')
     );
 
     await page.click('[data-id="registerButton"]');
