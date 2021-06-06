@@ -12,6 +12,15 @@ const {
   buildRandomStage,
 } = require('../../../util/util');
 
+const getLocaleDate = (date) => date.toLocaleString().split(', ')[0];
+
+const getInputDate = (date) =>
+  [
+    date.getFullYear().toString().padStart(4, '0'),
+    (date.getMonth() + 1).toString().padStart(2, '0'),
+    date.getDate().toString().padStart(2, '0'),
+  ].join('-');
+
 const register = async (user, page) => {
   await page.goto(`${process.env.REACT_APP_WEBSITE_URL}/register`);
   await page.waitForSelector('[data-id="registerButton"]');
@@ -37,14 +46,10 @@ const register = async (user, page) => {
   await page.click('[name="birthDate"]');
   await page.type(
     '[name="birthDate"]',
-    user.birthDate.toLocaleString().split(', ')[0].replace(/\//g, '')
+    getLocaleDate(user.birthDate).replace(/\//g, '')
   );
   expect(await page.$eval('[name="birthDate"]', (el) => el.value)).toEqual(
-    [
-      user.birthDate.getFullYear().padStart(4, '0'),
-      (user.birthDate.getMonth() + 1).padStart(2, '0'),
-      user.birthDate.getDate().padStart(2, '0'),
-    ].join('-')
+    getInputDate(user.birthDate)
   );
 
   await page.click('[data-id="registerButton"]');
@@ -79,6 +84,8 @@ module.exports = {
   randomInt,
   randomOption,
   randomDate,
+  getInputDate,
+  getLocaleDate,
   buildRandomUser,
   buildRandomIngredient,
   buildRandomStage,

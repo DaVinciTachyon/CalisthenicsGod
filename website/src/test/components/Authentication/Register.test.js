@@ -1,5 +1,5 @@
 import puppeteer from 'puppeteer';
-import { buildRandomUser } from '../../util';
+import { buildRandomUser, getInputDate, getLocaleDate } from '../../util';
 
 let browser;
 let page;
@@ -54,14 +54,10 @@ describe('Register', () => {
     await page.click('[name="birthDate"]');
     await page.type(
       '[name="birthDate"]',
-      user.birthDate.toLocaleString().split(', ')[0].replace(/\//g, '')
+      getLocaleDate(user.birthDate).replace(/\//g, '')
     );
     expect(await page.$eval('[name="birthDate"]', (el) => el.value)).toEqual(
-      [
-        user.birthDate.getFullYear().padStart(4, '0'),
-        (user.birthDate.getMonth() + 1).padStart(2, '0'),
-        user.birthDate.getDate().padStart(2, '0'),
-      ].join('-')
+      getInputDate(user.birthDate)
     );
 
     await page.click('[data-id="registerButton"]');
