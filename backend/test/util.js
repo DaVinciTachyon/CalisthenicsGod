@@ -16,42 +16,34 @@ const post = (url, body, authToken = undefined, headers = {}) =>
     });
   });
 
-const get = (url, authToken = '', headers = {}) =>
+const get = (url, authToken = undefined, headers = {}) =>
   new Promise((resolve, reject) => {
-    app
-      .get(url)
-      .set('auth-token', authToken)
-      .set(headers)
-      .end((err, res) => {
-        if (err) reject(err);
-        resolve(res);
-      });
+    const request = app.get(url).set(headers);
+    if (authToken) request.set('auth-token', authToken);
+    request.send(body).end((err, res) => {
+      if (err) reject(err);
+      resolve(res);
+    });
   });
 
-const deleteRequest = (url, body, authToken = '', headers = {}) =>
+const deleteRequest = (url, body, authToken = undefined, headers = {}) =>
   new Promise((resolve, reject) => {
-    app
-      .delete(url)
-      .set('auth-token', authToken)
-      .set(headers)
-      .send(body)
-      .end((err, res) => {
-        if (err) reject(err);
-        resolve(res);
-      });
+    const request = app.delete(url).set(headers);
+    if (authToken) request.set('auth-token', authToken);
+    request.send(body).end((err, res) => {
+      if (err) reject(err);
+      resolve(res);
+    });
   });
 
-const patch = (url, body, authToken = '', headers = {}) =>
+const patch = (url, body, authToken = undefined, headers = {}) =>
   new Promise((resolve, reject) => {
-    app
-      .patch(url)
-      .set('auth-token', authToken)
-      .set(headers)
-      .send(body)
-      .end((err, res) => {
-        if (err) reject(err);
-        resolve(res);
-      });
+    const request = app.patch(url).set(headers);
+    if (authToken) request.set('auth-token', authToken);
+    request.send(body).end((err, res) => {
+      if (err) reject(err);
+      resolve(res);
+    });
   });
 
 const login = async () => {
