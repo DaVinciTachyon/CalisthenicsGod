@@ -9,12 +9,13 @@ const {
 } = require('./util');
 const chai = require('chai');
 const should = chai.should();
-let authToken;
 
-const expectedStage = buildRandomStage();
+let authToken;
+let expectedStage;
 
 before(async () => {
   authToken = await login();
+  expectedStage = buildRandomStage();
 });
 
 describe('Stage', () => {

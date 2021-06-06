@@ -55,7 +55,7 @@ module.exports = {
         sagittalPlane,
         motion,
       }),
-      potentialStages: Joi.array().items(Joi.string()), //.min(1),
+      potentialStages: Joi.array().items(Joi.string()).min(1),
       requirements: Joi.array().items(Joi.string()),
       description: Joi.string().allow(''),
     }).validate(data),

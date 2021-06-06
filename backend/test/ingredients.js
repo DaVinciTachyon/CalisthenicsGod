@@ -9,12 +9,13 @@ const {
 } = require('./util');
 const chai = require('chai');
 const should = chai.should();
-let authToken;
 
-const expectedIngredient = buildRandomIngredient();
+let authToken;
+let expectedIngredient;
 
 before(async () => {
   authToken = await login();
+  expectedIngredient = buildRandomIngredient();
 });
 
 describe('Ingredients', () => {

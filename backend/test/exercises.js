@@ -9,8 +9,8 @@ const {
 } = require('./util');
 const chai = require('chai');
 const should = chai.should();
-let authToken;
 
+let authToken;
 let expectedExercise;
 
 before(async () => {

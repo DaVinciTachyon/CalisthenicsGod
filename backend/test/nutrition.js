@@ -1,6 +1,7 @@
 const { get, login, post, randomInt, randomFloat } = require('./util');
 const chai = require('chai');
 const should = chai.should();
+
 let authToken;
 
 before(async () => {

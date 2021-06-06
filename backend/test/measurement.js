@@ -2,12 +2,13 @@ const { get, login, post, randomFloat, randomString } = require('./util');
 const chai = require('chai');
 const should = chai.should();
 const expect = chai.expect;
-let authToken;
 
-const expectedWeight = randomFloat();
+let authToken;
+let expectedWeight;
 
 before(async () => {
   authToken = await login();
+  expectedWeight = randomFloat();
 });
 
 describe('Measurements', () => {

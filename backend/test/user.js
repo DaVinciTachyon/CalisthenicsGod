@@ -4,10 +4,11 @@ const { expect } = require('chai');
 const should = chai.should();
 
 let authToken;
-const expectedEmail = randomEmail();
+let expectedEmail;
 
 before(async () => {
   authToken = await login();
+  expectedEmail = randomEmail();
 });
 
 describe('Users', () => {
