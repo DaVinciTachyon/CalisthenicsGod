@@ -11,24 +11,24 @@ describe('Auth', () => {
 
   describe('/POST register', () => {
     it('no body', async () => {
-      const res = await post('/api/auth/register', {});
+      const res = await post('/api/auth/register/', {});
       res.should.have.status(400);
     });
 
     it('valid user', async () => {
-      const res = await post('/api/auth/register', expectedUser);
+      const res = await post('/api/auth/register/', expectedUser);
       res.should.have.status(200);
     });
   });
 
   describe('/POST login', () => {
     it('no body', async () => {
-      const res = await post('/api/auth/login', {});
+      const res = await post('/api/auth/login/', {});
       res.should.have.status(400);
     });
 
     it('invalid user', async () => {
-      const res = await post('/api/auth/login', {
+      const res = await post('/api/auth/login/', {
         email: expectedUser.email,
         password: randomAlphaNumeric(10),
       });
@@ -36,7 +36,7 @@ describe('Auth', () => {
     });
 
     it('valid user', async () => {
-      const res = await post('/api/auth/login', {
+      const res = await post('/api/auth/login/', {
         email: expectedUser.email,
         password: expectedUser.password,
       });
