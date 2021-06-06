@@ -8,42 +8,53 @@ chai.use(chaiHttp);
 
 const post = (url, body, authToken = undefined, headers = {}) =>
   new Promise((resolve, reject) => {
-    const request = app.post(url).set(headers);
-    if (authToken) request.set('auth-token', authToken);
-    request.send(body).end((err, res) => {
-      if (err) reject(err);
-      resolve(res);
-    });
+    if (authToken) headers['auth-token'] = authToken;
+    app
+      .post(url)
+      .set(headers)
+      .send(body)
+      .end((err, res) => {
+        if (err) reject(err);
+        resolve(res);
+      });
   });
 
 const get = (url, authToken = undefined, headers = {}) =>
   new Promise((resolve, reject) => {
-    const request = app.get(url).set(headers);
-    if (authToken) request.set('auth-token', authToken);
-    request.end((err, res) => {
-      if (err) reject(err);
-      resolve(res);
-    });
+    if (authToken) headers['auth-token'] = authToken;
+    app
+      .get(url)
+      .set(headers)
+      .end((err, res) => {
+        if (err) reject(err);
+        resolve(res);
+      });
   });
 
 const deleteRequest = (url, body, authToken = undefined, headers = {}) =>
   new Promise((resolve, reject) => {
-    const request = app.delete(url).set(headers);
-    if (authToken) request.set('auth-token', authToken);
-    request.send(body).end((err, res) => {
-      if (err) reject(err);
-      resolve(res);
-    });
+    if (authToken) headers['auth-token'] = authToken;
+    app
+      .delete(url)
+      .set(headers)
+      .send(body)
+      .end((err, res) => {
+        if (err) reject(err);
+        resolve(res);
+      });
   });
 
 const patch = (url, body, authToken = undefined, headers = {}) =>
   new Promise((resolve, reject) => {
-    const request = app.patch(url).set(headers);
-    if (authToken) request.set('auth-token', authToken);
-    request.send(body).end((err, res) => {
-      if (err) reject(err);
-      resolve(res);
-    });
+    if (authToken) headers['auth-token'] = authToken;
+    app
+      .patch(url)
+      .set(headers)
+      .send(body)
+      .end((err, res) => {
+        if (err) reject(err);
+        resolve(res);
+      });
   });
 
 const login = async () => {
