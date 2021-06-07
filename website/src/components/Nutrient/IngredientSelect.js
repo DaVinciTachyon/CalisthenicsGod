@@ -1,5 +1,6 @@
 import React from 'react';
 import { Select } from '../../style/inputs';
+import axios from 'axios';
 
 export default class IngredientSelect extends React.Component {
   constructor() {
@@ -35,17 +36,7 @@ export default class IngredientSelect extends React.Component {
   }
 
   getIngredients = async () => {
-    const response = await fetch(
-      `${process.env.REACT_APP_API_URL}/nutrition/ingredients/`,
-      {
-        method: 'GET',
-        headers: {
-          'Content-Type': 'application/json',
-          'auth-token': localStorage.getItem('authToken'),
-        },
-      }
-    );
-    const data = await response.json();
+    const data = (await axios.get('/nutrition/ingredients/')).data;
     this.setState({ ingredients: data.ingredients });
   };
 }

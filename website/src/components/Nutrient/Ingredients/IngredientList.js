@@ -2,6 +2,7 @@ import React from 'react';
 import IngredientRow from './IngredientRow';
 import { Title } from '../../../style/table';
 import IngredientAdder from './IngredientAdder';
+import axios from 'axios';
 
 export default class IngredientList extends React.Component {
   constructor() {
@@ -20,17 +21,9 @@ export default class IngredientList extends React.Component {
   }
 
   getIngredients = async () => {
-    let url = `${process.env.REACT_APP_API_URL}/nutrition/ingredients/`;
-    if (this.props.isUnavailable)
-      url = `${process.env.REACT_APP_API_URL}/nutrition/ingredients/unavailable/`;
-    const response = await fetch(url, {
-      method: 'GET',
-      headers: {
-        'Content-Type': 'application/json',
-        'auth-token': localStorage.getItem('authToken'),
-      },
-    });
-    const { ingredients } = await response.json();
+    let url = `/nutrition/ingredients/`;
+    if (this.props.isUnavailable) url += `unavailable/`;
+    const { ingredients } = (await axios.get(url)).data;
     this.setState({ ingredients });
   };
 

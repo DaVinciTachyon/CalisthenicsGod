@@ -17,63 +17,80 @@ import Meals from './components/Nutrient/Meals/Meals';
 import Stages from './components/Workouts/Stages/Stages';
 import AuthenticatedRoute from './components/AuthenticatedRoute';
 import NonAuthenticatedRoute from './components/NonAuthenticatedRoute';
+import axios from 'axios';
+import { SWRConfig } from 'swr';
+
+axios.defaults.baseURL =
+  process.env.REACT_APP_API_URL || 'http://localhost:8080';
+axios.defaults.headers.common['Content-Type'] = 'application/json';
+axios.defaults.headers.common['auth-token'] =
+  localStorage.getItem('authToken') || null;
+/*if setting null does not remove `Authorization` header then try     
+          delete axios.defaults.headers.common['Authorization'];
+        */
 
 ReactDOM.render(
   <React.StrictMode>
-    <Router>
-      <Toolbar />
-      <Switch>
-        <NonAuthenticatedRoute path="/register" exact component={Register} />
-        <NonAuthenticatedRoute path="/login" exact component={Login} />
-        <AuthenticatedRoute path="/" exact component={NutrientTracker} />
-        <AuthenticatedRoute
-          path="/nutrientTracker"
-          exact
-          component={NutrientTracker}
-        />
-        <AuthenticatedRoute
-          path="/nutrientTracker/ingredients"
-          exact
-          component={Ingredients}
-        />
-        <AuthenticatedRoute
-          path="/nutrientTracker/meals"
-          exact
-          component={Meals}
-        />
-        <AuthenticatedRoute
-          path="/workoutTracker"
-          exact
-          component={WorkoutTracker}
-        />
-        <AuthenticatedRoute
-          path="/workoutTracker/new"
-          exact
-          component={WorkoutAdder}
-        />
-        <AuthenticatedRoute
-          path="/workoutTracker/exercises"
-          exact
-          component={Exercises}
-        />
-        <AuthenticatedRoute
-          path="/workoutTracker/stages"
-          exact
-          component={Stages}
-        />
-        <AuthenticatedRoute
-          path="/measurementTracker"
-          exact
-          component={MeasurementTracker}
-        />
-        <AuthenticatedRoute
-          path="/measurementTracker/new"
-          exact
-          component={MeasurementAdder}
-        />
-        <AuthenticatedRoute path="/userProfile" exact component={UserProfile} />
-      </Switch>
-    </Router>
+    <SWRConfig value={{ fetcher: (url) => axios(url) }}>
+      <Router>
+        <Toolbar />
+        <Switch>
+          <NonAuthenticatedRoute path="/register" exact component={Register} />
+          <NonAuthenticatedRoute path="/login" exact component={Login} />
+          <AuthenticatedRoute path="/" exact component={NutrientTracker} />
+          <AuthenticatedRoute
+            path="/nutrientTracker"
+            exact
+            component={NutrientTracker}
+          />
+          <AuthenticatedRoute
+            path="/nutrientTracker/ingredients"
+            exact
+            component={Ingredients}
+          />
+          <AuthenticatedRoute
+            path="/nutrientTracker/meals"
+            exact
+            component={Meals}
+          />
+          <AuthenticatedRoute
+            path="/workoutTracker"
+            exact
+            component={WorkoutTracker}
+          />
+          <AuthenticatedRoute
+            path="/workoutTracker/new"
+            exact
+            component={WorkoutAdder}
+          />
+          <AuthenticatedRoute
+            path="/workoutTracker/exercises"
+            exact
+            component={Exercises}
+          />
+          <AuthenticatedRoute
+            path="/workoutTracker/stages"
+            exact
+            component={Stages}
+          />
+          <AuthenticatedRoute
+            path="/measurementTracker"
+            exact
+            component={MeasurementTracker}
+          />
+          <AuthenticatedRoute
+            path="/measurementTracker/new"
+            exact
+            component={MeasurementAdder}
+          />
+          <AuthenticatedRoute
+            path="/userProfile"
+            exact
+            component={UserProfile}
+          />
+        </Switch>
+      </Router>
+    </SWRConfig>
   </React.StrictMode>,
   document.getElementById('root')
 );

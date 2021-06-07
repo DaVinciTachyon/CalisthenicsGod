@@ -4,6 +4,7 @@ import { Row } from '../../style/table';
 import Card from '../../style/card';
 import { Button } from '../../style/buttons';
 import { Text, Password } from '../../style/inputs';
+import axios from 'axios';
 
 export default class Login extends React.Component {
   constructor() {
@@ -19,18 +20,12 @@ export default class Login extends React.Component {
   }
 
   onSubmit = async () => {
-    const response = await fetch(
-      `${process.env.REACT_APP_API_URL}/auth/login/`,
-      {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({
-          email: this.state.email,
-          password: this.state.password,
-        }),
-      }
-    );
-    const data = await response.json();
+    const data = (
+      await axios.post('/auth/login/', {
+        email: this.state.email,
+        password: this.state.password,
+      })
+    ).data;
     if (data['auth-token']) {
       localStorage.setItem('authToken', data['auth-token']);
       window.location = '/';

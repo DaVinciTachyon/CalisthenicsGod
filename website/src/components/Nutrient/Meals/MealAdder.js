@@ -2,6 +2,7 @@ import React from 'react';
 import { Row, Column } from '../../../style/table';
 import { Button, ErrorButton } from '../../../style/buttons';
 import { Text } from '../../../style/inputs';
+import axios from 'axios';
 
 export default class MealAdder extends React.Component {
   constructor() {
@@ -12,16 +13,9 @@ export default class MealAdder extends React.Component {
   set = () => this.setState({ isAdding: false, name: '' });
 
   onSubmit = async () => {
-    await fetch(`${process.env.REACT_APP_API_URL}/nutrition/meals/preset/`, {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-        'auth-token': localStorage.getItem('authToken'),
-      },
-      body: JSON.stringify({
-        name: this.state.name,
-        ingredients: [],
-      }),
+    await axios.post('/nutrition/meals/preset/', {
+      name: this.state.name,
+      ingredients: [],
     });
     this.set();
     this.props.onSubmit();

@@ -1,5 +1,6 @@
 import React from 'react';
 import { Select } from '../../style/inputs';
+import axios from 'axios';
 
 export default class StageSelect extends React.Component {
   constructor() {
@@ -14,18 +15,8 @@ export default class StageSelect extends React.Component {
   }
 
   getWorkoutStages = async () => {
-    const response = await fetch(
-      `${process.env.REACT_APP_API_URL}/workout/stage/`,
-      {
-        method: 'GET',
-        headers: {
-          'Content-Type': 'application/json',
-          'auth-token': localStorage.getItem('authToken'),
-        },
-      }
-    );
-    const data = await response.json();
-    this.setState({ stages: data.stages });
+    const { stages } = await axios.get('/workout/stage/');
+    this.setState({ stages });
   };
 
   onChange = async (evt) => {

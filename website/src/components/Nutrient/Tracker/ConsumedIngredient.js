@@ -15,6 +15,7 @@ import {
   ErrorButton,
   DeleteButton,
 } from '../../../style/buttons';
+import axios from 'axios';
 
 export default class ConsumedIngredient extends React.Component {
   constructor() {
@@ -29,53 +30,25 @@ export default class ConsumedIngredient extends React.Component {
   onSubmit = async () => {
     const { mealId, _id } = this.props;
     const { weight } = this.state;
-    const response = await fetch(
-      `${process.env.REACT_APP_API_URL}/nutrition/meals/`,
-      {
-        method: 'PATCH',
-        headers: {
-          'Content-Type': 'application/json',
-          'auth-token': localStorage.getItem('authToken'),
-        },
-        body: JSON.stringify({
-          _id: mealId,
-          ingredient: {
-            _id,
-            weight,
-          },
-        }),
-      }
-    );
-    this.onUpdate(response);
+    await axios.patch('/nutrition/meals/', {
+      _id: mealId,
+      ingredient: {
+        _id,
+        weight,
+      },
+    });
+    await this.props.onUpdate();
+    this.setState({ isEditing: false });
   };
 
   onRemove = async () => {
     const { mealId, _id } = this.props;
-    const response = await fetch(
-      `${process.env.REACT_APP_API_URL}/nutrition/meals/`,
-      {
-        method: 'DELETE',
-        headers: {
-          'Content-Type': 'application/json',
-          'auth-token': localStorage.getItem('authToken'),
-        },
-        body: JSON.stringify({
-          _id: mealId,
-          ingredient: { _id },
-        }),
-      }
-    );
-    this.onUpdate(response);
-  };
-
-  onUpdate = async (response) => {
-    if (response.status === 200) {
-      await this.props.onUpdate();
-      this.setState({ isEditing: false });
-    } else {
-      const data = await response.json();
-      console.error(data.error);
-    }
+    await axios.delete('/nutrition/meals/', {
+      _id: mealId,
+      ingredient: { _id },
+    });
+    await this.props.onUpdate();
+    this.setState({ isEditing: false });
   };
 
   setWeight = () => this.setState({ weight: this.props.weight });

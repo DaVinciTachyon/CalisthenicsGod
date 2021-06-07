@@ -1,5 +1,6 @@
 import React from 'react';
 import MacroSummaryRow from './MacroSummaryRow';
+import axios from 'axios';
 
 export default class NutrientSummary extends React.Component {
   constructor() {
@@ -82,20 +83,10 @@ export default class NutrientSummary extends React.Component {
     );
   }
 
-  getUserGoals = () => {
-    const requestOptions = {
-      method: 'GET',
-      headers: {
-        'Content-Type': 'application/json',
-        'auth-token': localStorage.getItem('authToken'),
-      },
-    };
-    fetch(`${process.env.REACT_APP_API_URL}/nutrition/goals/`, requestOptions)
-      .then((response) => response.json())
-      .then((data) =>
-        this.setState({
-          goal: data.macronutrients,
-        })
-      );
+  getUserGoals = async () => {
+    const { macronutrients } = (await axios.get('/nutrition/goals')).data;
+    this.setState({
+      goal: macronutrients,
+    });
   };
 }

@@ -2,6 +2,7 @@ import React from 'react';
 import { Select } from '../../style/inputs';
 import { Button } from '../../style/buttons';
 import { Row } from '../../style/table';
+import axios from 'axios';
 
 export default class MealSelect extends React.Component {
   constructor() {
@@ -29,17 +30,7 @@ export default class MealSelect extends React.Component {
   }
 
   getMeals = async () => {
-    const response = await fetch(
-      `${process.env.REACT_APP_API_URL}/nutrition/meals/preset/names/`,
-      {
-        method: 'GET',
-        headers: {
-          'Content-Type': 'application/json',
-          'auth-token': localStorage.getItem('authToken'),
-        },
-      }
-    );
-    const data = await response.json();
+    const data = (await axios.get('/nutrition/meals/preset/names/')).data;
     const meals = [];
     data.meals.forEach((meal) =>
       meals.push({ label: meal.name, value: meal._id })

@@ -3,6 +3,7 @@ import { Button } from '../../../style/buttons';
 import ExerciseRow from './ExerciseRow';
 import ExerciseAdder from './ExerciseAdder';
 import { Section } from '../../../style/table';
+import axios from 'axios';
 
 export default class Exercises extends React.Component {
   constructor() {
@@ -18,33 +19,14 @@ export default class Exercises extends React.Component {
   }
 
   getExercises = async () => {
-    const response = await fetch(`${process.env.REACT_APP_API_URL}/exercise/`, {
-      method: 'GET',
-      headers: {
-        'Content-Type': 'application/json',
-        'auth-token': localStorage.getItem('authToken'),
-      },
-    });
-    const data = await response.json();
-    this.setState({ exercises: data.exercises });
+    const { exercises } = (await axios.get('/exercise/')).data;
+    this.setState({ exercises });
   };
 
   onSubmit = async (exercise) => {
-    const response = await fetch(`${process.env.REACT_APP_API_URL}/exercise/`, {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-        'auth-token': localStorage.getItem('authToken'),
-      },
-      body: JSON.stringify(exercise),
-    });
-    if (response.status === 200) {
-      await this.getExercises();
-      this.setState({ isAdding: false });
-    } else {
-      const data = await response.json();
-      return data.error;
-    }
+    await axios.post('/exercise/', exercise);
+    await this.getExercises();
+    this.setState({ isAdding: false });
   };
 
   render() {

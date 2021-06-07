@@ -4,6 +4,7 @@ import MealSelect from '../MealSelect';
 import Card from '../../../style/card';
 import MealIngredientAdder from './MealIngredientAdder';
 import ConsumedMeal from './ConsumedMeal';
+import axios from 'axios';
 
 export default class NutrientTracker extends React.Component {
   constructor() {
@@ -25,39 +26,14 @@ export default class NutrientTracker extends React.Component {
   }
 
   getMeals = async () => {
-    const response = await fetch(
-      `${process.env.REACT_APP_API_URL}/nutrition/meals/`,
-      {
-        method: 'GET',
-        headers: {
-          'Content-Type': 'application/json',
-          'auth-token': localStorage.getItem('authToken'),
-        },
-      }
-    );
-    const data = await response.json();
-    this.setState({ meals: data.meals });
+    const { meals } = (await axios.get('/nutrition/meals/')).data;
+    this.setState({ meals });
   };
 
-  addMeal = async (id) => {
-    const response = await fetch(
-      `${process.env.REACT_APP_API_URL}/nutrition/meals/addPreset/`,
-      {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-          'auth-token': localStorage.getItem('authToken'),
-        },
-        body: JSON.stringify({
-          _id: id,
-        }),
-      }
-    );
-    if (response.status !== 200) {
-      const data = await response.json();
-      console.error(data.error);
-    }
-  };
+  addMeal = async (id) =>
+    await axios.post('/nutrition/meals/addPreset/', {
+      _id: id,
+    });
 
   render() {
     return (

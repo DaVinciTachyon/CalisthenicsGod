@@ -15,6 +15,7 @@ import {
   ErrorButton,
 } from '../../../style/buttons';
 import MealEditor from './MealEditor';
+import axios from 'axios';
 
 export default class MealRow extends React.Component {
   constructor() {
@@ -60,30 +61,18 @@ export default class MealRow extends React.Component {
   };
 
   getIngredients = async () => {
-    const response = await fetch(
-      `${process.env.REACT_APP_API_URL}/nutrition/meals/preset/ingredients/`,
-      {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-          'auth-token': localStorage.getItem('authToken'),
-        },
-        body: JSON.stringify({ _id: this.props.id }),
-      }
-    );
-    const data = await response.json();
+    const data = (
+      await axios.post('/nutrition/meals/preset/ingredients/', {
+        _id: this.props.id,
+      })
+    ).data;
     await this.setState({ ingredients: data.ingredients });
     this.setMacros();
   };
 
   onDelete = async () => {
-    await fetch(`${process.env.REACT_APP_API_URL}/nutrition/meals/preset/`, {
-      method: 'DELETE',
-      headers: {
-        'Content-Type': 'application/json',
-        'auth-token': localStorage.getItem('authToken'),
-      },
-      body: JSON.stringify({ _id: this.props.id }),
+    await axios.delete('/nutrition/meals/preset/', {
+      _id: this.props.id,
     });
     this.props.onUpdate();
   };

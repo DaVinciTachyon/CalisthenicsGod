@@ -1,6 +1,7 @@
 import React from 'react';
 import MealRow from './MealRow';
 import MealAdder from './MealAdder';
+import axios from 'axios';
 
 export default class Meals extends React.Component {
   constructor() {
@@ -21,18 +22,8 @@ export default class Meals extends React.Component {
   }
 
   getMeals = async () => {
-    const response = await fetch(
-      `${process.env.REACT_APP_API_URL}/nutrition/meals/preset/names/`,
-      {
-        method: 'GET',
-        headers: {
-          'Content-Type': 'application/json',
-          'auth-token': localStorage.getItem('authToken'),
-        },
-      }
-    );
-    const data = await response.json();
-    this.setState({ meals: data.meals });
+    const { meals } = (await axios.get('/nutrition/meals/preset/names/')).data;
+    this.setState({ meals });
   };
 
   render() {

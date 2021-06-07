@@ -7,6 +7,7 @@ import {
   ErrorButton,
   DeleteButton,
 } from '../../../style/buttons';
+import axios from 'axios';
 
 export default class StageRow extends React.Component {
   constructor() {
@@ -32,32 +33,18 @@ export default class StageRow extends React.Component {
   onChange = (evt) => this.setState({ [evt.target.name]: evt.target.value });
 
   onSubmit = async () => {
-    await fetch(`${process.env.REACT_APP_API_URL}/workout/stage/`, {
-      method: 'PATCH',
-      headers: {
-        'Content-Type': 'application/json',
-        'auth-token': localStorage.getItem('authToken'),
-      },
-      body: JSON.stringify({
-        _id: this.props.id,
-        name: this.state.name,
-        description: this.state.description,
-      }),
+    await axios.patch('/workout/stage/', {
+      _id: this.props.id,
+      name: this.state.name,
+      description: this.state.description,
     });
     await this.set();
     this.props.onUpdate();
   };
 
   onRemove = async () => {
-    await fetch(`${process.env.REACT_APP_API_URL}/workout/stage/`, {
-      method: 'DELETE',
-      headers: {
-        'Content-Type': 'application/json',
-        'auth-token': localStorage.getItem('authToken'),
-      },
-      body: JSON.stringify({
-        _id: this.props.id,
-      }),
+    await axios.delete('/workout/stage/', {
+      _id: this.props.id,
     });
     await this.set();
     this.props.onUpdate();

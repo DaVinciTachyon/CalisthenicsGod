@@ -1,6 +1,7 @@
 import React from 'react';
 import { Line } from 'react-chartjs-2';
 import Card from '../../style/card';
+import axios from 'axios';
 
 export default class MeasurementHistory extends React.Component {
   constructor() {
@@ -33,33 +34,20 @@ export default class MeasurementHistory extends React.Component {
     this.getWeightHistory();
   }
 
-  getWeightHistory = () => {
-    const requestOptions = {
-      method: 'GET',
-      headers: {
-        'Content-Type': 'application/json',
-        'auth-token': localStorage.getItem('authToken'),
-      },
-    };
-    fetch(
-      `${process.env.REACT_APP_API_URL}/measurement/weight/history/`,
-      requestOptions
-    )
-      .then((response) => response.json())
-      .then((data) => {
-        let chart = Object.assign({}, this.state.chart);
-        chart.labels = [];
-        chart.datasets[0].data = [];
-        for (let i = 0; i < data.weight.length; i++) {
-          chart.labels.unshift(
-            `${new Date(data.weight[i].date).getDate()}/${new Date(
-              data.weight[i].date
-            ).getMonth()}/${new Date(data.weight[i].date).getFullYear()}`
-          );
-          chart.datasets[0].data.unshift(data.weight[i].value);
-        }
-        this.setState({ chart: chart });
-      });
+  getWeightHistory = async () => {
+    const data = (await axios.get('/measurement/weight/history/')).data;
+    let chart = Object.assign({}, this.state.chart);
+    chart.labels = [];
+    chart.datasets[0].data = [];
+    for (let i = 0; i < data.weight.length; i++) {
+      chart.labels.unshift(
+        `${new Date(data.weight[i].date).getDate()}/${new Date(
+          data.weight[i].date
+        ).getMonth()}/${new Date(data.weight[i].date).getFullYear()}`
+      );
+      chart.datasets[0].data.unshift(data.weight[i].value);
+    }
+    this.setState({ chart: chart });
   };
 
   addWeightHistory = () => {

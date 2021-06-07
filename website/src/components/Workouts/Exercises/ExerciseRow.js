@@ -5,6 +5,7 @@ import { Button, DeleteButton } from '../../../style/buttons';
 import StageSelect from '../StageSelect';
 import ExerciseSelect from '../ExerciseSelect';
 import ExerciseAdder from './ExerciseAdder';
+import axios from 'axios';
 
 export default class ExerciseRow extends React.Component {
   constructor() {
@@ -15,33 +16,14 @@ export default class ExerciseRow extends React.Component {
   }
 
   onSubmit = async (exercise) => {
-    const response = await fetch(`${process.env.REACT_APP_API_URL}/exercise/`, {
-      method: 'PATCH',
-      headers: {
-        'Content-Type': 'application/json',
-        'auth-token': localStorage.getItem('authToken'),
-      },
-      body: JSON.stringify(exercise),
-    });
-    if (response.status === 200) {
-      await this.props.onUpdate();
-      this.setState({ isEditing: false });
-    } else {
-      const data = await response.json();
-      return data.error;
-    }
+    await axios.patch('/exercise/', exercise);
+    await this.props.onUpdate();
+    this.setState({ isEditing: false });
   };
 
   onRemove = async () => {
-    await fetch(`${process.env.REACT_APP_API_URL}/exercise/`, {
-      method: 'DELETE',
-      headers: {
-        'Content-Type': 'application/json',
-        'auth-token': localStorage.getItem('authToken'),
-      },
-      body: JSON.stringify({
-        _id: this.props.id,
-      }),
+    await axios.delete('/exercise/', {
+      _id: this.props.id,
     });
     this.props.onUpdate();
   };

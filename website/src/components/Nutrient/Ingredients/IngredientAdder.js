@@ -10,6 +10,7 @@ import {
   Protein,
   Ethanol,
 } from '../../../style/inputs';
+import axios from 'axios';
 
 export default class IngredientAdder extends React.Component {
   constructor() {
@@ -26,32 +27,17 @@ export default class IngredientAdder extends React.Component {
   }
 
   onSubmit = async () => {
-    const response = await fetch(
-      `${process.env.REACT_APP_API_URL}/nutrition/ingredients/`,
-      {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-          'auth-token': localStorage.getItem('authToken'),
-        },
-        body: JSON.stringify({
-          name: this.state.name,
-          macronutrients: {
-            fat: this.state.fat,
-            carbohydrate: this.state.carbohydrate,
-            protein: this.state.protein,
-            ethanol: this.state.ethanol,
-          },
-        }),
-      }
-    );
-    if (response.status === 200) {
-      await this.props.onSubmit();
-      this.resetState();
-    } else {
-      const data = await response.json();
-      console.error(data.error);
-    }
+    await axios.post('/nutrition/ingredients/', {
+      name: this.state.name,
+      macronutrients: {
+        fat: this.state.fat,
+        carbohydrate: this.state.carbohydrate,
+        protein: this.state.protein,
+        ethanol: this.state.ethanol,
+      },
+    });
+    await this.props.onSubmit();
+    this.resetState();
   };
 
   resetState = () =>

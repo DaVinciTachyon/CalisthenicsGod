@@ -15,6 +15,7 @@ import {
   ErrorButton,
   DeleteButton,
 } from '../../../style/buttons';
+import axios from 'axios';
 
 export default class MealIngredient extends React.Component {
   constructor() {
@@ -68,43 +69,23 @@ export default class MealIngredient extends React.Component {
   onSubmit = async () => {
     const { mealId, id, onUpdate } = this.props;
     const { weight } = this.state;
-    await fetch(
-      `${process.env.REACT_APP_API_URL}/nutrition/meals/preset/ingredient/`,
-      {
-        method: 'PATCH',
-        headers: {
-          'Content-Type': 'application/json',
-          'auth-token': localStorage.getItem('authToken'),
-        },
-        body: JSON.stringify({
-          _id: mealId,
-          ingredient: {
-            id,
-            weight,
-          },
-        }),
-      }
-    );
+    await axios.patch('/nutrition/meals/preset/ingredient/', {
+      _id: mealId,
+      ingredient: {
+        id,
+        weight,
+      },
+    });
     await this.setState({ isEditing: false });
     onUpdate();
   };
 
   onRemove = async () => {
     const { mealId, id, onUpdate } = this.props;
-    await fetch(
-      `${process.env.REACT_APP_API_URL}/nutrition/meals/preset/ingredient/`,
-      {
-        method: 'DELETE',
-        headers: {
-          'Content-Type': 'application/json',
-          'auth-token': localStorage.getItem('authToken'),
-        },
-        body: JSON.stringify({
-          ingredient: { _id: id },
-          _id: mealId,
-        }),
-      }
-    );
+    await axios.delete('/nutrition/meals/preset/ingredient/', {
+      ingredient: { _id: id },
+      _id: mealId,
+    });
     await this.setState({ isEditing: false });
     onUpdate();
   };

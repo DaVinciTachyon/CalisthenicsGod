@@ -4,6 +4,7 @@ import { Row, Column } from '../../../style/table';
 import { Text, Calories } from '../../../style/inputs';
 import { SuccessButton, ErrorButton } from '../../../style/buttons';
 import IngredientMacroRow from './IngredientMacroRow';
+import axios from 'axios';
 
 export default class MealIngredientAdder extends React.Component {
   constructor() {
@@ -53,52 +54,31 @@ export default class MealIngredientAdder extends React.Component {
     const id =
       (this.state.id === '' ? undefined : this.state.id) ||
       (await this.addIngredient());
-    let url = `${process.env.REACT_APP_API_URL}/nutrition/meals/`;
-    if (this.props.isPreset)
-      url = `${process.env.REACT_APP_API_URL}/nutrition/meals/preset/ingredient/`;
-    const response = await fetch(url, {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-        'auth-token': localStorage.getItem('authToken'),
+    let url = '/nutrition/meals/';
+    if (this.props.isPreset) url += 'preset/ingredient/';
+    await axios.post(url, {
+      _id: this.props.id,
+      ingredient: {
+        id,
+        weight: this.state.weight,
       },
-      body: JSON.stringify({
-        _id: this.props.id,
-        ingredient: {
-          id,
-          weight: this.state.weight,
-        },
-      }),
     });
-    if (response.status === 200) this.props.onSubmit();
-    else {
-      const data = await response.json();
-      console.error(data.error);
-    }
+    this.props.onSubmit();
   };
 
   addIngredient = async () => {
-    const response = await fetch(
-      `${process.env.REACT_APP_API_URL}/nutrition/ingredients/`,
-      {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-          'auth-token': localStorage.getItem('authToken'),
+    const { _id } = (
+      await axios.post('/nutrition/ingredients/', {
+        name: this.state.name,
+        macronutrients: {
+          fat: this.state.fat,
+          carbohydrate: this.state.carbohydrate,
+          protein: this.state.protein,
+          ethanol: this.state.ethanol,
         },
-        body: JSON.stringify({
-          name: this.state.name,
-          macronutrients: {
-            fat: this.state.fat,
-            carbohydrate: this.state.carbohydrate,
-            protein: this.state.protein,
-            ethanol: this.state.ethanol,
-          },
-        }),
-      }
-    );
-    const data = await response.json();
-    return data._id;
+      })
+    ).data;
+    return _id;
   };
 
   onCancel = () => this.props.onCancel();
