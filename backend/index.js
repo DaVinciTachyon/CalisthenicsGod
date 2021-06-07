@@ -8,7 +8,7 @@ const app = express();
 dotenv.config();
 
 mongoose.connect(
-  process.env.DB_CONNECT,
+  process.env.DB_CONNECT || 'mongodb://localhost:27017/database',
   { useNewUrlParser: true, useUnifiedTopology: true },
   (err) => {
     if (err) return console.error(err);
