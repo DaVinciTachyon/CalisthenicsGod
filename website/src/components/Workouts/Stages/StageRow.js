@@ -33,21 +33,29 @@ export default class StageRow extends React.Component {
   onChange = (evt) => this.setState({ [evt.target.name]: evt.target.value });
 
   onSubmit = async () => {
-    await axios.patch('/workout/stage/', {
-      _id: this.props.id,
-      name: this.state.name,
-      description: this.state.description,
-    });
-    await this.set();
-    this.props.onUpdate();
+    try {
+      await axios.patch('/workout/stage/', {
+        _id: this.props.id,
+        name: this.state.name,
+        description: this.state.description,
+      });
+      await this.set();
+      this.props.onUpdate();
+    } catch (err) {
+      console.error(err.response.data.error);
+    }
   };
 
   onRemove = async () => {
-    await axios.delete('/workout/stage/', {
-      _id: this.props.id,
-    });
-    await this.set();
-    this.props.onUpdate();
+    try {
+      await axios.delete('/workout/stage/', {
+        _id: this.props.id,
+      });
+      await this.set();
+      this.props.onUpdate();
+    } catch (err) {
+      console.error(err.response.data.error);
+    }
   };
 
   render() {

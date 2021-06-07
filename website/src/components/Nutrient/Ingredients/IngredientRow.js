@@ -65,33 +65,41 @@ export default class IngredientRow extends React.Component {
   };
 
   onChangeAvailability = async () => {
-    const { isAvailable, id, onUpdate } = this.props;
-    let url = `/nutrition/ingredients/unavailable/`;
-    if (isAvailable) url = `/nutrition/ingredients/`;
-    await axios.delete(url, {
-      _id: id,
-    });
-    await onUpdate();
-    this.setState({ isEditing: false });
+    try {
+      const { isAvailable, id, onUpdate } = this.props;
+      let url = `/nutrition/ingredients/unavailable/`;
+      if (isAvailable) url = `/nutrition/ingredients/`;
+      await axios.delete(url, {
+        _id: id,
+      });
+      await onUpdate();
+      this.setState({ isEditing: false });
+    } catch (err) {
+      console.error(err.response.data.error);
+    }
   };
 
   onChange = (evt) => this.setState({ [evt.target.name]: evt.target.value });
 
   onSubmit = async () => {
-    const { id, onUpdate } = this.props;
-    const { name, fat, carbohydrate, protein, ethanol } = this.state;
-    await axios.patch('/nutrition/ingredients/', {
-      _id: id,
-      name,
-      macronutrients: {
-        fat,
-        carbohydrate,
-        protein,
-        ethanol,
-      },
-    });
-    await onUpdate();
-    this.setState({ isEditing: false });
+    try {
+      const { id, onUpdate } = this.props;
+      const { name, fat, carbohydrate, protein, ethanol } = this.state;
+      await axios.patch('/nutrition/ingredients/', {
+        _id: id,
+        name,
+        macronutrients: {
+          fat,
+          carbohydrate,
+          protein,
+          ethanol,
+        },
+      });
+      await onUpdate();
+      this.setState({ isEditing: false });
+    } catch (err) {
+      console.error(err.response.data.error);
+    }
   };
 
   render() {

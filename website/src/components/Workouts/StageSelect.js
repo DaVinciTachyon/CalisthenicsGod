@@ -15,8 +15,12 @@ export default class StageSelect extends React.Component {
   }
 
   getWorkoutStages = async () => {
-    const { stages } = await axios.get('/workout/stage/');
-    this.setState({ stages });
+    try {
+      const { stages } = await axios.get('/workout/stage/');
+      this.setState({ stages });
+    } catch (err) {
+      console.error(err.response.data.error);
+    }
   };
 
   onChange = async (evt) => {

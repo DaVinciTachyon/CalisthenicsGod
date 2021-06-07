@@ -26,14 +26,23 @@ export default class NutrientTracker extends React.Component {
   }
 
   getMeals = async () => {
-    const { meals } = (await axios.get('/nutrition/meals/')).data;
-    this.setState({ meals });
+    try {
+      const { meals } = (await axios.get('/nutrition/meals/')).data;
+      this.setState({ meals });
+    } catch (err) {
+      console.error(err.response.data.error);
+    }
   };
 
-  addMeal = async (id) =>
-    await axios.post('/nutrition/meals/addPreset/', {
-      _id: id,
-    });
+  addMeal = async (id) => {
+    try {
+      await axios.post('/nutrition/meals/addPreset/', {
+        _id: id,
+      });
+    } catch (err) {
+      console.error(err.response.data.error);
+    }
+  };
 
   render() {
     return (

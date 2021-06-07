@@ -35,19 +35,23 @@ export default class MeasurementHistory extends React.Component {
   }
 
   getWeightHistory = async () => {
-    const data = (await axios.get('/measurement/weight/history/')).data;
-    let chart = Object.assign({}, this.state.chart);
-    chart.labels = [];
-    chart.datasets[0].data = [];
-    for (let i = 0; i < data.weight.length; i++) {
-      chart.labels.unshift(
-        `${new Date(data.weight[i].date).getDate()}/${new Date(
-          data.weight[i].date
-        ).getMonth()}/${new Date(data.weight[i].date).getFullYear()}`
-      );
-      chart.datasets[0].data.unshift(data.weight[i].value);
+    try {
+      const { weight } = (await axios.get('/measurement/weight/history/')).data;
+      let chart = Object.assign({}, this.state.chart);
+      chart.labels = [];
+      chart.datasets[0].data = [];
+      for (let i = 0; i < weight.length; i++) {
+        chart.labels.unshift(
+          `${new Date(weight[i].date).getDate()}/${new Date(
+            weight[i].date
+          ).getMonth()}/${new Date(weight[i].date).getFullYear()}`
+        );
+        chart.datasets[0].data.unshift(weight[i].value);
+      }
+      this.setState({ chart });
+    } catch (err) {
+      console.error(err.response.data.error);
     }
-    this.setState({ chart: chart });
   };
 
   addWeightHistory = () => {

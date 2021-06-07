@@ -16,8 +16,12 @@ export default class Stages extends React.Component {
   }
 
   getStages = async () => {
-    const { stages } = (await axios.get('/workout/stage/')).data;
-    this.setState({ stages });
+    try {
+      const { stages } = (await axios.get('/workout/stage/')).data;
+      this.setState({ stages });
+    } catch (err) {
+      console.error(err.response.data.error);
+    }
   };
 
   render() {

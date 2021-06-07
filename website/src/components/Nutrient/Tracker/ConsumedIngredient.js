@@ -28,27 +28,35 @@ export default class ConsumedIngredient extends React.Component {
   }
 
   onSubmit = async () => {
-    const { mealId, _id } = this.props;
-    const { weight } = this.state;
-    await axios.patch('/nutrition/meals/', {
-      _id: mealId,
-      ingredient: {
-        _id,
-        weight,
-      },
-    });
-    await this.props.onUpdate();
-    this.setState({ isEditing: false });
+    try {
+      const { mealId, _id } = this.props;
+      const { weight } = this.state;
+      await axios.patch('/nutrition/meals/', {
+        _id: mealId,
+        ingredient: {
+          _id,
+          weight,
+        },
+      });
+      await this.props.onUpdate();
+      this.setState({ isEditing: false });
+    } catch (err) {
+      console.error(err.response.data.error);
+    }
   };
 
   onRemove = async () => {
-    const { mealId, _id } = this.props;
-    await axios.delete('/nutrition/meals/', {
-      _id: mealId,
-      ingredient: { _id },
-    });
-    await this.props.onUpdate();
-    this.setState({ isEditing: false });
+    try {
+      const { mealId, _id } = this.props;
+      await axios.delete('/nutrition/meals/', {
+        _id: mealId,
+        ingredient: { _id },
+      });
+      await this.props.onUpdate();
+      this.setState({ isEditing: false });
+    } catch (err) {
+      console.error(err.response.data.error);
+    }
   };
 
   setWeight = () => this.setState({ weight: this.props.weight });

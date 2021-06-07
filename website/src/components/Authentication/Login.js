@@ -20,16 +20,18 @@ export default class Login extends React.Component {
   }
 
   onSubmit = async () => {
-    const data = (
-      await axios.post('/auth/login/', {
-        email: this.state.email,
-        password: this.state.password,
-      })
-    ).data;
-    if (data['auth-token']) {
+    try {
+      const data = (
+        await axios.post('/auth/login/', {
+          email: this.state.email,
+          password: this.state.password,
+        })
+      ).data;
       localStorage.setItem('authToken', data['auth-token']);
       window.location = '/';
-    } else this.setState({ error: data.error });
+    } catch (err) {
+      this.setState({ error: err.response.data.error });
+    }
   };
 
   onChange = (evt) => this.setState({ [evt.target.name]: evt.target.value });

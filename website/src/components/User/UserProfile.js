@@ -44,30 +44,34 @@ export default class UserProfile extends React.Component {
   }
 
   getUserInfo = async () => {
-    const user = (await axios.get('/user/')).data;
-    const nutrition = (await axios.get('/nutrition/')).data;
-    const measurement = (await axios.get('/measurement/weight/')).data;
-    this.setState({
-      firstname: user.name.first,
-      middlename: user.name.middle,
-      lastname: user.name.last,
-      email: user.email,
-      dateJoined: this.formatDate(new Date(user.dateJoined)),
-      birthDate: this.formatDate(new Date(user.birthDate)),
-      gender: user.gender,
-      weight: measurement.weight,
-      caloriesPerKg: nutrition.caloriesPerKg,
-      proteinGramsPerKg: nutrition.proteinGramsPerKg,
-      fatCalorieProportion: nutrition.fatCalorieProportion,
-      calorieOffset: nutrition.calorieOffset,
-      currentCalorieOffset: nutrition.calorieOffset,
-      calorieMode:
-        nutrition.calorieOffset > 0
-          ? 'bulk'
-          : nutrition.calorieOffset < 0
-          ? 'deficit'
-          : 'maintenance',
-    });
+    try {
+      const user = (await axios.get('/user/')).data;
+      const nutrition = (await axios.get('/nutrition/')).data;
+      const measurement = (await axios.get('/measurement/weight/')).data;
+      this.setState({
+        firstname: user.name.first,
+        middlename: user.name.middle,
+        lastname: user.name.last,
+        email: user.email,
+        dateJoined: this.formatDate(new Date(user.dateJoined)),
+        birthDate: this.formatDate(new Date(user.birthDate)),
+        gender: user.gender,
+        weight: measurement.weight,
+        caloriesPerKg: nutrition.caloriesPerKg,
+        proteinGramsPerKg: nutrition.proteinGramsPerKg,
+        fatCalorieProportion: nutrition.fatCalorieProportion,
+        calorieOffset: nutrition.calorieOffset,
+        currentCalorieOffset: nutrition.calorieOffset,
+        calorieMode:
+          nutrition.calorieOffset > 0
+            ? 'bulk'
+            : nutrition.calorieOffset < 0
+            ? 'deficit'
+            : 'maintenance',
+      });
+    } catch (err) {
+      console.error(err.response.data.error);
+    }
   };
 
   onCalorieModeChange = (evt) => {
@@ -87,27 +91,27 @@ export default class UserProfile extends React.Component {
   };
 
   onSubmit = async () => {
-    const userResponse = await axios.post('/user/', {
-      name: {
-        first: this.state.firstname,
-        middle: this.state.middlename,
-        last: this.state.lastname,
-      },
-      email: this.state.email,
-      birthDate: this.state.birthDate,
-      gender: this.state.gender,
-    });
-    if (userResponse.status !== 200)
-      return this.setState({ error: userResponse.data.error });
-    const nutritionResponse = await axios.post('/nutrition/', {
-      calorieOffset: this.state.calorieOffset,
-      caloriesPerKg: this.state.caloriesPerKg,
-      proteinGramsPerKg: this.state.proteinGramsPerKg,
-      fatCalorieProportion: this.state.fatCalorieProportion,
-    });
-    if (nutritionResponse.status !== 200)
-      return this.setState({ error: nutritionResponse.data.error });
-    this.setState({ success: 'Success!' });
+    try {
+      await axios.post('/user/', {
+        name: {
+          first: this.state.firstname,
+          middle: this.state.middlename,
+          last: this.state.lastname,
+        },
+        email: this.state.email,
+        birthDate: this.state.birthDate,
+        gender: this.state.gender,
+      });
+      await axios.post('/nutrition/', {
+        calorieOffset: this.state.calorieOffset,
+        caloriesPerKg: this.state.caloriesPerKg,
+        proteinGramsPerKg: this.state.proteinGramsPerKg,
+        fatCalorieProportion: this.state.fatCalorieProportion,
+      });
+      this.setState({ success: 'Success!' });
+    } catch (err) {
+      this.setState({ error: err.response.data.error });
+    }
   };
 
   onChange = (evt) => this.setState({ [evt.target.name]: evt.target.value });

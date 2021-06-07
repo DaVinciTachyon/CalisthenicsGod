@@ -19,14 +19,22 @@ export default class Exercises extends React.Component {
   }
 
   getExercises = async () => {
-    const { exercises } = (await axios.get('/exercise/')).data;
-    this.setState({ exercises });
+    try {
+      const { exercises } = (await axios.get('/exercise/')).data;
+      this.setState({ exercises });
+    } catch (err) {
+      console.error(err.response.data.error);
+    }
   };
 
   onSubmit = async (exercise) => {
-    await axios.post('/exercise/', exercise);
-    await this.getExercises();
-    this.setState({ isAdding: false });
+    try {
+      await axios.post('/exercise/', exercise);
+      await this.getExercises();
+      this.setState({ isAdding: false });
+    } catch (err) {
+      console.error(err.response.data.error);
+    }
   };
 
   render() {

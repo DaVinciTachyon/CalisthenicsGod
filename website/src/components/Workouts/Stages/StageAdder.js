@@ -30,13 +30,17 @@ export default class StageAdder extends React.Component {
     if (!this.state.name) return this.setState({ error: 'Name is required' });
     if (this.props.index < 0 || this.props.index % 1 !== 0)
       return this.setState({ error: 'Chronological Ranking is invalid' });
-    await axios.post('/workout/stage/', {
-      name: this.state.name,
-      description: this.state.description,
-      chronologicalRanking: this.props.index,
-    });
-    await this.setState({ isAdding: false });
-    window.location.reload();
+    try {
+      await axios.post('/workout/stage/', {
+        name: this.state.name,
+        description: this.state.description,
+        chronologicalRanking: this.props.index,
+      });
+      await this.setState({ isAdding: false });
+      window.location.reload();
+    } catch (err) {
+      console.error(err.response.data.error);
+    }
   };
 
   render() {

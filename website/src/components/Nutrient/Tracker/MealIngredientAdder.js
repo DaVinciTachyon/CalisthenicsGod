@@ -51,34 +51,42 @@ export default class MealIngredientAdder extends React.Component {
   onChange = (evt) => this.setState({ [evt.target.name]: evt.target.value });
 
   onSubmit = async () => {
-    const id =
-      (this.state.id === '' ? undefined : this.state.id) ||
-      (await this.addIngredient());
-    let url = '/nutrition/meals/';
-    if (this.props.isPreset) url += 'preset/ingredient/';
-    await axios.post(url, {
-      _id: this.props.id,
-      ingredient: {
-        id,
-        weight: this.state.weight,
-      },
-    });
-    this.props.onSubmit();
+    try {
+      const id =
+        (this.state.id === '' ? undefined : this.state.id) ||
+        (await this.addIngredient());
+      let url = '/nutrition/meals/';
+      if (this.props.isPreset) url += 'preset/ingredient/';
+      await axios.post(url, {
+        _id: this.props.id,
+        ingredient: {
+          id,
+          weight: this.state.weight,
+        },
+      });
+      this.props.onSubmit();
+    } catch (err) {
+      console.error(err.response.data.error);
+    }
   };
 
   addIngredient = async () => {
-    const { _id } = (
-      await axios.post('/nutrition/ingredients/', {
-        name: this.state.name,
-        macronutrients: {
-          fat: this.state.fat,
-          carbohydrate: this.state.carbohydrate,
-          protein: this.state.protein,
-          ethanol: this.state.ethanol,
-        },
-      })
-    ).data;
-    return _id;
+    try {
+      const { _id } = (
+        await axios.post('/nutrition/ingredients/', {
+          name: this.state.name,
+          macronutrients: {
+            fat: this.state.fat,
+            carbohydrate: this.state.carbohydrate,
+            protein: this.state.protein,
+            ethanol: this.state.ethanol,
+          },
+        })
+      ).data;
+      return _id;
+    } catch (err) {
+      console.error(err.response.data.error);
+    }
   };
 
   onCancel = () => this.props.onCancel();

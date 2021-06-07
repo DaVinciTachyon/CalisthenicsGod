@@ -67,27 +67,35 @@ export default class MealIngredient extends React.Component {
   onChange = (evt) => this.setState({ [evt.target.name]: evt.target.value });
 
   onSubmit = async () => {
-    const { mealId, id, onUpdate } = this.props;
-    const { weight } = this.state;
-    await axios.patch('/nutrition/meals/preset/ingredient/', {
-      _id: mealId,
-      ingredient: {
-        id,
-        weight,
-      },
-    });
-    await this.setState({ isEditing: false });
-    onUpdate();
+    try {
+      const { mealId, id, onUpdate } = this.props;
+      const { weight } = this.state;
+      await axios.patch('/nutrition/meals/preset/ingredient/', {
+        _id: mealId,
+        ingredient: {
+          id,
+          weight,
+        },
+      });
+      await this.setState({ isEditing: false });
+      onUpdate();
+    } catch (err) {
+      console.error(err.response.data.error);
+    }
   };
 
   onRemove = async () => {
-    const { mealId, id, onUpdate } = this.props;
-    await axios.delete('/nutrition/meals/preset/ingredient/', {
-      ingredient: { _id: id },
-      _id: mealId,
-    });
-    await this.setState({ isEditing: false });
-    onUpdate();
+    try {
+      const { mealId, id, onUpdate } = this.props;
+      await axios.delete('/nutrition/meals/preset/ingredient/', {
+        ingredient: { _id: id },
+        _id: mealId,
+      });
+      await this.setState({ isEditing: false });
+      onUpdate();
+    } catch (err) {
+      console.error(err.response.data.error);
+    }
   };
 
   render() {

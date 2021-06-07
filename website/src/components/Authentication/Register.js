@@ -33,7 +33,7 @@ export default class Register extends React.Component {
   getValue = (value) => (value ? value : undefined);
 
   onSubmit = async () => {
-    const data = (
+    try {
       await axios.post('/auth/register/', {
         name: {
           first: this.getValue(this.state.firstname),
@@ -45,10 +45,11 @@ export default class Register extends React.Component {
         weight: this.getValue(this.state.weight),
         gender: this.getValue(this.state.gender),
         birthDate: this.getValue(this.state.birthDate),
-      })
-    ).data;
-    if (data.user) window.location = '/login';
-    else this.setState({ error: data.error });
+      });
+      window.location = '/login';
+    } catch (err) {
+      this.setState({ error: err.response.data.error });
+    }
   };
 
   onChange = (evt) => this.setState({ [evt.target.name]: evt.target.value });

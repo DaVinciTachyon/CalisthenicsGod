@@ -61,20 +61,28 @@ export default class MealRow extends React.Component {
   };
 
   getIngredients = async () => {
-    const data = (
-      await axios.post('/nutrition/meals/preset/ingredients/', {
-        _id: this.props.id,
-      })
-    ).data;
-    await this.setState({ ingredients: data.ingredients });
-    this.setMacros();
+    try {
+      const data = (
+        await axios.post('/nutrition/meals/preset/ingredients/', {
+          _id: this.props.id,
+        })
+      ).data;
+      await this.setState({ ingredients: data.ingredients });
+      this.setMacros();
+    } catch (err) {
+      console.error(err.response.data.error);
+    }
   };
 
   onDelete = async () => {
-    await axios.delete('/nutrition/meals/preset/', {
-      _id: this.props.id,
-    });
-    this.props.onUpdate();
+    try {
+      await axios.delete('/nutrition/meals/preset/', {
+        _id: this.props.id,
+      });
+      this.props.onUpdate();
+    } catch (err) {
+      console.error(err.response.data.error);
+    }
   };
 
   onSubmit = () => {

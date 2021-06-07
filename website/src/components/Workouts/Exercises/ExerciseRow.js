@@ -16,16 +16,24 @@ export default class ExerciseRow extends React.Component {
   }
 
   onSubmit = async (exercise) => {
-    await axios.patch('/exercise/', exercise);
-    await this.props.onUpdate();
-    this.setState({ isEditing: false });
+    try {
+      await axios.patch('/exercise/', exercise);
+      await this.props.onUpdate();
+      this.setState({ isEditing: false });
+    } catch (err) {
+      console.error(err.response.data.error);
+    }
   };
 
   onRemove = async () => {
-    await axios.delete('/exercise/', {
-      _id: this.props.id,
-    });
-    this.props.onUpdate();
+    try {
+      await axios.delete('/exercise/', {
+        _id: this.props.id,
+      });
+      this.props.onUpdate();
+    } catch (err) {
+      console.error(err.response.data.error);
+    }
   };
 
   render() {

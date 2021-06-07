@@ -15,17 +15,21 @@ export default class ExerciseSelect extends React.Component {
   }
 
   getExercises = async () => {
-    const data = (await axios.get('/exercise/')).data;
-    const exercises = [];
-    data.exercises.forEach((exercise) => {
-      if (
-        !this.props.stage ||
-        (this.props.stage &&
-          exercise.potentialStages.includes(this.props.stage))
-      )
-        exercises.push(exercise);
-    });
-    this.setState({ exercises });
+    try {
+      const data = (await axios.get('/exercise/')).data;
+      const exercises = [];
+      data.exercises.forEach((exercise) => {
+        if (
+          !this.props.stage ||
+          (this.props.stage &&
+            exercise.potentialStages.includes(this.props.stage))
+        )
+          exercises.push(exercise);
+      });
+      this.setState({ exercises });
+    } catch (err) {
+      console.error(err.response.data.error);
+    }
   };
 
   onChange = (evt) => {

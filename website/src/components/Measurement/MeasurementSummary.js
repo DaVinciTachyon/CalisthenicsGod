@@ -28,20 +28,36 @@ export default class MeasurementSummary extends React.Component {
   }
 
   getMeasurements = async () => {
-    const data = (await axios.get('/measurement/')).data;
-    this.setState({
-      weight: data.weight,
-      height: data.height,
-      waist: data.waist,
-      hips: data.hips,
-      rightBicep: data.rightBicep,
-      leftBicep: data.leftBicep,
-      rightForearm: data.rightForearm,
-      leftForearm: data.leftForearm,
-      shoulders: data.shoulders,
-      chest: data.chest,
-      neck: data.neck,
-    });
+    try {
+      const {
+        weight,
+        height,
+        waist,
+        hips,
+        rightBicep,
+        leftBicep,
+        rightForearm,
+        leftForearm,
+        shoulders,
+        chest,
+        neck,
+      } = (await axios.get('/measurement/')).data;
+      this.setState({
+        weight,
+        height,
+        waist,
+        hips,
+        rightBicep,
+        leftBicep,
+        rightForearm,
+        leftForearm,
+        shoulders,
+        chest,
+        neck,
+      });
+    } catch (err) {
+      console.error(err.response.data.error);
+    }
   };
 
   render() {

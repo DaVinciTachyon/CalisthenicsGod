@@ -34,20 +34,24 @@ export default class MeasurementAdder extends React.Component {
     });
 
   submitMeasurement = async () => {
-    await axios.post('/measurement/', {
-      weight: this.state.weight,
-      height: this.state.height,
-      waist: this.state.waist,
-      hips: this.state.hips,
-      rightBicep: this.state.rightBicep,
-      leftBicep: this.state.leftBicep,
-      rightForearm: this.state.rightForearm,
-      leftForearm: this.state.leftForearm,
-      shoulders: this.state.shoulders,
-      chest: this.state.chest,
-      neck: this.state.neck,
-    });
-    window.location = '/measurementTracker';
+    try {
+      await axios.post('/measurement/', {
+        weight: this.state.weight,
+        height: this.state.height,
+        waist: this.state.waist,
+        hips: this.state.hips,
+        rightBicep: this.state.rightBicep,
+        leftBicep: this.state.leftBicep,
+        rightForearm: this.state.rightForearm,
+        leftForearm: this.state.leftForearm,
+        shoulders: this.state.shoulders,
+        chest: this.state.chest,
+        neck: this.state.neck,
+      });
+      window.location = '/measurementTracker';
+    } catch (err) {
+      console.error(err.response.data.error);
+    }
   };
 
   render() {

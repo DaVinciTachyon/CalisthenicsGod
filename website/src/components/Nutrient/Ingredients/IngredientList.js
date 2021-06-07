@@ -21,10 +21,14 @@ export default class IngredientList extends React.Component {
   }
 
   getIngredients = async () => {
-    let url = `/nutrition/ingredients/`;
-    if (this.props.isUnavailable) url += `unavailable/`;
-    const { ingredients } = (await axios.get(url)).data;
-    this.setState({ ingredients });
+    try {
+      let url = `/nutrition/ingredients/`;
+      if (this.props.isUnavailable) url += `unavailable/`;
+      const { ingredients } = (await axios.get(url)).data;
+      this.setState({ ingredients });
+    } catch (err) {
+      console.error(err.response.data.error);
+    }
   };
 
   render() {

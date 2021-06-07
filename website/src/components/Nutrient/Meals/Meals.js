@@ -22,8 +22,13 @@ export default class Meals extends React.Component {
   }
 
   getMeals = async () => {
-    const { meals } = (await axios.get('/nutrition/meals/preset/names/')).data;
-    this.setState({ meals });
+    try {
+      const { meals } = (await axios.get('/nutrition/meals/preset/names/'))
+        .data;
+      this.setState({ meals });
+    } catch (err) {
+      console.error(err.response.data.error);
+    }
   };
 
   render() {

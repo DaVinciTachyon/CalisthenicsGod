@@ -21,8 +21,12 @@ export default class WorkoutAdder extends React.Component {
   }
 
   getStages = async () => {
-    const { stages } = (await axios.get('/workout/stage/')).data;
-    this.setState({ stages });
+    try {
+      const { stages } = (await axios.get('/workout/stage/')).data;
+      this.setState({ stages });
+    } catch (err) {
+      console.error(err.response.data.error);
+    }
   };
 
   onUpdate = (stage) =>
@@ -35,8 +39,12 @@ export default class WorkoutAdder extends React.Component {
     });
 
   onSubmit = async () => {
-    await axios.post('/workout/', this.state.workout);
-    window.location = '/workoutTracker';
+    try {
+      await axios.post('/workout/', this.state.workout);
+      window.location = '/workoutTracker';
+    } catch (err) {
+      console.error(err.response.data.error);
+    }
   };
 
   render() {

@@ -30,11 +30,15 @@ export default class MealSelect extends React.Component {
   }
 
   getMeals = async () => {
-    const data = (await axios.get('/nutrition/meals/preset/names/')).data;
-    const meals = [];
-    data.meals.forEach((meal) =>
-      meals.push({ label: meal.name, value: meal._id })
-    );
-    this.setState({ meals });
+    try {
+      const data = (await axios.get('/nutrition/meals/preset/names/')).data;
+      const meals = [];
+      data.meals.forEach((meal) =>
+        meals.push({ label: meal.name, value: meal._id })
+      );
+      this.setState({ meals });
+    } catch (err) {
+      console.error(err.response.data.error);
+    }
   };
 }

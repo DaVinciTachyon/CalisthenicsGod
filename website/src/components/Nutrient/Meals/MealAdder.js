@@ -13,12 +13,16 @@ export default class MealAdder extends React.Component {
   set = () => this.setState({ isAdding: false, name: '' });
 
   onSubmit = async () => {
-    await axios.post('/nutrition/meals/preset/', {
-      name: this.state.name,
-      ingredients: [],
-    });
-    this.set();
-    this.props.onSubmit();
+    try {
+      await axios.post('/nutrition/meals/preset/', {
+        name: this.state.name,
+        ingredients: [],
+      });
+      this.set();
+      this.props.onSubmit();
+    } catch (err) {
+      console.error(err.response.data.error);
+    }
   };
 
   onChange = (evt) => this.setState({ [evt.target.name]: evt.target.value });

@@ -27,17 +27,21 @@ export default class IngredientAdder extends React.Component {
   }
 
   onSubmit = async () => {
-    await axios.post('/nutrition/ingredients/', {
-      name: this.state.name,
-      macronutrients: {
-        fat: this.state.fat,
-        carbohydrate: this.state.carbohydrate,
-        protein: this.state.protein,
-        ethanol: this.state.ethanol,
-      },
-    });
-    await this.props.onSubmit();
-    this.resetState();
+    try {
+      await axios.post('/nutrition/ingredients/', {
+        name: this.state.name,
+        macronutrients: {
+          fat: this.state.fat,
+          carbohydrate: this.state.carbohydrate,
+          protein: this.state.protein,
+          ethanol: this.state.ethanol,
+        },
+      });
+      await this.props.onSubmit();
+      this.resetState();
+    } catch (err) {
+      console.error(err.response.data.error);
+    }
   };
 
   resetState = () =>

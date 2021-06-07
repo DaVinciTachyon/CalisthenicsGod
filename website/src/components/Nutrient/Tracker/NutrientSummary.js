@@ -84,9 +84,13 @@ export default class NutrientSummary extends React.Component {
   }
 
   getUserGoals = async () => {
-    const { macronutrients } = (await axios.get('/nutrition/goals')).data;
-    this.setState({
-      goal: macronutrients,
-    });
+    try {
+      const { macronutrients } = (await axios.get('/nutrition/goals')).data;
+      this.setState({
+        goal: macronutrients,
+      });
+    } catch (err) {
+      console.error(err.response.data.error);
+    }
   };
 }
