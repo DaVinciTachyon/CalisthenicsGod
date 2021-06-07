@@ -66,7 +66,8 @@ export default class MealIngredientAdder extends React.Component {
       });
       this.props.onSubmit();
     } catch (err) {
-      console.error(err.response.data.error);
+      if (err.response.status === 400) console.error(err.response.data.error);
+      else console.error(err.response);
     }
   };
 
@@ -85,7 +86,8 @@ export default class MealIngredientAdder extends React.Component {
       ).data;
       return _id;
     } catch (err) {
-      console.error(err.response.data.error);
+      if (err.response.status === 400) console.error(err.response.data.error);
+      else console.error(err.response);
     }
   };
 

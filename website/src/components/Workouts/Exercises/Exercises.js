@@ -23,7 +23,8 @@ export default class Exercises extends React.Component {
       const { exercises } = (await axios.get('/exercise/')).data;
       this.setState({ exercises });
     } catch (err) {
-      console.error(err.response.data.error);
+      if (err.response.status === 400) console.error(err.response.data.error);
+      else console.error(err.response);
     }
   };
 
@@ -33,7 +34,8 @@ export default class Exercises extends React.Component {
       await this.getExercises();
       this.setState({ isAdding: false });
     } catch (err) {
-      console.error(err.response.data.error);
+      if (err.response.status === 400) console.error(err.response.data.error);
+      else console.error(err.response);
     }
   };
 

@@ -40,7 +40,8 @@ export default class IngredientSelect extends React.Component {
       const { ingredients } = (await axios.get('/nutrition/ingredients/')).data;
       this.setState({ ingredients });
     } catch (err) {
-      console.error(err.response.data.error);
+      if (err.response.status === 400) console.error(err.response.data.error);
+      else console.error(err.response);
     }
   };
 }

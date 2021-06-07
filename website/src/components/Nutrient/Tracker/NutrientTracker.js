@@ -30,7 +30,8 @@ export default class NutrientTracker extends React.Component {
       const { meals } = (await axios.get('/nutrition/meals/')).data;
       this.setState({ meals });
     } catch (err) {
-      console.error(err.response.data.error);
+      if (err.response.status === 400) console.error(err.response.data.error);
+      else console.error(err.response);
     }
   };
 
@@ -40,7 +41,8 @@ export default class NutrientTracker extends React.Component {
         _id: id,
       });
     } catch (err) {
-      console.error(err.response.data.error);
+      if (err.response.status === 400) console.error(err.response.data.error);
+      else console.error(err.response);
     }
   };
 

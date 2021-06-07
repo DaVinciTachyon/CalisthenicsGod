@@ -27,7 +27,8 @@ export default class IngredientList extends React.Component {
       const { ingredients } = (await axios.get(url)).data;
       this.setState({ ingredients });
     } catch (err) {
-      console.error(err.response.data.error);
+      if (err.response.status === 400) console.error(err.response.data.error);
+      else console.error(err.response);
     }
   };
 

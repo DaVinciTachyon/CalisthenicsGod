@@ -80,7 +80,8 @@ export default class MealIngredient extends React.Component {
       await this.setState({ isEditing: false });
       onUpdate();
     } catch (err) {
-      console.error(err.response.data.error);
+      if (err.response.status === 400) console.error(err.response.data.error);
+      else console.error(err.response);
     }
   };
 
@@ -94,7 +95,8 @@ export default class MealIngredient extends React.Component {
       await this.setState({ isEditing: false });
       onUpdate();
     } catch (err) {
-      console.error(err.response.data.error);
+      if (err.response.status === 400) console.error(err.response.data.error);
+      else console.error(err.response);
     }
   };
 

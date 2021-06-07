@@ -70,7 +70,8 @@ export default class MealRow extends React.Component {
       await this.setState({ ingredients: data.ingredients });
       this.setMacros();
     } catch (err) {
-      console.error(err.response.data.error);
+      if (err.response.status === 400) console.error(err.response.data.error);
+      else console.error(err.response);
     }
   };
 
@@ -81,7 +82,8 @@ export default class MealRow extends React.Component {
       });
       this.props.onUpdate();
     } catch (err) {
-      console.error(err.response.data.error);
+      if (err.response.status === 400) console.error(err.response.data.error);
+      else console.error(err.response);
     }
   };
 

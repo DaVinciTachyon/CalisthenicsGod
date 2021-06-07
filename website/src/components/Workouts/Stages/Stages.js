@@ -20,7 +20,8 @@ export default class Stages extends React.Component {
       const { stages } = (await axios.get('/workout/stage/')).data;
       this.setState({ stages });
     } catch (err) {
-      console.error(err.response.data.error);
+      if (err.response.status === 400) console.error(err.response.data.error);
+      else console.error(err.response);
     }
   };
 

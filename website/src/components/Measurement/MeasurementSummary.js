@@ -56,7 +56,8 @@ export default class MeasurementSummary extends React.Component {
         neck,
       });
     } catch (err) {
-      console.error(err.response.data.error);
+      if (err.response.status === 400) console.error(err.response.data.error);
+      else console.error(err.response);
     }
   };
 

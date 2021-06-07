@@ -21,7 +21,8 @@ export default class ExerciseRow extends React.Component {
       await this.props.onUpdate();
       this.setState({ isEditing: false });
     } catch (err) {
-      console.error(err.response.data.error);
+      if (err.response.status === 400) console.error(err.response.data.error);
+      else console.error(err.response);
     }
   };
 
@@ -32,7 +33,8 @@ export default class ExerciseRow extends React.Component {
       });
       this.props.onUpdate();
     } catch (err) {
-      console.error(err.response.data.error);
+      if (err.response.status === 400) console.error(err.response.data.error);
+      else console.error(err.response);
     }
   };
 

@@ -21,7 +21,10 @@ export default class WorkoutTracker extends React.Component {
       const { workouts } = (await axios.get('/workout/')).data;
       this.setState({ workouts });
     } catch (err) {
-      console.error(err.response.data.error);
+      if (err.response.status === 400)
+        if (err.response.status === 400) console.error(err.response.data.error);
+        else console.error(err.response);
+      else console.error(err.response);
     }
   };
 
