@@ -111,7 +111,9 @@ export default class UserProfile extends React.Component {
       });
       this.setState({ success: 'Success!' });
     } catch (err) {
-      this.setState({ error: err.response.data.error });
+      if (err.response.status === 400)
+        this.setState({ error: err.response.data.error });
+      else console.error(err.response);
     }
   };
 

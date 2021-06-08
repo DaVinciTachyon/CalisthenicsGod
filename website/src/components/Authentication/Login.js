@@ -30,7 +30,9 @@ export default class Login extends React.Component {
       localStorage.setItem('authToken', data['auth-token']);
       window.location = '/';
     } catch (err) {
-      this.setState({ error: err.response.data.error });
+      if (err.response.status === 400)
+        this.setState({ error: err.response.data.error });
+      else console.error(err.response);
     }
   };
 
