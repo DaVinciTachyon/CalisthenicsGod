@@ -5,12 +5,6 @@ export default class Ingredients extends React.Component {
   constructor() {
     super();
     this.state = {
-      macroDensities: {
-        fat: 9,
-        carbohydrate: 4,
-        protein: 4,
-        ethanol: 7,
-      },
       update: true,
     };
   }
@@ -20,14 +14,9 @@ export default class Ingredients extends React.Component {
   render() {
     return (
       <div>
-        <IngredientList
-          macroDensities={this.state.macroDensities}
-          update={this.state.update}
-          onUpdate={this.onUpdate}
-        />
+        <IngredientList update={this.state.update} onUpdate={this.onUpdate} />
         <IngredientList
           isUnavailable={true}
-          macroDensities={this.state.macroDensities}
           update={this.state.update}
           onUpdate={this.onUpdate}
         />

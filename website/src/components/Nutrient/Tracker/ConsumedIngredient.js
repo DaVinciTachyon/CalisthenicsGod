@@ -16,6 +16,7 @@ import {
   DeleteButton,
 } from '../../../style/buttons';
 import axios from 'axios';
+import { getCalories } from '../util';
 
 export default class ConsumedIngredient extends React.Component {
   constructor() {
@@ -64,15 +65,9 @@ export default class ConsumedIngredient extends React.Component {
   setWeight = () => this.setState({ weight: this.props.weight });
 
   getCalories = () => {
-    const { weight, macros, macroDensities } = this.props;
-    return (
-      ((macros.fat * macroDensities.fat +
-        macros.carbohydrate * macroDensities.carbohydrate +
-        macros.protein * macroDensities.protein +
-        macros.ethanol * macroDensities.ethanol) *
-        weight) /
-      100
-    );
+    const { weight, macros } = this.props;
+    const { fat, carbohydrate, protein, ethanol } = macros;
+    return getCalories(fat, carbohydrate, protein, ethanol, weight);
   };
 
   onChange = (evt) => this.setState({ [evt.target.name]: evt.target.value });

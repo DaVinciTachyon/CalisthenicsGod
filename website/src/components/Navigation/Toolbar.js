@@ -34,7 +34,7 @@ export default class ToolBar extends React.Component {
   };
 
   render() {
-    if (localStorage.getItem('authToken'))
+    if (localStorage.getItem('user'))
       return (
         <NavigationBarContainer isMobile={isMobile}>
           <NavigationBar onClick={this.updateUrl}>
@@ -270,7 +270,7 @@ export default class ToolBar extends React.Component {
   }
 
   logOut = () => {
-    localStorage.clear();
+    localStorage.removeItem('user');
     window.location.reload();
   };
 }

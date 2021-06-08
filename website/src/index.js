@@ -22,11 +22,8 @@ import axios from 'axios';
 axios.defaults.baseURL =
   process.env.REACT_APP_API_URL || 'http://localhost:8080/api';
 axios.defaults.headers.common['Content-Type'] = 'application/json';
-axios.defaults.headers.common['auth-token'] =
-  localStorage.getItem('authToken') || null;
-/*if setting null does not remove `Authorization` header then try     
-          delete axios.defaults.headers.common['Authorization'];
-        */
+axios.defaults.headers.common['Authentication'] =
+  JSON.parse(localStorage.getItem('user'))?.authToken || null;
 
 ReactDOM.render(
   <React.StrictMode>

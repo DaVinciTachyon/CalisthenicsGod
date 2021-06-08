@@ -10,12 +10,6 @@ export default class NutrientTracker extends React.Component {
   constructor() {
     super();
     this.state = {
-      macroDensities: {
-        fat: 9,
-        carbohydrate: 4,
-        protein: 4,
-        ethanol: 7,
-      },
       isAddingMeal: false,
       meals: [],
     };
@@ -50,10 +44,7 @@ export default class NutrientTracker extends React.Component {
     return (
       <div>
         <Card>
-          <NutrientSummary
-            macroDensities={this.state.macroDensities}
-            meals={this.state.meals}
-          />
+          <NutrientSummary meals={this.state.meals} />
         </Card>
         {!this.state.isAddingMeal && (
           <MealSelect
@@ -73,7 +64,6 @@ export default class NutrientTracker extends React.Component {
               this.getMeals();
             }}
             onCancel={() => this.setState({ isAddingMeal: false })}
-            macroDensities={this.state.macroDensities}
           />
         )}
         {this.state.meals.map((meal) => (
@@ -81,7 +71,6 @@ export default class NutrientTracker extends React.Component {
             key={meal._id}
             id={meal._id}
             ingredients={meal.ingredients}
-            macroDensities={this.state.macroDensities}
             onUpdate={this.getMeals}
           />
         ))}

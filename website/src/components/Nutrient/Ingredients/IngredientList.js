@@ -33,7 +33,7 @@ export default class IngredientList extends React.Component {
   };
 
   render() {
-    const { isUnavailable, macroDensities, onUpdate } = this.props;
+    const { isUnavailable, onUpdate } = this.props;
     const { ingredients } = this.state;
     if (ingredients.length === 0 && isUnavailable) return <></>;
     return (
@@ -43,19 +43,13 @@ export default class IngredientList extends React.Component {
           {isUnavailable && <>Unavailable</>}
         </Title>
         <IngredientRow isTitle />
-        {!isUnavailable && (
-          <IngredientAdder
-            onSubmit={onUpdate}
-            macroDensities={macroDensities}
-          />
-        )}
+        {!isUnavailable && <IngredientAdder onSubmit={onUpdate} />}
         {ingredients.map(({ _id, name, macronutrients }) => (
           <IngredientRow
             key={_id}
             id={_id}
             name={name}
             macronutrients={macronutrients}
-            macroDensities={macroDensities}
             onUpdate={onUpdate}
             isAvailable={!isUnavailable}
           />

@@ -16,6 +16,7 @@ import {
 } from '../../../style/buttons';
 import MealEditor from './MealEditor';
 import axios from 'axios';
+import { getCalories } from '../util';
 
 export default class MealRow extends React.Component {
   constructor() {
@@ -51,13 +52,7 @@ export default class MealRow extends React.Component {
 
   getCalories = () => {
     const { fat, carbohydrate, protein, ethanol } = this.state;
-    const { macroDensities } = this.props;
-    return (
-      fat * macroDensities.fat +
-      carbohydrate * macroDensities.carbohydrate +
-      protein * macroDensities.protein +
-      ethanol * macroDensities.ethanol
-    );
+    return getCalories(fat, carbohydrate, protein, ethanol);
   };
 
   getIngredients = async () => {
@@ -109,7 +104,7 @@ export default class MealRow extends React.Component {
   };
 
   render() {
-    const { isTitle, id, macroDensities } = this.props;
+    const { isTitle, id } = this.props;
     const {
       isEditing,
       ingredients,
@@ -169,7 +164,6 @@ export default class MealRow extends React.Component {
             id={id}
             ingredients={ingredients}
             onUpdate={this.getIngredients}
-            macroDensities={macroDensities}
           />
         )}
       </div>

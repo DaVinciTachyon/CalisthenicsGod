@@ -27,7 +27,16 @@ export default class Login extends React.Component {
           password: this.state.password,
         })
       ).data;
-      localStorage.setItem('authToken', data['auth-token']);
+      localStorage.setItem(
+        'user',
+        JSON.stringify({ authToken: data['Authentication'] })
+      );
+      localStorage.setItem('macronutrientDensities', {
+        fat: 9,
+        carbohydrate: 4,
+        protein: 4,
+        ethanol: 7,
+      });
       window.location = '/';
     } catch (err) {
       if (err.response.status === 400)

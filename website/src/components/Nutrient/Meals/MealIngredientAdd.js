@@ -18,7 +18,6 @@ export default class MealIngredientAdd extends React.Component {
             this.props.onUpdate();
           }}
           onCancel={() => this.setState({ isAdding: false })}
-          macroDensities={this.props.macroDensities}
           isPreset
         />
       );

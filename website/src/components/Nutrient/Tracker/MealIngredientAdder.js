@@ -5,6 +5,7 @@ import { Text, Calories } from '../../../style/inputs';
 import { SuccessButton, ErrorButton } from '../../../style/buttons';
 import IngredientMacroRow from './IngredientMacroRow';
 import axios from 'axios';
+import { getCalories } from '../util';
 
 export default class MealIngredientAdder extends React.Component {
   constructor() {
@@ -40,13 +41,10 @@ export default class MealIngredientAdder extends React.Component {
     }
   };
 
-  getCalories = () =>
-    ((this.state.fat * this.props.macroDensities.fat +
-      this.state.carbohydrate * this.props.macroDensities.carbohydrate +
-      this.state.protein * this.props.macroDensities.protein +
-      this.state.ethanol * this.props.macroDensities.ethanol) *
-      this.state.weight) /
-    100;
+  getCalories = () => {
+    const { fat, carbohydrate, protein, ethanol, weight } = this.status;
+    return getCalories(fat, carbohydrate, protein, ethanol, weight);
+  };
 
   onChange = (evt) => this.setState({ [evt.target.name]: evt.target.value });
 

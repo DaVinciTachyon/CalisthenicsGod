@@ -8,12 +8,6 @@ export default class Meals extends React.Component {
     super();
     this.state = {
       meals: [],
-      macroDensities: {
-        fat: 9,
-        carbohydrate: 4,
-        protein: 4,
-        ethanol: 7,
-      },
     };
   }
 
@@ -36,16 +30,12 @@ export default class Meals extends React.Component {
     return (
       <div>
         <MealRow isTitle />
-        <MealAdder
-          macroDensities={this.state.macroDensities}
-          onSubmit={this.getMeals}
-        />
+        <MealAdder onSubmit={this.getMeals} />
         {this.state.meals.map((meal) => (
           <MealRow
             key={meal._id}
             id={meal._id}
             name={meal.name}
-            macroDensities={this.state.macroDensities}
             onUpdate={this.getMeals}
           />
         ))}

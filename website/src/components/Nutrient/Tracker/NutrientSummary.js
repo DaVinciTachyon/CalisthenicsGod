@@ -59,7 +59,6 @@ export default class NutrientSummary extends React.Component {
           carbohydrate={this.state.goal.carbohydrate}
           protein={this.state.goal.protein}
           ethanol={this.state.goal.ethanol}
-          macroDensities={this.props.macroDensities}
         />
         <MacroSummaryRow
           name="Current"
@@ -67,7 +66,6 @@ export default class NutrientSummary extends React.Component {
           carbohydrate={this.state.current.carbohydrate}
           protein={this.state.current.protein}
           ethanol={this.state.current.ethanol}
-          macroDensities={this.props.macroDensities}
         />
         <MacroSummaryRow
           name="Left"
@@ -77,7 +75,6 @@ export default class NutrientSummary extends React.Component {
           }
           protein={this.state.goal.protein - this.state.current.protein}
           ethanol={this.state.goal.ethanol - this.state.current.ethanol}
-          macroDensities={this.props.macroDensities}
         />
       </div>
     );
