@@ -7,7 +7,7 @@ import IngredientMacroRow from './IngredientMacroRow';
 import axios from 'axios';
 import { getCalories } from '../util';
 import { connect } from 'react-redux';
-import { addIngredient } from '../../../reducers/ingredients';
+import { addIngredient } from '../../../stateManagement/reducers/ingredients';
 
 class MealIngredientAdder extends React.Component {
   constructor() {

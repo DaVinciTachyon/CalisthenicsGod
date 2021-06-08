@@ -11,7 +11,7 @@ import {
   Ethanol,
 } from '../../../style/inputs';
 import { getCalories } from '../util';
-import { addIngredient } from '../../../reducers/ingredients';
+import { addIngredient } from '../../../stateManagement/reducers/ingredients';
 import { connect } from 'react-redux';
 
 class IngredientAdder extends React.Component {

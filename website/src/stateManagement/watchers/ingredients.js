@@ -10,7 +10,7 @@ import {
   changeAvailability,
   setIngredients,
   patchIngredient,
-} from '../../ingredients';
+} from '../reducers/ingredients';
 
 export default function* ingredientWatcher() {
   yield takeLeading(addIngredient.type, handlePostIngredient);

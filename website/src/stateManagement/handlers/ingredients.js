@@ -5,7 +5,7 @@ import {
   setIngredients,
   changeAvailability,
   patchIngredient,
-} from '../../ingredients';
+} from '../reducers/ingredients';
 
 function* handlePostIngredient({ payload }) {
   try {

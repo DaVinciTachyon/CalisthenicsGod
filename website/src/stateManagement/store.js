@@ -4,8 +4,8 @@ import {
   applyMiddleware,
 } from '@reduxjs/toolkit';
 import createSagaMiddleware from 'redux-saga';
-import ingredients from './ingredients';
-import ingredientWatcher from './sagas/watchers/ingredients';
+import ingredients from './reducers/ingredients';
+import ingredientWatcher from './watchers/ingredients';
 
 const reducer = combineReducers({
   ingredients,

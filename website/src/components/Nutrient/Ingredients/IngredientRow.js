@@ -20,7 +20,7 @@ import { connect } from 'react-redux';
 import {
   changeAvailability,
   patchIngredient,
-} from '../../../reducers/ingredients';
+} from '../../../stateManagement/reducers/ingredients';
 
 class IngredientRow extends React.Component {
   constructor() {

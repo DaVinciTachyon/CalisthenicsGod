@@ -19,7 +19,7 @@ import AuthenticatedRoute from './components/AuthenticatedRoute';
 import NonAuthenticatedRoute from './components/NonAuthenticatedRoute';
 import axios from 'axios';
 import { Provider } from 'react-redux';
-import store from './reducers/store';
+import store from './stateManagement/store';
 
 axios.defaults.baseURL =
   process.env.REACT_APP_API_URL || 'http://localhost:8080/api';
