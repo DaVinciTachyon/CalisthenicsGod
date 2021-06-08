@@ -70,7 +70,7 @@ export default class UserProfile extends React.Component {
             : 'maintenance',
       });
     } catch (err) {
-      if (err.response.status === 400) console.error(err.response.data.error);
+      if (err.response?.status === 400) console.error(err.response.data.error);
       else console.error(err.response);
     }
   };
@@ -111,7 +111,7 @@ export default class UserProfile extends React.Component {
       });
       this.setState({ success: 'Success!' });
     } catch (err) {
-      if (err.response.status === 400)
+      if (err.response?.status === 400)
         this.setState({ error: err.response.data.error });
       else console.error(err.response);
     }

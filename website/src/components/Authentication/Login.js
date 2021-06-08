@@ -31,15 +31,9 @@ export default class Login extends React.Component {
         'user',
         JSON.stringify({ authToken: data['Authentication'] })
       );
-      localStorage.setItem('macronutrientDensities', {
-        fat: 9,
-        carbohydrate: 4,
-        protein: 4,
-        ethanol: 7,
-      });
       window.location = '/';
     } catch (err) {
-      if (err.response.status === 400)
+      if (err.response?.status === 400)
         this.setState({ error: err.response.data.error });
       else console.error(err.response);
     }

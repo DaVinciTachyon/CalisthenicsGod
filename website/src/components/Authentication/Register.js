@@ -48,7 +48,7 @@ export default class Register extends React.Component {
       });
       window.location = '/login';
     } catch (err) {
-      if (err.response.status === 400)
+      if (err.response?.status === 400)
         this.setState({ error: err.response.data.error });
       else console.error(err.response);
     }

@@ -19,7 +19,7 @@ export default class StageSelect extends React.Component {
       const { stages } = await axios.get('/workout/stage/');
       this.setState({ stages });
     } catch (err) {
-      if (err.response.status === 400) console.error(err.response.data.error);
+      if (err.response?.status === 400) console.error(err.response.data.error);
       else console.error(err.response);
     }
   };

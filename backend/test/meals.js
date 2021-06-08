@@ -3,7 +3,7 @@ const {
   login,
   post,
   patch,
-  deleteRequest,
+  deleteReq,
   buildRandomIngredientReference,
   buildRandomPresetMealReference,
   randomFloat,
@@ -74,12 +74,12 @@ describe('Meals', () => {
 
   describe('/DELETE', () => {
     it('empty body', async () => {
-      const res = await deleteRequest('/nutrition/meals', {}, authToken);
+      const res = await deleteReq('/nutrition/meals', {}, authToken);
       res.should.have.status(400);
     });
 
     it('valid request', async () => {
-      const res = await deleteRequest(
+      const res = await deleteReq(
         '/nutrition/meals',
         {
           _id: expectedMealId,

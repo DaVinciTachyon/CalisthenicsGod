@@ -15,10 +15,14 @@ import {
   ErrorButton,
   DeleteButton,
 } from '../../../style/buttons';
-import axios from 'axios';
 import { getCalories } from '../util';
+import { connect } from 'react-redux';
+import {
+  changeAvailability,
+  patchIngredient,
+} from '../../../reducers/ingredients';
 
-export default class IngredientRow extends React.Component {
+class IngredientRow extends React.Component {
   constructor() {
     super();
     this.state = {
@@ -57,44 +61,21 @@ export default class IngredientRow extends React.Component {
     });
   };
 
-  onChangeAvailability = async () => {
-    try {
-      const { isAvailable, id, onUpdate } = this.props;
-      let url = `/nutrition/ingredients/unavailable/`;
-      if (isAvailable) url = `/nutrition/ingredients/`;
-      await axios.delete(url, {
-        _id: id,
-      });
-      await onUpdate();
-      this.setState({ isEditing: false });
-    } catch (err) {
-      if (err.response.status === 400) console.error(err.response.data.error);
-      else console.error(err.response);
-    }
-  };
-
   onChange = (evt) => this.setState({ [evt.target.name]: evt.target.value });
 
   onSubmit = async () => {
-    try {
-      const { id, onUpdate } = this.props;
-      const { name, fat, carbohydrate, protein, ethanol } = this.state;
-      await axios.patch('/nutrition/ingredients/', {
-        _id: id,
-        name,
-        macronutrients: {
-          fat,
-          carbohydrate,
-          protein,
-          ethanol,
-        },
-      });
-      await onUpdate();
-      this.setState({ isEditing: false });
-    } catch (err) {
-      if (err.response.status === 400) console.error(err.response.data.error);
-      else console.error(err.response);
-    }
+    const { name, fat, carbohydrate, protein, ethanol } = this.state;
+    this.props.patchIngredient({
+      _id: this.props.id,
+      name,
+      macronutrients: {
+        fat,
+        carbohydrate,
+        protein,
+        ethanol,
+      },
+    });
+    this.setState({ isEditing: false });
   };
 
   render() {
@@ -156,12 +137,26 @@ export default class IngredientRow extends React.Component {
               Edit
             </Button>
             {isAvailable && (
-              <DeleteButton onClick={this.onChangeAvailability}>
+              <DeleteButton
+                onClick={() =>
+                  this.props.changeAvailability({
+                    _id: this.props.id,
+                    isAvailable,
+                  })
+                }
+              >
                 Unavailable
               </DeleteButton>
             )}
             {!isAvailable && (
-              <SuccessButton onClick={this.onChangeAvailability}>
+              <SuccessButton
+                onClick={() =>
+                  this.props.changeAvailability({
+                    _id: this.props.id,
+                    isAvailable,
+                  })
+                }
+              >
                 Available
               </SuccessButton>
             )}
@@ -186,3 +181,8 @@ export default class IngredientRow extends React.Component {
     );
   }
 }
+
+export default connect(() => ({}), {
+  changeAvailability,
+  patchIngredient,
+})(IngredientRow);

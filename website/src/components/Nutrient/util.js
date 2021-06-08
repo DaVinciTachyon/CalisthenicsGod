@@ -1,11 +1,23 @@
-const getCalories = (
+import axios from 'axios';
+
+const getCalories = async (
   fat,
   carbohydrate,
   protein,
   ethanol,
   weight = undefined
 ) => {
-  const macroDensities = localStorage.getItem('macronutrientDensities');
+  if (!localStorage.getItem('macronutrientDensities')) {
+    try {
+      const data = (await axios.get('/nutrition/macronutrientDensities/')).data;
+      localStorage.setItem('macronutrientDensities', JSON.stringify(data));
+    } catch (err) {
+      console.error(err.response);
+    }
+  }
+  const macroDensities = JSON.parse(
+    localStorage.getItem('macronutrientDensities')
+  );
   if (weight)
     return (
       ((fat * macroDensities.fat +
@@ -23,4 +35,4 @@ const getCalories = (
   );
 };
 
-module.exports = { getCalories };
+export { getCalories };

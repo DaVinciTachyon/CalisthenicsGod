@@ -50,7 +50,7 @@ export default class MeasurementAdder extends React.Component {
       });
       window.location = '/measurementTracker';
     } catch (err) {
-      if (err.response.status === 400) console.error(err.response.data.error);
+      if (err.response?.status === 400) console.error(err.response.data.error);
       else console.error(err.response);
     }
   };

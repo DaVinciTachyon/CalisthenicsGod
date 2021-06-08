@@ -25,7 +25,7 @@ export default class WorkoutAdder extends React.Component {
       const { stages } = (await axios.get('/workout/stage/')).data;
       this.setState({ stages });
     } catch (err) {
-      if (err.response.status === 400) console.error(err.response.data.error);
+      if (err.response?.status === 400) console.error(err.response.data.error);
       else console.error(err.response);
     }
   };
@@ -44,7 +44,7 @@ export default class WorkoutAdder extends React.Component {
       await axios.post('/workout/', this.state.workout);
       window.location = '/workoutTracker';
     } catch (err) {
-      if (err.response.status === 400) console.error(err.response.data.error);
+      if (err.response?.status === 400) console.error(err.response.data.error);
       else console.error(err.response);
     }
   };

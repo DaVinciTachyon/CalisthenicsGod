@@ -4,7 +4,7 @@ const {
   post,
   buildRandomPresetMeal,
   buildRandomIngredientReference,
-  deleteRequest,
+  deleteReq,
 } = require('./util');
 const chai = require('chai');
 const should = chai.should();
@@ -92,7 +92,7 @@ describe('Preset Meals', () => {
 
   describe('/DELETE /ingredient', () => {
     it('empty body', async () => {
-      const res = await deleteRequest(
+      const res = await deleteReq(
         '/nutrition/meals/preset/ingredient',
         {},
         authToken
@@ -101,7 +101,7 @@ describe('Preset Meals', () => {
     });
 
     it('valid request', async () => {
-      const res = await deleteRequest(
+      const res = await deleteReq(
         '/nutrition/meals/preset/ingredient',
         {
           _id: expectedPresetMeal._id,

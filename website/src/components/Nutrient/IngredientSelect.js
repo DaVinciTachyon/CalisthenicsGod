@@ -1,20 +1,21 @@
 import React from 'react';
 import { Select } from '../../style/inputs';
-import axios from 'axios';
+import { connect } from 'react-redux';
+import { setIngredients } from '../../reducers/ingredients';
 
-export default class IngredientSelect extends React.Component {
+class IngredientSelect extends React.Component {
   constructor() {
     super();
-    this.state = { ingredients: [] };
+    this.state = {};
   }
 
   componentDidMount() {
-    this.getIngredients();
+    this.props.setIngredients();
   }
 
   onChange = (evt) =>
     this.props.onChange(
-      this.state.ingredients.filter(
+      this.props.ingredients.available.filter(
         (ingredient) => evt.value === ingredient._id
       )[0]
     );
@@ -25,7 +26,7 @@ export default class IngredientSelect extends React.Component {
       <Select
         name={name || 'ingredient'}
         options={[{ label: 'New Ingredient', value: '' }].concat(
-          this.state.ingredients.map((ingredient) => {
+          this.props.ingredients.available.map((ingredient) => {
             return { label: ingredient.name, value: ingredient._id };
           })
         )}
@@ -34,14 +35,8 @@ export default class IngredientSelect extends React.Component {
       />
     );
   }
-
-  getIngredients = async () => {
-    try {
-      const { ingredients } = (await axios.get('/nutrition/ingredients/')).data;
-      this.setState({ ingredients });
-    } catch (err) {
-      if (err.response.status === 400) console.error(err.response.data.error);
-      else console.error(err.response);
-    }
-  };
 }
+
+export default connect(({ ingredients }) => ({ ingredients }), {
+  setIngredients,
+})(IngredientSelect);
