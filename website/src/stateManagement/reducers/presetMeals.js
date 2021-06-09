@@ -5,9 +5,10 @@ export const slice = createSlice({
   initialState: [],
   reducers: {
     addIngredient: (state, { payload }) => {
-      state
-        .find((meal) => meal._id === payload._id)
-        .ingredients.push(payload.ingredient);
+      if (payload.ingredient._id)
+        state
+          .find((meal) => meal._id === payload._id)
+          .ingredients.push(payload.ingredient);
     },
     modifyIngredient: (state, { payload }) => {
       state
@@ -27,9 +28,11 @@ export const slice = createSlice({
     deletePresetMeal: (state, { payload }) =>
       state.filter((meal) => meal._id !== payload),
     addPresetMeal: (state, { payload }) => {
-      const index = state.findIndex((meal) => meal.name === payload.name);
-      if (index === -1) state.push(payload);
-      else state[index] = payload;
+      if (payload._id) state.push(payload);
+    },
+    modifyPresetMeal: (state, { payload }) => {
+      state.find((meal) => meal._id === payload._id).name = payload.name;
+      //TODO modify ingredients
     },
   },
 });
@@ -41,6 +44,7 @@ export const {
   setPresetMeals,
   addPresetMeal,
   deletePresetMeal,
+  modifyPresetMeal,
 } = slice.actions;
 
 export default slice.reducer;

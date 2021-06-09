@@ -41,6 +41,13 @@ const deleteReq = (_id) =>
     data: { _id },
   });
 
+const patch = (meal) =>
+  axios.request({
+    method: 'patch',
+    url: '/nutrition/meals/preset/',
+    data: meal,
+  });
+
 export {
   postIngredient,
   patchIngredient,
@@ -48,4 +55,5 @@ export {
   get,
   post,
   deleteReq,
+  patch,
 };

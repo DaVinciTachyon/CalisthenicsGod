@@ -6,6 +6,7 @@ import {
   handleGetPresetMeals,
   handleDeletePresetMeal,
   handlePostPresetMeal,
+  handlePatchPresetMeal,
 } from '../handlers/presetMeals';
 import {
   addIngredient,
@@ -14,6 +15,7 @@ import {
   setPresetMeals,
   deletePresetMeal,
   addPresetMeal,
+  modifyPresetMeal,
 } from '../reducers/presetMeals';
 
 export default function* presetMealWatcher() {
@@ -23,4 +25,5 @@ export default function* presetMealWatcher() {
   yield takeLeading(setPresetMeals.type, handleGetPresetMeals);
   yield takeLeading(deletePresetMeal.type, handleDeletePresetMeal);
   yield takeLeading(addPresetMeal.type, handlePostPresetMeal);
+  yield takeLeading(modifyPresetMeal.type, handlePatchPresetMeal);
 }

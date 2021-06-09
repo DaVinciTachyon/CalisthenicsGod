@@ -47,6 +47,27 @@ router
     await Meal.findByIdAndDelete(req.body._id);
 
     res.sendStatus(200);
+  })
+  .patch(async (req, res) => {
+    const { error } = nutrientValidation.presetMeal(req.body);
+    if (error) return res.status(400).send({ error: error.details[0].message });
+
+    const meal = await Meal.findOne({
+      _id: req.body._id,
+      userId: req.user._id,
+    });
+
+    meal.name = req.body.name;
+
+    //FIXME only modify sent ingredients
+    //TODO test for this
+
+    try {
+      await meal.save();
+      res.status(200).send(meal);
+    } catch (err) {
+      res.status(400).send({ error: err });
+    }
   });
 
 router.post('/ingredients', async (req, res) => {
@@ -75,7 +96,7 @@ router.post('/ingredients', async (req, res) => {
 router
   .route('/ingredient')
   .post(async (req, res) => {
-    const { error } = nutrientValidation.mealIngredient(req.body);
+    const { error } = nutrientValidation.mealAddIngredient(req.body);
     if (error) return res.status(400).send({ error: error.details[0].message });
 
     const meal = await Meal.findById(req.body._id);

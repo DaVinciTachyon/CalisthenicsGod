@@ -27,6 +27,7 @@ class MealIngredientAdder extends React.Component {
     if (ingredient === undefined)
       this.setState({
         id: '',
+        name: '',
         fat: 0,
         carbohydrate: 0,
         protein: 0,
@@ -35,6 +36,7 @@ class MealIngredientAdder extends React.Component {
     else {
       this.setState({
         id: ingredient._id,
+        name: ingredient.name,
         fat: ingredient.macronutrients.fat,
         carbohydrate: ingredient.macronutrients.carbohydrate,
         protein: ingredient.macronutrients.protein,

@@ -7,6 +7,7 @@ import {
   setPresetMeals,
   deletePresetMeal,
   addPresetMeal,
+  modifyPresetMeal,
 } from '../reducers/presetMeals';
 import {
   postIngredient,
@@ -15,6 +16,7 @@ import {
   get,
   deleteReq,
   post,
+  patch,
 } from '../requests/presetMeals';
 
 function* handlePostPresetMealIngredient({ payload }) {
@@ -90,6 +92,16 @@ function* handleDeletePresetMeal({ payload }) {
   }
 }
 
+function* handlePatchPresetMeal({ payload }) {
+  //FIXME only if there is a change
+  try {
+    yield call(patch, payload);
+    yield put(modifyPresetMeal(payload));
+  } catch (err) {
+    console.error(err.response);
+  }
+}
+
 export {
   handlePostPresetMealIngredient,
   handlePatchPresetMealIngredient,
@@ -97,4 +109,5 @@ export {
   handleGetPresetMeals,
   handleDeletePresetMeal,
   handlePostPresetMeal,
+  handlePatchPresetMeal,
 };

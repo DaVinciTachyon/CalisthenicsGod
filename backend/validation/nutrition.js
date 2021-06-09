@@ -1,26 +1,29 @@
-const { required } = require('@hapi/joi');
 const Joi = require('@hapi/joi');
 
+const _id = Joi.string().min(1);
+
+const weight = Joi.number().min(0.01);
+
+const macronutrient = Joi.number().min(0).max(100);
+
+const name = Joi.string().min(1).required();
+
 const macronutrients = Joi.object({
-  fat: Joi.number().min(0).max(100).required(),
-  carbohydrate: Joi.number().min(0).max(100).required(),
-  protein: Joi.number().min(0).max(100).required(),
-  ethanol: Joi.number().min(0).max(100).required(),
+  fat: macronutrient.required(),
+  carbohydrate: macronutrient.required(),
+  protein: macronutrient.required(),
+  ethanol: macronutrient.required(),
 });
 
 const ingredientRef = Joi.object({
-  id: Joi.string().min(1).required(),
-  weight: Joi.number().min(0.01).required(),
+  id: _id.required(),
+  weight: weight.required(),
 });
 
 const mealIngredient = Joi.object({
-  _id: Joi.string().min(1).required(),
-  weight: Joi.number().min(0.01).required(),
+  _id: _id.required(),
+  weight: weight.required(),
 });
-
-const _id = Joi.string();
-
-const name = Joi.string().min(1).required();
 
 module.exports = {
   userInfo: (data) =>
@@ -43,6 +46,7 @@ module.exports = {
     }).validate(data),
   presetMeal: (data) =>
     Joi.object({
+      _id,
       name,
       ingredients: Joi.array().items(ingredientRef),
     }).validate(data),
@@ -51,7 +55,15 @@ module.exports = {
     Joi.object({
       _id: _id.required(),
       ingredient: {
-        _id: Joi.string().min(1).required(),
+        _id: _id.required(),
+        weight: Joi.number().min(0.01).required(),
+      },
+    }).validate(data),
+  mealAddIngredient: (data) =>
+    Joi.object({
+      _id: _id.required(),
+      ingredient: {
+        id: _id.required(),
         weight: Joi.number().min(0.01).required(),
       },
     }).validate(data),

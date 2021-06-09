@@ -15,10 +15,12 @@ import {
   ErrorButton,
 } from '../../../style/buttons';
 import MealEditor from './MealEditor';
-import axios from 'axios';
 import { getCalories } from '../util';
 import { setIngredients } from '../../../stateManagement/reducers/ingredients';
-import { deletePresetMeal } from '../../../stateManagement/reducers/presetMeals';
+import {
+  deletePresetMeal,
+  modifyPresetMeal,
+} from '../../../stateManagement/reducers/presetMeals';
 import { connect } from 'react-redux';
 
 class MealRow extends React.Component {
@@ -98,11 +100,6 @@ class MealRow extends React.Component {
 
   onChange = (evt) => this.setState({ [evt.target.name]: evt.target.value });
 
-  onSubmit = () => {
-    //TODO submit name and submit all unsubmitted ingredients
-    this.set();
-  };
-
   render() {
     if (this.props.isTitle)
       return (
@@ -151,7 +148,18 @@ class MealRow extends React.Component {
             )}
             {isEditing && (
               <>
-                <SuccessButton onClick={this.onSubmit}>Submit</SuccessButton>
+                <SuccessButton
+                  onClick={() => {
+                    this.props.modifyPresetMeal({
+                      _id: this.props.meal._id,
+                      name: this.state.name,
+                      ingredients: [], //TODO submit ingredients to modify
+                    });
+                    this.set();
+                  }}
+                >
+                  Submit
+                </SuccessButton>
                 <ErrorButton onClick={this.set}>Cancel</ErrorButton>
               </>
             )}
@@ -171,4 +179,5 @@ class MealRow extends React.Component {
 export default connect(({ ingredients }) => ({ ingredients }), {
   setIngredients,
   deletePresetMeal,
+  modifyPresetMeal,
 })(MealRow);
