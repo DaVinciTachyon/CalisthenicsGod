@@ -112,11 +112,4 @@ describe('Preset Meals', () => {
       res.should.have.status(200);
     });
   });
-
-  describe('/GET', () => {
-    it('valid request', async () => {
-      const res = await get('/nutrition/meals/preset/names', authToken);
-      res.should.have.status(200);
-    });
-  });
 });

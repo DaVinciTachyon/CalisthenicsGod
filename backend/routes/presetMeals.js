@@ -133,14 +133,4 @@ router
     }
   });
 
-router.get('/names', async (req, res) => {
-  const meals = await Meal.find({ userId: req.user._id });
-
-  res.send({
-    meals: meals.map((val) => {
-      return { _id: val._id, name: val.name };
-    }),
-  });
-});
-
 module.exports = router;

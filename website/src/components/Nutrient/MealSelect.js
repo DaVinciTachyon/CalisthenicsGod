@@ -2,16 +2,17 @@ import React from 'react';
 import { Select } from '../../style/inputs';
 import { Button } from '../../style/buttons';
 import { Row } from '../../style/table';
-import axios from 'axios';
+import { setPresetMeals } from '../../stateManagement/reducers/presetMeals';
+import { connect } from 'react-redux';
 
-export default class MealSelect extends React.Component {
+class MealSelect extends React.Component {
   constructor() {
     super();
-    this.state = { meals: [], id: '' };
+    this.state = { id: '' };
   }
 
   componentDidMount() {
-    this.getMeals();
+    if (this.props.presetMeals.length === 0) this.props.setPresetMeals();
   }
 
   render() {
@@ -19,7 +20,12 @@ export default class MealSelect extends React.Component {
     return (
       <Row columns={2}>
         <Select
-          options={[{ label: 'New Meal', value: '' }].concat(this.state.meals)}
+          options={[{ label: 'New Meal', value: '' }].concat(
+            this.props.presetMeals.map((meal) => ({
+              label: meal.name,
+              value: meal._id,
+            }))
+          )}
           value={this.state.id}
           onChange={(evt) => this.setState({ id: evt.value })}
           {...rest}
@@ -28,18 +34,8 @@ export default class MealSelect extends React.Component {
       </Row>
     );
   }
-
-  getMeals = async () => {
-    try {
-      const data = (await axios.get('/nutrition/meals/preset/names/')).data;
-      const meals = [];
-      data.meals.forEach((meal) =>
-        meals.push({ label: meal.name, value: meal._id })
-      );
-      this.setState({ meals });
-    } catch (err) {
-      if (err.response?.status === 400) console.error(err.response.data.error);
-      else console.error(err.response);
-    }
-  };
 }
+
+export default connect(({ presetMeals }) => ({ presetMeals }), {
+  setPresetMeals,
+})(MealSelect);

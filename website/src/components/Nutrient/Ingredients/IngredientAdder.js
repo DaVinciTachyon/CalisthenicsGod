@@ -38,6 +38,10 @@ class IngredientAdder extends React.Component {
         ethanol: this.state.ethanol,
       },
     });
+    this.reset();
+  };
+
+  reset = () =>
     this.setState({
       isAdding: false,
       name: '',
@@ -46,7 +50,6 @@ class IngredientAdder extends React.Component {
       protein: 0,
       ethanol: 0,
     });
-  };
 
   onChange = (evt) => this.setState({ [evt.target.name]: evt.target.value });
 

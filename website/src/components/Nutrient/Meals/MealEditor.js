@@ -9,7 +9,7 @@ export default class MealEditor extends React.Component {
   }
 
   render() {
-    const { ingredients, id, onUpdate } = this.props;
+    const { ingredients, id } = this.props;
     return (
       <div>
         <MealIngredient isTitle />
@@ -21,10 +21,9 @@ export default class MealEditor extends React.Component {
             name={name}
             weight={weight}
             macronutrients={macronutrients}
-            onUpdate={onUpdate}
           />
         ))}
-        <MealIngredientAdd id={id} onUpdate={onUpdate} />
+        <MealIngredientAdd id={id} />
       </div>
     );
   }

@@ -4,10 +4,10 @@ import { Row, Column } from '../../../style/table';
 import { Text, Calories } from '../../../style/inputs';
 import { SuccessButton, ErrorButton } from '../../../style/buttons';
 import IngredientMacroRow from './IngredientMacroRow';
-import axios from 'axios';
 import { getCalories } from '../util';
 import { connect } from 'react-redux';
 import { addIngredient } from '../../../stateManagement/reducers/ingredients';
+import { addIngredient as addPresetMealIngredient } from '../../../stateManagement/reducers/presetMeals';
 
 class MealIngredientAdder extends React.Component {
   constructor() {
@@ -46,10 +46,12 @@ class MealIngredientAdder extends React.Component {
   onChange = (evt) => this.setState({ [evt.target.name]: evt.target.value });
 
   onSubmit = async () => {
-    try {
-      let id = this.state.id;
-      if (!id) {
-        this.props.addIngredient({
+    if (this.props.isPreset)
+      this.props.addPresetMealIngredient({
+        _id: this.props.id,
+        ingredient: {
+          id: this.state.id || undefined,
+          weight: this.state.weight,
           name: this.state.name,
           macronutrients: {
             fat: this.state.fat,
@@ -57,25 +59,10 @@ class MealIngredientAdder extends React.Component {
             protein: this.state.protein,
             ethanol: this.state.ethanol,
           },
-        });
-        id = this.props.ingredients.available.find(
-          (ingredient) => ingredient.name === this.state.name
-        )._id; //FIXME
-      }
-      let url = '/nutrition/meals/';
-      if (this.props.isPreset) url += 'preset/ingredient/';
-      await axios.post(url, {
-        _id: this.props.id,
-        ingredient: {
-          id,
-          weight: this.state.weight,
         },
       });
-      this.props.onSubmit();
-    } catch (err) {
-      if (err.response?.status === 400) console.error(err.response.data.error);
-      else console.error(err.response);
-    }
+    // let url = '/nutrition/meals/'; TODO
+    this.props.onSubmit();
   };
 
   onCancel = () => this.props.onCancel();
@@ -136,4 +123,5 @@ class MealIngredientAdder extends React.Component {
 
 export default connect(({ ingredients }) => ({ ingredients }), {
   addIngredient,
+  addPresetMealIngredient,
 })(MealIngredientAdder);

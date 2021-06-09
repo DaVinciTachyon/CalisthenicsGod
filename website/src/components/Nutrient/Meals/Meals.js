@@ -1,45 +1,32 @@
 import React from 'react';
 import MealRow from './MealRow';
 import MealAdder from './MealAdder';
-import axios from 'axios';
+import { setPresetMeals } from '../../../stateManagement/reducers/presetMeals';
+import { connect } from 'react-redux';
 
-export default class Meals extends React.Component {
+class Meals extends React.Component {
   constructor() {
     super();
-    this.state = {
-      meals: [],
-    };
+    this.state = {};
   }
 
   componentDidMount() {
-    this.getMeals();
+    if (this.props.presetMeals.length === 0) this.props.setPresetMeals();
   }
-
-  getMeals = async () => {
-    try {
-      const { meals } = (await axios.get('/nutrition/meals/preset/names/'))
-        .data;
-      this.setState({ meals });
-    } catch (err) {
-      if (err.response?.status === 400) console.error(err.response.data.error);
-      else console.error(err.response);
-    }
-  };
 
   render() {
     return (
       <div>
         <MealRow isTitle />
-        <MealAdder onSubmit={this.getMeals} />
-        {this.state.meals.map((meal) => (
-          <MealRow
-            key={meal._id}
-            id={meal._id}
-            name={meal.name}
-            onUpdate={this.getMeals}
-          />
+        <MealAdder />
+        {this.props.presetMeals.map((meal) => (
+          <MealRow key={meal._id} meal={meal} />
         ))}
       </div>
     );
   }
 }
+
+export default connect(({ presetMeals }) => ({ presetMeals }), {
+  setPresetMeals,
+})(Meals);
