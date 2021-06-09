@@ -153,7 +153,6 @@ class MealRow extends React.Component {
                     this.props.modifyPresetMeal({
                       _id: this.props.meal._id,
                       name: this.state.name,
-                      ingredients: [], //TODO submit ingredients to modify
                     });
                     this.set();
                   }}

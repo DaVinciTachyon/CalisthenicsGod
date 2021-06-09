@@ -58,7 +58,7 @@ router
     });
 
     meal.name = req.body.name;
-    req.body.ingredients.forEach((ingredient) => {
+    (req.body.ingredients || []).forEach((ingredient) => {
       meal.ingredients[
         meal.ingredients.findIndex((ing) => ing._id === ingredient._id)
       ].weight = ingredient.weight;

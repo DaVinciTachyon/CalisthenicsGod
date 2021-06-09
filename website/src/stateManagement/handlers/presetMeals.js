@@ -93,7 +93,6 @@ function* handleDeletePresetMeal({ payload }) {
 }
 
 function* handlePatchPresetMeal({ payload }) {
-  //FIXME only if there is a change
   try {
     yield call(patch, payload);
     yield put(modifyPresetMeal(payload));

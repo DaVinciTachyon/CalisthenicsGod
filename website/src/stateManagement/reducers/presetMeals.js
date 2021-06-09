@@ -31,8 +31,15 @@ export const slice = createSlice({
       if (payload._id) state.push(payload);
     },
     modifyPresetMeal: (state, { payload }) => {
-      state.find((meal) => meal._id === payload._id).name = payload.name;
-      //TODO modify ingredients
+      const index = state.findIndex((meal) => meal._id === payload._id);
+      state[index].name = payload.name;
+      (payload.ingredients || []).forEach((ingredient) => {
+        state[index].ingredients[
+          state[index].ingredients.findIndex(
+            (ing) => ing._id === ingredient._id
+          )
+        ].weight = ingredient.weight;
+      });
     },
   },
 });
