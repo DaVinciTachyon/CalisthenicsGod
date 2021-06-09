@@ -58,9 +58,11 @@ router
     });
 
     meal.name = req.body.name;
-
-    //FIXME only modify sent ingredients
-    //TODO test for this
+    req.body.ingredients.forEach((ingredient) => {
+      meal.ingredients[
+        meal.ingredients.findIndex((ing) => ing._id === ingredient._id)
+      ].weight = ingredient.weight;
+    });
 
     try {
       await meal.save();

@@ -63,8 +63,8 @@ class MealIngredientAdder extends React.Component {
           },
         },
       });
-    // let url = '/nutrition/meals/'; TODO
-    this.props.onSubmit();
+    // TODO let url = '/nutrition/meals/';
+    this.props.onSubmit(); //TOOD abstract out to onsubmit not in here
   };
 
   onCancel = () => this.props.onCancel();
