@@ -8,7 +8,11 @@ export const slice = createSlice({
   },
   reducers: {
     addIngredient: (state, { payload }) => {
-      state.available.push(payload);
+      const index = state.available.findIndex(
+        (ingredient) => ingredient.name === payload.name
+      );
+      if (index === -1) state.available.push(payload);
+      else state.available[index] = payload;
     },
     setIngredients: (state, { payload }) => ({ ...state, ...payload }),
     changeAvailability: (state, { payload }) => {

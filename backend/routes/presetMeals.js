@@ -21,6 +21,12 @@ router
     const { error } = nutrientValidation.presetMeal(req.body);
     if (error) return res.status(400).send({ error: error.details[0].message });
 
+    const name = await Meal.findOne({
+      name: req.body.name,
+      userId: req.user._id,
+    });
+    if (name) return res.status(400).send({ error: 'Name already exists' });
+
     const meal = new Meal({
       name: req.body.name,
       ingredients: req.body.ingredients,
@@ -118,7 +124,7 @@ router
     if (!meal) return res.status(400).send({ error: 'Invalid Meal ID' });
 
     const index = meal.ingredients.findIndex(
-      (val) => val.id == req.body.ingredient.id
+      (val) => val._id == req.body.ingredient._id
     );
     if (index === -1)
       return res.status(400).send({ error: 'Invalid Ingredient ID' });

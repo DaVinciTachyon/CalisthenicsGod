@@ -48,9 +48,13 @@ module.exports = {
     }).validate(data),
   id: (data) => Joi.object({ _id: _id.required() }).validate(data),
   mealIngredient: (data) =>
-    Joi.object({ _id: _id.required(), ingredient: ingredientRef }).validate(
-      data
-    ),
+    Joi.object({
+      _id: _id.required(),
+      ingredient: {
+        _id: Joi.string().min(1).required(),
+        weight: Joi.number().min(0.01).required(),
+      },
+    }).validate(data),
   mealIngredientEdit: (data) =>
     Joi.object({ _id: _id.required(), ingredient: mealIngredient }).validate(
       data

@@ -15,10 +15,14 @@ import {
   ErrorButton,
   DeleteButton,
 } from '../../../style/buttons';
-import axios from 'axios';
 import { getCalories } from '../util';
+import {
+  removeIngredient,
+  modifyIngredient,
+} from '../../../stateManagement/reducers/presetMeals';
+import { connect } from 'react-redux';
 
-export default class MealIngredient extends React.Component {
+class MealIngredient extends React.Component {
   constructor() {
     super();
     this.state = {
@@ -59,40 +63,6 @@ export default class MealIngredient extends React.Component {
 
   onChange = (evt) => this.setState({ [evt.target.name]: evt.target.value });
 
-  onSubmit = async () => {
-    try {
-      const { mealId, id, onUpdate } = this.props;
-      const { weight } = this.state;
-      await axios.patch('/nutrition/meals/preset/ingredient/', {
-        _id: mealId,
-        ingredient: {
-          id,
-          weight,
-        },
-      });
-      await this.setState({ isEditing: false });
-      onUpdate();
-    } catch (err) {
-      if (err.response?.status === 400) console.error(err.response.data.error);
-      else console.error(err.response);
-    }
-  };
-
-  onRemove = async () => {
-    try {
-      const { mealId, id, onUpdate } = this.props;
-      await axios.delete('/nutrition/meals/preset/ingredient/', {
-        ingredient: { _id: id },
-        _id: mealId,
-      });
-      await this.setState({ isEditing: false });
-      onUpdate();
-    } catch (err) {
-      if (err.response?.status === 400) console.error(err.response.data.error);
-      else console.error(err.response);
-    }
-  };
-
   render() {
     const { isTitle, name } = this.props;
     const { isEditing, weight, fat, carbohydrate, protein, ethanol } =
@@ -132,12 +102,34 @@ export default class MealIngredient extends React.Component {
               <Button onClick={() => this.setState({ isEditing: true })}>
                 Edit
               </Button>
-              <DeleteButton onClick={this.onRemove}>Remove</DeleteButton>
+              <DeleteButton
+                onClick={() =>
+                  this.props.removeIngredient({
+                    _id: this.props.mealId,
+                    ingredient: { _id: this.props.id },
+                  })
+                }
+              >
+                Remove
+              </DeleteButton>
             </>
           )}
           {isEditing && (
             <>
-              <SuccessButton onClick={this.onSubmit}>Submit</SuccessButton>
+              <SuccessButton
+                onClick={() => {
+                  this.props.modifyIngredient({
+                    _id: this.props.mealId,
+                    ingredient: {
+                      _id: this.props.id,
+                      weight: this.state.weight,
+                    },
+                  });
+                  this.set();
+                }}
+              >
+                Submit
+              </SuccessButton>
               <ErrorButton onClick={this.set}>Cancel</ErrorButton>
             </>
           )}
@@ -146,3 +138,8 @@ export default class MealIngredient extends React.Component {
     );
   }
 }
+
+export default connect(() => ({}), {
+  removeIngredient,
+  modifyIngredient,
+})(MealIngredient);

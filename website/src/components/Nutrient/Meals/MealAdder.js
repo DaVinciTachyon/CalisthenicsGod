@@ -2,29 +2,16 @@ import React from 'react';
 import { Row, Column } from '../../../style/table';
 import { Button, ErrorButton } from '../../../style/buttons';
 import { Text } from '../../../style/inputs';
-import axios from 'axios';
+import { addPresetMeal } from '../../../stateManagement/reducers/presetMeals';
+import { connect } from 'react-redux';
 
-export default class MealAdder extends React.Component {
+class MealAdder extends React.Component {
   constructor() {
     super();
     this.state = { isAdding: false, name: '' };
   }
 
   set = () => this.setState({ isAdding: false, name: '' });
-
-  onSubmit = async () => {
-    try {
-      await axios.post('/nutrition/meals/preset/', {
-        name: this.state.name,
-        ingredients: [],
-      });
-      this.set();
-      this.props.onSubmit();
-    } catch (err) {
-      if (err.response?.status === 400) console.error(err.response.data.error);
-      else console.error(err.response);
-    }
-  };
 
   onChange = (evt) => this.setState({ [evt.target.name]: evt.target.value });
 
@@ -34,7 +21,17 @@ export default class MealAdder extends React.Component {
         <Row columns={2}>
           <Text name="name" value={this.state.name} onChange={this.onChange} />
           <Column>
-            <Button onClick={this.onSubmit}>Add</Button>
+            <Button
+              onClick={() => {
+                this.props.addPresetMeal({
+                  name: this.state.name,
+                  ingredients: [],
+                });
+                this.set();
+              }}
+            >
+              Add
+            </Button>
             <ErrorButton onClick={this.set}>Cancel</ErrorButton>
           </Column>
         </Row>
@@ -49,3 +46,7 @@ export default class MealAdder extends React.Component {
     );
   }
 }
+
+export default connect(() => ({}), {
+  addPresetMeal,
+})(MealAdder);
