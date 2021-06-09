@@ -45,6 +45,12 @@ describe('Preset Meals', () => {
       );
       res.should.have.status(200);
       expectedPresetMeal._id = res.body._id;
+      expectedPresetMeal.ingredients = expectedPresetMeal.ingredients.map(
+        (ingredient, index) => ({
+          ...ingredient,
+          _id: res.body.ingredients[index]._id,
+        })
+      );
     });
   });
 
@@ -132,4 +138,6 @@ describe('Preset Meals', () => {
       res.should.have.status(200);
     });
   });
+
+  //TODO patch
 });

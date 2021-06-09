@@ -50,6 +50,18 @@ module.exports = {
       name,
       ingredients: Joi.array().items(ingredientRef),
     }).validate(data),
+  presetMealEdit: (data) =>
+    Joi.object({
+      _id,
+      name,
+      ingredients: Joi.array().items(
+        Joi.object({
+          _id: _id.required(),
+          id: _id,
+          weight: weight.required(),
+        })
+      ),
+    }).validate(data),
   id: (data) => Joi.object({ _id: _id.required() }).validate(data),
   mealIngredient: (data) =>
     Joi.object({
@@ -68,9 +80,14 @@ module.exports = {
       },
     }).validate(data),
   mealIngredientEdit: (data) =>
-    Joi.object({ _id: _id.required(), ingredient: mealIngredient }).validate(
-      data
-    ),
+    Joi.object({
+      _id: _id.required(),
+      ingredient: Joi.object({
+        _id: _id.required(),
+        id: _id,
+        weight: weight.required(),
+      }),
+    }).validate(data),
   mealIngredientId: (data) =>
     Joi.object({
       _id: _id.required(),

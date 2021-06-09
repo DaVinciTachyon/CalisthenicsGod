@@ -31,6 +31,6 @@ app.on('ready', () => {
     if (err) return console.error(err);
     const host = server.address().address;
     const port = server.address().port;
-    console.log('Listening at http://%s:%s', host, port);
+    console.info('Listening at http://%s:%s', host, port);
   });
 });

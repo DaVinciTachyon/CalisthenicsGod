@@ -49,7 +49,7 @@ router
     res.sendStatus(200);
   })
   .patch(async (req, res) => {
-    const { error } = nutrientValidation.presetMeal(req.body);
+    const { error } = nutrientValidation.presetMealEdit(req.body);
     if (error) return res.status(400).send({ error: error.details[0].message });
 
     const meal = await Meal.findOne({
@@ -58,11 +58,12 @@ router
     });
 
     meal.name = req.body.name;
-    (req.body.ingredients || []).forEach((ingredient) => {
-      meal.ingredients[
-        meal.ingredients.findIndex((ing) => ing._id === ingredient._id)
-      ].weight = ingredient.weight;
-    });
+    (req.body.ingredients || []).forEach(
+      (ingredient) =>
+        (meal.ingredients[
+          meal.ingredients.findIndex((ing) => ing._id.equals(ingredient._id))
+        ].weight = ingredient.weight)
+    );
 
     try {
       await meal.save();
