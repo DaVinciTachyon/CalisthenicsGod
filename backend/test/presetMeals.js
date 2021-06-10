@@ -138,6 +138,4 @@ describe('Preset Meals', () => {
       res.should.have.status(200);
     });
   });
-
-  //TODO patch
 });
