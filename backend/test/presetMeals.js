@@ -4,11 +4,9 @@ const {
   post,
   buildRandomPresetMeal,
   buildRandomIngredientReference,
-  deleteReq,
-  patch,
+  deleteRequest,
 } = require('./util');
 const chai = require('chai');
-const { randomString } = require('../../util/util');
 const should = chai.should();
 
 describe('Preset Meals', () => {
@@ -45,30 +43,6 @@ describe('Preset Meals', () => {
       );
       res.should.have.status(200);
       expectedPresetMeal._id = res.body._id;
-      expectedPresetMeal.ingredients = expectedPresetMeal.ingredients.map(
-        (ingredient, index) => ({
-          ...ingredient,
-          _id: res.body.ingredients[index]._id,
-        })
-      );
-    });
-  });
-
-  describe('/PATCH', () => {
-    it('empty body', async () => {
-      const res = await patch('/nutrition/meals/preset', {}, authToken);
-      res.should.have.status(400);
-    });
-
-    it('valid meal', async () => {
-      const patchedPresetMeal = JSON.parse(JSON.stringify(expectedPresetMeal));
-      patchedPresetMeal.name = randomString(5);
-      const res = await patch(
-        '/nutrition/meals/preset',
-        patchedPresetMeal,
-        authToken
-      );
-      res.should.have.status(200);
     });
   });
 
@@ -118,7 +92,7 @@ describe('Preset Meals', () => {
 
   describe('/DELETE /ingredient', () => {
     it('empty body', async () => {
-      const res = await deleteReq(
+      const res = await deleteRequest(
         '/nutrition/meals/preset/ingredient',
         {},
         authToken
@@ -127,7 +101,7 @@ describe('Preset Meals', () => {
     });
 
     it('valid request', async () => {
-      const res = await deleteReq(
+      const res = await deleteRequest(
         '/nutrition/meals/preset/ingredient',
         {
           _id: expectedPresetMeal._id,
@@ -135,6 +109,13 @@ describe('Preset Meals', () => {
         },
         authToken
       );
+      res.should.have.status(200);
+    });
+  });
+
+  describe('/GET', () => {
+    it('valid request', async () => {
+      const res = await get('/nutrition/meals/preset/names', authToken);
       res.should.have.status(200);
     });
   });

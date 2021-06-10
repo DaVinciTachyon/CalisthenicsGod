@@ -3,7 +3,6 @@ import { Row } from '../../style/table';
 import { Button } from '../../style/buttons';
 import { Error } from '../../style/notification';
 import { Length, Weight } from '../../style/inputs';
-import axios from 'axios';
 
 export default class MeasurementAdder extends React.Component {
   constructor() {
@@ -34,24 +33,33 @@ export default class MeasurementAdder extends React.Component {
     });
 
   submitMeasurement = async () => {
-    try {
-      await axios.post('/measurement/', {
-        weight: this.state.weight,
-        height: this.state.height,
-        waist: this.state.waist,
-        hips: this.state.hips,
-        rightBicep: this.state.rightBicep,
-        leftBicep: this.state.leftBicep,
-        rightForearm: this.state.rightForearm,
-        leftForearm: this.state.leftForearm,
-        shoulders: this.state.shoulders,
-        chest: this.state.chest,
-        neck: this.state.neck,
-      });
-      window.location = '/measurementTracker';
-    } catch (err) {
-      if (err.response?.status === 400) console.error(err.response.data.error);
-      else console.error(err.response);
+    const response = await fetch(
+      `${process.env.REACT_APP_API_URL}/measurement/`,
+      {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          'auth-token': localStorage.getItem('authToken'),
+        },
+        body: JSON.stringify({
+          weight: this.state.weight,
+          height: this.state.height,
+          waist: this.state.waist,
+          hips: this.state.hips,
+          rightBicep: this.state.rightBicep,
+          leftBicep: this.state.leftBicep,
+          rightForearm: this.state.rightForearm,
+          leftForearm: this.state.leftForearm,
+          shoulders: this.state.shoulders,
+          chest: this.state.chest,
+          neck: this.state.neck,
+        }),
+      }
+    );
+    if (response.status === 200) window.location = '/measurementTracker';
+    else {
+      const data = await response.json();
+      this.setState({ error: data.error });
     }
   };
 

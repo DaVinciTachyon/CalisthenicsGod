@@ -8,13 +8,13 @@ import {
   Protein,
   Ethanol,
 } from '../../../style/inputs';
-import { getCalories } from '../util';
 
 export default class MacroSummaryRow extends React.Component {
-  getCalories = () => {
-    const { fat, carbohydrate, protein, ethanol } = this.props;
-    return getCalories(fat, carbohydrate, protein, ethanol);
-  };
+  getCalories = () =>
+    this.props.fat * this.props.macroDensities.fat +
+    this.props.carbohydrate * this.props.macroDensities.carbohydrate +
+    this.props.protein * this.props.macroDensities.protein +
+    this.props.ethanol * this.props.macroDensities.ethanol;
 
   render() {
     if (this.props.isTitle)

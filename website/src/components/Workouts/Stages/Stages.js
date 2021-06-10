@@ -1,7 +1,6 @@
 import React from 'react';
 import StageAdder from './StageAdder';
 import StageRow from './StageRow';
-import axios from 'axios';
 
 export default class Stages extends React.Component {
   constructor() {
@@ -16,13 +15,18 @@ export default class Stages extends React.Component {
   }
 
   getStages = async () => {
-    try {
-      const { stages } = (await axios.get('/workout/stage/')).data;
-      this.setState({ stages });
-    } catch (err) {
-      if (err.response?.status === 400) console.error(err.response.data.error);
-      else console.error(err.response);
-    }
+    const response = await fetch(
+      `${process.env.REACT_APP_API_URL}/workout/stage/`,
+      {
+        method: 'GET',
+        headers: {
+          'Content-Type': 'application/json',
+          'auth-token': localStorage.getItem('authToken'),
+        },
+      }
+    );
+    const data = await response.json();
+    this.setState({ stages: data.stages });
   };
 
   render() {

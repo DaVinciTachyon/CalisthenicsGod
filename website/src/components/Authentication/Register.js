@@ -10,7 +10,6 @@ import {
   Date as DateInput,
   Select,
 } from '../../style/inputs';
-import axios from 'axios';
 
 export default class Register extends React.Component {
   constructor() {
@@ -33,25 +32,28 @@ export default class Register extends React.Component {
   getValue = (value) => (value ? value : undefined);
 
   onSubmit = async () => {
-    try {
-      await axios.post('/auth/register/', {
-        name: {
-          first: this.getValue(this.state.firstname),
-          middle: this.getValue(this.state.middlename),
-          last: this.getValue(this.state.lastname),
-        },
-        email: this.getValue(this.state.email),
-        password: this.getValue(this.state.password),
-        weight: this.getValue(this.state.weight),
-        gender: this.getValue(this.state.gender),
-        birthDate: this.getValue(this.state.birthDate),
-      });
-      window.location = '/login';
-    } catch (err) {
-      if (err.response?.status === 400)
-        this.setState({ error: err.response.data.error });
-      else console.error(err.response);
-    }
+    const response = await fetch(
+      `${process.env.REACT_APP_API_URL}/auth/register/`,
+      {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          name: {
+            first: this.getValue(this.state.firstname),
+            middle: this.getValue(this.state.middlename),
+            last: this.getValue(this.state.lastname),
+          },
+          email: this.getValue(this.state.email),
+          password: this.getValue(this.state.password),
+          weight: this.getValue(this.state.weight),
+          gender: this.getValue(this.state.gender),
+          birthDate: this.getValue(this.state.birthDate),
+        }),
+      }
+    );
+    const data = await response.json();
+    if (data.user) window.location = '/login';
+    else this.setState({ error: data.error });
   };
 
   onChange = (evt) => this.setState({ [evt.target.name]: evt.target.value });

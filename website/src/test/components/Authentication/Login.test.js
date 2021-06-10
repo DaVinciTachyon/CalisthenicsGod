@@ -1,21 +1,28 @@
+import puppeteer from 'puppeteer';
 import { buildRandomUser, register, randomAlphaNumeric } from '../../util';
 
+let browser;
+let page;
+let user;
+
+beforeAll(async () => {
+  browser = await puppeteer.launch({});
+  page = await browser.newPage();
+  user = buildRandomUser();
+  await register(user, page);
+});
+
+afterAll(() => {
+  browser.close();
+});
+
+beforeEach(async () => {
+  page = await browser.newPage();
+  await page.goto(`${process.env.REACT_APP_WEBSITE_URL}/login`);
+  await page.waitForSelector('[data-id="logInButton"]');
+});
+
 describe('Login', () => {
-  let page;
-  let user;
-
-  beforeAll(async () => {
-    page = await global.browser.newPage();
-    user = buildRandomUser();
-    await register(user, page);
-  });
-
-  beforeEach(async () => {
-    page = await global.browser.newPage();
-    await page.goto(`${global.url}/login`);
-    await page.waitForSelector('[data-id="logInButton"]');
-  });
-
   it('Empty', async () => {
     const logInButton = await page.$('[data-id="logInButton"]');
     logInButton.click();

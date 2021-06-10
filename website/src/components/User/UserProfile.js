@@ -9,7 +9,6 @@ import {
   Range,
 } from '../../style/inputs';
 import { Success, Error } from '../../style/notification';
-import axios from 'axios';
 
 export default class UserProfile extends React.Component {
   constructor() {
@@ -44,35 +43,57 @@ export default class UserProfile extends React.Component {
   }
 
   getUserInfo = async () => {
-    try {
-      const user = (await axios.get('/user/')).data;
-      const nutrition = (await axios.get('/nutrition/')).data;
-      const measurement = (await axios.get('/measurement/weight/')).data;
-      this.setState({
-        firstname: user.name.first,
-        middlename: user.name.middle,
-        lastname: user.name.last,
-        email: user.email,
-        dateJoined: this.formatDate(new Date(user.dateJoined)),
-        birthDate: this.formatDate(new Date(user.birthDate)),
-        gender: user.gender,
-        weight: measurement.weight,
-        caloriesPerKg: nutrition.caloriesPerKg,
-        proteinGramsPerKg: nutrition.proteinGramsPerKg,
-        fatCalorieProportion: nutrition.fatCalorieProportion,
-        calorieOffset: nutrition.calorieOffset,
-        currentCalorieOffset: nutrition.calorieOffset,
-        calorieMode:
-          nutrition.calorieOffset > 0
-            ? 'bulk'
-            : nutrition.calorieOffset < 0
-            ? 'deficit'
-            : 'maintenance',
-      });
-    } catch (err) {
-      if (err.response?.status === 400) console.error(err.response.data.error);
-      else console.error(err.response);
-    }
+    const userResponse = await fetch(`${process.env.REACT_APP_API_URL}/user/`, {
+      method: 'GET',
+      headers: {
+        'Content-Type': 'application/json',
+        'auth-token': localStorage.getItem('authToken'),
+      },
+    });
+    const userData = await userResponse.json();
+    const nutritionResponse = await fetch(
+      `${process.env.REACT_APP_API_URL}/nutrition/`,
+      {
+        method: 'GET',
+        headers: {
+          'Content-Type': 'application/json',
+          'auth-token': localStorage.getItem('authToken'),
+        },
+      }
+    );
+    const nutritionData = await nutritionResponse.json();
+    const measurementResponse = await fetch(
+      `${process.env.REACT_APP_API_URL}/measurement/weight/`,
+      {
+        method: 'GET',
+        headers: {
+          'Content-Type': 'application/json',
+          'auth-token': localStorage.getItem('authToken'),
+        },
+      }
+    );
+    const measurementData = await measurementResponse.json();
+    this.setState({
+      firstname: userData.name.first,
+      middlename: userData.name.middle,
+      lastname: userData.name.last,
+      email: userData.email,
+      dateJoined: this.formatDate(new Date(userData.dateJoined)),
+      birthDate: this.formatDate(new Date(userData.birthDate)),
+      gender: userData.gender,
+      weight: measurementData.weight,
+      caloriesPerKg: nutritionData.caloriesPerKg,
+      proteinGramsPerKg: nutritionData.proteinGramsPerKg,
+      fatCalorieProportion: nutritionData.fatCalorieProportion,
+      calorieOffset: nutritionData.calorieOffset,
+      currentCalorieOffset: nutritionData.calorieOffset,
+      calorieMode:
+        nutritionData.calorieOffset > 0
+          ? 'bulk'
+          : nutritionData.calorieOffset < 0
+          ? 'deficit'
+          : 'maintenance',
+    });
   };
 
   onCalorieModeChange = (evt) => {
@@ -92,8 +113,13 @@ export default class UserProfile extends React.Component {
   };
 
   onSubmit = async () => {
-    try {
-      await axios.post('/user/', {
+    const userResponse = await fetch(`${process.env.REACT_APP_API_URL}/user/`, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+        'auth-token': localStorage.getItem('authToken'),
+      },
+      body: JSON.stringify({
         name: {
           first: this.state.firstname,
           middle: this.state.middlename,
@@ -102,19 +128,33 @@ export default class UserProfile extends React.Component {
         email: this.state.email,
         birthDate: this.state.birthDate,
         gender: this.state.gender,
-      });
-      await axios.post('/nutrition/', {
-        calorieOffset: this.state.calorieOffset,
-        caloriesPerKg: this.state.caloriesPerKg,
-        proteinGramsPerKg: this.state.proteinGramsPerKg,
-        fatCalorieProportion: this.state.fatCalorieProportion,
-      });
-      this.setState({ success: 'Success!' });
-    } catch (err) {
-      if (err.response?.status === 400)
-        this.setState({ error: err.response.data.error });
-      else console.error(err.response);
+      }),
+    });
+    if (userResponse.status !== 200) {
+      const userData = await userResponse.json();
+      return this.setState({ error: userData.error });
     }
+    const nutritionResponse = await fetch(
+      `${process.env.REACT_APP_API_URL}/nutrition/`,
+      {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          'auth-token': localStorage.getItem('authToken'),
+        },
+        body: JSON.stringify({
+          calorieOffset: this.state.calorieOffset,
+          caloriesPerKg: this.state.caloriesPerKg,
+          proteinGramsPerKg: this.state.proteinGramsPerKg,
+          fatCalorieProportion: this.state.fatCalorieProportion,
+        }),
+      }
+    );
+    if (nutritionResponse.status !== 200) {
+      const nutritionData = await nutritionResponse.json();
+      return this.setState({ error: nutritionData.error });
+    }
+    this.setState({ success: 'Success!' });
   };
 
   onChange = (evt) => this.setState({ [evt.target.name]: evt.target.value });

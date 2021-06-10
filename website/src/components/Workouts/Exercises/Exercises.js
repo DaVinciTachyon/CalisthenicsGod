@@ -3,7 +3,6 @@ import { Button } from '../../../style/buttons';
 import ExerciseRow from './ExerciseRow';
 import ExerciseAdder from './ExerciseAdder';
 import { Section } from '../../../style/table';
-import axios from 'axios';
 
 export default class Exercises extends React.Component {
   constructor() {
@@ -19,23 +18,32 @@ export default class Exercises extends React.Component {
   }
 
   getExercises = async () => {
-    try {
-      const { exercises } = (await axios.get('/exercise/')).data;
-      this.setState({ exercises });
-    } catch (err) {
-      if (err.response?.status === 400) console.error(err.response.data.error);
-      else console.error(err.response);
-    }
+    const response = await fetch(`${process.env.REACT_APP_API_URL}/exercise/`, {
+      method: 'GET',
+      headers: {
+        'Content-Type': 'application/json',
+        'auth-token': localStorage.getItem('authToken'),
+      },
+    });
+    const data = await response.json();
+    this.setState({ exercises: data.exercises });
   };
 
   onSubmit = async (exercise) => {
-    try {
-      await axios.post('/exercise/', exercise);
+    const response = await fetch(`${process.env.REACT_APP_API_URL}/exercise/`, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+        'auth-token': localStorage.getItem('authToken'),
+      },
+      body: JSON.stringify(exercise),
+    });
+    if (response.status === 200) {
       await this.getExercises();
       this.setState({ isAdding: false });
-    } catch (err) {
-      if (err.response?.status === 400) console.error(err.response.data.error);
-      else console.error(err.response);
+    } else {
+      const data = await response.json();
+      return data.error;
     }
   };
 

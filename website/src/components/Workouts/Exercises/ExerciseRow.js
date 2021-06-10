@@ -5,7 +5,6 @@ import { Button, DeleteButton } from '../../../style/buttons';
 import StageSelect from '../StageSelect';
 import ExerciseSelect from '../ExerciseSelect';
 import ExerciseAdder from './ExerciseAdder';
-import axios from 'axios';
 
 export default class ExerciseRow extends React.Component {
   constructor() {
@@ -16,26 +15,35 @@ export default class ExerciseRow extends React.Component {
   }
 
   onSubmit = async (exercise) => {
-    try {
-      await axios.patch('/exercise/', exercise);
+    const response = await fetch(`${process.env.REACT_APP_API_URL}/exercise/`, {
+      method: 'PATCH',
+      headers: {
+        'Content-Type': 'application/json',
+        'auth-token': localStorage.getItem('authToken'),
+      },
+      body: JSON.stringify(exercise),
+    });
+    if (response.status === 200) {
       await this.props.onUpdate();
       this.setState({ isEditing: false });
-    } catch (err) {
-      if (err.response?.status === 400) console.error(err.response.data.error);
-      else console.error(err.response);
+    } else {
+      const data = await response.json();
+      return data.error;
     }
   };
 
   onRemove = async () => {
-    try {
-      await axios.delete('/exercise/', {
+    await fetch(`${process.env.REACT_APP_API_URL}/exercise/`, {
+      method: 'DELETE',
+      headers: {
+        'Content-Type': 'application/json',
+        'auth-token': localStorage.getItem('authToken'),
+      },
+      body: JSON.stringify({
         _id: this.props.id,
-      });
-      this.props.onUpdate();
-    } catch (err) {
-      if (err.response?.status === 400) console.error(err.response.data.error);
-      else console.error(err.response);
-    }
+      }),
+    });
+    this.props.onUpdate();
   };
 
   render() {

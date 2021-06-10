@@ -3,7 +3,6 @@ import { Error } from '../../../style/notification';
 import { Row, Column } from '../../../style/table';
 import { Button, ErrorButton } from '../../../style/buttons';
 import { Text } from '../../../style/inputs';
-import axios from 'axios';
 
 export default class StageAdder extends React.Component {
   constructor() {
@@ -30,17 +29,27 @@ export default class StageAdder extends React.Component {
     if (!this.state.name) return this.setState({ error: 'Name is required' });
     if (this.props.index < 0 || this.props.index % 1 !== 0)
       return this.setState({ error: 'Chronological Ranking is invalid' });
-    try {
-      await axios.post('/workout/stage/', {
-        name: this.state.name,
-        description: this.state.description,
-        chronologicalRanking: this.props.index,
-      });
+    const response = await fetch(
+      `${process.env.REACT_APP_API_URL}/workout/stage/`,
+      {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          'auth-token': localStorage.getItem('authToken'),
+        },
+        body: JSON.stringify({
+          name: this.state.name,
+          description: this.state.description,
+          chronologicalRanking: this.props.index,
+        }),
+      }
+    );
+    if (response.status === 200) {
       await this.setState({ isAdding: false });
       window.location.reload();
-    } catch (err) {
-      if (err.response?.status === 400) console.error(err.response.data.error);
-      else console.error(err.response);
+    } else {
+      const data = await response.json();
+      this.setState({ error: data.error });
     }
   };
 

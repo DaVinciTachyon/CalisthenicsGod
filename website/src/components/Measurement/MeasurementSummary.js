@@ -3,7 +3,6 @@ import Card from '../../style/card';
 import { Row } from '../../style/table';
 import { Button } from '../../style/buttons';
 import { Weight, Length } from '../../style/inputs';
-import axios from 'axios';
 
 export default class MeasurementSummary extends React.Component {
   constructor() {
@@ -27,16 +26,31 @@ export default class MeasurementSummary extends React.Component {
     this.getMeasurements();
   }
 
-  getMeasurements = async () => {
-    try {
-      const data = (await axios.get('/measurement/')).data;
-      Object.keys(data).forEach((name) =>
-        this.setState({ [name]: data[name] })
+  getMeasurements = () => {
+    const requestOptions = {
+      method: 'GET',
+      headers: {
+        'Content-Type': 'application/json',
+        'auth-token': localStorage.getItem('authToken'),
+      },
+    };
+    fetch(`${process.env.REACT_APP_API_URL}/measurement/`, requestOptions)
+      .then((response) => response.json())
+      .then((data) =>
+        this.setState({
+          weight: data.weight,
+          height: data.height,
+          waist: data.waist,
+          hips: data.hips,
+          rightBicep: data.rightBicep,
+          leftBicep: data.leftBicep,
+          rightForearm: data.rightForearm,
+          leftForearm: data.leftForearm,
+          shoulders: data.shoulders,
+          chest: data.chest,
+          neck: data.neck,
+        })
       );
-    } catch (err) {
-      if (err.response?.status === 400) console.error(err.response.data.error);
-      else console.error(err.response);
-    }
   };
 
   render() {

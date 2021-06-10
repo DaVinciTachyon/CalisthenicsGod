@@ -8,7 +8,6 @@ import {
   Protein,
   Ethanol,
 } from '../../../style/inputs';
-import { getCalories } from '../util';
 
 export default class ConsumedIngredientSummary extends React.Component {
   constructor() {
@@ -29,10 +28,11 @@ export default class ConsumedIngredientSummary extends React.Component {
     if (prevProps !== this.props) this.setMacros();
   }
 
-  getCalories = () => {
-    const { fat, carbohydrate, protein, ethanol } = this.state;
-    return getCalories(fat, carbohydrate, protein, ethanol);
-  };
+  getCalories = () =>
+    this.state.fat * this.props.macroDensities.fat +
+    this.state.carbohydrate * this.props.macroDensities.carbohydrate +
+    this.state.protein * this.props.macroDensities.protein +
+    this.state.ethanol * this.props.macroDensities.ethanol;
 
   setMacros = () => {
     let fat = 0;

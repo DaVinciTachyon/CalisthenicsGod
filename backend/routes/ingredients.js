@@ -11,12 +11,10 @@ router
   .get(async (req, res) => {
     const ingredients = await Ingredient.find({
       userId: req.user._id,
+      isAvailable: true,
     });
 
-    res.send({
-      available: ingredients.filter((ingredient) => ingredient.isAvailable),
-      unavailable: ingredients.filter((ingredient) => !ingredient.isAvailable),
-    });
+    res.send({ ingredients });
   })
   .post(async (req, res) => {
     const { error } = nutrientValidation.ingredient(req.body);
@@ -52,7 +50,7 @@ router
     });
     if (!ingredient) return res.status(400).send({ error: '_id not found' });
 
-    ingredient.isAvailable = !ingredient.isAvailable;
+    ingredient.isAvailable = false;
 
     try {
       await ingredient.save();
@@ -74,6 +72,36 @@ router
     Object.keys(req.body).forEach(
       (name) => (ingredient[name] = req.body[name])
     );
+
+    try {
+      await ingredient.save();
+      res.sendStatus(200);
+    } catch (err) {
+      res.status(400).send({ error: err });
+    }
+  });
+
+router
+  .route('/unavailable')
+  .get(async (req, res) => {
+    const ingredients = await Ingredient.find({
+      userId: req.user._id,
+      isAvailable: false,
+    });
+
+    res.send({ ingredients });
+  })
+  .delete(async (req, res) => {
+    const { error } = nutrientValidation.id(req.body);
+    if (error) return res.status(400).send({ error: error.details[0].message });
+
+    const ingredient = await Ingredient.findOne({
+      userId: req.user._id,
+      _id: req.body._id,
+    });
+    if (!ingredient) return res.status(400).send({ error: '_id not found' });
+
+    ingredient.isAvailable = true;
 
     try {
       await ingredient.save();

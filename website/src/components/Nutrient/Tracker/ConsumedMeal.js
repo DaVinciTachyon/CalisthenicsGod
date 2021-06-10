@@ -22,14 +22,19 @@ export default class ConsumedMeal extends React.Component {
             name={ingredient.name}
             weight={ingredient.weight}
             macros={ingredient.macronutrients}
+            macroDensities={this.props.macroDensities}
             onUpdate={this.props.onUpdate}
           />
         ))}
         <ConsumedIngredientAdder
           id={this.props.id}
+          macroDensities={this.props.macroDensities}
           onUpdate={this.props.onUpdate}
         />
-        <ConsumedIngredientSummary ingredients={this.props.ingredients} />
+        <ConsumedIngredientSummary
+          ingredients={this.props.ingredients}
+          macroDensities={this.props.macroDensities}
+        />
       </div>
     );
   }

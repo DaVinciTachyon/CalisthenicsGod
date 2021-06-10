@@ -15,14 +15,8 @@ import {
   ErrorButton,
   DeleteButton,
 } from '../../../style/buttons';
-import { getCalories } from '../util';
-import {
-  removeIngredient,
-  modifyIngredient,
-} from '../../../stateManagement/reducers/presetMeals';
-import { connect } from 'react-redux';
 
-class MealIngredient extends React.Component {
+export default class MealIngredient extends React.Component {
   constructor() {
     super();
     this.state = {
@@ -58,10 +52,62 @@ class MealIngredient extends React.Component {
 
   getCalories = () => {
     const { fat, carbohydrate, protein, ethanol, weight } = this.state;
-    return getCalories(fat, carbohydrate, protein, ethanol, weight);
+    const { macroDensities } = this.props;
+    return (
+      ((fat * macroDensities.fat +
+        carbohydrate * macroDensities.carbohydrate +
+        protein * macroDensities.protein +
+        ethanol * macroDensities.ethanol) *
+        weight) /
+      100
+    );
   };
 
   onChange = (evt) => this.setState({ [evt.target.name]: evt.target.value });
+
+  onSubmit = async () => {
+    const { mealId, id, onUpdate } = this.props;
+    const { weight } = this.state;
+    await fetch(
+      `${process.env.REACT_APP_API_URL}/nutrition/meals/preset/ingredient/`,
+      {
+        method: 'PATCH',
+        headers: {
+          'Content-Type': 'application/json',
+          'auth-token': localStorage.getItem('authToken'),
+        },
+        body: JSON.stringify({
+          _id: mealId,
+          ingredient: {
+            id,
+            weight,
+          },
+        }),
+      }
+    );
+    await this.setState({ isEditing: false });
+    onUpdate();
+  };
+
+  onRemove = async () => {
+    const { mealId, id, onUpdate } = this.props;
+    await fetch(
+      `${process.env.REACT_APP_API_URL}/nutrition/meals/preset/ingredient/`,
+      {
+        method: 'DELETE',
+        headers: {
+          'Content-Type': 'application/json',
+          'auth-token': localStorage.getItem('authToken'),
+        },
+        body: JSON.stringify({
+          ingredient: { _id: id },
+          _id: mealId,
+        }),
+      }
+    );
+    await this.setState({ isEditing: false });
+    onUpdate();
+  };
 
   render() {
     const { isTitle, name } = this.props;
@@ -102,34 +148,12 @@ class MealIngredient extends React.Component {
               <Button onClick={() => this.setState({ isEditing: true })}>
                 Edit
               </Button>
-              <DeleteButton
-                onClick={() =>
-                  this.props.removeIngredient({
-                    _id: this.props.mealId,
-                    ingredient: { _id: this.props.id },
-                  })
-                }
-              >
-                Remove
-              </DeleteButton>
+              <DeleteButton onClick={this.onRemove}>Remove</DeleteButton>
             </>
           )}
           {isEditing && (
             <>
-              <SuccessButton
-                onClick={() => {
-                  this.props.modifyIngredient({
-                    _id: this.props.mealId,
-                    ingredient: {
-                      _id: this.props.id,
-                      weight: this.state.weight,
-                    },
-                  });
-                  this.set();
-                }}
-              >
-                Submit
-              </SuccessButton>
+              <SuccessButton onClick={this.onSubmit}>Submit</SuccessButton>
               <ErrorButton onClick={this.set}>Cancel</ErrorButton>
             </>
           )}
@@ -138,8 +162,3 @@ class MealIngredient extends React.Component {
     );
   }
 }
-
-export default connect(() => ({}), {
-  removeIngredient,
-  modifyIngredient,
-})(MealIngredient);
