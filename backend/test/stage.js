@@ -1,7 +1,7 @@
 const {
   get,
   post,
-  deleteReq,
+  deleteRequest,
   patch,
   login,
   randomString,
@@ -56,12 +56,12 @@ describe('Stage', () => {
 
   describe('/DELETE', () => {
     it('empty body', async () => {
-      const res = await deleteReq('/workout/stage', {}, authToken);
+      const res = await deleteRequest('/workout/stage', {}, authToken);
       res.should.have.status(400);
     });
 
     it('valid id', async () => {
-      const res = await deleteReq(
+      const res = await deleteRequest(
         '/workout/stage',
         { _id: expectedStage._id },
         authToken

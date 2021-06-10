@@ -1,14 +1,24 @@
+import puppeteer from 'puppeteer';
 import { buildRandomUser, getInputDate } from '../../util';
 
+let browser;
+let page;
+
+beforeAll(async () => {
+  browser = await puppeteer.launch({});
+});
+
+afterAll(() => {
+  browser.close();
+});
+
+beforeEach(async () => {
+  page = await browser.newPage();
+  await page.goto(`${process.env.REACT_APP_WEBSITE_URL}/register`);
+  await page.waitForSelector('[data-id="registerButton"]');
+});
+
 describe('Register', () => {
-  let page;
-
-  beforeEach(async () => {
-    page = await global.browser.newPage();
-    await page.goto(`${global.url}/register`);
-    await page.waitForSelector('[data-id="registerButton"]');
-  });
-
   it('Empty', async () => {
     const registerButton = await page.$('[data-id="registerButton"]');
     registerButton.click();

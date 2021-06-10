@@ -4,7 +4,7 @@ const {
   login,
   patch,
   buildRandomExercise,
-  deleteReq,
+  deleteRequest,
   randomString,
 } = require('./util');
 const chai = require('chai');
@@ -55,12 +55,12 @@ describe('Exercises', () => {
 
   describe('/DELETE', () => {
     it('empty body', async () => {
-      const res = await deleteReq('/exercise', {}, authToken);
+      const res = await deleteRequest('/exercise', {}, authToken);
       res.should.have.status(400);
     });
 
     it('valid id', async () => {
-      const res = await deleteReq(
+      const res = await deleteRequest(
         '/exercise',
         { _id: expectedExercise._id },
         authToken

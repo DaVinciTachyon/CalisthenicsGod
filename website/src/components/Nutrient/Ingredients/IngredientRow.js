@@ -15,14 +15,8 @@ import {
   ErrorButton,
   DeleteButton,
 } from '../../../style/buttons';
-import { getCalories } from '../util';
-import { connect } from 'react-redux';
-import {
-  changeAvailability,
-  patchIngredient,
-} from '../../../stateManagement/reducers/ingredients';
 
-class IngredientRow extends React.Component {
+export default class IngredientRow extends React.Component {
   constructor() {
     super();
     this.state = {
@@ -46,7 +40,15 @@ class IngredientRow extends React.Component {
 
   getCalories = () => {
     const { fat, carbohydrate, protein, ethanol, weight } = this.state;
-    return getCalories(fat, carbohydrate, protein, ethanol, weight);
+    const { macroDensities } = this.props;
+    return (
+      ((fat * macroDensities.fat +
+        carbohydrate * macroDensities.carbohydrate +
+        protein * macroDensities.protein +
+        ethanol * macroDensities.ethanol) *
+        weight) /
+      100
+    );
   };
 
   setMacros = () => {
@@ -61,21 +63,62 @@ class IngredientRow extends React.Component {
     });
   };
 
+  onChangeAvailability = async () => {
+    const { isAvailable, id, onUpdate } = this.props;
+    let url = `${process.env.REACT_APP_API_URL}/nutrition/ingredients/unavailable/`;
+    if (isAvailable)
+      url = `${process.env.REACT_APP_API_URL}/nutrition/ingredients/`;
+    const response = await fetch(url, {
+      method: 'DELETE',
+      headers: {
+        'Content-Type': 'application/json',
+        'auth-token': localStorage.getItem('authToken'),
+      },
+      body: JSON.stringify({
+        _id: id,
+      }),
+    });
+    if (response.status === 200) {
+      await onUpdate();
+      this.setState({ isEditing: false });
+    } else {
+      const data = await response.json();
+      console.error(data.error);
+    }
+  };
+
   onChange = (evt) => this.setState({ [evt.target.name]: evt.target.value });
 
   onSubmit = async () => {
+    const { id, onUpdate } = this.props;
     const { name, fat, carbohydrate, protein, ethanol } = this.state;
-    this.props.patchIngredient({
-      _id: this.props.id,
-      name,
-      macronutrients: {
-        fat,
-        carbohydrate,
-        protein,
-        ethanol,
-      },
-    });
-    this.setState({ isEditing: false });
+    const response = await fetch(
+      `${process.env.REACT_APP_API_URL}/nutrition/ingredients/`,
+      {
+        method: 'PATCH',
+        headers: {
+          'Content-Type': 'application/json',
+          'auth-token': localStorage.getItem('authToken'),
+        },
+        body: JSON.stringify({
+          _id: id,
+          name,
+          macronutrients: {
+            fat,
+            carbohydrate,
+            protein,
+            ethanol,
+          },
+        }),
+      }
+    );
+    if (response.status === 200) {
+      await onUpdate();
+      this.setState({ isEditing: false });
+    } else {
+      const data = await response.json();
+      console.error(data.error);
+    }
   };
 
   render() {
@@ -137,26 +180,12 @@ class IngredientRow extends React.Component {
               Edit
             </Button>
             {isAvailable && (
-              <DeleteButton
-                onClick={() =>
-                  this.props.changeAvailability({
-                    _id: this.props.id,
-                    isAvailable,
-                  })
-                }
-              >
+              <DeleteButton onClick={this.onChangeAvailability}>
                 Unavailable
               </DeleteButton>
             )}
             {!isAvailable && (
-              <SuccessButton
-                onClick={() =>
-                  this.props.changeAvailability({
-                    _id: this.props.id,
-                    isAvailable,
-                  })
-                }
-              >
+              <SuccessButton onClick={this.onChangeAvailability}>
                 Available
               </SuccessButton>
             )}
@@ -181,8 +210,3 @@ class IngredientRow extends React.Component {
     );
   }
 }
-
-export default connect(() => ({}), {
-  changeAvailability,
-  patchIngredient,
-})(IngredientRow);

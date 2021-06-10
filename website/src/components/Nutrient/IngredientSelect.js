@@ -1,22 +1,19 @@
 import React from 'react';
 import { Select } from '../../style/inputs';
-import { connect } from 'react-redux';
-import { setIngredients } from '../../stateManagement/reducers/ingredients';
 
-class IngredientSelect extends React.Component {
+export default class IngredientSelect extends React.Component {
   constructor() {
     super();
-    this.state = {};
+    this.state = { ingredients: [] };
   }
 
   componentDidMount() {
-    if (this.props.ingredients.available.length === 0)
-      this.props.setIngredients();
+    this.getIngredients();
   }
 
   onChange = (evt) =>
     this.props.onChange(
-      this.props.ingredients.available.filter(
+      this.state.ingredients.filter(
         (ingredient) => evt.value === ingredient._id
       )[0]
     );
@@ -27,7 +24,7 @@ class IngredientSelect extends React.Component {
       <Select
         name={name || 'ingredient'}
         options={[{ label: 'New Ingredient', value: '' }].concat(
-          this.props.ingredients.available.map((ingredient) => {
+          this.state.ingredients.map((ingredient) => {
             return { label: ingredient.name, value: ingredient._id };
           })
         )}
@@ -36,8 +33,19 @@ class IngredientSelect extends React.Component {
       />
     );
   }
-}
 
-export default connect(({ ingredients }) => ({ ingredients }), {
-  setIngredients,
-})(IngredientSelect);
+  getIngredients = async () => {
+    const response = await fetch(
+      `${process.env.REACT_APP_API_URL}/nutrition/ingredients/`,
+      {
+        method: 'GET',
+        headers: {
+          'Content-Type': 'application/json',
+          'auth-token': localStorage.getItem('authToken'),
+        },
+      }
+    );
+    const data = await response.json();
+    this.setState({ ingredients: data.ingredients });
+  };
+}

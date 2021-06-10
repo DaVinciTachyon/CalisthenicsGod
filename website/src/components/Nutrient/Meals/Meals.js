@@ -1,32 +1,58 @@
 import React from 'react';
 import MealRow from './MealRow';
 import MealAdder from './MealAdder';
-import { setPresetMeals } from '../../../stateManagement/reducers/presetMeals';
-import { connect } from 'react-redux';
 
-class Meals extends React.Component {
+export default class Meals extends React.Component {
   constructor() {
     super();
-    this.state = {};
+    this.state = {
+      meals: [],
+      macroDensities: {
+        fat: 9,
+        carbohydrate: 4,
+        protein: 4,
+        ethanol: 7,
+      },
+    };
   }
 
   componentDidMount() {
-    if (this.props.presetMeals.length === 0) this.props.setPresetMeals();
+    this.getMeals();
   }
+
+  getMeals = async () => {
+    const response = await fetch(
+      `${process.env.REACT_APP_API_URL}/nutrition/meals/preset/names/`,
+      {
+        method: 'GET',
+        headers: {
+          'Content-Type': 'application/json',
+          'auth-token': localStorage.getItem('authToken'),
+        },
+      }
+    );
+    const data = await response.json();
+    this.setState({ meals: data.meals });
+  };
 
   render() {
     return (
       <div>
         <MealRow isTitle />
-        <MealAdder />
-        {this.props.presetMeals.map((meal) => (
-          <MealRow key={meal._id} meal={meal} />
+        <MealAdder
+          macroDensities={this.state.macroDensities}
+          onSubmit={this.getMeals}
+        />
+        {this.state.meals.map((meal) => (
+          <MealRow
+            key={meal._id}
+            id={meal._id}
+            name={meal.name}
+            macroDensities={this.state.macroDensities}
+            onUpdate={this.getMeals}
+          />
         ))}
       </div>
     );
   }
 }
-
-export default connect(({ presetMeals }) => ({ presetMeals }), {
-  setPresetMeals,
-})(Meals);

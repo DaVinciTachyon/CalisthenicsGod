@@ -13,8 +13,12 @@ export default class MealIngredientAdd extends React.Component {
       return (
         <MealIngredientAdder
           id={this.props.id}
-          onSubmit={() => this.setState({ isAdding: false })}
+          onSubmit={() => {
+            this.setState({ isAdding: false });
+            this.props.onUpdate();
+          }}
           onCancel={() => this.setState({ isAdding: false })}
+          macroDensities={this.props.macroDensities}
           isPreset
         />
       );

@@ -15,15 +15,8 @@ import {
   ErrorButton,
 } from '../../../style/buttons';
 import MealEditor from './MealEditor';
-import { getCalories } from '../util';
-import { setIngredients } from '../../../stateManagement/reducers/ingredients';
-import {
-  deletePresetMeal,
-  modifyPresetMeal,
-} from '../../../stateManagement/reducers/presetMeals';
-import { connect } from 'react-redux';
 
-class MealRow extends React.Component {
+export default class MealRow extends React.Component {
   constructor() {
     super();
     this.state = {
@@ -34,74 +27,100 @@ class MealRow extends React.Component {
       protein: 0,
       ethanol: 0,
       ingredients: [],
-      calories: 0,
     };
   }
 
-  async componentDidMount() {
-    if (!this.props.isTitle) this.set();
-    if (this.props.ingredients.available.length === 0)
-      this.props.setIngredients();
-  }
-
-  async componentDidUpdate(prevProps) {
-    if (
-      (prevProps.meal !== this.props.meal ||
-        prevProps.ingredients.available !== this.props.ingredients.available ||
-        prevProps.ingredients.unavailable !==
-          this.props.ingredients.unavailable) &&
-      !this.props.isTitle
-    )
+  componentDidMount() {
+    if (!this.props.isTitle) {
       this.set();
+      this.getIngredients();
+    }
   }
 
-  set = async () => {
-    const ingredients = this.props.meal.ingredients.map((ingredient) => {
-      const ing =
-        this.props.ingredients.available.find(
-          (ing) => ing._id === ingredient.id
-        ) ||
-        this.props.ingredients.unavailable.find(
-          (ing) => ing._id === ingredient.id
-        );
-      return {
-        ...ingredient,
-        name: ing?.name || '',
-        macronutrients: ing?.macronutrients || {
-          fat: 0,
-          carbohydrate: 0,
-          protein: 0,
-          ethanol: 0,
+  componentDidUpdate(prevProps) {
+    if (prevProps !== this.props && !this.props.isTitle) {
+      this.set();
+      this.getIngredients();
+    }
+  }
+
+  set = () => this.setState({ name: this.props.name, isEditing: false });
+
+  onChange = (evt) => this.setState({ [evt.target.name]: evt.target.value });
+
+  getCalories = () => {
+    const { fat, carbohydrate, protein, ethanol } = this.state;
+    const { macroDensities } = this.props;
+    return (
+      fat * macroDensities.fat +
+      carbohydrate * macroDensities.carbohydrate +
+      protein * macroDensities.protein +
+      ethanol * macroDensities.ethanol
+    );
+  };
+
+  getIngredients = async () => {
+    const response = await fetch(
+      `${process.env.REACT_APP_API_URL}/nutrition/meals/preset/ingredients/`,
+      {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          'auth-token': localStorage.getItem('authToken'),
         },
-      };
+        body: JSON.stringify({ _id: this.props.id }),
+      }
+    );
+    const data = await response.json();
+    await this.setState({ ingredients: data.ingredients });
+    this.setMacros();
+  };
+
+  onDelete = async () => {
+    await fetch(`${process.env.REACT_APP_API_URL}/nutrition/meals/preset/`, {
+      method: 'DELETE',
+      headers: {
+        'Content-Type': 'application/json',
+        'auth-token': localStorage.getItem('authToken'),
+      },
+      body: JSON.stringify({ _id: this.props.id }),
     });
-    let fat = 0,
-      carbohydrate = 0,
-      protein = 0,
-      ethanol = 0;
-    ingredients.forEach(({ weight, macronutrients }) => {
-      fat += (weight * macronutrients.fat) / 100;
-      carbohydrate += (weight * macronutrients.carbohydrate) / 100;
-      protein += (weight * macronutrients.protein) / 100;
-      ethanol += (weight * macronutrients.ethanol) / 100;
+    this.props.onUpdate();
+  };
+
+  onSubmit = () => {
+    //TODO submit name and submit all unsubmitted ingredients
+    this.props.onUpdate();
+    this.set();
+  };
+
+  setMacros = () => {
+    let fat = 0;
+    let carbohydrate = 0;
+    let protein = 0;
+    let ethanol = 0;
+    this.state.ingredients.forEach((ingredient) => {
+      fat += (ingredient.weight * ingredient.macronutrients.fat) / 100;
+      carbohydrate +=
+        (ingredient.weight * ingredient.macronutrients.carbohydrate) / 100;
+      protein += (ingredient.weight * ingredient.macronutrients.protein) / 100;
+      ethanol += (ingredient.weight * ingredient.macronutrients.ethanol) / 100;
     });
-    const calories = await getCalories(fat, carbohydrate, protein, ethanol);
-    this.setState({
-      name: this.props.meal.name,
+    this.setState({ fat, carbohydrate, protein, ethanol });
+  };
+
+  render() {
+    const { isTitle, id, macroDensities } = this.props;
+    const {
+      isEditing,
       ingredients,
+      name,
       fat,
       carbohydrate,
       protein,
       ethanol,
-      isEditing: false,
-      calories,
-    });
-  };
-
-  onChange = (evt) => this.setState({ [evt.target.name]: evt.target.value });
-
-  render() {
-    if (this.props.isTitle)
+    } = this.state;
+    if (isTitle)
       return (
         <Row columns={8} isTitle>
           <Column span={2} />
@@ -113,8 +132,6 @@ class MealRow extends React.Component {
           <Column />
         </Row>
       );
-    const { isEditing, name, fat, carbohydrate, protein, ethanol, calories } =
-      this.state;
     return (
       <div>
         <Row columns={8}>
@@ -126,7 +143,7 @@ class MealRow extends React.Component {
               onChange={this.onChange}
             />
           </Column>
-          <Calories value={calories} readOnly />
+          <Calories value={this.getCalories()} readOnly />
           <Fat value={fat} readOnly />
           <Carbohydrate value={carbohydrate} readOnly />
           <Protein value={protein} readOnly />
@@ -137,28 +154,12 @@ class MealRow extends React.Component {
                 <Button onClick={() => this.setState({ isEditing: true })}>
                   Edit
                 </Button>
-                <DeleteButton
-                  onClick={() =>
-                    this.props.deletePresetMeal(this.props.meal._id)
-                  }
-                >
-                  Delete
-                </DeleteButton>
+                <DeleteButton onClick={this.onDelete}>Delete</DeleteButton>
               </>
             )}
             {isEditing && (
               <>
-                <SuccessButton
-                  onClick={() => {
-                    this.props.modifyPresetMeal({
-                      _id: this.props.meal._id,
-                      name: this.state.name,
-                    });
-                    this.set();
-                  }}
-                >
-                  Submit
-                </SuccessButton>
+                <SuccessButton onClick={this.onSubmit}>Submit</SuccessButton>
                 <ErrorButton onClick={this.set}>Cancel</ErrorButton>
               </>
             )}
@@ -166,17 +167,13 @@ class MealRow extends React.Component {
         </Row>
         {isEditing && (
           <MealEditor
-            id={this.props.meal._id}
-            ingredients={this.state.ingredients}
+            id={id}
+            ingredients={ingredients}
+            onUpdate={this.getIngredients}
+            macroDensities={macroDensities}
           />
         )}
       </div>
     );
   }
 }
-
-export default connect(({ ingredients }) => ({ ingredients }), {
-  setIngredients,
-  deletePresetMeal,
-  modifyPresetMeal,
-})(MealRow);
