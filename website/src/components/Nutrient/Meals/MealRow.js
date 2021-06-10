@@ -38,13 +38,13 @@ class MealRow extends React.Component {
     };
   }
 
-  async componentDidMount() {
+  componentDidMount() {
     if (!this.props.isTitle) this.set();
     if (this.props.ingredients.available.length === 0)
       this.props.setIngredients();
   }
 
-  async componentDidUpdate(prevProps) {
+  componentDidUpdate(prevProps) {
     if (
       (prevProps.meal !== this.props.meal ||
         prevProps.ingredients.available !== this.props.ingredients.available ||

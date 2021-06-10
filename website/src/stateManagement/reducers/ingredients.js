@@ -10,7 +10,9 @@ export const slice = createSlice({
     addIngredient: (state, { payload }) => {
       if (payload._id) state.available.push(payload);
     },
-    setIngredients: (state, { payload }) => ({ ...state, ...payload }),
+    setIngredients: (state, { payload }) => {
+      if (payload) return { ...state, ...payload };
+    },
     changeAvailability: (state, { payload }) => {
       if (payload.isAvailable)
         state.available = swapAvailability(

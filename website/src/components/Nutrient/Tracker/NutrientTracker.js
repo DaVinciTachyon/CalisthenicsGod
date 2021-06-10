@@ -4,77 +4,57 @@ import MealSelect from '../MealSelect';
 import Card from '../../../style/card';
 import MealIngredientAdder from './MealIngredientAdder';
 import ConsumedMeal from './ConsumedMeal';
-import axios from 'axios';
+import { connect } from 'react-redux';
+import {
+  setMeals,
+  addPresetMeal,
+} from '../../../stateManagement/reducers/meals';
 
-export default class NutrientTracker extends React.Component {
+class NutrientTracker extends React.Component {
   constructor() {
     super();
     this.state = {
       isAddingMeal: false,
-      meals: [],
     };
   }
 
   componentDidMount() {
-    this.getMeals();
+    if (this.props.meals.length === 0) this.props.setMeals();
   }
-
-  getMeals = async () => {
-    try {
-      const { meals } = (await axios.get('/nutrition/meals/')).data;
-      this.setState({ meals });
-    } catch (err) {
-      if (err.response?.status === 400) console.error(err.response.data.error);
-      else console.error(err.response);
-    }
-  };
-
-  addMeal = async (id) => {
-    try {
-      await axios.post('/nutrition/meals/addPreset/', {
-        _id: id,
-      });
-    } catch (err) {
-      if (err.response?.status === 400) console.error(err.response.data.error);
-      else console.error(err.response);
-    }
-  };
 
   render() {
     return (
       <div>
         <Card>
-          <NutrientSummary meals={this.state.meals} />
+          <NutrientSummary meals={this.props.meals} />
         </Card>
         {!this.state.isAddingMeal && (
           <MealSelect
             onSubmit={async (id) => {
               if (id === '') this.setState({ isAddingMeal: true });
-              else {
-                await this.addMeal(id);
-                this.getMeals();
-              }
+              else this.props.addPresetMeal(id);
             }}
           />
         )}
         {this.state.isAddingMeal && (
           <MealIngredientAdder
-            onSubmit={() => {
-              this.setState({ isAddingMeal: false });
-              this.getMeals();
-            }}
+            onSubmit={() => this.setState({ isAddingMeal: false })}
             onCancel={() => this.setState({ isAddingMeal: false })}
           />
         )}
-        {this.state.meals.map((meal) => (
+        {this.props.meals.map((meal) => (
           <ConsumedMeal
             key={meal._id}
             id={meal._id}
             ingredients={meal.ingredients}
-            onUpdate={this.getMeals}
           />
         ))}
       </div>
     );
   }
 }
+
+export default connect(({ meals }) => ({ meals }), {
+  setMeals,
+  addPresetMeal,
+})(NutrientTracker);

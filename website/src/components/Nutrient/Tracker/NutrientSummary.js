@@ -1,8 +1,10 @@
 import React from 'react';
 import MacroSummaryRow from './MacroSummaryRow';
 import axios from 'axios';
+import { connect } from 'react-redux';
+import { setIngredients } from '../../../stateManagement/reducers/ingredients';
 
-export default class NutrientSummary extends React.Component {
+class NutrientSummary extends React.Component {
   constructor() {
     super();
     this.state = {
@@ -24,10 +26,17 @@ export default class NutrientSummary extends React.Component {
   componentDidMount() {
     this.getUserGoals();
     this.getMacros();
+    if (this.props.ingredients.available.length === 0)
+      this.props.setIngredients();
   }
 
   componentDidUpdate(prevProps) {
-    if (prevProps !== this.props) this.getMacros();
+    if (
+      prevProps.meals !== this.props.meals ||
+      prevProps.ingredients.available !== this.props.ingredients.available ||
+      prevProps.ingredients.unavailable !== this.props.ingredients.unavailable
+    )
+      this.getMacros();
   }
 
   getMacros = () => {
@@ -37,13 +46,18 @@ export default class NutrientSummary extends React.Component {
     let ethanol = 0;
     this.props.meals.forEach((meal) =>
       meal.ingredients.forEach((ingredient) => {
-        fat += (ingredient.weight * ingredient.macronutrients.fat) / 100;
-        carbohydrate +=
-          (ingredient.weight * ingredient.macronutrients.carbohydrate) / 100;
-        protein +=
-          (ingredient.weight * ingredient.macronutrients.protein) / 100;
-        ethanol +=
-          (ingredient.weight * ingredient.macronutrients.ethanol) / 100;
+        const { macronutrients } = this.props.ingredients.available.find(
+          (ingredient) => ingredient._id === this.props.id
+        ) ||
+          this.props.ingredients.unavailable.find(
+            (ingredient) => ingredient._id === this.props.id
+          ) || {
+            macronutrients: { fat: 0, carbohydrate: 0, protein: 0, ethanol: 0 },
+          };
+        fat += (ingredient.weight * macronutrients.fat) / 100;
+        carbohydrate += (ingredient.weight * macronutrients.carbohydrate) / 100;
+        protein += (ingredient.weight * macronutrients.protein) / 100;
+        ethanol += (ingredient.weight * macronutrients.ethanol) / 100;
       })
     );
     this.setState({ current: { fat, carbohydrate, protein, ethanol } });
@@ -92,3 +106,7 @@ export default class NutrientSummary extends React.Component {
     }
   };
 }
+
+export default connect(({ ingredients }) => ({ ingredients }), {
+  setIngredients,
+})(NutrientSummary);

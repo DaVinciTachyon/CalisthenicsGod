@@ -8,6 +8,7 @@ import { getCalories } from '../util';
 import { connect } from 'react-redux';
 import { addIngredient } from '../../../stateManagement/reducers/ingredients';
 import { addIngredient as addPresetMealIngredient } from '../../../stateManagement/reducers/presetMeals';
+import { addIngredient as addMealIngredient } from '../../../stateManagement/reducers/meals';
 
 class MealIngredientAdder extends React.Component {
   constructor() {
@@ -48,26 +49,24 @@ class MealIngredientAdder extends React.Component {
   onChange = (evt) => this.setState({ [evt.target.name]: evt.target.value });
 
   onSubmit = async () => {
-    if (this.props.isPreset)
-      this.props.addPresetMealIngredient({
-        _id: this.props.id,
-        ingredient: {
-          id: this.state.id || undefined,
-          weight: this.state.weight,
-          name: this.state.name,
-          macronutrients: {
-            fat: this.state.fat,
-            carbohydrate: this.state.carbohydrate,
-            protein: this.state.protein,
-            ethanol: this.state.ethanol,
-          },
+    const ingredient = {
+      _id: this.props.id,
+      ingredient: {
+        id: this.state.id || undefined,
+        weight: this.state.weight,
+        name: this.state.name,
+        macronutrients: {
+          fat: this.state.fat,
+          carbohydrate: this.state.carbohydrate,
+          protein: this.state.protein,
+          ethanol: this.state.ethanol,
         },
-      });
-    // TODO let url = '/nutrition/meals/';
-    this.props.onSubmit(); //TOOD abstract out to onsubmit not in here
+      },
+    };
+    if (this.props.isPreset) this.props.addPresetMealIngredient(ingredient);
+    this.props.addMealIngredient(ingredient);
+    this.props.onSubmit();
   };
-
-  onCancel = () => this.props.onCancel();
 
   render() {
     const { id, name, fat, carbohydrate, protein, ethanol, weight } =
@@ -116,14 +115,15 @@ class MealIngredientAdder extends React.Component {
         </Column>
         <Column>
           <SuccessButton onClick={this.onSubmit}>Submit</SuccessButton>
-          <ErrorButton onClick={this.onCancel}>Cancel</ErrorButton>
+          <ErrorButton onClick={this.props.onCancel}>Cancel</ErrorButton>
         </Column>
       </Row>
     );
   }
 }
 
-export default connect(({ ingredients }) => ({ ingredients }), {
+export default connect(() => ({}), {
   addIngredient,
   addPresetMealIngredient,
+  addMealIngredient,
 })(MealIngredientAdder);

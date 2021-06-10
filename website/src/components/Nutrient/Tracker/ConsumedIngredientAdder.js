@@ -15,10 +15,7 @@ export default class ConsumedIngredientAdder extends React.Component {
       return (
         <MealIngredientAdder
           id={this.props.id}
-          onSubmit={() => {
-            this.setState({ isAdding: false });
-            this.props.onUpdate();
-          }}
+          onSubmit={() => this.setState({ isAdding: false })}
           onCancel={() => this.setState({ isAdding: false })}
         />
       );
