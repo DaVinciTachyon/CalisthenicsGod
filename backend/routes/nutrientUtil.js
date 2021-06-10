@@ -1,5 +1,4 @@
 const macronutrientDensities = {
-  //FIXME in db?
   fat: 9,
   carbohydrate: 4,
   protein: 4,
@@ -9,13 +8,13 @@ const macronutrientDensities = {
 const round = (num, decimals) =>
   Math.round(num * Math.pow(10, decimals)) / Math.pow(10, decimals);
 
-const getMaintenanceCalories = (bodyweight, calsPerKilo = 30) =>
+const getMaintenanceCalories = (bodyweight, calsPerKilo) =>
   round(calsPerKilo * bodyweight, 1);
 
-const getProteinGrams = (bodyweight, gramsPerKilo = 2) =>
+const getProteinGrams = (bodyweight, gramsPerKilo) =>
   round(gramsPerKilo * bodyweight, 1);
 
-const getFatGrams = (calories, calProportion = 0.2) =>
+const getFatGrams = (calories, calProportion) =>
   round((calProportion * calories) / macronutrientDensities.fat, 1);
 
 const getCarbohydrateGrams = (calories, fatCalories, proteinCalories) =>

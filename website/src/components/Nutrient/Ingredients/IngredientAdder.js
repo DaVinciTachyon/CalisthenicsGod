@@ -10,8 +10,11 @@ import {
   Protein,
   Ethanol,
 } from '../../../style/inputs';
+import { getCalories } from '../util';
+import { addIngredient } from '../../../stateManagement/reducers/ingredients';
+import { connect } from 'react-redux';
 
-export default class IngredientAdder extends React.Component {
+class IngredientAdder extends React.Component {
   constructor() {
     super();
     this.state = {
@@ -25,36 +28,20 @@ export default class IngredientAdder extends React.Component {
     };
   }
 
-  onSubmit = async () => {
-    const response = await fetch(
-      `${process.env.REACT_APP_API_URL}/nutrition/ingredients/`,
-      {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-          'auth-token': localStorage.getItem('authToken'),
-        },
-        body: JSON.stringify({
-          name: this.state.name,
-          macronutrients: {
-            fat: this.state.fat,
-            carbohydrate: this.state.carbohydrate,
-            protein: this.state.protein,
-            ethanol: this.state.ethanol,
-          },
-        }),
-      }
-    );
-    if (response.status === 200) {
-      await this.props.onSubmit();
-      this.resetState();
-    } else {
-      const data = await response.json();
-      console.error(data.error);
-    }
+  onSubmit = () => {
+    this.props.addIngredient({
+      name: this.state.name,
+      macronutrients: {
+        fat: this.state.fat,
+        carbohydrate: this.state.carbohydrate,
+        protein: this.state.protein,
+        ethanol: this.state.ethanol,
+      },
+    });
+    this.reset();
   };
 
-  resetState = () =>
+  reset = () =>
     this.setState({
       isAdding: false,
       name: '',
@@ -66,54 +53,34 @@ export default class IngredientAdder extends React.Component {
 
   onChange = (evt) => this.setState({ [evt.target.name]: evt.target.value });
 
-  getCalories = () => {
-    const { fat, carbohydrate, protein, ethanol, weight } = this.state;
-    const { macroDensities } = this.props;
-    return (
-      ((fat * macroDensities.fat +
-        carbohydrate * macroDensities.carbohydrate +
-        protein * macroDensities.protein +
-        ethanol * macroDensities.ethanol) *
-        weight) /
-      100
-    );
-  };
-
   render() {
-    if (this.state.isAdding)
+    if (this.state.isAdding) {
+      const { name, fat, carbohydrate, protein, ethanol, weight } = this.state;
       return (
         <Row columns={9} className="input">
           <Column span={2}>
-            <Text
-              name="name"
-              onChange={this.onChange}
-              value={this.state.name}
-            />
+            <Text name="name" onChange={this.onChange} value={name} />
           </Column>
-          <Calories value={this.getCalories()} readOnly />
-          <Weight value={this.state.weight} readOnly />
-          <Fat name="fat" onChange={this.onChange} value={this.state.fat} />
+          <Calories
+            value={getCalories(fat, carbohydrate, protein, ethanol, weight)}
+            readOnly
+          />
+          <Weight value={weight} readOnly />
+          <Fat name="fat" onChange={this.onChange} value={fat} />
           <Carbohydrate
             name="carbohydrate"
             onChange={this.onChange}
-            value={this.state.carbohydrate}
+            value={carbohydrate}
           />
-          <Protein
-            name="protein"
-            onChange={this.onChange}
-            value={this.state.protein}
-          />
-          <Ethanol
-            name="ethanol"
-            onChange={this.onChange}
-            value={this.state.ethanol}
-          />
+          <Protein name="protein" onChange={this.onChange} value={protein} />
+          <Ethanol name="ethanol" onChange={this.onChange} value={ethanol} />
           <Column>
             <Button onClick={this.onSubmit}>Submit</Button>
             <ErrorButton onClick={this.resetState}>Cancel</ErrorButton>
           </Column>
         </Row>
       );
+    }
     return (
       <Button
         className="maxWidth thin"
@@ -124,3 +91,7 @@ export default class IngredientAdder extends React.Component {
     );
   }
 }
+
+export default connect(() => ({}), {
+  addIngredient,
+})(IngredientAdder);

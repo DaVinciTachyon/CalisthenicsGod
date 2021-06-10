@@ -2,30 +2,16 @@ import React from 'react';
 import { Row, Column } from '../../../style/table';
 import { Button, ErrorButton } from '../../../style/buttons';
 import { Text } from '../../../style/inputs';
+import { addPresetMeal } from '../../../stateManagement/reducers/presetMeals';
+import { connect } from 'react-redux';
 
-export default class MealAdder extends React.Component {
+class MealAdder extends React.Component {
   constructor() {
     super();
     this.state = { isAdding: false, name: '' };
   }
 
   set = () => this.setState({ isAdding: false, name: '' });
-
-  onSubmit = async () => {
-    await fetch(`${process.env.REACT_APP_API_URL}/nutrition/meals/preset/`, {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-        'auth-token': localStorage.getItem('authToken'),
-      },
-      body: JSON.stringify({
-        name: this.state.name,
-        ingredients: [],
-      }),
-    });
-    this.set();
-    this.props.onSubmit();
-  };
 
   onChange = (evt) => this.setState({ [evt.target.name]: evt.target.value });
 
@@ -35,7 +21,17 @@ export default class MealAdder extends React.Component {
         <Row columns={2}>
           <Text name="name" value={this.state.name} onChange={this.onChange} />
           <Column>
-            <Button onClick={this.onSubmit}>Add</Button>
+            <Button
+              onClick={() => {
+                this.props.addPresetMeal({
+                  name: this.state.name,
+                  ingredients: [],
+                });
+                this.set();
+              }}
+            >
+              Add
+            </Button>
             <ErrorButton onClick={this.set}>Cancel</ErrorButton>
           </Column>
         </Row>
@@ -50,3 +46,7 @@ export default class MealAdder extends React.Component {
     );
   }
 }
+
+export default connect(() => ({}), {
+  addPresetMeal,
+})(MealAdder);

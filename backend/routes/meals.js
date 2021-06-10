@@ -29,28 +29,7 @@ router
     const nutrients = await NutrientInfo.findOne({ userId: req.user._id });
     const day = nutrients.history[0];
     let meals = [];
-    if (hasHistory(nutrients) && isToday(day.date)) {
-      for (const meal of day.meals) {
-        const fullMeal = {
-          _id: meal._id,
-          ingredients: [],
-        };
-        for (const ingredient of meal.ingredients) {
-          const fullIngredient = await Ingredient.findOne({
-            _id: ingredient.id,
-            userId: req.user._id,
-          });
-          fullMeal.ingredients.push({
-            _id: ingredient._id,
-            id: ingredient.id,
-            name: fullIngredient.name,
-            weight: ingredient.weight,
-            macronutrients: fullIngredient.macronutrients,
-          });
-        }
-        meals.push(fullMeal);
-      }
-    }
+    if (hasHistory(nutrients) && isToday(day.date)) meals = day.meals;
     res.status(200).send({ meals });
   })
   .patch(async (req, res) => {
@@ -175,12 +154,11 @@ router.post('/addPreset', async (req, res) => {
 
   const nutrients = await NutrientInfo.findOne({ userId: req.user._id });
 
-  const meals = nutrients.history[0].meals;
   if (hasHistory(nutrients) && isToday(nutrients.history[0].date))
-    meals.push({ ingredients: [] });
+    nutrients.history[0].meals.unshift({ ingredients: [] });
   else nutrients.history.unshift({ meals: [{ ingredients: [] }] });
 
-  const ingredients = meals[meals.length - 1].ingredients;
+  const ingredients = nutrients.history[0].meals[0].ingredients;
   for (const ingredient of meal.ingredients) {
     const fullIngredient = await Ingredient.findOne({
       userId: req.user._id,
@@ -194,7 +172,7 @@ router.post('/addPreset', async (req, res) => {
 
   try {
     await nutrients.save();
-    res.sendStatus(200);
+    res.status(200).send(nutrients.history[0].meals[0]);
   } catch (err) {
     res.status(400).send({ error: err });
   }

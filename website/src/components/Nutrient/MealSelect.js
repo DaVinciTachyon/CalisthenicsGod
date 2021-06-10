@@ -2,15 +2,17 @@ import React from 'react';
 import { Select } from '../../style/inputs';
 import { Button } from '../../style/buttons';
 import { Row } from '../../style/table';
+import { setPresetMeals } from '../../stateManagement/reducers/presetMeals';
+import { connect } from 'react-redux';
 
-export default class MealSelect extends React.Component {
+class MealSelect extends React.Component {
   constructor() {
     super();
-    this.state = { meals: [], id: '' };
+    this.state = { id: '' };
   }
 
   componentDidMount() {
-    this.getMeals();
+    if (this.props.presetMeals.length === 0) this.props.setPresetMeals();
   }
 
   render() {
@@ -18,7 +20,12 @@ export default class MealSelect extends React.Component {
     return (
       <Row columns={2}>
         <Select
-          options={[{ label: 'New Meal', value: '' }].concat(this.state.meals)}
+          options={[{ label: 'New Meal', value: '' }].concat(
+            this.props.presetMeals.map((meal) => ({
+              label: meal.name,
+              value: meal._id,
+            }))
+          )}
           value={this.state.id}
           onChange={(evt) => this.setState({ id: evt.value })}
           {...rest}
@@ -27,23 +34,8 @@ export default class MealSelect extends React.Component {
       </Row>
     );
   }
-
-  getMeals = async () => {
-    const response = await fetch(
-      `${process.env.REACT_APP_API_URL}/nutrition/meals/preset/names/`,
-      {
-        method: 'GET',
-        headers: {
-          'Content-Type': 'application/json',
-          'auth-token': localStorage.getItem('authToken'),
-        },
-      }
-    );
-    const data = await response.json();
-    const meals = [];
-    data.meals.forEach((meal) =>
-      meals.push({ label: meal.name, value: meal._id })
-    );
-    this.setState({ meals });
-  };
 }
+
+export default connect(({ presetMeals }) => ({ presetMeals }), {
+  setPresetMeals,
+})(MealSelect);

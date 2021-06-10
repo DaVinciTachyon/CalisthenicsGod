@@ -1,7 +1,10 @@
 import React from 'react';
 import MacroSummaryRow from './MacroSummaryRow';
+import axios from 'axios';
+import { connect } from 'react-redux';
+import { setIngredients } from '../../../stateManagement/reducers/ingredients';
 
-export default class NutrientSummary extends React.Component {
+class NutrientSummary extends React.Component {
   constructor() {
     super();
     this.state = {
@@ -23,10 +26,17 @@ export default class NutrientSummary extends React.Component {
   componentDidMount() {
     this.getUserGoals();
     this.getMacros();
+    if (this.props.ingredients.available.length === 0)
+      this.props.setIngredients();
   }
 
   componentDidUpdate(prevProps) {
-    if (prevProps !== this.props) this.getMacros();
+    if (
+      prevProps.meals !== this.props.meals ||
+      prevProps.ingredients.available !== this.props.ingredients.available ||
+      prevProps.ingredients.unavailable !== this.props.ingredients.unavailable
+    )
+      this.getMacros();
   }
 
   getMacros = () => {
@@ -36,13 +46,18 @@ export default class NutrientSummary extends React.Component {
     let ethanol = 0;
     this.props.meals.forEach((meal) =>
       meal.ingredients.forEach((ingredient) => {
-        fat += (ingredient.weight * ingredient.macronutrients.fat) / 100;
-        carbohydrate +=
-          (ingredient.weight * ingredient.macronutrients.carbohydrate) / 100;
-        protein +=
-          (ingredient.weight * ingredient.macronutrients.protein) / 100;
-        ethanol +=
-          (ingredient.weight * ingredient.macronutrients.ethanol) / 100;
+        const { macronutrients } = this.props.ingredients.available.find(
+          (ingredient) => ingredient._id === this.props.id
+        ) ||
+          this.props.ingredients.unavailable.find(
+            (ingredient) => ingredient._id === this.props.id
+          ) || {
+            macronutrients: { fat: 0, carbohydrate: 0, protein: 0, ethanol: 0 },
+          };
+        fat += (ingredient.weight * macronutrients.fat) / 100;
+        carbohydrate += (ingredient.weight * macronutrients.carbohydrate) / 100;
+        protein += (ingredient.weight * macronutrients.protein) / 100;
+        ethanol += (ingredient.weight * macronutrients.ethanol) / 100;
       })
     );
     this.setState({ current: { fat, carbohydrate, protein, ethanol } });
@@ -58,7 +73,6 @@ export default class NutrientSummary extends React.Component {
           carbohydrate={this.state.goal.carbohydrate}
           protein={this.state.goal.protein}
           ethanol={this.state.goal.ethanol}
-          macroDensities={this.props.macroDensities}
         />
         <MacroSummaryRow
           name="Current"
@@ -66,7 +80,6 @@ export default class NutrientSummary extends React.Component {
           carbohydrate={this.state.current.carbohydrate}
           protein={this.state.current.protein}
           ethanol={this.state.current.ethanol}
-          macroDensities={this.props.macroDensities}
         />
         <MacroSummaryRow
           name="Left"
@@ -76,26 +89,24 @@ export default class NutrientSummary extends React.Component {
           }
           protein={this.state.goal.protein - this.state.current.protein}
           ethanol={this.state.goal.ethanol - this.state.current.ethanol}
-          macroDensities={this.props.macroDensities}
         />
       </div>
     );
   }
 
-  getUserGoals = () => {
-    const requestOptions = {
-      method: 'GET',
-      headers: {
-        'Content-Type': 'application/json',
-        'auth-token': localStorage.getItem('authToken'),
-      },
-    };
-    fetch(`${process.env.REACT_APP_API_URL}/nutrition/goals/`, requestOptions)
-      .then((response) => response.json())
-      .then((data) =>
-        this.setState({
-          goal: data.macronutrients,
-        })
-      );
+  getUserGoals = async () => {
+    try {
+      const { macronutrients } = (await axios.get('/nutrition/goals')).data;
+      this.setState({
+        goal: macronutrients,
+      });
+    } catch (err) {
+      if (err.response?.status === 400) console.error(err.response.data.error);
+      else console.error(err.response);
+    }
   };
 }
+
+export default connect(({ ingredients }) => ({ ingredients }), {
+  setIngredients,
+})(NutrientSummary);

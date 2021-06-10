@@ -3,7 +3,7 @@ const {
   post,
   login,
   buildRandomIngredient,
-  deleteRequest,
+  deleteReq,
   patch,
   randomString,
 } = require('./util');
@@ -68,12 +68,12 @@ describe('Ingredients', () => {
 
   describe('/DELETE', () => {
     it('empty body', async () => {
-      const res = await deleteRequest('/nutrition/ingredients', {}, authToken);
+      const res = await deleteReq('/nutrition/ingredients', {}, authToken);
       res.should.have.status(400);
     });
 
     it('valid', async () => {
-      const res = await deleteRequest(
+      const res = await deleteReq(
         '/nutrition/ingredients',
         { _id: expectedIngredient._id },
         authToken
@@ -94,29 +94,6 @@ describe('Ingredients', () => {
       const res = await patch(
         '/nutrition/ingredients',
         patchedIngredient,
-        authToken
-      );
-      res.should.have.status(200);
-    });
-  });
-
-  describe('/GET unavailable', () => {
-    it('valid request', async () => {
-      const res = await get('/nutrition/ingredients/unavailable', authToken);
-      res.should.have.status(200);
-    });
-  });
-
-  describe('/DELETE unavailable', () => {
-    it('empty body', async () => {
-      const res = await deleteRequest('/nutrition/ingredients', {}, authToken);
-      res.should.have.status(400);
-    });
-
-    it('valid', async () => {
-      const res = await deleteRequest(
-        '/nutrition/ingredients',
-        { _id: expectedIngredient._id },
         authToken
       );
       res.should.have.status(200);

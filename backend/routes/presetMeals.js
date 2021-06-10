@@ -21,6 +21,12 @@ router
     const { error } = nutrientValidation.presetMeal(req.body);
     if (error) return res.status(400).send({ error: error.details[0].message });
 
+    const name = await Meal.findOne({
+      name: req.body.name,
+      userId: req.user._id,
+    });
+    if (name) return res.status(400).send({ error: 'Name already exists' });
+
     const meal = new Meal({
       name: req.body.name,
       ingredients: req.body.ingredients,
@@ -41,6 +47,30 @@ router
     await Meal.findByIdAndDelete(req.body._id);
 
     res.sendStatus(200);
+  })
+  .patch(async (req, res) => {
+    const { error } = nutrientValidation.presetMealEdit(req.body);
+    if (error) return res.status(400).send({ error: error.details[0].message });
+
+    const meal = await Meal.findOne({
+      _id: req.body._id,
+      userId: req.user._id,
+    });
+
+    meal.name = req.body.name;
+    (req.body.ingredients || []).forEach(
+      (ingredient) =>
+        (meal.ingredients[
+          meal.ingredients.findIndex((ing) => ing._id.equals(ingredient._id))
+        ].weight = ingredient.weight)
+    );
+
+    try {
+      await meal.save();
+      res.status(200).send(meal);
+    } catch (err) {
+      res.status(400).send({ error: err });
+    }
   });
 
 router.post('/ingredients', async (req, res) => {
@@ -69,7 +99,7 @@ router.post('/ingredients', async (req, res) => {
 router
   .route('/ingredient')
   .post(async (req, res) => {
-    const { error } = nutrientValidation.mealIngredient(req.body);
+    const { error } = nutrientValidation.mealAddIngredient(req.body);
     if (error) return res.status(400).send({ error: error.details[0].message });
 
     const meal = await Meal.findById(req.body._id);
@@ -118,7 +148,7 @@ router
     if (!meal) return res.status(400).send({ error: 'Invalid Meal ID' });
 
     const index = meal.ingredients.findIndex(
-      (val) => val.id == req.body.ingredient.id
+      (val) => val._id == req.body.ingredient._id
     );
     if (index === -1)
       return res.status(400).send({ error: 'Invalid Ingredient ID' });
@@ -132,15 +162,5 @@ router
       res.status(400).send({ error: err });
     }
   });
-
-router.get('/names', async (req, res) => {
-  const meals = await Meal.find({ userId: req.user._id });
-
-  res.send({
-    meals: meals.map((val) => {
-      return { _id: val._id, name: val.name };
-    }),
-  });
-});
 
 module.exports = router;

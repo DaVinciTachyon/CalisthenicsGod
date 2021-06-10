@@ -33,7 +33,7 @@ const getLanguage = () =>
   'en';
 
 const register = async (user, page) => {
-  await page.goto(`${process.env.REACT_APP_WEBSITE_URL}/register`);
+  await page.goto(`${global.url}/register`);
   await page.waitForSelector('[data-id="registerButton"]');
 
   await page.click('[name="firstname"]');
@@ -70,7 +70,7 @@ const register = async (user, page) => {
 
 const login = async (user, page) => {
   await register(user, page);
-  await page.goto(`${process.env.REACT_APP_WEBSITE_URL}/login`);
+  await page.goto(`${global.url}/login`);
   await page.waitForSelector('[data-id="logInButton"]');
 
   await page.click('[name="email"]');

@@ -1,6 +1,7 @@
 import React from 'react';
 import Workout from './Workout';
 import { Button } from '../../../style/buttons';
+import axios from 'axios';
 
 export default class WorkoutTracker extends React.Component {
   constructor() {
@@ -16,15 +17,16 @@ export default class WorkoutTracker extends React.Component {
   }
 
   getWorkouts = async () => {
-    const response = await fetch(`${process.env.REACT_APP_API_URL}/workout/`, {
-      method: 'GET',
-      headers: {
-        'Content-Type': 'application/json',
-        'auth-token': localStorage.getItem('authToken'),
-      },
-    });
-    const data = await response.json();
-    this.setState({ workouts: data.workouts });
+    try {
+      const { workouts } = (await axios.get('/workout/')).data;
+      this.setState({ workouts });
+    } catch (err) {
+      if (err.response?.status === 400)
+        if (err.response?.status === 400)
+          console.error(err.response.data.error);
+        else console.error(err.response);
+      else console.error(err.response);
+    }
   };
 
   render() {

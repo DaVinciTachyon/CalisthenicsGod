@@ -4,6 +4,7 @@ import { Row } from '../../style/table';
 import Card from '../../style/card';
 import { Button } from '../../style/buttons';
 import { Text, Password } from '../../style/inputs';
+import axios from 'axios';
 
 export default class Login extends React.Component {
   constructor() {
@@ -19,22 +20,23 @@ export default class Login extends React.Component {
   }
 
   onSubmit = async () => {
-    const response = await fetch(
-      `${process.env.REACT_APP_API_URL}/auth/login/`,
-      {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({
+    try {
+      const data = (
+        await axios.post('/auth/login/', {
           email: this.state.email,
           password: this.state.password,
-        }),
-      }
-    );
-    const data = await response.json();
-    if (data['auth-token']) {
-      localStorage.setItem('authToken', data['auth-token']);
+        })
+      ).data;
+      localStorage.setItem(
+        'user',
+        JSON.stringify({ authToken: data['Authentication'] })
+      );
       window.location = '/';
-    } else this.setState({ error: data.error });
+    } catch (err) {
+      if (err.response?.status === 400)
+        this.setState({ error: err.response.data.error });
+      else console.error(err.response);
+    }
   };
 
   onChange = (evt) => this.setState({ [evt.target.name]: evt.target.value });
