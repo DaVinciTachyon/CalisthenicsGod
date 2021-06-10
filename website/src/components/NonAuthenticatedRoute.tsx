@@ -11,7 +11,7 @@ const NonAuthenticatedRoute = ({ component: Component, ...rest }: Props) => (
   <Route
     {...rest}
     render={(props: any) =>
-      !localStorage.getItem('authToken') ? (
+      !localStorage.getItem('user') ? (
         <Component {...props} />
       ) : (
         <Redirect

@@ -27,7 +27,7 @@ const request = (
   headers = {}
 ) =>
   new Promise((resolve, reject) => {
-    if (authToken) headers['auth-token'] = authToken;
+    if (authToken) headers['Authentication'] = authToken;
     headers['Accept'] = 'application/json';
     app[method](url)
       .set(headers)
@@ -44,7 +44,7 @@ const post = (url, body, authToken = undefined, headers = {}) =>
 const get = (url, authToken = undefined, headers = {}) =>
   request('get', url, undefined, authToken, headers);
 
-const deleteRequest = (url, body, authToken = undefined, headers = {}) =>
+const deleteReq = (url, body, authToken = undefined, headers = {}) =>
   request('delete', url, body, authToken, headers);
 
 const patch = (url, body, authToken = undefined, headers = {}) =>
@@ -57,7 +57,7 @@ const login = async () => {
     email: user.email,
     password: user.password,
   });
-  return res.body['auth-token'];
+  return res.body['Authentication'];
 };
 
 const buildRandomExercise = async (authToken) => {
@@ -146,7 +146,7 @@ const buildRandomPresetMealReference = async (authToken) =>
 module.exports = {
   post,
   get,
-  deleteRequest,
+  deleteReq,
   patch,
   buildRandomUser,
   buildRandomExercise,

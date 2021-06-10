@@ -53,8 +53,11 @@ router.post('/login', async (req, res) => {
   const validPass = await bcrypt.compare(req.body.password, user.password);
   if (!validPass) return res.status(400).send({ error: 'Invalid Password' });
 
-  const token = jwt.sign({ _id: user._id }, process.env.TOKEN_SECRET);
-  res.header('auth-token', token).send({ 'auth-token': token });
+  const token = jwt.sign(
+    { _id: user._id },
+    process.env.TOKEN_SECRET || 'secret'
+  );
+  res.header('Authentication', token).send({ Authentication: token });
 });
 
 module.exports = router;

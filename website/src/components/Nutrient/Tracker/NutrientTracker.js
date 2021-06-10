@@ -4,17 +4,12 @@ import MealSelect from '../MealSelect';
 import Card from '../../../style/card';
 import MealIngredientAdder from './MealIngredientAdder';
 import ConsumedMeal from './ConsumedMeal';
+import axios from 'axios';
 
 export default class NutrientTracker extends React.Component {
   constructor() {
     super();
     this.state = {
-      macroDensities: {
-        fat: 9,
-        carbohydrate: 4,
-        protein: 4,
-        ethanol: 7,
-      },
       isAddingMeal: false,
       meals: [],
     };
@@ -25,37 +20,23 @@ export default class NutrientTracker extends React.Component {
   }
 
   getMeals = async () => {
-    const response = await fetch(
-      `${process.env.REACT_APP_API_URL}/nutrition/meals/`,
-      {
-        method: 'GET',
-        headers: {
-          'Content-Type': 'application/json',
-          'auth-token': localStorage.getItem('authToken'),
-        },
-      }
-    );
-    const data = await response.json();
-    this.setState({ meals: data.meals });
+    try {
+      const { meals } = (await axios.get('/nutrition/meals/')).data;
+      this.setState({ meals });
+    } catch (err) {
+      if (err.response?.status === 400) console.error(err.response.data.error);
+      else console.error(err.response);
+    }
   };
 
   addMeal = async (id) => {
-    const response = await fetch(
-      `${process.env.REACT_APP_API_URL}/nutrition/meals/addPreset/`,
-      {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-          'auth-token': localStorage.getItem('authToken'),
-        },
-        body: JSON.stringify({
-          _id: id,
-        }),
-      }
-    );
-    if (response.status !== 200) {
-      const data = await response.json();
-      console.error(data.error);
+    try {
+      await axios.post('/nutrition/meals/addPreset/', {
+        _id: id,
+      });
+    } catch (err) {
+      if (err.response?.status === 400) console.error(err.response.data.error);
+      else console.error(err.response);
     }
   };
 
@@ -63,10 +44,7 @@ export default class NutrientTracker extends React.Component {
     return (
       <div>
         <Card>
-          <NutrientSummary
-            macroDensities={this.state.macroDensities}
-            meals={this.state.meals}
-          />
+          <NutrientSummary meals={this.state.meals} />
         </Card>
         {!this.state.isAddingMeal && (
           <MealSelect
@@ -86,7 +64,6 @@ export default class NutrientTracker extends React.Component {
               this.getMeals();
             }}
             onCancel={() => this.setState({ isAddingMeal: false })}
-            macroDensities={this.state.macroDensities}
           />
         )}
         {this.state.meals.map((meal) => (
@@ -94,7 +71,6 @@ export default class NutrientTracker extends React.Component {
             key={meal._id}
             id={meal._id}
             ingredients={meal.ingredients}
-            macroDensities={this.state.macroDensities}
             onUpdate={this.getMeals}
           />
         ))}

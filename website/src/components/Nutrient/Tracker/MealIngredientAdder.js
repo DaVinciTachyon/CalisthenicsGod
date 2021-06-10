@@ -4,8 +4,12 @@ import { Row, Column } from '../../../style/table';
 import { Text, Calories } from '../../../style/inputs';
 import { SuccessButton, ErrorButton } from '../../../style/buttons';
 import IngredientMacroRow from './IngredientMacroRow';
+import { getCalories } from '../util';
+import { connect } from 'react-redux';
+import { addIngredient } from '../../../stateManagement/reducers/ingredients';
+import { addIngredient as addPresetMealIngredient } from '../../../stateManagement/reducers/presetMeals';
 
-export default class MealIngredientAdder extends React.Component {
+class MealIngredientAdder extends React.Component {
   constructor() {
     super();
     this.state = {
@@ -23,6 +27,7 @@ export default class MealIngredientAdder extends React.Component {
     if (ingredient === undefined)
       this.setState({
         id: '',
+        name: '',
         fat: 0,
         carbohydrate: 0,
         protein: 0,
@@ -31,6 +36,7 @@ export default class MealIngredientAdder extends React.Component {
     else {
       this.setState({
         id: ingredient._id,
+        name: ingredient.name,
         fat: ingredient.macronutrients.fat,
         carbohydrate: ingredient.macronutrients.carbohydrate,
         protein: ingredient.macronutrients.protein,
@@ -39,54 +45,15 @@ export default class MealIngredientAdder extends React.Component {
     }
   };
 
-  getCalories = () =>
-    ((this.state.fat * this.props.macroDensities.fat +
-      this.state.carbohydrate * this.props.macroDensities.carbohydrate +
-      this.state.protein * this.props.macroDensities.protein +
-      this.state.ethanol * this.props.macroDensities.ethanol) *
-      this.state.weight) /
-    100;
-
   onChange = (evt) => this.setState({ [evt.target.name]: evt.target.value });
 
   onSubmit = async () => {
-    const id =
-      (this.state.id === '' ? undefined : this.state.id) ||
-      (await this.addIngredient());
-    let url = `${process.env.REACT_APP_API_URL}/nutrition/meals/`;
     if (this.props.isPreset)
-      url = `${process.env.REACT_APP_API_URL}/nutrition/meals/preset/ingredient/`;
-    const response = await fetch(url, {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-        'auth-token': localStorage.getItem('authToken'),
-      },
-      body: JSON.stringify({
+      this.props.addPresetMealIngredient({
         _id: this.props.id,
         ingredient: {
-          id,
+          id: this.state.id || undefined,
           weight: this.state.weight,
-        },
-      }),
-    });
-    if (response.status === 200) this.props.onSubmit();
-    else {
-      const data = await response.json();
-      console.error(data.error);
-    }
-  };
-
-  addIngredient = async () => {
-    const response = await fetch(
-      `${process.env.REACT_APP_API_URL}/nutrition/ingredients/`,
-      {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-          'auth-token': localStorage.getItem('authToken'),
-        },
-        body: JSON.stringify({
           name: this.state.name,
           macronutrients: {
             fat: this.state.fat,
@@ -94,43 +61,43 @@ export default class MealIngredientAdder extends React.Component {
             protein: this.state.protein,
             ethanol: this.state.ethanol,
           },
-        }),
-      }
-    );
-    const data = await response.json();
-    return data._id;
+        },
+      });
+    // TODO let url = '/nutrition/meals/';
+    this.props.onSubmit(); //TOOD abstract out to onsubmit not in here
   };
 
   onCancel = () => this.props.onCancel();
 
   render() {
+    const { id, name, fat, carbohydrate, protein, ethanol, weight } =
+      this.state;
     return (
       <Row columns={11} className="input">
         <Column span={2}>
           <IngredientSelect
-            value={this.state.id}
+            value={id}
             onChange={this.onIngredientChange}
             label="Ingredient"
           />
-          {this.state.id === '' && (
-            <Text
-              name="name"
-              value={this.state.name}
-              onChange={this.onChange}
-            />
+          {id === '' && (
+            <Text name="name" value={name} onChange={this.onChange} />
           )}
         </Column>
-        <Calories value={this.getCalories()} readOnly />
+        <Calories
+          value={getCalories(fat, carbohydrate, protein, ethanol, weight)}
+          readOnly
+        />
         <Column span={7}>
           <IngredientMacroRow isTitle />
           <IngredientMacroRow
             name="Net Weight"
             onChange={({ weight }) => this.setState({ weight })}
-            weight={this.state.weight}
-            fat={(this.state.fat * this.state.weight) / 100}
-            carbohydrate={(this.state.carbohydrate * this.state.weight) / 100}
-            protein={(this.state.protein * this.state.weight) / 100}
-            ethanol={(this.state.ethanol * this.state.weight) / 100}
+            weight={weight}
+            fat={(fat * weight) / 100}
+            carbohydrate={(carbohydrate * weight) / 100}
+            protein={(protein * weight) / 100}
+            ethanol={(ethanol * weight) / 100}
           />
           <IngredientMacroRow
             name="Base Weight"
@@ -138,12 +105,12 @@ export default class MealIngredientAdder extends React.Component {
               this.setState({ fat, carbohydrate, protein, ethanol })
             }
             isBaseline
-            macroReadOnly={this.state.id !== ''}
+            macroReadOnly={id !== ''}
             weight={100}
-            fat={this.state.fat}
-            carbohydrate={this.state.carbohydrate}
-            protein={this.state.protein}
-            ethanol={this.state.ethanol}
+            fat={fat}
+            carbohydrate={carbohydrate}
+            protein={protein}
+            ethanol={ethanol}
             className="emphasis"
           />
         </Column>
@@ -155,3 +122,8 @@ export default class MealIngredientAdder extends React.Component {
     );
   }
 }
+
+export default connect(({ ingredients }) => ({ ingredients }), {
+  addIngredient,
+  addPresetMealIngredient,
+})(MealIngredientAdder);

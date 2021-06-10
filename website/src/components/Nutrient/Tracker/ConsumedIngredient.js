@@ -15,6 +15,8 @@ import {
   ErrorButton,
   DeleteButton,
 } from '../../../style/buttons';
+import axios from 'axios';
+import { getCalories } from '../util';
 
 export default class ConsumedIngredient extends React.Component {
   constructor() {
@@ -27,69 +29,45 @@ export default class ConsumedIngredient extends React.Component {
   }
 
   onSubmit = async () => {
-    const { mealId, _id } = this.props;
-    const { weight } = this.state;
-    const response = await fetch(
-      `${process.env.REACT_APP_API_URL}/nutrition/meals/`,
-      {
-        method: 'PATCH',
-        headers: {
-          'Content-Type': 'application/json',
-          'auth-token': localStorage.getItem('authToken'),
+    try {
+      const { mealId, _id } = this.props;
+      const { weight } = this.state;
+      await axios.patch('/nutrition/meals/', {
+        _id: mealId,
+        ingredient: {
+          _id,
+          weight,
         },
-        body: JSON.stringify({
-          _id: mealId,
-          ingredient: {
-            _id,
-            weight,
-          },
-        }),
-      }
-    );
-    this.onUpdate(response);
+      });
+      await this.props.onUpdate();
+      this.setState({ isEditing: false });
+    } catch (err) {
+      if (err.response?.status === 400) console.error(err.response.data.error);
+      else console.error(err.response);
+    }
   };
 
   onRemove = async () => {
-    const { mealId, _id } = this.props;
-    const response = await fetch(
-      `${process.env.REACT_APP_API_URL}/nutrition/meals/`,
-      {
-        method: 'DELETE',
-        headers: {
-          'Content-Type': 'application/json',
-          'auth-token': localStorage.getItem('authToken'),
-        },
-        body: JSON.stringify({
-          _id: mealId,
-          ingredient: { _id },
-        }),
-      }
-    );
-    this.onUpdate(response);
-  };
-
-  onUpdate = async (response) => {
-    if (response.status === 200) {
+    try {
+      const { mealId, _id } = this.props;
+      await axios.delete('/nutrition/meals/', {
+        _id: mealId,
+        ingredient: { _id },
+      });
       await this.props.onUpdate();
       this.setState({ isEditing: false });
-    } else {
-      const data = await response.json();
-      console.error(data.error);
+    } catch (err) {
+      if (err.response?.status === 400) console.error(err.response.data.error);
+      else console.error(err.response);
     }
   };
 
   setWeight = () => this.setState({ weight: this.props.weight });
 
   getCalories = () => {
-    const { weight, macros, macroDensities } = this.props;
-    return (
-      ((macros.fat * macroDensities.fat +
-        macros.carbohydrate * macroDensities.carbohydrate +
-        macros.protein * macroDensities.protein +
-        macros.ethanol * macroDensities.ethanol) *
-        weight) /
-      100
-    );
+    const { weight, macros } = this.props;
+    const { fat, carbohydrate, protein, ethanol } = macros;
+    return getCalories(fat, carbohydrate, protein, ethanol, weight);
   };
 
   onChange = (evt) => this.setState({ [evt.target.name]: evt.target.value });

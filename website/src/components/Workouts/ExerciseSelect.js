@@ -1,5 +1,6 @@
 import React from 'react';
 import { Select } from '../../style/inputs';
+import axios from 'axios';
 
 export default class ExerciseSelect extends React.Component {
   constructor() {
@@ -14,24 +15,22 @@ export default class ExerciseSelect extends React.Component {
   }
 
   getExercises = async () => {
-    const response = await fetch(`${process.env.REACT_APP_API_URL}/exercise/`, {
-      method: 'GET',
-      headers: {
-        'Content-Type': 'application/json',
-        'auth-token': localStorage.getItem('authToken'),
-      },
-    });
-    const data = await response.json();
-    const exercises = [];
-    data.exercises.forEach((exercise) => {
-      if (
-        !this.props.stage ||
-        (this.props.stage &&
-          exercise.potentialStages.includes(this.props.stage))
-      )
-        exercises.push(exercise);
-    });
-    this.setState({ exercises });
+    try {
+      const data = (await axios.get('/exercise/')).data;
+      const exercises = [];
+      data.exercises.forEach((exercise) => {
+        if (
+          !this.props.stage ||
+          (this.props.stage &&
+            exercise.potentialStages.includes(this.props.stage))
+        )
+          exercises.push(exercise);
+      });
+      this.setState({ exercises });
+    } catch (err) {
+      if (err.response?.status === 400) console.error(err.response.data.error);
+      else console.error(err.response);
+    }
   };
 
   onChange = (evt) => {

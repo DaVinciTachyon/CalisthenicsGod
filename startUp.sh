@@ -14,7 +14,4 @@ elif [ -n "$1" ] && [ "$1" = "test" ]; then
     else
         sudo docker-compose --env-file ./config/.env.test up -d
     fi
-else
-    sudo docker-compose --env-file ./config/.env.development build
-    sudo docker-compose --env-file ./config/.env.development up backend
 fi

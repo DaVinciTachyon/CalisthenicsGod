@@ -2,6 +2,7 @@ import React from 'react';
 import { Row, Column, Title } from '../../../style/table';
 import StageEditor from './StageEditor';
 import { Button, ErrorButton } from '../../../style/buttons';
+import axios from 'axios';
 
 export default class WorkoutAdder extends React.Component {
   constructor() {
@@ -20,18 +21,13 @@ export default class WorkoutAdder extends React.Component {
   }
 
   getStages = async () => {
-    const response = await fetch(
-      `${process.env.REACT_APP_API_URL}/workout/stage/`,
-      {
-        method: 'GET',
-        headers: {
-          'Content-Type': 'application/json',
-          'auth-token': localStorage.getItem('authToken'),
-        },
-      }
-    );
-    const data = await response.json();
-    this.setState({ stages: data.stages });
+    try {
+      const { stages } = (await axios.get('/workout/stage/')).data;
+      this.setState({ stages });
+    } catch (err) {
+      if (err.response?.status === 400) console.error(err.response.data.error);
+      else console.error(err.response);
+    }
   };
 
   onUpdate = (stage) =>
@@ -44,19 +40,12 @@ export default class WorkoutAdder extends React.Component {
     });
 
   onSubmit = async () => {
-    const response = await fetch(`${process.env.REACT_APP_API_URL}/workout/`, {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-        'auth-token': localStorage.getItem('authToken'),
-      },
-      body: JSON.stringify(this.state.workout),
-    });
-    if (response.status === 200) {
+    try {
+      await axios.post('/workout/', this.state.workout);
       window.location = '/workoutTracker';
-    } else {
-      const data = await response.json();
-      console.error(data.error);
+    } catch (err) {
+      if (err.response?.status === 400) console.error(err.response.data.error);
+      else console.error(err.response);
     }
   };
 

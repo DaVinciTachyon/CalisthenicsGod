@@ -1,26 +1,29 @@
-const { required } = require('@hapi/joi');
 const Joi = require('@hapi/joi');
 
+const _id = Joi.string().min(1);
+
+const weight = Joi.number().min(0.01);
+
+const macronutrient = Joi.number().min(0).max(100);
+
+const name = Joi.string().min(1).required();
+
 const macronutrients = Joi.object({
-  fat: Joi.number().min(0).max(100).required(),
-  carbohydrate: Joi.number().min(0).max(100).required(),
-  protein: Joi.number().min(0).max(100).required(),
-  ethanol: Joi.number().min(0).max(100).required(),
+  fat: macronutrient.required(),
+  carbohydrate: macronutrient.required(),
+  protein: macronutrient.required(),
+  ethanol: macronutrient.required(),
 });
 
 const ingredientRef = Joi.object({
-  id: Joi.string().min(1).required(),
-  weight: Joi.number().min(0.01).required(),
+  id: _id.required(),
+  weight: weight.required(),
 });
 
 const mealIngredient = Joi.object({
-  _id: Joi.string().min(1).required(),
-  weight: Joi.number().min(0.01).required(),
+  _id: _id.required(),
+  weight: weight.required(),
 });
-
-const _id = Joi.string();
-
-const name = Joi.string().min(1).required();
 
 module.exports = {
   userInfo: (data) =>
@@ -43,18 +46,48 @@ module.exports = {
     }).validate(data),
   presetMeal: (data) =>
     Joi.object({
+      _id,
       name,
       ingredients: Joi.array().items(ingredientRef),
     }).validate(data),
+  presetMealEdit: (data) =>
+    Joi.object({
+      _id,
+      name,
+      ingredients: Joi.array().items(
+        Joi.object({
+          _id: _id.required(),
+          id: _id,
+          weight: weight.required(),
+        })
+      ),
+    }).validate(data),
   id: (data) => Joi.object({ _id: _id.required() }).validate(data),
   mealIngredient: (data) =>
-    Joi.object({ _id: _id.required(), ingredient: ingredientRef }).validate(
-      data
-    ),
+    Joi.object({
+      _id: _id.required(),
+      ingredient: {
+        _id: _id.required(),
+        weight: Joi.number().min(0.01).required(),
+      },
+    }).validate(data),
+  mealAddIngredient: (data) =>
+    Joi.object({
+      _id: _id.required(),
+      ingredient: {
+        id: _id.required(),
+        weight: Joi.number().min(0.01).required(),
+      },
+    }).validate(data),
   mealIngredientEdit: (data) =>
-    Joi.object({ _id: _id.required(), ingredient: mealIngredient }).validate(
-      data
-    ),
+    Joi.object({
+      _id: _id.required(),
+      ingredient: Joi.object({
+        _id: _id.required(),
+        id: _id,
+        weight: weight.required(),
+      }),
+    }).validate(data),
   mealIngredientId: (data) =>
     Joi.object({
       _id: _id.required(),

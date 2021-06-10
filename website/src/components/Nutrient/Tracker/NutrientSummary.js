@@ -1,5 +1,6 @@
 import React from 'react';
 import MacroSummaryRow from './MacroSummaryRow';
+import axios from 'axios';
 
 export default class NutrientSummary extends React.Component {
   constructor() {
@@ -58,7 +59,6 @@ export default class NutrientSummary extends React.Component {
           carbohydrate={this.state.goal.carbohydrate}
           protein={this.state.goal.protein}
           ethanol={this.state.goal.ethanol}
-          macroDensities={this.props.macroDensities}
         />
         <MacroSummaryRow
           name="Current"
@@ -66,7 +66,6 @@ export default class NutrientSummary extends React.Component {
           carbohydrate={this.state.current.carbohydrate}
           protein={this.state.current.protein}
           ethanol={this.state.current.ethanol}
-          macroDensities={this.props.macroDensities}
         />
         <MacroSummaryRow
           name="Left"
@@ -76,26 +75,20 @@ export default class NutrientSummary extends React.Component {
           }
           protein={this.state.goal.protein - this.state.current.protein}
           ethanol={this.state.goal.ethanol - this.state.current.ethanol}
-          macroDensities={this.props.macroDensities}
         />
       </div>
     );
   }
 
-  getUserGoals = () => {
-    const requestOptions = {
-      method: 'GET',
-      headers: {
-        'Content-Type': 'application/json',
-        'auth-token': localStorage.getItem('authToken'),
-      },
-    };
-    fetch(`${process.env.REACT_APP_API_URL}/nutrition/goals/`, requestOptions)
-      .then((response) => response.json())
-      .then((data) =>
-        this.setState({
-          goal: data.macronutrients,
-        })
-      );
+  getUserGoals = async () => {
+    try {
+      const { macronutrients } = (await axios.get('/nutrition/goals')).data;
+      this.setState({
+        goal: macronutrients,
+      });
+    } catch (err) {
+      if (err.response?.status === 400) console.error(err.response.data.error);
+      else console.error(err.response);
+    }
   };
 }
