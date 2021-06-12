@@ -32,6 +32,7 @@ class MealIngredient extends React.Component {
       carbohydrate: 0,
       protein: 0,
       ethanol: 0,
+      calories: 0,
     };
   }
 
@@ -43,7 +44,7 @@ class MealIngredient extends React.Component {
     if (prevProps !== this.props && !this.props.isTitle) this.set();
   }
 
-  set = () => {
+  set = async () => {
     const { weight, macronutrients } = this.props;
     const { fat, carbohydrate, protein, ethanol } = macronutrients;
     this.setState({
@@ -53,15 +54,22 @@ class MealIngredient extends React.Component {
       carbohydrate,
       protein,
       ethanol,
+      calories: await getCalories(fat, carbohydrate, protein, ethanol, weight),
     });
   };
 
-  getCalories = () => {
-    const { fat, carbohydrate, protein, ethanol, weight } = this.state;
-    return getCalories(fat, carbohydrate, protein, ethanol, weight);
+  onChange = async (evt) => {
+    await this.setState({ [evt.target.name]: evt.target.value });
+    this.setState({
+      calories: await getCalories(
+        this.state.fat,
+        this.state.carbohydrate,
+        this.state.protein,
+        this.state.ethanol,
+        this.state.weight
+      ),
+    });
   };
-
-  onChange = (evt) => this.setState({ [evt.target.name]: evt.target.value });
 
   render() {
     const { isTitle, name } = this.props;
@@ -85,7 +93,7 @@ class MealIngredient extends React.Component {
         <Column span={2}>
           <Text value={name} readOnly />
         </Column>
-        <Calories value={this.getCalories()} readOnly />
+        <Calories value={this.state.calories} readOnly />
         <Weight
           name="weight"
           value={weight}

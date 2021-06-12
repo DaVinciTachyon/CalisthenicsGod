@@ -38,9 +38,9 @@ class ConsumedIngredient extends React.Component {
     };
   }
 
-  componentDidMount() {
+  async componentDidMount() {
     if (!this.props.isTitle) {
-      this.getDetails();
+      await this.getDetails();
       this.setWeight();
     }
     if (this.props.ingredients.available.length === 0)
@@ -55,7 +55,7 @@ class ConsumedIngredient extends React.Component {
       this.getDetails();
   }
 
-  setWeight = () => {
+  setWeight = async () => {
     const weight = this.props.meals
       .find((meal) => meal._id === this.props.mealId)
       .ingredients.find(
@@ -63,7 +63,7 @@ class ConsumedIngredient extends React.Component {
       ).weight;
     this.setState({
       weight,
-      calories: getCalories(
+      calories: await getCalories(
         this.state.fat,
         this.state.carbohydrate,
         this.state.protein,
@@ -73,9 +73,20 @@ class ConsumedIngredient extends React.Component {
     });
   };
 
-  onChange = (evt) => this.setState({ [evt.target.name]: evt.target.value });
+  onChange = async (evt) => {
+    await this.setState({ [evt.target.name]: evt.target.value });
+    this.setState({
+      calories: await getCalories(
+        this.state.fat,
+        this.state.carbohydrate,
+        this.state.protein,
+        this.state.ethanol,
+        this.state.weight
+      ),
+    });
+  };
 
-  getDetails = () => {
+  getDetails = async () => {
     const { name, macronutrients } = this.props.ingredients.available.find(
       (ingredient) => ingredient._id === this.props.ingredient.id
     ) ||
@@ -91,6 +102,13 @@ class ConsumedIngredient extends React.Component {
       carbohydrate: macronutrients.carbohydrate,
       protein: macronutrients.protein,
       ethanol: macronutrients.ethanol,
+      calories: await getCalories(
+        macronutrients.fat,
+        macronutrients.carbohydrate,
+        macronutrients.protein,
+        macronutrients.ethanol,
+        this.state.weight
+      ),
     });
   };
 

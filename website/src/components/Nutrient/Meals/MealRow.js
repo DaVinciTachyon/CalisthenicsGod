@@ -85,7 +85,6 @@ class MealRow extends React.Component {
       protein += (weight * macronutrients.protein) / 100;
       ethanol += (weight * macronutrients.ethanol) / 100;
     });
-    const calories = await getCalories(fat, carbohydrate, protein, ethanol);
     this.setState({
       name: this.props.meal.name,
       ingredients,
@@ -94,7 +93,7 @@ class MealRow extends React.Component {
       protein,
       ethanol,
       isEditing: false,
-      calories,
+      calories: await getCalories(fat, carbohydrate, protein, ethanol),
     });
   };
 
