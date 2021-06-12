@@ -27,10 +27,8 @@ services:
     volumes:
       - .:/home/node/app
       - node_modules:/home/node/app/node_modules
-    depends_on:
-      - calisthenicsgoddb
     environment:
-      - DB_CONNECT=mongodb://calisthenicsGodDB/database
+      - DB_CONNECT=${DB_CONNECT}
       - PORT=${PORT}
       - TOKEN_SECRET=${TOKEN_SECRET}
     networks:
