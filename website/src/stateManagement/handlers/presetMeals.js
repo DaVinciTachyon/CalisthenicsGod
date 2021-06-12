@@ -1,5 +1,4 @@
 import { call, put } from 'redux-saga/effects';
-import { handlePostIngredient } from './ingredients';
 import {
   addIngredient,
   removeIngredient,
@@ -21,23 +20,15 @@ import {
 
 function* handlePostPresetMealIngredient({ payload }) {
   try {
-    let id = payload.ingredient.id;
-    if (!id)
-      id = yield* handlePostIngredient({
-        payload: {
-          name: payload.ingredient.name,
-          macronutrients: payload.ingredient.macronutrients,
-        },
-      });
-    const response = yield call(postIngredient, {
-      _id: payload._id,
-      ingredient: { id, weight: payload.ingredient.weight },
-    });
+    const response = yield call(postIngredient, payload);
     const { data } = response;
     yield put(
       addIngredient({
         ...payload,
-        ingredient: { ...payload.ingredient, _id: data.ingredient._id, id },
+        ingredient: {
+          _id: data.ingredient._id,
+          ...payload.ingredient,
+        },
       })
     );
   } catch (err) {

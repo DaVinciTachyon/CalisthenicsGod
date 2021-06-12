@@ -58,18 +58,24 @@ class MealIngredientAdder extends React.Component {
   onChange = (evt) => this.setState({ [evt.target.name]: evt.target.value });
 
   onSubmit = async () => {
+    // if (!this.state.id)
+    //   this.props.addIngredient({
+    //     name: this.state.name,
+    //     macronutrients: {
+    //       fat: this.state.fat,
+    //       carbohydrate: this.state.carbohydrate,
+    //       protein: this.state.protein,
+    //       ethanol: this.state.ethanol,
+    //     },
+    //   });
     const ingredient = {
       _id: this.props.id,
       ingredient: {
-        id: this.state.id || undefined,
+        id: this.state.id,
+        // || this.props.ingredients.available.find(
+        //   (ingredient) => ingredient.name === this.state.name
+        // )._id
         weight: this.state.weight,
-        name: this.state.name,
-        macronutrients: {
-          fat: this.state.fat,
-          carbohydrate: this.state.carbohydrate,
-          protein: this.state.protein,
-          ethanol: this.state.ethanol,
-        },
       },
     };
     if (this.props.isPreset) this.props.addPresetMealIngredient(ingredient);
@@ -151,7 +157,7 @@ class MealIngredientAdder extends React.Component {
   }
 }
 
-export default connect(() => ({}), {
+export default connect(({ ingredients }) => ({ ingredients }), {
   addIngredient,
   addPresetMealIngredient,
   addMealIngredient,

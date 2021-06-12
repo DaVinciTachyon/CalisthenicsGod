@@ -20,11 +20,6 @@ const ingredientRef = Joi.object({
   weight: weight.required(),
 });
 
-const mealIngredient = Joi.object({
-  _id: _id.required(),
-  weight: weight.required(),
-});
-
 module.exports = {
   userInfo: (data) =>
     Joi.object({
