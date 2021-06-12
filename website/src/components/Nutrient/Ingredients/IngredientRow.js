@@ -33,6 +33,7 @@ class IngredientRow extends React.Component {
       protein: 0,
       ethanol: 0,
       name: '',
+      calories: 0,
     };
   }
 
@@ -44,12 +45,7 @@ class IngredientRow extends React.Component {
     if (prevProps !== this.props && !this.props.isTitle) this.setMacros();
   }
 
-  getCalories = () => {
-    const { fat, carbohydrate, protein, ethanol, weight } = this.state;
-    return getCalories(fat, carbohydrate, protein, ethanol, weight);
-  };
-
-  setMacros = () => {
+  setMacros = async () => {
     const { name, macronutrients } = this.props;
     const { fat, carbohydrate, protein, ethanol } = macronutrients;
     this.setState({
@@ -58,10 +54,28 @@ class IngredientRow extends React.Component {
       carbohydrate,
       protein,
       ethanol,
+      calories: await getCalories(
+        fat,
+        carbohydrate,
+        protein,
+        ethanol,
+        this.state.weight
+      ),
     });
   };
 
-  onChange = (evt) => this.setState({ [evt.target.name]: evt.target.value });
+  onChange = async (evt) => {
+    await this.setState({ [evt.target.name]: evt.target.value });
+    this.setState({
+      calories: await getCalories(
+        this.state.fat,
+        this.state.carbohydrate,
+        this.state.protein,
+        this.state.ethanol,
+        this.state.weight
+      ),
+    });
+  };
 
   onSubmit = async () => {
     const { name, fat, carbohydrate, protein, ethanol } = this.state;
@@ -105,7 +119,7 @@ class IngredientRow extends React.Component {
             readOnly={!isEditing}
           />
         </Column>
-        <Calories value={this.getCalories()} readOnly />
+        <Calories value={this.state.calories} readOnly />
         <Weight value={weight} readOnly />
         <Fat
           name="fat"

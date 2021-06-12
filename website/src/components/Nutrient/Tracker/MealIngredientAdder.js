@@ -21,10 +21,11 @@ class MealIngredientAdder extends React.Component {
       weight: 0,
       name: '',
       id: '',
+      calories: 0,
     };
   }
 
-  onIngredientChange = (ingredient) => {
+  onIngredientChange = async (ingredient) => {
     if (ingredient === undefined)
       this.setState({
         id: '',
@@ -33,6 +34,7 @@ class MealIngredientAdder extends React.Component {
         carbohydrate: 0,
         protein: 0,
         ethanol: 0,
+        calories: 0,
       });
     else {
       this.setState({
@@ -42,6 +44,13 @@ class MealIngredientAdder extends React.Component {
         carbohydrate: ingredient.macronutrients.carbohydrate,
         protein: ingredient.macronutrients.protein,
         ethanol: ingredient.macronutrients.ethanol,
+        calories: await getCalories(
+          ingredient.macronutrients.fat,
+          ingredient.macronutrients.carbohydrate,
+          ingredient.macronutrients.protein,
+          ingredient.macronutrients.ethanol,
+          this.state.weight
+        ),
       });
     }
   };
@@ -49,18 +58,24 @@ class MealIngredientAdder extends React.Component {
   onChange = (evt) => this.setState({ [evt.target.name]: evt.target.value });
 
   onSubmit = async () => {
+    // if (!this.state.id)
+    //   this.props.addIngredient({
+    //     name: this.state.name,
+    //     macronutrients: {
+    //       fat: this.state.fat,
+    //       carbohydrate: this.state.carbohydrate,
+    //       protein: this.state.protein,
+    //       ethanol: this.state.ethanol,
+    //     },
+    //   });
     const ingredient = {
       _id: this.props.id,
       ingredient: {
-        id: this.state.id || undefined,
+        id: this.state.id,
+        // || this.props.ingredients.available.find(
+        //   (ingredient) => ingredient.name === this.state.name
+        // )._id
         weight: this.state.weight,
-        name: this.state.name,
-        macronutrients: {
-          fat: this.state.fat,
-          carbohydrate: this.state.carbohydrate,
-          protein: this.state.protein,
-          ethanol: this.state.ethanol,
-        },
       },
     };
     if (this.props.isPreset) this.props.addPresetMealIngredient(ingredient);
@@ -69,7 +84,7 @@ class MealIngredientAdder extends React.Component {
   };
 
   render() {
-    const { id, name, fat, carbohydrate, protein, ethanol, weight } =
+    const { id, name, fat, carbohydrate, protein, ethanol, weight, calories } =
       this.state;
     return (
       <Row columns={11} className="input">
@@ -83,15 +98,23 @@ class MealIngredientAdder extends React.Component {
             <Text name="name" value={name} onChange={this.onChange} />
           )}
         </Column>
-        <Calories
-          value={getCalories(fat, carbohydrate, protein, ethanol, weight)}
-          readOnly
-        />
+        <Calories value={calories} readOnly />
         <Column span={7}>
           <IngredientMacroRow isTitle />
           <IngredientMacroRow
             name="Net Weight"
-            onChange={({ weight }) => this.setState({ weight })}
+            onChange={async ({ weight }) =>
+              this.setState({
+                weight,
+                calories: await getCalories(
+                  this.state.fat,
+                  this.state.carbohydrate,
+                  this.state.protein,
+                  this.state.ethanol,
+                  weight
+                ),
+              })
+            }
             weight={weight}
             fat={(fat * weight) / 100}
             carbohydrate={(carbohydrate * weight) / 100}
@@ -100,8 +123,20 @@ class MealIngredientAdder extends React.Component {
           />
           <IngredientMacroRow
             name="Base Weight"
-            onChange={({ fat, carbohydrate, protein, ethanol }) =>
-              this.setState({ fat, carbohydrate, protein, ethanol })
+            onChange={async ({ fat, carbohydrate, protein, ethanol }) =>
+              this.setState({
+                fat,
+                carbohydrate,
+                protein,
+                ethanol,
+                calories: await getCalories(
+                  fat,
+                  carbohydrate,
+                  protein,
+                  ethanol,
+                  this.state.weight
+                ),
+              })
             }
             isBaseline
             macroReadOnly={id !== ''}
@@ -122,7 +157,7 @@ class MealIngredientAdder extends React.Component {
   }
 }
 
-export default connect(() => ({}), {
+export default connect(({ ingredients }) => ({ ingredients }), {
   addIngredient,
   addPresetMealIngredient,
   addMealIngredient,

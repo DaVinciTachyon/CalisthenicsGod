@@ -47,10 +47,10 @@ class NutrientSummary extends React.Component {
     this.props.meals.forEach((meal) =>
       meal.ingredients.forEach((ingredient) => {
         const { macronutrients } = this.props.ingredients.available.find(
-          (ingredient) => ingredient._id === this.props.id
+          (ing) => ing._id === ingredient.id
         ) ||
           this.props.ingredients.unavailable.find(
-            (ingredient) => ingredient._id === this.props.id
+            (ing) => ing._id === ingredient.id
           ) || {
             macronutrients: { fat: 0, carbohydrate: 0, protein: 0, ethanol: 0 },
           };

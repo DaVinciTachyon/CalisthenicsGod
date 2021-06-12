@@ -7,30 +7,17 @@ import {
   addPresetMeal,
 } from '../reducers/meals';
 import { deleteReq, get, patch, post, postPresetMeal } from '../requests/meals';
-import { handlePostIngredient } from './ingredients';
 
 function* handlePostMealIngredient({ payload }) {
   try {
-    let id = payload.ingredient.id;
-    if (!id)
-      id = yield* handlePostIngredient({
-        payload: {
-          name: payload.ingredient.name,
-          macronutrients: payload.ingredient.macronutrients,
-        },
-      });
-    const response = yield call(post, {
-      _id: payload._id,
-      ingredient: { id, weight: payload.ingredient.weight },
-    });
+    const response = yield call(post, payload);
     const { data } = response;
     yield put(
       addIngredient({
-        _id: data._id,
+        ...payload,
         ingredient: {
-          weight: payload.ingredient.weight,
           _id: data.ingredient._id,
-          id,
+          ...payload.ingredient,
         },
       })
     );

@@ -19,6 +19,7 @@ class ConsumedIngredientSummary extends React.Component {
       carbohydrate: 0,
       protein: 0,
       ethanol: 0,
+      calories: 0,
     };
   }
 
@@ -37,22 +38,17 @@ class ConsumedIngredientSummary extends React.Component {
       this.setMacros();
   }
 
-  getCalories = () => {
-    const { fat, carbohydrate, protein, ethanol } = this.state;
-    return getCalories(fat, carbohydrate, protein, ethanol);
-  };
-
-  setMacros = () => {
+  setMacros = async () => {
     let fat = 0;
     let carbohydrate = 0;
     let protein = 0;
     let ethanol = 0;
     this.props.ingredientIds.forEach((ingredient) => {
       const { macronutrients } = this.props.ingredients.available.find(
-        (ing) => ingredient._id === ing._id
+        (ing) => ingredient.id === ing._id
       ) ||
         this.props.ingredients.unavailable.find(
-          (ing) => ingredient._id === ing._id
+          (ing) => ingredient.id === ing._id
         ) || {
           macronutrients: { fat: 0, carbohydrate: 0, protein: 0, ethanol: 0 },
         };
@@ -66,6 +62,7 @@ class ConsumedIngredientSummary extends React.Component {
       carbohydrate,
       protein,
       ethanol,
+      calories: await getCalories(fat, carbohydrate, protein, ethanol),
     });
   };
 
@@ -75,7 +72,7 @@ class ConsumedIngredientSummary extends React.Component {
         <Column span={2}>
           <Text value="Summary" readOnly />
         </Column>
-        <Calories value={this.getCalories()} readOnly />
+        <Calories value={this.state.calories} readOnly />
         <Column />
         <Fat value={this.state.fat} readOnly />
         <Carbohydrate value={this.state.carbohydrate} readOnly />
