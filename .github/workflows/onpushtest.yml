@@ -86,6 +86,8 @@ jobs:
       - uses: actions/checkout@v1
       - name: deploy for test
         run: ./startUp.sh test website
+      - name: Wait for deploy
+        run: sleep 30s
       - name: test
         run: |
           cd website/
