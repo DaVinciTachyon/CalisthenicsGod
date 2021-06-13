@@ -10,9 +10,9 @@ router.use(verify, (req, res, next) => {
 router
   .route('/')
   .get(async (req, res) => {
-    const exercises = await Exercise.find({ isAvailable: true });
+    const exercises = await Exercise.find();
 
-    res.send({ exercises: exercises });
+    res.send({ exercises });
   })
   .post(async (req, res) => {
     const { error } = exerciseValidation.exercise(req.body);

@@ -26,7 +26,10 @@ export const slice = createSlice({
       if (payload._id && payload.ingredient._id) {
         let index = state.findIndex((meal) => meal._id === payload._id);
         if (index === -1) {
-          state.unshift({ _id: payload._id, ingredients: [] });
+          state.unshift({
+            _id: payload._id,
+            ingredients: [],
+          });
           index = 0;
         }
         state[index].ingredients.push(payload.ingredient);

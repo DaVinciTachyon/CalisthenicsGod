@@ -40,16 +40,13 @@ class MealRow extends React.Component {
 
   componentDidMount() {
     if (!this.props.isTitle) this.set();
-    if (this.props.ingredients.available.length === 0)
-      this.props.setIngredients();
+    if (this.props.ingredients.length === 0) this.props.setIngredients();
   }
 
   componentDidUpdate(prevProps) {
     if (
       (prevProps.meal !== this.props.meal ||
-        prevProps.ingredients.available !== this.props.ingredients.available ||
-        prevProps.ingredients.unavailable !==
-          this.props.ingredients.unavailable) &&
+        prevProps.ingredients !== this.props.ingredients) &&
       !this.props.isTitle
     )
       this.set();
@@ -57,13 +54,9 @@ class MealRow extends React.Component {
 
   set = async () => {
     const ingredients = this.props.meal.ingredients.map((ingredient) => {
-      const ing =
-        this.props.ingredients.available.find(
-          (ing) => ing._id === ingredient.id
-        ) ||
-        this.props.ingredients.unavailable.find(
-          (ing) => ing._id === ingredient.id
-        );
+      const ing = this.props.ingredients.find(
+        (ing) => ing._id === ingredient.id
+      );
       return {
         ...ingredient,
         name: ing?.name || '',

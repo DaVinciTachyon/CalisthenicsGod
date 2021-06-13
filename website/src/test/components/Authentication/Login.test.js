@@ -16,50 +16,6 @@ describe('Login', () => {
     await page.waitForSelector('[data-id="logInButton"]');
   });
 
-  it('Empty', async () => {
-    const logInButton = await page.$('[data-id="logInButton"]');
-    logInButton.click();
-
-    await page.waitForSelector('[data-id="notification"]');
-    const notification = await page.$eval(
-      '[data-id="notification"]',
-      (el) => el.innerHTML
-    );
-    expect(notification).toMatch('"email" is not allowed to be empty');
-  });
-
-  it('No password', async () => {
-    await page.click('[name="email"]');
-    await page.type('[name="email"]', user.email);
-
-    const logInButton = await page.$('[data-id="logInButton"]');
-    logInButton.click();
-
-    await page.waitForSelector('[data-id="notification"]');
-    const notification = await page.$eval(
-      '[data-id="notification"]',
-      (el) => el.innerHTML
-    );
-    expect(notification).toMatch('"password" is not allowed to be empty');
-  });
-
-  it('Incorrect details', async () => {
-    await page.click('[name="email"]');
-    await page.type('[name="email"]', user.email);
-    await page.click('[name="password"]');
-    await page.type('[name="password"]', randomAlphaNumeric(7));
-
-    const logInButton = await page.$('[data-id="logInButton"]');
-    logInButton.click();
-
-    await page.waitForSelector('[data-id="notification"]');
-    const notification = await page.$eval(
-      '[data-id="notification"]',
-      (el) => el.innerHTML
-    );
-    expect(notification).toMatch('Invalid Password');
-  });
-
   it('Correct details', async () => {
     await page.click('[name="email"]');
     await page.type('[name="email"]', user.email);

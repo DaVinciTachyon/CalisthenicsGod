@@ -205,6 +205,7 @@ export default class Exercises extends React.Component {
                       value={this.state.componentExercises}
                       isMulti
                       label="Component Exercises"
+                      unavailable={[this.props.id]}
                     />
                   </Column>
                 )}

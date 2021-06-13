@@ -1,4 +1,4 @@
-import { buildRandomUser, getInputDate } from '../../util';
+import { buildRandomUser, getInputDate, getDateInput } from '../../util';
 
 describe('Register', () => {
   let page;
@@ -7,18 +7,6 @@ describe('Register', () => {
     page = await global.browser.newPage();
     await page.goto(`${global.url}/register`);
     await page.waitForSelector('[data-id="registerButton"]');
-  });
-
-  it('Empty', async () => {
-    const registerButton = await page.$('[data-id="registerButton"]');
-    registerButton.click();
-
-    await page.waitForSelector('[data-id="notification"]');
-    const notification = await page.$eval(
-      '[data-id="notification"]',
-      (el) => el.innerHTML
-    );
-    expect(notification).toMatch('"name.first" is required');
   });
 
   it('Valid details', async () => {
@@ -42,10 +30,7 @@ describe('Register', () => {
     await page.click(`[data-id="${user.gender}"]`);
     await page.waitForSelector(`[data-id="select-${user.gender}"]`);
     await page.click('[name="birthDate"]');
-    await page.type(
-      '[name="birthDate"]',
-      user.birthDate.toLocaleDateString().replace(/\//g, '')
-    );
+    await page.type('[name="birthDate"]', getDateInput(user.birthDate));
     expect(await page.$eval('[name="birthDate"]', (el) => el.value)).toEqual(
       getInputDate(user.birthDate)
     );

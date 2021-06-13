@@ -14,8 +14,7 @@ router
     });
 
     res.send({
-      available: ingredients.filter((ingredient) => ingredient.isAvailable),
-      unavailable: ingredients.filter((ingredient) => !ingredient.isAvailable),
+      ingredients,
     });
   })
   .post(async (req, res) => {

@@ -10,9 +10,10 @@ import {
   Date as DateInput,
   Select,
 } from '../../style/inputs';
-import axios from 'axios';
+import { connect } from 'react-redux';
+import { register } from '../../stateManagement/reducers/auth';
 
-export default class Register extends React.Component {
+class Register extends React.Component {
   constructor() {
     super();
     this.state = {
@@ -26,33 +27,9 @@ export default class Register extends React.Component {
       birthDate: '',
       error: '',
     };
-    this.onChange = this.onChange.bind(this);
-    this.onSubmit = this.onSubmit.bind(this);
   }
 
   getValue = (value) => (value ? value : undefined);
-
-  onSubmit = async () => {
-    try {
-      await axios.post('/auth/register/', {
-        name: {
-          first: this.getValue(this.state.firstname),
-          middle: this.getValue(this.state.middlename),
-          last: this.getValue(this.state.lastname),
-        },
-        email: this.getValue(this.state.email),
-        password: this.getValue(this.state.password),
-        weight: this.getValue(this.state.weight),
-        gender: this.getValue(this.state.gender),
-        birthDate: this.getValue(this.state.birthDate),
-      });
-      window.location = '/login';
-    } catch (err) {
-      if (err.response?.status === 400)
-        this.setState({ error: err.response.data.error });
-      else console.error(err.response);
-    }
-  };
 
   onChange = (evt) => this.setState({ [evt.target.name]: evt.target.value });
   onSelectChange = (evt) => this.setState({ [evt.name]: evt.value });
@@ -125,7 +102,23 @@ export default class Register extends React.Component {
           required
         />
         <Row>
-          <Button onClick={this.onSubmit} dataId="registerButton">
+          <Button
+            onClick={() =>
+              this.props.register({
+                name: {
+                  first: this.getValue(this.state.firstname),
+                  middle: this.getValue(this.state.middlename),
+                  last: this.getValue(this.state.lastname),
+                },
+                email: this.getValue(this.state.email),
+                password: this.getValue(this.state.password),
+                weight: this.getValue(this.state.weight),
+                gender: this.getValue(this.state.gender),
+                birthDate: this.getValue(this.state.birthDate),
+              })
+            }
+            dataId="registerButton"
+          >
             Register
           </Button>
         </Row>
@@ -141,3 +134,7 @@ export default class Register extends React.Component {
     );
   }
 }
+
+export default connect(() => ({}), {
+  register,
+})(Register);

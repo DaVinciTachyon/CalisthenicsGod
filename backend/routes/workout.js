@@ -25,38 +25,9 @@ router.use('/stage', stageRoute);
 router
   .route('/')
   .get(async (req, res) => {
-    const workouts = await Workout.findOne({ userId: req.user._id });
+    const workout = await Workout.findOne({ userId: req.user._id });
 
-    const fullWorkouts = [];
-    for (const workout of workouts.workouts) {
-      const stages = [];
-      for (const stage of workout.stages) {
-        const fullStage = await WorkoutStage.findOne({ _id: stage.id });
-        const exercises = [];
-        for (const exercise of stage.exercises) {
-          const { name } = await Exercise.findOne({ _id: exercise.id });
-          const { _id, id, sets, variation, sagittalPlane, rest } = exercise;
-          exercises.push({
-            _id,
-            id,
-            name,
-            sets,
-            variation,
-            sagittalPlane,
-            rest,
-          });
-        }
-        stages.push({
-          _id: stage._id,
-          id: stage.id,
-          name: fullStage.name,
-          exercises,
-        });
-      }
-      fullWorkouts.push({ date: workout.date, stages });
-    }
-
-    res.send({ workouts: fullWorkouts });
+    res.send({ workouts: workout.workouts });
   })
   .post(async (req, res) => {
     const { error } = workoutValidation.workout(req.body);
@@ -67,7 +38,7 @@ router
 
     try {
       await workout.save();
-      res.sendStatus(200);
+      res.status(200).send({ workout: workout.workouts[0] });
     } catch (err) {
       res.status(400).send({ error: err });
     }

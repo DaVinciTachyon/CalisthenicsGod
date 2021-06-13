@@ -10,11 +10,23 @@ import presetMeals from './reducers/presetMeals';
 import presetMealWatcher from './watchers/presetMeals';
 import meals from './reducers/meals';
 import mealWatcher from './watchers/meals';
+import stages from './reducers/stages';
+import stageWatcher from './watchers/stages';
+import exercises from './reducers/exercises';
+import exerciseWatcher from './watchers/exercises';
+import workouts from './reducers/workouts';
+import workoutWatcher from './watchers/workouts';
+import auth from './reducers/auth';
+import authWatcher from './watchers/auth';
 
 const reducer = combineReducers({
   ingredients,
   presetMeals,
   meals,
+  stages,
+  exercises,
+  workouts,
+  auth,
 });
 
 const sagaMiddleware = createSagaMiddleware();
@@ -26,5 +38,9 @@ const store = createStore(reducer, {}, applyMiddleware(...middleware));
 sagaMiddleware.run(ingredientWatcher);
 sagaMiddleware.run(presetMealWatcher);
 sagaMiddleware.run(mealWatcher);
+sagaMiddleware.run(stageWatcher);
+sagaMiddleware.run(exerciseWatcher);
+sagaMiddleware.run(workoutWatcher);
+sagaMiddleware.run(authWatcher);
 
 export default store;

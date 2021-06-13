@@ -10,15 +10,14 @@ class IngredientSelect extends React.Component {
   }
 
   componentDidMount() {
-    if (this.props.ingredients.available.length === 0)
-      this.props.setIngredients();
+    if (this.props.ingredients.length === 0) this.props.setIngredients();
   }
 
   onChange = (evt) =>
     this.props.onChange(
-      this.props.ingredients.available.filter(
-        (ingredient) => evt.value === ingredient._id
-      )[0]
+      this.props.ingredients
+        .filter((ingredient) => ingredient.isAvailable)
+        .filter((ingredient) => evt.value === ingredient._id)[0]
     );
 
   render() {
@@ -27,9 +26,11 @@ class IngredientSelect extends React.Component {
       <Select
         name={name || 'ingredient'}
         options={[{ label: 'New Ingredient', value: '' }].concat(
-          this.props.ingredients.available.map((ingredient) => {
-            return { label: ingredient.name, value: ingredient._id };
-          })
+          this.props.ingredients
+            .filter((ingredient) => ingredient.isAvailable)
+            .map((ingredient) => {
+              return { label: ingredient.name, value: ingredient._id };
+            })
         )}
         onChange={this.onChange}
         {...rest}

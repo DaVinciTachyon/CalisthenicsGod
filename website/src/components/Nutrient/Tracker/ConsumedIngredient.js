@@ -43,16 +43,11 @@ class ConsumedIngredient extends React.Component {
       await this.getDetails();
       this.setWeight();
     }
-    if (this.props.ingredients.available.length === 0)
-      this.props.setIngredients();
+    if (this.props.ingredients.length === 0) this.props.setIngredients();
   }
 
   componentDidUpdate(prevProps) {
-    if (
-      prevProps.ingredients.available !== this.props.ingredients.available ||
-      prevProps.ingredients.unavailable !== this.props.ingredients.unavailable
-    )
-      this.getDetails();
+    if (prevProps.ingredients !== this.props.ingredients) this.getDetails();
   }
 
   setWeight = async () => {
@@ -87,15 +82,12 @@ class ConsumedIngredient extends React.Component {
   };
 
   getDetails = async () => {
-    const { name, macronutrients } = this.props.ingredients.available.find(
+    const { name, macronutrients } = this.props.ingredients.find(
       (ingredient) => ingredient._id === this.props.ingredient.id
-    ) ||
-      this.props.ingredients.unavailable.find(
-        (ingredient) => ingredient._id === this.props.ingredient.id
-      ) || {
-        name: '',
-        macronutrients: { fat: 0, carbohydrate: 0, protein: 0, ethanol: 0 },
-      };
+    ) || {
+      name: '',
+      macronutrients: { fat: 0, carbohydrate: 0, protein: 0, ethanol: 0 },
+    };
     this.setState({
       name,
       fat: macronutrients.fat,

@@ -7,9 +7,13 @@ import {
   ErrorButton,
   DeleteButton,
 } from '../../../style/buttons';
-import axios from 'axios';
+import { connect } from 'react-redux';
+import {
+  removeStage,
+  modifyStage,
+} from '../../../stateManagement/reducers/stages';
 
-export default class StageRow extends React.Component {
+class StageRow extends React.Component {
   constructor() {
     super();
     this.state = { name: '', description: '', isEditing: false };
@@ -32,32 +36,13 @@ export default class StageRow extends React.Component {
 
   onChange = (evt) => this.setState({ [evt.target.name]: evt.target.value });
 
-  onSubmit = async () => {
-    try {
-      await axios.patch('/workout/stage/', {
-        _id: this.props.id,
-        name: this.state.name,
-        description: this.state.description,
-      });
-      await this.set();
-      this.props.onUpdate();
-    } catch (err) {
-      if (err.response?.status === 400) console.error(err.response.data.error);
-      else console.error(err.response);
-    }
-  };
-
-  onRemove = async () => {
-    try {
-      await axios.delete('/workout/stage/', {
-        _id: this.props.id,
-      });
-      await this.set();
-      this.props.onUpdate();
-    } catch (err) {
-      if (err.response?.status === 400) console.error(err.response.data.error);
-      else console.error(err.response);
-    }
+  onSubmit = () => {
+    this.props.modifyStage({
+      _id: this.props.id,
+      name: this.state.name,
+      description: this.state.description,
+    });
+    this.set();
   };
 
   render() {
@@ -93,7 +78,11 @@ export default class StageRow extends React.Component {
               <Button onClick={() => this.setState({ isEditing: true })}>
                 Edit
               </Button>
-              <DeleteButton onClick={this.onRemove}>Remove</DeleteButton>
+              <DeleteButton
+                onClick={() => this.props.removeStage(this.props.id)}
+              >
+                Remove
+              </DeleteButton>
             </>
           )}
           {this.state.isEditing && (
@@ -107,3 +96,8 @@ export default class StageRow extends React.Component {
     );
   }
 }
+
+export default connect(() => ({}), {
+  removeStage,
+  modifyStage,
+})(StageRow);

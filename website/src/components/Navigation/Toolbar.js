@@ -1,5 +1,4 @@
 import React from 'react';
-// import '../../style/Toolbar.css';
 import { isMobile } from 'react-device-detect';
 import {
   NavigationBarContainer,
@@ -20,8 +19,10 @@ import {
   SubNavigationItem,
   SubLinkText,
 } from '../../style/toolbar';
+import { connect } from 'react-redux';
+import { logOut } from '../../stateManagement/reducers/auth';
 
-export default class ToolBar extends React.Component {
+class ToolBar extends React.Component {
   constructor() {
     super();
     this.state = {
@@ -34,7 +35,7 @@ export default class ToolBar extends React.Component {
   };
 
   render() {
-    if (localStorage.getItem('user'))
+    if (localStorage.getItem('authToken'))
       return (
         <NavigationBarContainer isMobile={isMobile}>
           <NavigationBar onClick={this.updateUrl}>
@@ -208,7 +209,7 @@ export default class ToolBar extends React.Component {
               </NavigationLink>
             </NavigationItem>
             <NavigationItem>
-              <NavigationLink to="/" onClick={this.logOut}>
+              <NavigationLink to="/" onClick={this.props.logOut}>
                 <Svg
                   aria-hidden="true"
                   focusable="false"
@@ -268,9 +269,8 @@ export default class ToolBar extends React.Component {
       </NavigationBarContainer>
     );
   }
-
-  logOut = () => {
-    localStorage.removeItem('user');
-    window.location.reload();
-  };
 }
+
+export default connect(() => ({}), {
+  logOut,
+})(ToolBar);

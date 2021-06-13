@@ -12,13 +12,16 @@ class IngredientList extends React.Component {
   }
 
   componentDidMount() {
-    if (this.props.ingredients.available.length === 0)
-      this.props.setIngredients();
+    if (this.props.ingredients.length === 0) this.props.setIngredients();
   }
 
   render() {
     const { isUnavailable, ingredients } = this.props;
-    if (isUnavailable && ingredients.unavailable.length === 0) return <></>;
+    if (
+      isUnavailable &&
+      ingredients.filter((ingredient) => !ingredient.isAvailable).length === 0
+    )
+      return <></>;
     return (
       <div>
         <Title>
@@ -27,8 +30,11 @@ class IngredientList extends React.Component {
         </Title>
         <IngredientRow isTitle />
         {!isUnavailable && <IngredientAdder />}
-        {(isUnavailable ? ingredients.unavailable : ingredients.available).map(
-          ({ _id, name, macronutrients }) => (
+        {ingredients
+          .filter((ingredient) =>
+            isUnavailable ? !ingredient.isAvailable : ingredient.isAvailable
+          )
+          .map(({ _id, name, macronutrients }) => (
             <IngredientRow
               key={_id}
               id={_id}
@@ -36,8 +42,7 @@ class IngredientList extends React.Component {
               macronutrients={macronutrients}
               isAvailable={!isUnavailable}
             />
-          )
-        )}
+          ))}
       </div>
     );
   }

@@ -19,6 +19,8 @@ const getInputDate = (date) =>
     date.getDate().toString().padStart(2, '0'),
   ].join('-');
 
+const getDateInput = (date) => date.toLocaleDateString().replace(/\//g, '');
+
 const getLocaleNumber = (number) =>
   new Intl.NumberFormat(getLanguage()).format(number);
 
@@ -55,10 +57,7 @@ const register = async (user, page) => {
   await page.click(`[data-id="${user.gender}"]`);
   await page.waitForSelector(`[data-id="select-${user.gender}"]`);
   await page.click('[name="birthDate"]');
-  await page.type(
-    '[name="birthDate"]',
-    user.birthDate.toLocaleDateString().replace(/\//g, '')
-  );
+  await page.type('[name="birthDate"]', getDateInput(user.birthDate));
   expect(await page.$eval('[name="birthDate"]', (el) => el.value)).toEqual(
     getInputDate(user.birthDate)
   );
@@ -96,6 +95,7 @@ module.exports = {
   randomOption,
   randomDate,
   getInputDate,
+  getDateInput,
   getLocaleNumber,
   buildRandomUser,
   buildRandomIngredient,

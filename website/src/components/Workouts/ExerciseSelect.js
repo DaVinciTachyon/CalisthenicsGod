@@ -1,40 +1,20 @@
 import React from 'react';
 import { Select } from '../../style/inputs';
-import axios from 'axios';
+import { connect } from 'react-redux';
+import { setExercises } from '../../stateManagement/reducers/exercises';
 
-export default class ExerciseSelect extends React.Component {
+class ExerciseSelect extends React.Component {
   constructor() {
     super();
-    this.state = {
-      exercises: [],
-    };
+    this.state = {};
   }
 
   componentDidMount() {
-    this.getExercises();
+    if (this.props.exercises.length === 0) this.props.setExercises();
   }
 
-  getExercises = async () => {
-    try {
-      const data = (await axios.get('/exercise/')).data;
-      const exercises = [];
-      data.exercises.forEach((exercise) => {
-        if (
-          !this.props.stage ||
-          (this.props.stage &&
-            exercise.potentialStages.includes(this.props.stage))
-        )
-          exercises.push(exercise);
-      });
-      this.setState({ exercises });
-    } catch (err) {
-      if (err.response?.status === 400) console.error(err.response.data.error);
-      else console.error(err.response);
-    }
-  };
-
   onChange = (evt) => {
-    const exercises = this.state.exercises.filter((exercise) => {
+    const exercises = this.props.exercises.filter((exercise) => {
       if (this.props.isMulti) return evt.value.includes(exercise._id);
       return evt.value === exercise._id;
     });
@@ -49,9 +29,21 @@ export default class ExerciseSelect extends React.Component {
           ? []
           : [{ label: 'Choose Exercise', value: '' }]
         ).concat(
-          this.state.exercises.map((exercise) => {
-            return { label: exercise.name, value: exercise._id };
-          })
+          this.props.exercises
+            .filter((exercise) => exercise.isAvailable)
+            .filter(
+              (exercise) =>
+                !this.props.unavailable ||
+                (this.props.unavailable &&
+                  !this.props.unavailable.includes(exercise._id))
+            )
+            .filter(
+              (exercise) =>
+                !this.props.stage ||
+                (this.props.stage &&
+                  exercise.potentialStages.includes(this.props.stage))
+            )
+            .map((exercise) => ({ label: exercise.name, value: exercise._id }))
         )}
         onChange={this.onChange}
         isMulti={isMulti}
@@ -60,3 +52,7 @@ export default class ExerciseSelect extends React.Component {
     );
   }
 }
+
+export default connect(({ exercises }) => ({ exercises }), {
+  setExercises,
+})(ExerciseSelect);

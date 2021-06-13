@@ -72,7 +72,7 @@ class MealIngredientAdder extends React.Component {
       _id: this.props.id,
       ingredient: {
         id: this.state.id,
-        // || this.props.ingredients.available.find(
+        // || this.props.ingredients.find(
         //   (ingredient) => ingredient.name === this.state.name
         // )._id
         weight: this.state.weight,

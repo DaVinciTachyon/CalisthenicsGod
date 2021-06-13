@@ -4,9 +4,10 @@ import { Row } from '../../style/table';
 import Card from '../../style/card';
 import { Button } from '../../style/buttons';
 import { Text, Password } from '../../style/inputs';
-import axios from 'axios';
+import { connect } from 'react-redux';
+import { logIn } from '../../stateManagement/reducers/auth';
 
-export default class Login extends React.Component {
+class Login extends React.Component {
   constructor() {
     super();
     this.state = {
@@ -14,30 +15,7 @@ export default class Login extends React.Component {
       password: '',
       error: '',
     };
-
-    this.onChange = this.onChange.bind(this);
-    this.onSubmit = this.onSubmit.bind(this);
   }
-
-  onSubmit = async () => {
-    try {
-      const data = (
-        await axios.post('/auth/login/', {
-          email: this.state.email,
-          password: this.state.password,
-        })
-      ).data;
-      localStorage.setItem(
-        'user',
-        JSON.stringify({ authToken: data['Authentication'] })
-      );
-      window.location = '/';
-    } catch (err) {
-      if (err.response?.status === 400)
-        this.setState({ error: err.response.data.error });
-      else console.error(err.response);
-    }
-  };
 
   onChange = (evt) => this.setState({ [evt.target.name]: evt.target.value });
 
@@ -61,7 +39,15 @@ export default class Login extends React.Component {
           label="Password"
         />
         <Row>
-          <Button dataId="logInButton" onClick={this.onSubmit}>
+          <Button
+            dataId="logInButton"
+            onClick={() =>
+              this.props.logIn({
+                email: this.state.email,
+                password: this.state.password,
+              })
+            }
+          >
             Sign In
           </Button>
         </Row>
@@ -77,3 +63,7 @@ export default class Login extends React.Component {
     );
   }
 }
+
+export default connect(() => ({}), {
+  logIn,
+})(Login);
