@@ -30,14 +30,18 @@ class ExerciseSelect extends React.Component {
           : [{ label: 'Choose Exercise', value: '' }]
         ).concat(
           this.props.exercises
+            .filter((exercise) => exercise.isAvailable)
             .filter(
               (exercise) =>
-                (!this.props.stage ||
-                  (this.props.stage &&
-                    exercise.potentialStages.includes(this.props.stage))) &&
-                (!this.props.unavailable ||
-                  (this.props.unavailable &&
-                    !this.props.unavailable.includes(exercise._id)))
+                !this.props.unavailable ||
+                (this.props.unavailable &&
+                  !this.props.unavailable.includes(exercise._id))
+            )
+            .filter(
+              (exercise) =>
+                !this.props.stage ||
+                (this.props.stage &&
+                  exercise.potentialStages.includes(this.props.stage))
             )
             .map((exercise) => ({ label: exercise.name, value: exercise._id }))
         )}

@@ -30,7 +30,7 @@ function* handlePostExercise({ payload }) {
   try {
     const response = yield call(post, payload);
     const { data } = response;
-    yield put(addExercise({ ...payload, _id: data._id }));
+    yield put(addExercise(data));
   } catch (err) {
     console.error(err.response);
   }

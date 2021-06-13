@@ -22,16 +22,18 @@ class Exercises extends React.Component {
   }
 
   render() {
-    const exercises = this.props.exercises.reduce((exercises, exercise) => {
-      const hasComponents =
-        exercise.motionType.componentExercises &&
-        exercise.motionType.componentExercises.length > 0
-          ? 'component'
-          : 'singular';
-      exercises[hasComponents] = exercises[hasComponents] || [];
-      exercises[hasComponents].push(exercise);
-      return exercises;
-    }, {});
+    const exercises = this.props.exercises
+      .filter((exercise) => exercise.isAvailable)
+      .reduce((exercises, exercise) => {
+        const hasComponents =
+          exercise.motionType.componentExercises &&
+          exercise.motionType.componentExercises.length > 0
+            ? 'component'
+            : 'singular';
+        exercises[hasComponents] = exercises[hasComponents] || [];
+        exercises[hasComponents].push(exercise);
+        return exercises;
+      }, {});
     exercises['singular'] =
       exercises['singular']?.reduce((exercises, exercise) => {
         let transversePlane = exercise.motionType.transversePlane;
