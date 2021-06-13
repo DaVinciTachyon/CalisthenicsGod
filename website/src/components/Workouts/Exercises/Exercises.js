@@ -3,44 +3,26 @@ import { Button } from '../../../style/buttons';
 import ExerciseRow from './ExerciseRow';
 import ExerciseAdder from './ExerciseAdder';
 import { Section } from '../../../style/table';
-import axios from 'axios';
+import { connect } from 'react-redux';
+import {
+  addExercise,
+  setExercises,
+} from '../../../stateManagement/reducers/exercises';
 
-export default class Exercises extends React.Component {
+class Exercises extends React.Component {
   constructor() {
     super();
     this.state = {
-      exercises: [],
       isAdding: false,
     };
   }
 
   componentDidMount() {
-    this.getExercises();
+    if (this.props.exercises.length === 0) this.props.setExercises();
   }
 
-  getExercises = async () => {
-    try {
-      const { exercises } = (await axios.get('/exercise/')).data;
-      this.setState({ exercises });
-    } catch (err) {
-      if (err.response?.status === 400) console.error(err.response.data.error);
-      else console.error(err.response);
-    }
-  };
-
-  onSubmit = async (exercise) => {
-    try {
-      await axios.post('/exercise/', exercise);
-      await this.getExercises();
-      this.setState({ isAdding: false });
-    } catch (err) {
-      if (err.response?.status === 400) console.error(err.response.data.error);
-      else console.error(err.response);
-    }
-  };
-
   render() {
-    const exercises = this.state.exercises.reduce((exercises, exercise) => {
+    const exercises = this.props.exercises.reduce((exercises, exercise) => {
       const hasComponents =
         exercise.motionType.componentExercises &&
         exercise.motionType.componentExercises.length > 0
@@ -93,7 +75,10 @@ export default class Exercises extends React.Component {
         )}
         {this.state.isAdding && (
           <ExerciseAdder
-            onSubmit={this.onSubmit}
+            onSubmit={(exercise) => {
+              this.props.addExercise(exercise);
+              this.setState({ isAdding: false });
+            }}
             onCancel={() => this.setState({ isAdding: false })}
           />
         )}
@@ -114,7 +99,6 @@ export default class Exercises extends React.Component {
                           key={exercise._id}
                           id={exercise._id}
                           exercise={exercise}
-                          onUpdate={this.getExercises}
                         />
                       ))}
                     </Section>
@@ -131,7 +115,6 @@ export default class Exercises extends React.Component {
                 key={exercise._id}
                 id={exercise._id}
                 exercise={exercise}
-                onUpdate={this.getExercises}
               />
             ))}
           </Section>
@@ -140,3 +123,8 @@ export default class Exercises extends React.Component {
     );
   }
 }
+
+export default connect(({ exercises }) => ({ exercises }), {
+  addExercise,
+  setExercises,
+})(Exercises);
