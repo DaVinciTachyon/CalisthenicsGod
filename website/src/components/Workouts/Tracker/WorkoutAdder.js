@@ -2,7 +2,6 @@ import React from 'react';
 import { Row, Column, Title } from '../../../style/table';
 import StageEditor from './StageEditor';
 import { Button, ErrorButton } from '../../../style/buttons';
-import axios from 'axios';
 import { connect } from 'react-redux';
 import { setStages } from '../../../stateManagement/reducers/stages';
 import { addWorkout } from '../../../stateManagement/reducers/workouts';
