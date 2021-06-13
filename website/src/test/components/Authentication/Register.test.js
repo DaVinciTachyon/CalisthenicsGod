@@ -9,18 +9,6 @@ describe('Register', () => {
     await page.waitForSelector('[data-id="registerButton"]');
   });
 
-  it('Empty', async () => {
-    const registerButton = await page.$('[data-id="registerButton"]');
-    registerButton.click();
-
-    await page.waitForSelector('[data-id="notification"]');
-    const notification = await page.$eval(
-      '[data-id="notification"]',
-      (el) => el.innerHTML
-    );
-    expect(notification).toMatch('"name.first" is required');
-  });
-
   it('Valid details', async () => {
     const user = buildRandomUser();
     await page.click('[name="firstname"]');
