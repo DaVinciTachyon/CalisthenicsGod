@@ -12,6 +12,10 @@ import { Success, Error } from '../../style/notification';
 import axios from 'axios';
 import { connect } from 'react-redux';
 import { setMeasurement } from '../../stateManagement/reducers/measurements';
+import {
+  setUserInfo,
+  modifyUserInfo,
+} from '../../stateManagement/reducers/user';
 
 class UserProfile extends React.Component {
   constructor() {
@@ -42,21 +46,21 @@ class UserProfile extends React.Component {
 
   componentDidMount() {
     this.getUserInfo();
+    this.props.setUserInfo();
     this.props.setMeasurement('weight');
   }
 
   getUserInfo = async () => {
     try {
-      const user = (await axios.get('/user/')).data;
       const nutrition = (await axios.get('/nutrition/')).data;
       this.setState({
-        firstname: user.name.first,
-        middlename: user.name.middle,
-        lastname: user.name.last,
-        email: user.email,
-        dateJoined: this.formatDate(new Date(user.dateJoined)),
-        birthDate: this.formatDate(new Date(user.birthDate)),
-        gender: user.gender,
+        firstname: this.props.user.name.first,
+        middlename: this.props.user.name.middle,
+        lastname: this.props.user.name.last,
+        email: this.props.user.email,
+        dateJoined: this.formatDate(new Date(this.props.user.dateJoined)),
+        birthDate: this.formatDate(new Date(this.props.user.birthDate)),
+        gender: this.props.user.gender,
         caloriesPerKg: nutrition.caloriesPerKg,
         proteinGramsPerKg: nutrition.proteinGramsPerKg,
         fatCalorieProportion: nutrition.fatCalorieProportion,
@@ -92,17 +96,17 @@ class UserProfile extends React.Component {
   };
 
   onSubmit = async () => {
+    this.props.modifyUserInfo({
+      name: {
+        first: this.state.firstname,
+        middle: this.state.middlename,
+        last: this.state.lastname,
+      },
+      email: this.state.email,
+      birthDate: this.state.birthDate,
+      gender: this.state.gender,
+    });
     try {
-      await axios.post('/user/', {
-        name: {
-          first: this.state.firstname,
-          middle: this.state.middlename,
-          last: this.state.lastname,
-        },
-        email: this.state.email,
-        birthDate: this.state.birthDate,
-        gender: this.state.gender,
-      });
       await axios.post('/nutrition/', {
         calorieOffset: this.state.calorieOffset,
         caloriesPerKg: this.state.caloriesPerKg,
@@ -262,6 +266,8 @@ class UserProfile extends React.Component {
   }
 }
 
-export default connect(({ measurements }) => ({ measurements }), {
+export default connect(({ measurements, user }) => ({ measurements, user }), {
   setMeasurement,
+  setUserInfo,
+  modifyUserInfo,
 })(UserProfile);
