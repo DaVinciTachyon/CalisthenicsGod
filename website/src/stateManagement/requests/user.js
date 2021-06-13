@@ -13,4 +13,17 @@ const patch = (user) =>
     data: user,
   });
 
-export { get, patch };
+const getNutritionInfo = () =>
+  axios.request({
+    method: 'get',
+    url: '/nutrition/',
+  });
+
+const patchNutritionInfo = (nutrientInfo) =>
+  axios.request({
+    method: 'patch',
+    url: '/nutrition/',
+    data: nutrientInfo,
+  });
+
+export { get, patch, getNutritionInfo, patchNutritionInfo };

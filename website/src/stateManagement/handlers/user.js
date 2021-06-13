@@ -1,6 +1,16 @@
 import { call, put } from 'redux-saga/effects';
-import { modifyUserInfo, setUserInfo } from '../reducers/user';
-import { get, patch } from '../requests/user';
+import {
+  modifyNutritionInfo,
+  modifyUserInfo,
+  setNutritionInfo,
+  setUserInfo,
+} from '../reducers/user';
+import {
+  get,
+  patch,
+  patchNutritionInfo,
+  getNutritionInfo,
+} from '../requests/user';
 
 function* handleGetUser({ payload }) {
   try {
@@ -20,4 +30,28 @@ function* handlePatchUser({ payload }) {
   }
 }
 
-export { handleGetUser, handlePatchUser };
+function* handleGetNutritionInfo({ payload }) {
+  try {
+    const response = yield call(getNutritionInfo);
+    const { data } = response;
+    yield put(setNutritionInfo(data));
+  } catch (err) {
+    console.error(err.response);
+  }
+}
+
+function* handlePatchNutritionInfo({ payload }) {
+  try {
+    yield call(patchNutritionInfo, payload);
+    yield put(modifyNutritionInfo(payload));
+  } catch (err) {
+    console.error(err.response);
+  }
+}
+
+export {
+  handleGetUser,
+  handlePatchUser,
+  handleGetNutritionInfo,
+  handlePatchNutritionInfo,
+};

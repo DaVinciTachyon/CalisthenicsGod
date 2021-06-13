@@ -42,7 +42,7 @@ router
       fatCalorieProportion: nutrients.fatCalorieProportion,
     });
   })
-  .post(async (req, res) => {
+  .patch(async (req, res) => {
     const { error } = nutrientValidation.userInfo(req.body);
     if (error) return res.status(400).send({ error: error.details[0].message });
 

@@ -9,12 +9,13 @@ import {
   Range,
 } from '../../style/inputs';
 import { Success, Error } from '../../style/notification';
-import axios from 'axios';
 import { connect } from 'react-redux';
 import { setMeasurement } from '../../stateManagement/reducers/measurements';
 import {
   setUserInfo,
   modifyUserInfo,
+  setNutritionInfo,
+  modifyNutritionInfo,
 } from '../../stateManagement/reducers/user';
 
 class UserProfile extends React.Component {
@@ -39,44 +40,45 @@ class UserProfile extends React.Component {
     };
   }
 
+  componentDidMount() {
+    this.props.setUserInfo();
+    this.props.setNutritionInfo();
+    this.props.setMeasurement('weight');
+    this.getUserInfo();
+  }
+
+  componentDidUpdate(prevProps) {
+    if (prevProps.user !== this.props.user) this.getUserInfo();
+  }
+
   formatDate = (date) =>
     `${date.getFullYear().toString().padStart(4, '0')}-${(date.getMonth() + 1)
       .toString()
       .padStart(2, '0')}-${date.getDate().toString().padStart(2, '0')}`;
 
-  componentDidMount() {
-    this.getUserInfo();
-    this.props.setUserInfo();
-    this.props.setMeasurement('weight');
-  }
+  getUserInfo = () => {
+    const { user } = this.props;
 
-  getUserInfo = async () => {
-    try {
-      const nutrition = (await axios.get('/nutrition/')).data;
-      this.setState({
-        firstname: this.props.user.name.first,
-        middlename: this.props.user.name.middle,
-        lastname: this.props.user.name.last,
-        email: this.props.user.email,
-        dateJoined: this.formatDate(new Date(this.props.user.dateJoined)),
-        birthDate: this.formatDate(new Date(this.props.user.birthDate)),
-        gender: this.props.user.gender,
-        caloriesPerKg: nutrition.caloriesPerKg,
-        proteinGramsPerKg: nutrition.proteinGramsPerKg,
-        fatCalorieProportion: nutrition.fatCalorieProportion,
-        calorieOffset: nutrition.calorieOffset,
-        currentCalorieOffset: nutrition.calorieOffset,
-        calorieMode:
-          nutrition.calorieOffset > 0
-            ? 'bulk'
-            : nutrition.calorieOffset < 0
-            ? 'deficit'
-            : 'maintenance',
-      });
-    } catch (err) {
-      if (err.response?.status === 400) console.error(err.response.data.error);
-      else console.error(err.response);
-    }
+    this.setState({
+      firstname: user.name?.first,
+      middlename: user.name?.middle,
+      lastname: user.name?.last,
+      email: user.email,
+      dateJoined: this.formatDate(new Date(user.dateJoined)),
+      birthDate: this.formatDate(new Date(user.birthDate)),
+      gender: user.gender,
+      caloriesPerKg: user.nutrition?.caloriesPerKg,
+      proteinGramsPerKg: user.nutrition?.proteinGramsPerKg,
+      fatCalorieProportion: user.nutrition?.fatCalorieProportion,
+      calorieOffset: user.nutrition?.calorieOffset,
+      currentCalorieOffset: user.nutrition?.calorieOffset,
+      calorieMode:
+        user.nutrition?.calorieOffset > 0
+          ? 'bulk'
+          : user.nutrition?.calorieOffset < 0
+          ? 'deficit'
+          : 'maintenance',
+    });
   };
 
   onCalorieModeChange = (evt) => {
@@ -106,19 +108,12 @@ class UserProfile extends React.Component {
       birthDate: this.state.birthDate,
       gender: this.state.gender,
     });
-    try {
-      await axios.post('/nutrition/', {
-        calorieOffset: this.state.calorieOffset,
-        caloriesPerKg: this.state.caloriesPerKg,
-        proteinGramsPerKg: this.state.proteinGramsPerKg,
-        fatCalorieProportion: this.state.fatCalorieProportion,
-      });
-      this.setState({ success: 'Success!' });
-    } catch (err) {
-      if (err.response?.status === 400)
-        this.setState({ error: err.response.data.error });
-      else console.error(err.response);
-    }
+    this.props.modifyNutritionInfo({
+      calorieOffset: this.state.calorieOffset,
+      caloriesPerKg: this.state.caloriesPerKg,
+      proteinGramsPerKg: this.state.proteinGramsPerKg,
+      fatCalorieProportion: this.state.fatCalorieProportion,
+    });
   };
 
   onChange = (evt) => this.setState({ [evt.target.name]: evt.target.value });
@@ -270,4 +265,6 @@ export default connect(({ measurements, user }) => ({ measurements, user }), {
   setMeasurement,
   setUserInfo,
   modifyUserInfo,
+  setNutritionInfo,
+  modifyNutritionInfo,
 })(UserProfile);
