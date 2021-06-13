@@ -1,4 +1,4 @@
-import { buildRandomUser, getInputDate } from '../../util';
+import { buildRandomUser, getInputDate, getDateInput } from '../../util';
 
 describe('Register', () => {
   let page;
@@ -42,10 +42,7 @@ describe('Register', () => {
     await page.click(`[data-id="${user.gender}"]`);
     await page.waitForSelector(`[data-id="select-${user.gender}"]`);
     await page.click('[name="birthDate"]');
-    await page.type(
-      '[name="birthDate"]',
-      user.birthDate.toLocaleDateString().replace(/\//g, '')
-    );
+    await page.type('[name="birthDate"]', getDateInput(user.birthDate));
     expect(await page.$eval('[name="birthDate"]', (el) => el.value)).toEqual(
       getInputDate(user.birthDate)
     );
