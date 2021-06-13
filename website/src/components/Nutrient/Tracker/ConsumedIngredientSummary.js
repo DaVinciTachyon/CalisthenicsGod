@@ -25,15 +25,13 @@ class ConsumedIngredientSummary extends React.Component {
 
   componentDidMount() {
     this.setMacros();
-    if (this.props.ingredients.available.length === 0)
-      this.props.setIngredients();
+    if (this.props.ingredients.length === 0) this.props.setIngredients();
   }
 
   componentDidUpdate(prevProps) {
     if (
       prevProps.ingredientIds !== this.props.ingredientIds ||
-      prevProps.ingredients.available !== this.props.ingredients.available ||
-      prevProps.ingredients.unavailable !== this.props.ingredients.unavailable
+      prevProps.ingredients !== this.props.ingredients
     )
       this.setMacros();
   }
@@ -44,14 +42,11 @@ class ConsumedIngredientSummary extends React.Component {
     let protein = 0;
     let ethanol = 0;
     this.props.ingredientIds.forEach((ingredient) => {
-      const { macronutrients } = this.props.ingredients.available.find(
+      const { macronutrients } = this.props.ingredients.find(
         (ing) => ingredient.id === ing._id
-      ) ||
-        this.props.ingredients.unavailable.find(
-          (ing) => ingredient.id === ing._id
-        ) || {
-          macronutrients: { fat: 0, carbohydrate: 0, protein: 0, ethanol: 0 },
-        };
+      ) || {
+        macronutrients: { fat: 0, carbohydrate: 0, protein: 0, ethanol: 0 },
+      };
       fat += (ingredient.weight * macronutrients.fat) / 100;
       carbohydrate += (ingredient.weight * macronutrients.carbohydrate) / 100;
       protein += (ingredient.weight * macronutrients.protein) / 100;

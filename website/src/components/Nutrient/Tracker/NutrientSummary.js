@@ -26,15 +26,13 @@ class NutrientSummary extends React.Component {
   componentDidMount() {
     this.getUserGoals();
     this.getMacros();
-    if (this.props.ingredients.available.length === 0)
-      this.props.setIngredients();
+    if (this.props.ingredients.length === 0) this.props.setIngredients();
   }
 
   componentDidUpdate(prevProps) {
     if (
       prevProps.meals !== this.props.meals ||
-      prevProps.ingredients.available !== this.props.ingredients.available ||
-      prevProps.ingredients.unavailable !== this.props.ingredients.unavailable
+      prevProps.ingredients !== this.props.ingredients
     )
       this.getMacros();
   }
@@ -46,14 +44,11 @@ class NutrientSummary extends React.Component {
     let ethanol = 0;
     this.props.meals.forEach((meal) =>
       meal.ingredients.forEach((ingredient) => {
-        const { macronutrients } = this.props.ingredients.available.find(
+        const { macronutrients } = this.props.ingredients.find(
           (ing) => ing._id === ingredient.id
-        ) ||
-          this.props.ingredients.unavailable.find(
-            (ing) => ing._id === ingredient.id
-          ) || {
-            macronutrients: { fat: 0, carbohydrate: 0, protein: 0, ethanol: 0 },
-          };
+        ) || {
+          macronutrients: { fat: 0, carbohydrate: 0, protein: 0, ethanol: 0 },
+        };
         fat += (ingredient.weight * macronutrients.fat) / 100;
         carbohydrate += (ingredient.weight * macronutrients.carbohydrate) / 100;
         protein += (ingredient.weight * macronutrients.protein) / 100;

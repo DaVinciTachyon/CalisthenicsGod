@@ -2,50 +2,27 @@ import { createSlice } from '@reduxjs/toolkit';
 
 export const slice = createSlice({
   name: 'ingredients',
-  initialState: {
-    available: [],
-    unavailable: [],
-  },
+  initialState: [],
   reducers: {
     addIngredient: (state, { payload }) => {
-      if (payload._id) state.available.push(payload);
+      if (payload._id) state.push(payload);
     },
-    setIngredients: (state, { payload }) => {
-      if (payload) return { ...state, ...payload };
-    },
+    setIngredients: (state, { payload }) => payload || [],
     changeAvailability: (state, { payload }) => {
-      if (payload.isAvailable)
-        state.available = swapAvailability(
-          state.available,
-          state.unavailable,
-          payload._id
-        );
-      else
-        state.unavailable = swapAvailability(
-          state.unavailable,
-          state.available,
-          payload._id
-        );
+      state.find((ingredient) => ingredient._id === payload._id).isAvailable =
+        !payload.isAvailable;
     },
     patchIngredient: (state, { payload }) => {
-      let index = state.available.findIndex(
+      const index = state.findIndex(
         (ingredient) => ingredient._id === payload._id
       );
-      if (index === -1) {
-        index = state.unavailable.findIndex(
-          (ingredient) => ingredient._id === payload._id
-        );
-        state.unavailable[index] = payload;
-      } else state.available[index] = payload;
+      state[index] = {
+        ...payload,
+        ...state[index],
+      };
     },
   },
 });
-
-const swapAvailability = (original, swapped, id) => {
-  if (!swapped.find((ingredient) => ingredient._id === id))
-    swapped.push(original.find((ingredient) => ingredient._id === id));
-  return original.filter((ingredient) => ingredient._id !== id);
-};
 
 export const {
   addIngredient,

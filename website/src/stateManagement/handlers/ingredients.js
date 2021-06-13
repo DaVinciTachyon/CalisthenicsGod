@@ -11,8 +11,7 @@ function* handlePostIngredient({ payload }) {
   try {
     const response = yield call(post, payload);
     const { data } = response;
-    yield put(addIngredient({ ...payload, _id: data._id }));
-    return data._id;
+    yield put(addIngredient({ ...data }));
   } catch (err) {
     console.error(err.response);
   }
@@ -22,7 +21,7 @@ function* handleSetIngredients({ payload }) {
   try {
     const response = yield call(get);
     const { data } = response;
-    yield put(setIngredients({ ...data }));
+    yield put(setIngredients(data.ingredients));
   } catch (err) {
     console.error(err.response);
   }

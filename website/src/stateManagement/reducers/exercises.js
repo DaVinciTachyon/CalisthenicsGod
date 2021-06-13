@@ -11,8 +11,11 @@ export const slice = createSlice({
       if (payload._id) state.push(payload);
     },
     modifyExercise: (state, { payload }) => {
-      state[state.findIndex((exercise) => exercise._id === payload._id)] =
-        payload;
+      const index = state.findIndex((exercise) => exercise._id === payload._id);
+      state[index] = {
+        ...payload,
+        ...state[index],
+      };
     },
   },
 });
