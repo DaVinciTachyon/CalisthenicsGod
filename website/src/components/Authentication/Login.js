@@ -5,7 +5,7 @@ import Card from '../../style/card';
 import { Button } from '../../style/buttons';
 import { Text, Password } from '../../style/inputs';
 import { connect } from 'react-redux';
-import { logIn } from '../../stateManagement/reducers/user';
+import { logIn } from '../../stateManagement/reducers/auth';
 
 class Login extends React.Component {
   constructor() {

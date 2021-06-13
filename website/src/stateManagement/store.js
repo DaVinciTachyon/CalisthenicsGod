@@ -16,8 +16,8 @@ import exercises from './reducers/exercises';
 import exerciseWatcher from './watchers/exercises';
 import workouts from './reducers/workouts';
 import workoutWatcher from './watchers/workouts';
-import user from './reducers/user';
-import userWatcher from './watchers/user';
+import auth from './reducers/auth';
+import authWatcher from './watchers/auth';
 
 const reducer = combineReducers({
   ingredients,
@@ -26,7 +26,7 @@ const reducer = combineReducers({
   stages,
   exercises,
   workouts,
-  user,
+  auth,
 });
 
 const sagaMiddleware = createSagaMiddleware();
@@ -41,6 +41,6 @@ sagaMiddleware.run(mealWatcher);
 sagaMiddleware.run(stageWatcher);
 sagaMiddleware.run(exerciseWatcher);
 sagaMiddleware.run(workoutWatcher);
-sagaMiddleware.run(userWatcher);
+sagaMiddleware.run(authWatcher);
 
 export default store;

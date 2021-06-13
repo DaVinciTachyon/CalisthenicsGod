@@ -1,6 +1,6 @@
 import { call, put } from 'redux-saga/effects';
-import { logIn, register, logOut } from '../reducers/user';
-import { postLogIn, postRegister } from '../requests/user';
+import { logIn, register, logOut } from '../reducers/auth';
+import { postLogIn, postRegister } from '../requests/auth';
 
 function* handleRegister({ payload }) {
   try {

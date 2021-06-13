@@ -11,7 +11,7 @@ import {
   Select,
 } from '../../style/inputs';
 import { connect } from 'react-redux';
-import { register } from '../../stateManagement/reducers/user';
+import { register } from '../../stateManagement/reducers/auth';
 
 class Register extends React.Component {
   constructor() {

@@ -24,9 +24,8 @@ import store from './stateManagement/store';
 axios.defaults.baseURL =
   process.env.REACT_APP_API_URL || 'http://localhost:8080/api';
 axios.defaults.headers.common['Content-Type'] = 'application/json';
-axios.defaults.headers.common['Authentication'] = localStorage.getItem('user')
-  ? JSON.parse(localStorage.getItem('user')).authToken
-  : null;
+axios.defaults.headers.common['Authentication'] =
+  localStorage.getItem('authToken');
 
 ReactDOM.render(
   <React.StrictMode>

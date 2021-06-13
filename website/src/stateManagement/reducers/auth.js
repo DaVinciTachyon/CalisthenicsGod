@@ -1,20 +1,21 @@
 import { createSlice } from '@reduxjs/toolkit';
 
 export const slice = createSlice({
-  name: 'user',
+  name: 'auth',
   initialState: {},
   reducers: {
     logIn: (state, { payload }) => {
       if (payload.Authentication) {
         localStorage.setItem(
-          'user',
-          JSON.stringify({ authToken: payload.Authentication })
+          //FIXME unsafe using local storage
+          'authToken',
+          payload.Authentication
         );
         window.location = '/';
       }
     },
     logOut: (state, { payload }) => {
-      localStorage.removeItem('user');
+      localStorage.removeItem('authToken');
       window.location.reload();
     },
     register: (state, { payload }) => {

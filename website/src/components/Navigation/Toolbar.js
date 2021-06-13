@@ -20,7 +20,7 @@ import {
   SubLinkText,
 } from '../../style/toolbar';
 import { connect } from 'react-redux';
-import { logOut } from '../../stateManagement/reducers/user';
+import { logOut } from '../../stateManagement/reducers/auth';
 
 class ToolBar extends React.Component {
   constructor() {
@@ -35,7 +35,7 @@ class ToolBar extends React.Component {
   };
 
   render() {
-    if (localStorage.getItem('user'))
+    if (localStorage.getItem('authToken'))
       return (
         <NavigationBarContainer isMobile={isMobile}>
           <NavigationBar onClick={this.updateUrl}>

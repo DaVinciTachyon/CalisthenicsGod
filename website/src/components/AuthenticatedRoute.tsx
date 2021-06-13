@@ -11,7 +11,7 @@ const AuthenticatedRoute = ({ component: Component, ...rest }: Props) => (
   <Route
     {...rest}
     render={(props: any) =>
-      localStorage.getItem('user') ? (
+      localStorage.getItem('authToken') ? (
         <Component {...props} />
       ) : (
         <Redirect
