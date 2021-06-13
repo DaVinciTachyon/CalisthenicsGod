@@ -10,8 +10,10 @@ import {
 } from '../../style/inputs';
 import { Success, Error } from '../../style/notification';
 import axios from 'axios';
+import { connect } from 'react-redux';
+import { setMeasurement } from '../../stateManagement/reducers/measurements';
 
-export default class UserProfile extends React.Component {
+class UserProfile extends React.Component {
   constructor() {
     super();
     this.state = {
@@ -25,7 +27,6 @@ export default class UserProfile extends React.Component {
       dateJoined: '',
       birthDate: '',
       gender: '',
-      weight: 0,
       caloriesPerKg: 0,
       proteinGramsPerKg: 0,
       fatCalorieProportion: 0,
@@ -41,13 +42,13 @@ export default class UserProfile extends React.Component {
 
   componentDidMount() {
     this.getUserInfo();
+    this.props.setMeasurement('weight');
   }
 
   getUserInfo = async () => {
     try {
       const user = (await axios.get('/user/')).data;
       const nutrition = (await axios.get('/nutrition/')).data;
-      const measurement = (await axios.get('/measurement/weight/')).data;
       this.setState({
         firstname: user.name.first,
         middlename: user.name.middle,
@@ -56,7 +57,6 @@ export default class UserProfile extends React.Component {
         dateJoined: this.formatDate(new Date(user.dateJoined)),
         birthDate: this.formatDate(new Date(user.birthDate)),
         gender: user.gender,
-        weight: measurement.weight,
         caloriesPerKg: nutrition.caloriesPerKg,
         proteinGramsPerKg: nutrition.proteinGramsPerKg,
         fatCalorieProportion: nutrition.fatCalorieProportion,
@@ -185,7 +185,12 @@ export default class UserProfile extends React.Component {
         <Section label="Nutrient Information">
           <Row columns={this.state.calorieOffset !== 0 ? 3 : 2}>
             <Calories
-              value={this.state.caloriesPerKg * this.state.weight}
+              value={
+                this.state.caloriesPerKg *
+                (this.props.measurements.weight
+                  ? this.props.measurements.weight[0].value
+                  : 0)
+              }
               label="Maintenance Calories"
               unit="kcal"
               readOnly
@@ -256,3 +261,7 @@ export default class UserProfile extends React.Component {
     );
   }
 }
+
+export default connect(({ measurements }) => ({ measurements }), {
+  setMeasurement,
+})(UserProfile);

@@ -3,113 +3,110 @@ import Card from '../../style/card';
 import { Row } from '../../style/table';
 import { Button } from '../../style/buttons';
 import { Weight, Length } from '../../style/inputs';
-import axios from 'axios';
+import { connect } from 'react-redux';
+import { setMeasurements } from '../../stateManagement/reducers/measurements';
 
-export default class MeasurementSummary extends React.Component {
+class MeasurementSummary extends React.Component {
   constructor() {
     super();
-    this.state = {
-      weight: undefined,
-      height: undefined,
-      waist: undefined,
-      hips: undefined,
-      rightBicep: undefined,
-      leftBicep: undefined,
-      rightForearm: undefined,
-      leftForearm: undefined,
-      shoulders: undefined,
-      chest: undefined,
-      neck: undefined,
-    };
+    this.state = {};
   }
 
   componentDidMount() {
-    this.getMeasurements();
+    this.props.setMeasurements();
   }
-
-  getMeasurements = async () => {
-    try {
-      const data = (await axios.get('/measurement/')).data;
-      Object.keys(data).forEach((name) =>
-        this.setState({ [name]: data[name] })
-      );
-    } catch (err) {
-      if (err.response?.status === 400) console.error(err.response.data.error);
-      else console.error(err.response);
-    }
-  };
 
   render() {
     return (
       <>
         <Card>
-          {this.state.weight > 0 && (
+          {this.props.measurements.weight?.length > 0 && (
             <Weight
               label="Weight"
               unit="kg"
-              value={this.state.weight}
+              value={this.props.measurements.weight[0].value}
               readOnly
             />
           )}
-          {this.state.height > 0 && (
+          {this.props.measurements.height?.length > 0 && (
             <Length
               label="Height"
               unit="cm"
-              value={this.state.height}
+              value={this.props.measurements.height[0].value}
               readOnly
             />
           )}
-          {this.state.waist > 0 && (
-            <Length label="Waist" unit="cm" value={this.state.waist} readOnly />
+          {this.props.measurements.waist?.length > 0 && (
+            <Length
+              label="Waist"
+              unit="cm"
+              value={this.props.measurements.waist[0].value}
+              readOnly
+            />
           )}
-          {this.state.hips > 0 && (
-            <Length label="Hips" unit="cm" value={this.state.hips} readOnly />
+          {this.props.measurements.hips?.length > 0 && (
+            <Length
+              label="Hips"
+              unit="cm"
+              value={this.props.measurements.hips[0].value}
+              readOnly
+            />
           )}
-          {this.state.rightBicep > 0 && (
+          {this.props.measurements.rightBicep?.length > 0 && (
             <Length
               label="Right Bicep"
               unit="cm"
-              value={this.state.rightBicep}
+              value={this.props.measurements.rightBicep[0].value}
               readOnly
             />
           )}
-          {this.state.leftBicep > 0 && (
+          {this.props.measurements.leftBicep?.length > 0 && (
             <Length
               label="Left Bicep"
               unit="cm"
-              value={this.state.leftBicep}
+              value={this.props.measurements.leftBicep[0].value}
               readOnly
             />
           )}
-          {this.state.rightForearm > 0 && (
+          {this.props.measurements.rightForearm?.length > 0 && (
             <Length
               label="Right Forearm"
               unit="cm"
-              value={this.state.rightForearm}
+              value={this.props.measurements.rightForearm[0].value}
               readOnly
             />
           )}
-          {this.state.leftForearm > 0 && (
+          {this.props.measurements.leftForearm?.length > 0 && (
             <Length
               label="Left Forearm"
               unit="cm"
-              value={this.state.leftForearm}
+              value={this.props.measurements.leftForearm[0].value}
               readOnly
             />
           )}
-          {this.state.shoulders > 0 && (
+          {this.props.measurements.shoulders?.length > 0 && (
             <Length
               label="Shoulders"
               unit="cm"
-              value={this.state.shoulders}
+              value={this.props.measurements.shoulders[0].value}
               readOnly
             />
           )}
-          {this.state.chest > 0 && (
-            <Length label="Chest" unit="cm" value={this.state.chest} readOnly />
+          {this.props.measurements.chest?.length > 0 && (
+            <Length
+              label="Chest"
+              unit="cm"
+              value={this.props.measurements.chest[0].value}
+              readOnly
+            />
           )}
-          {this.state.neck > 0 && (
-            <Length label="Neck" unit="cm" value={this.state.neck} readOnly />
+          {this.props.measurements.neck?.length > 0 && (
+            <Length
+              label="Neck"
+              unit="cm"
+              value={this.props.measurements.neck[0].value}
+              readOnly
+            />
           )}
           <Row>
             <Button
@@ -123,3 +120,7 @@ export default class MeasurementSummary extends React.Component {
     );
   }
 }
+
+export default connect(({ measurements }) => ({ measurements }), {
+  setMeasurements,
+})(MeasurementSummary);

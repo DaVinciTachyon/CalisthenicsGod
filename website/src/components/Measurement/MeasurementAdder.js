@@ -3,9 +3,10 @@ import { Row } from '../../style/table';
 import { Button } from '../../style/buttons';
 import { Error } from '../../style/notification';
 import { Length, Weight } from '../../style/inputs';
-import axios from 'axios';
+import { connect } from 'react-redux';
+import { addMeasurements } from '../../stateManagement/reducers/measurements';
 
-export default class MeasurementAdder extends React.Component {
+class MeasurementAdder extends React.Component {
   constructor() {
     super();
     this.state = {
@@ -34,25 +35,20 @@ export default class MeasurementAdder extends React.Component {
     });
 
   submitMeasurement = async () => {
-    try {
-      await axios.post('/measurement/', {
-        weight: this.state.weight,
-        height: this.state.height,
-        waist: this.state.waist,
-        hips: this.state.hips,
-        rightBicep: this.state.rightBicep,
-        leftBicep: this.state.leftBicep,
-        rightForearm: this.state.rightForearm,
-        leftForearm: this.state.leftForearm,
-        shoulders: this.state.shoulders,
-        chest: this.state.chest,
-        neck: this.state.neck,
-      });
-      window.location = '/measurementTracker';
-    } catch (err) {
-      if (err.response?.status === 400) console.error(err.response.data.error);
-      else console.error(err.response);
-    }
+    this.props.addMeasurements({
+      weight: this.state.weight,
+      height: this.state.height,
+      waist: this.state.waist,
+      hips: this.state.hips,
+      rightBicep: this.state.rightBicep,
+      leftBicep: this.state.leftBicep,
+      rightForearm: this.state.rightForearm,
+      leftForearm: this.state.leftForearm,
+      shoulders: this.state.shoulders,
+      chest: this.state.chest,
+      neck: this.state.neck,
+    });
+    window.location = '/measurementTracker';
   };
 
   render() {
@@ -148,3 +144,7 @@ export default class MeasurementAdder extends React.Component {
     );
   }
 }
+
+export default connect(() => ({}), {
+  addMeasurements,
+})(MeasurementAdder);

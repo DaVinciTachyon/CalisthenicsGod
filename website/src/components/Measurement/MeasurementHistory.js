@@ -1,9 +1,10 @@
 import React from 'react';
 import { Line } from 'react-chartjs-2';
 import Card from '../../style/card';
-import axios from 'axios';
+import { connect } from 'react-redux';
+import { getMeasurementHistory } from '../../stateManagement/reducers/measurements';
 
-export default class MeasurementHistory extends React.Component {
+class MeasurementHistory extends React.Component {
   constructor() {
     super();
     this.state = {
@@ -23,58 +24,25 @@ export default class MeasurementHistory extends React.Component {
       },
     };
   }
-
-  componentDidUpdate(prevProps) {
-    if (prevProps.update !== this.props.update) {
-      this.getWeightHistory();
-    }
-  }
-
   componentDidMount() {
-    this.getWeightHistory();
+    this.props.getMeasurementHistory('weight');
   }
-
-  getWeightHistory = async () => {
-    try {
-      const { weight } = (await axios.get('/measurement/weight/history/')).data;
-      let chart = Object.assign({}, this.state.chart);
-      chart.labels = [];
-      chart.datasets[0].data = [];
-      for (let i = 0; i < weight.length; i++) {
-        chart.labels.unshift(
-          `${new Date(weight[i].date).getDate()}/${new Date(
-            weight[i].date
-          ).getMonth()}/${new Date(weight[i].date).getFullYear()}`
-        );
-        chart.datasets[0].data.unshift(weight[i].value);
-      }
-      this.setState({ chart });
-    } catch (err) {
-      if (err.response?.status === 400) console.error(err.response.data.error);
-      else console.error(err.response);
-    }
-  };
-
-  addWeightHistory = () => {
-    return this.state.weightHistory.map((weight) => {
-      let date = new Date(weight.date);
-      return (
-        <tr key={weight._id}>
-          <td>
-            {date.getDate()}/{date.getMonth() + 1}/{date.getFullYear()}-
-            {date.getHours()}:{date.getMinutes()}:{date.getSeconds()}
-          </td>
-          <td>{weight.value}</td>
-        </tr>
-      );
-    });
-  };
 
   render() {
+    const chart = Object.assign({}, this.state.chart);
+    chart.labels = [];
+    chart.datasets[0].data = [];
+    for (let i = 0; i < this.props.measurements.weight?.length; i++) {
+      const date = new Date(this.props.measurements.weight[i].date);
+      chart.labels.unshift(
+        `${date.getDate()}/${date.getMonth()}/${date.getFullYear()}`
+      );
+      chart.datasets[0].data.unshift(this.props.measurements.weight[i].value);
+    }
     return (
       <Card>
         <Line
-          data={this.state.chart}
+          data={chart}
           options={{
             title: {
               display: true,
@@ -91,3 +59,7 @@ export default class MeasurementHistory extends React.Component {
     );
   }
 }
+
+export default connect(({ measurements }) => ({ measurements }), {
+  getMeasurementHistory,
+})(MeasurementHistory);
