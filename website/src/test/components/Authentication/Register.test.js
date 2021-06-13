@@ -44,7 +44,7 @@ describe('Register', () => {
     await page.click('[name="birthDate"]');
     await page.type(
       '[name="birthDate"]',
-      user.birthDate.toLocaleDateString().replace(/\//g, '')
+      user.birthDate.toISOString().replace(/-/g, '')
     );
     expect(await page.$eval('[name="birthDate"]', (el) => el.value)).toEqual(
       getInputDate(user.birthDate)
