@@ -3,32 +3,22 @@ import { Row, Column, Title } from '../../../style/table';
 import StageEditor from './StageEditor';
 import { Button, ErrorButton } from '../../../style/buttons';
 import axios from 'axios';
+import { connect } from 'react-redux';
+import { setStages } from '../../../stateManagement/reducers/stages';
 
-export default class WorkoutAdder extends React.Component {
+class WorkoutAdder extends React.Component {
   constructor() {
     super();
     this.state = {
-      stages: [],
       workout: {
         stages: [],
       },
     };
-    this.getStages = this.getStages.bind(this);
   }
 
   componentDidMount() {
-    this.getStages();
+    if (this.props.stages.length === 0) this.props.setStages();
   }
-
-  getStages = async () => {
-    try {
-      const { stages } = (await axios.get('/workout/stage/')).data;
-      this.setState({ stages });
-    } catch (err) {
-      if (err.response?.status === 400) console.error(err.response.data.error);
-      else console.error(err.response);
-    }
-  };
 
   onUpdate = (stage) =>
     this.setState((state) => {
@@ -68,7 +58,7 @@ export default class WorkoutAdder extends React.Component {
           </Column>
           <Column />
         </Row>
-        {this.state.stages.map((stage) => (
+        {this.props.stages.map((stage) => (
           <StageEditor
             key={stage._id}
             id={stage._id}
@@ -84,3 +74,7 @@ export default class WorkoutAdder extends React.Component {
     );
   }
 }
+
+export default connect(({ stages }) => ({ stages }), {
+  setStages,
+})(WorkoutAdder);

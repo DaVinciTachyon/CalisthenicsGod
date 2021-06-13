@@ -3,9 +3,10 @@ import { Error } from '../../../style/notification';
 import { Row, Column } from '../../../style/table';
 import { Button, ErrorButton } from '../../../style/buttons';
 import { Text } from '../../../style/inputs';
-import axios from 'axios';
+import { connect } from 'react-redux';
+import { addStage } from '../../../stateManagement/reducers/stages';
 
-export default class StageAdder extends React.Component {
+class StageAdder extends React.Component {
   constructor() {
     super();
     this.state = {
@@ -30,18 +31,12 @@ export default class StageAdder extends React.Component {
     if (!this.state.name) return this.setState({ error: 'Name is required' });
     if (this.props.index < 0 || this.props.index % 1 !== 0)
       return this.setState({ error: 'Chronological Ranking is invalid' });
-    try {
-      await axios.post('/workout/stage/', {
-        name: this.state.name,
-        description: this.state.description,
-        chronologicalRanking: this.props.index,
-      });
-      await this.setState({ isAdding: false });
-      window.location.reload();
-    } catch (err) {
-      if (err.response?.status === 400) console.error(err.response.data.error);
-      else console.error(err.response);
-    }
+    this.props.addStage({
+      name: this.state.name,
+      description: this.state.description,
+      chronologicalRanking: this.props.index,
+    });
+    this.set();
   };
 
   render() {
@@ -85,3 +80,7 @@ export default class StageAdder extends React.Component {
       );
   }
 }
+
+export default connect(() => ({}), {
+  addStage,
+})(StageAdder);

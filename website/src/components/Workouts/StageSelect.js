@@ -1,31 +1,20 @@
 import React from 'react';
 import { Select } from '../../style/inputs';
-import axios from 'axios';
+import { connect } from 'react-redux';
+import { setStages } from '../../stateManagement/reducers/stages';
 
-export default class StageSelect extends React.Component {
+class StageSelect extends React.Component {
   constructor() {
     super();
-    this.state = {
-      stages: [],
-    };
+    this.state = {};
   }
 
   componentDidMount() {
-    this.getWorkoutStages();
+    if (this.props.stages.length === 0) this.props.setStages();
   }
 
-  getWorkoutStages = async () => {
-    try {
-      const { stages } = await axios.get('/workout/stage/');
-      this.setState({ stages });
-    } catch (err) {
-      if (err.response?.status === 400) console.error(err.response.data.error);
-      else console.error(err.response);
-    }
-  };
-
   onChange = async (evt) => {
-    const stages = this.state.stages.filter((stage) => {
+    const stages = this.props.stages.filter((stage) => {
       if (this.props.isMulti) return evt.value.includes(stage._id);
       return evt.value === stage._id;
     });
@@ -37,7 +26,7 @@ export default class StageSelect extends React.Component {
     return (
       <Select
         options={(isMulti ? [] : [{ label: 'Choose Stage', value: '' }]).concat(
-          this.state.stages.map((stage) => {
+          this.props.stages.map((stage) => {
             return { label: stage.name, value: stage._id };
           })
         )}
@@ -48,3 +37,7 @@ export default class StageSelect extends React.Component {
     );
   }
 }
+
+export default connect(({ stages }) => ({ stages }), {
+  setStages,
+})(StageSelect);
