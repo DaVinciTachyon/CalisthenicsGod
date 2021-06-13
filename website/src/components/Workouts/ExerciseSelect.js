@@ -32,13 +32,14 @@ class ExerciseSelect extends React.Component {
           this.props.exercises
             .filter(
               (exercise) =>
-                !this.props.stage ||
-                (this.props.stage &&
-                  exercise.potentialStages.includes(this.props.stage))
+                (!this.props.stage ||
+                  (this.props.stage &&
+                    exercise.potentialStages.includes(this.props.stage))) &&
+                (!this.props.unavailable ||
+                  (this.props.unavailable &&
+                    !this.props.unavailable.includes(exercise._id)))
             )
-            .map((exercise) => {
-              return { label: exercise.name, value: exercise._id };
-            })
+            .map((exercise) => ({ label: exercise.name, value: exercise._id }))
         )}
         onChange={this.onChange}
         isMulti={isMulti}
