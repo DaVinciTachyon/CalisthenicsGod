@@ -96,13 +96,17 @@ router
         ],
       });
 
-    const meal = nutrients.history[0].meals[0];
+    const index = nutrients.history[0].meals.findIndex(
+      (info) => info._id == req.body._id
+    );
+    const { _id, ingredients } =
+      nutrients.history[0].meals[index === -1 ? 0 : index];
     try {
       await nutrients.save();
       res.status(200).send({
-        _id: req.body._id ? req.body._id : meal._id,
+        _id,
         ingredient: {
-          _id: meal.ingredients[meal.ingredients.length - 1]._id,
+          _id: ingredients[ingredients.length - 1]._id,
         },
       });
     } catch (err) {

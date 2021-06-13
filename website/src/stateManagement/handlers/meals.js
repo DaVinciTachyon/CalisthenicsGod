@@ -15,6 +15,7 @@ function* handlePostMealIngredient({ payload }) {
     yield put(
       addIngredient({
         ...payload,
+        _id: data._id,
         ingredient: {
           _id: data.ingredient._id,
           ...payload.ingredient,
