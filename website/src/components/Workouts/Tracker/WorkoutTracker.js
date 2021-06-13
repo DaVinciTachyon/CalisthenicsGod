@@ -1,33 +1,18 @@
 import React from 'react';
 import Workout from './Workout';
 import { Button } from '../../../style/buttons';
-import axios from 'axios';
+import { connect } from 'react-redux';
+import { setWorkouts } from '../../../stateManagement/reducers/workouts';
 
-export default class WorkoutTracker extends React.Component {
+class WorkoutTracker extends React.Component {
   constructor() {
     super();
-    this.state = {
-      workouts: [],
-    };
-    this.getWorkouts = this.getWorkouts.bind(this);
+    this.state = {};
   }
 
   componentDidMount() {
-    this.getWorkouts();
+    if (this.props.workouts.length === 0) this.props.setWorkouts();
   }
-
-  getWorkouts = async () => {
-    try {
-      const { workouts } = (await axios.get('/workout/')).data;
-      this.setState({ workouts });
-    } catch (err) {
-      if (err.response?.status === 400)
-        if (err.response?.status === 400)
-          console.error(err.response.data.error);
-        else console.error(err.response);
-      else console.error(err.response);
-    }
-  };
 
   render() {
     return (
@@ -38,10 +23,14 @@ export default class WorkoutTracker extends React.Component {
         >
           +
         </Button>
-        {this.state.workouts.map((workout) => (
+        {this.props.workouts.map((workout) => (
           <Workout key={workout._id} details={workout} />
         ))}
       </div>
     );
   }
 }
+
+export default connect(({ workouts }) => ({ workouts }), {
+  setWorkouts,
+})(WorkoutTracker);

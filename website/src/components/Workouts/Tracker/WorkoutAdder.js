@@ -5,6 +5,7 @@ import { Button, ErrorButton } from '../../../style/buttons';
 import axios from 'axios';
 import { connect } from 'react-redux';
 import { setStages } from '../../../stateManagement/reducers/stages';
+import { addWorkout } from '../../../stateManagement/reducers/workouts';
 
 class WorkoutAdder extends React.Component {
   constructor() {
@@ -30,13 +31,8 @@ class WorkoutAdder extends React.Component {
     });
 
   onSubmit = async () => {
-    try {
-      await axios.post('/workout/', this.state.workout);
-      window.location = '/workoutTracker';
-    } catch (err) {
-      if (err.response?.status === 400) console.error(err.response.data.error);
-      else console.error(err.response);
-    }
+    this.props.addWorkout(this.state.workout);
+    window.location = '/workoutTracker';
   };
 
   render() {
@@ -77,4 +73,5 @@ class WorkoutAdder extends React.Component {
 
 export default connect(({ stages }) => ({ stages }), {
   setStages,
+  addWorkout,
 })(WorkoutAdder);
