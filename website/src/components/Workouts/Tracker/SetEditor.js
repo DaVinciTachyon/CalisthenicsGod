@@ -15,7 +15,10 @@ export default class SetEditor extends React.Component {
 
   async componentDidMount() {
     await this.setParams();
-    if (!this.props.readOnly) this.onUpdate();
+    if (!this.props.readOnly) {
+      await this.setState(this.props.value);
+      this.onUpdate();
+    }
   }
 
   componentDidUpdate(prevProps) {

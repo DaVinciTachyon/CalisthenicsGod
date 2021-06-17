@@ -17,4 +17,8 @@ const saveState = (name, state) => {
   }
 };
 
-export { loadState, saveState };
+const removeState = (name) => {
+  localStorage.removeItem(name);
+};
+
+export { loadState, saveState, removeState };

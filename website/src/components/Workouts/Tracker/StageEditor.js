@@ -2,51 +2,29 @@ import React from 'react';
 import { Row, Title } from '../../../style/table';
 import { Button } from '../../../style/buttons';
 import ExerciseRow from './ExerciseRow';
+import { connect } from 'react-redux';
+import {
+  addCurrentExercise,
+  removeCurrentExercise,
+} from '../../../stateManagement/reducers/workouts';
 
-export default class StageEditor extends React.Component {
+class StageEditor extends React.Component {
   constructor() {
     super();
-    this.state = {
-      exercises: [],
-    };
+    this.state = {};
   }
 
-  update = () =>
-    this.props.onUpdate({ id: this.props.id, exercises: this.state.exercises });
-
-  addExercise = async (index, length) => {
-    await this.setState((state) => {
-      if (state.exercises.length < length + 1)
-        state.exercises.splice(index, 0, {});
-
-      return { exercises: state.exercises };
-    });
-    this.update();
-  };
-
-  onRemove = async (index, length) => {
-    await this.setState((state) => {
-      if (state.exercises.length > length - 1) state.exercises.splice(index, 1);
-
-      return { exercises: state.exercises };
-    });
-    this.update();
-  };
-
-  onUpdate = async (index, exercise) => {
-    await this.setState((state) => {
-      state.exercises[index] = exercise;
-
-      return { exercises: state.exercises };
-    });
-    this.update();
-  };
-
-  addButton = (i) => (
+  addButton = (index) => (
     <Row>
       <Button
         className="maxWidth thin"
-        onClick={() => this.addExercise(i, this.state.exercises.length)}
+        onClick={() =>
+          this.props.addCurrentExercise({
+            stageId: this.props.id,
+            index,
+            currentLength: this.props.details?.exercises.length || 0,
+          })
+        }
       >
         +
       </Button>
@@ -54,21 +32,36 @@ export default class StageEditor extends React.Component {
   );
 
   render() {
+    const { name } = this.props.stages.find(
+      (stage) => stage._id === this.props.id
+    );
     return (
       <div>
         <Row>
-          <Title>{this.props.name}</Title>
+          <Title>{name}</Title>
         </Row>
-        {this.state.exercises.map((exercise, i, exercises) => (
-          <ExerciseRow
-            key={i}
-            stageId={this.props.id}
-            onUpdate={(exercise) => this.onUpdate(i, exercise)}
-            onRemove={() => this.onRemove(i, exercises.length)}
-          />
-        ))}
-        {this.addButton(this.state.exercises.length)}
+        {this.props.details &&
+          this.props.details.exercises.map((exercise, index, exercises) => (
+            <ExerciseRow
+              key={index}
+              stageId={this.props.id}
+              index={index}
+              onRemove={() =>
+                this.props.removeCurrentExercise({
+                  stageId: this.props.id,
+                  index,
+                  currentLength: exercises.length,
+                })
+              }
+            />
+          ))}
+        {this.addButton(this.props.details?.exercises.length || 0)}
       </div>
     );
   }
 }
+
+export default connect(({ stages }) => ({ stages }), {
+  addCurrentExercise,
+  removeCurrentExercise,
+})(StageEditor);

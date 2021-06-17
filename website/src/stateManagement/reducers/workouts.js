@@ -1,16 +1,56 @@
 import { createSlice } from '@reduxjs/toolkit';
+import { saveState, removeState } from '../../components/util';
 
 export const slice = createSlice({
   name: 'workouts',
-  initialState: [],
+  initialState: { current: {}, history: [] },
   reducers: {
-    setWorkouts: (state, { payload }) => payload || [],
+    setWorkouts: (state, { payload }) => ({ history: payload || [] }),
     addWorkout: (state, { payload }) => {
-      if (payload._id) state.unshift(payload);
+      if (payload._id) {
+        state.history.unshift(payload);
+        removeState('currentWorkout');
+        return { current: {} };
+      }
+    },
+    setCurrentWorkout: (state, { payload }) => {
+      saveState('currentWorkout', payload);
+      return { current: payload || {} };
+    },
+    addCurrentExercise: (state, { payload }) => {
+      const exercises = state.current.stages.find(
+        (stage) => stage.id === payload.stageId
+      ).exercises;
+      if (exercises.length < payload.currentLength + 1)
+        exercises.splice(payload.index, 0, {});
+      saveState('currentWorkout', state.current);
+    },
+    removeCurrentExercise: (state, { payload }) => {
+      const exercises = state.current.stages.find(
+        (stage) => stage.id === payload.stageId
+      ).exercises;
+      if (exercises.length > payload.currentLength - 1)
+        exercises.splice(payload.index, 1);
+      saveState('currentWorkout', state.current);
+    },
+    modifyCurrentExercise: (state, { payload }) => {
+      const stageIndex = state.current.stages.findIndex(
+        (stage) => stage.id === payload.stageId
+      );
+      state.current.stages[stageIndex].exercises[payload.index] =
+        payload.exercise;
+      saveState('currentWorkout', state.current);
     },
   },
 });
 
-export const { setWorkouts, addWorkout } = slice.actions;
+export const {
+  setWorkouts,
+  addWorkout,
+  setCurrentWorkout,
+  addCurrentExercise,
+  removeCurrentExercise,
+  modifyCurrentExercise,
+} = slice.actions;
 
 export default slice.reducer;
