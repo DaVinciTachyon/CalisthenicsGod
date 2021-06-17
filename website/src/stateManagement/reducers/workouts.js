@@ -15,7 +15,7 @@ export const slice = createSlice({
       if (payload._id) {
         state.history.unshift(payload);
         removeState('currentWorkout');
-        return { ...state, current: { stages: [] } };
+        state.current = { stages: [] };
       }
     },
     setCurrentWorkout: (state, { payload }) => {

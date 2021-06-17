@@ -54,10 +54,7 @@ class WorkoutAdder extends React.Component {
         ))}
         <Row>
           <Button
-            onClick={() => {
-              this.props.addWorkout(this.props.workouts.current);
-              window.location = '/workoutTracker';
-            }}
+            onClick={() => this.props.addWorkout(this.props.workouts.current)}
           >
             Submit
           </Button>

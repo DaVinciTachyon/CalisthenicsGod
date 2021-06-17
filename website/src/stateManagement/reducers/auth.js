@@ -5,22 +5,17 @@ export const slice = createSlice({
   initialState: {},
   reducers: {
     logIn: (state, { payload }) => {
-      if (payload.Authentication) {
+      if (payload.Authentication)
         localStorage.setItem(
           //FIXME unsafe using local storage
           'authToken',
           payload.Authentication
         );
-        window.location = '/';
-      }
     },
     logOut: (state, { payload }) => {
       localStorage.removeItem('authToken');
-      window.location.reload();
     },
-    register: (state, { payload }) => {
-      if (!payload) window.location = '/login';
-    },
+    register: (state, { payload }) => {},
   },
 });
 
