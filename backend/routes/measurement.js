@@ -15,17 +15,19 @@ router
 
     const measurements = await Measurement.findOne({ userId: req.user._id });
 
-    Object.keys(req.body).forEach((name) =>
-      Array.isArray(measurements[name])
-        ? measurements[name].unshift({
-            value: req.body[name],
-          })
-        : null
-    );
+    const response = {};
+    Object.keys(req.body).forEach((name) => {
+      if (Array.isArray(measurements[name])) {
+        measurements[name].unshift({
+          value: req.body[name],
+        });
+        response[name] = measurements[name][0];
+      }
+    });
 
     try {
       await measurements.save();
-      res.sendStatus(200);
+      res.status(200).send(response);
     } catch (err) {
       res.status(400).send({ error: err });
     }
@@ -36,7 +38,7 @@ router
 
     Object.keys(measurements._doc).forEach((name) =>
       Array.isArray(measurements[name]) && measurements[name].length > 0
-        ? (response[name] = measurements[name][0].value)
+        ? (response[name] = measurements[name][0])
         : null
     );
 
@@ -69,7 +71,7 @@ router
   .get(async (req, res) => {
     const measurements = await Measurement.findOne({ userId: req.user._id });
     if (measurements[req.params.name])
-      res.send({ [req.params.name]: measurements[req.params.name][0].value });
+      res.send({ [req.params.name]: measurements[req.params.name][0] });
     else res.status(400).send({ error: 'Parameter not recognised' });
   });
 

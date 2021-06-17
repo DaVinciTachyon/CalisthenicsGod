@@ -1,8 +1,10 @@
 import React from 'react';
 import MacroSummaryRow from './MacroSummaryRow';
-import axios from 'axios';
 import { connect } from 'react-redux';
 import { setIngredients } from '../../../stateManagement/reducers/ingredients';
+import { setNutritionInfo } from '../../../stateManagement/reducers/user';
+import { setMeasurement } from '../../../stateManagement/reducers/measurements';
+import { getMacroDensities } from '../util';
 
 class NutrientSummary extends React.Component {
   constructor() {
@@ -24,9 +26,11 @@ class NutrientSummary extends React.Component {
   }
 
   componentDidMount() {
-    this.getUserGoals();
-    this.getMacros();
     if (this.props.ingredients.length === 0) this.props.setIngredients();
+    if (!this.props.user.nutrition) this.props.setNutritionInfo();
+    if (!this.props.measurements.weight) this.props.setMeasurement('weight');
+    this.getMacros();
+    this.setMacros();
   }
 
   componentDidUpdate(prevProps) {
@@ -35,7 +39,34 @@ class NutrientSummary extends React.Component {
       prevProps.ingredients !== this.props.ingredients
     )
       this.getMacros();
+    if (
+      prevProps.measurements !== this.props.measurements ||
+      prevProps.user !== this.props.user
+    )
+      this.setMacros();
   }
+
+  setMacros = async () => {
+    let weight = 0;
+    let nutrition = {
+      caloriesPerKg: 0,
+      calorieOffset: 0,
+      proteinGramsPerKg: 0,
+      fatCalorieProportion: 0,
+    };
+    if (this.props.user.nutrition) nutrition = this.props.user.nutrition;
+    if (this.props.measurements.weight)
+      weight = this.props.measurements.weight[0].value;
+    const macroDensities = await getMacroDensities();
+    const calories = weight * nutrition.caloriesPerKg + nutrition.calorieOffset;
+    const protein = weight * nutrition.proteinGramsPerKg;
+    const fat =
+      (nutrition.fatCalorieProportion * calories) / macroDensities.fat;
+    const carbohydrate =
+      (calories - protein * macroDensities.protein - fat * macroDensities.fat) /
+      macroDensities.carbohydrate;
+    this.setState({ goal: { protein, fat, carbohydrate, ethanol: 0 } });
+  };
 
   getMacros = () => {
     let fat = 0;
@@ -88,20 +119,17 @@ class NutrientSummary extends React.Component {
       </div>
     );
   }
-
-  getUserGoals = async () => {
-    try {
-      const { macronutrients } = (await axios.get('/nutrition/goals')).data;
-      this.setState({
-        goal: macronutrients,
-      });
-    } catch (err) {
-      if (err.response?.status === 400) console.error(err.response.data.error);
-      else console.error(err.response);
-    }
-  };
 }
 
-export default connect(({ ingredients }) => ({ ingredients }), {
-  setIngredients,
-})(NutrientSummary);
+export default connect(
+  ({ ingredients, user, measurements }) => ({
+    ingredients,
+    user,
+    measurements,
+  }),
+  {
+    setIngredients,
+    setNutritionInfo,
+    setMeasurement,
+  }
+)(NutrientSummary);

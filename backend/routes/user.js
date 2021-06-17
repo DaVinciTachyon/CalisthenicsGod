@@ -19,7 +19,7 @@ router
       gender: user.gender,
     });
   })
-  .post(async (req, res) => {
+  .patch(async (req, res) => {
     const { error } = authValidation.userInfo(req.body);
     if (error) return res.status(400).send({ error: error.details[0].message });
 

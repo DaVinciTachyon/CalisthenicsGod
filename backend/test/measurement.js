@@ -41,7 +41,7 @@ describe('Measurements', () => {
       const res = await get('/measurement/weight', authToken);
       res.should.have.status(200);
       expect(res.body.weight).to.not.be.an('undefined');
-      res.body.weight.should.equal(expectedWeight);
+      res.body.weight.value.should.equal(expectedWeight);
     });
 
     it('invalid parameter', async () => {

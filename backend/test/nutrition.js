@@ -1,4 +1,4 @@
-const { get, login, post, randomInt, randomFloat } = require('./util');
+const { get, login, patch, randomInt, randomFloat } = require('./util');
 const chai = require('chai');
 const should = chai.should();
 
@@ -16,14 +16,14 @@ describe('Nutrition', () => {
     });
   });
 
-  describe('/POST', () => {
+  describe('/PATCH', () => {
     it('empty body', async () => {
-      const res = await post('/nutrition', {}, authToken);
+      const res = await patch('/nutrition', {}, authToken);
       res.should.have.status(400);
     });
 
     it('valid nutrient info', async () => {
-      const res = await post(
+      const res = await patch(
         '/nutrition',
         {
           calorieOffset: randomInt(),

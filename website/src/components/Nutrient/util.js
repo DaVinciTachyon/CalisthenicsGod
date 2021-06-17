@@ -7,17 +7,7 @@ const getCalories = async (
   ethanol,
   weight = undefined
 ) => {
-  if (!localStorage.getItem('macronutrientDensities')) {
-    try {
-      const data = (await axios.get('/nutrition/macronutrientDensities/')).data;
-      localStorage.setItem('macronutrientDensities', JSON.stringify(data));
-    } catch (err) {
-      console.error(err.response);
-    }
-  }
-  const macroDensities = JSON.parse(
-    localStorage.getItem('macronutrientDensities')
-  );
+  const macroDensities = await getMacroDensities();
   if (weight)
     return (
       ((fat * macroDensities.fat +
@@ -35,4 +25,16 @@ const getCalories = async (
   );
 };
 
-export { getCalories };
+const getMacroDensities = async () => {
+  if (!localStorage.getItem('macronutrientDensities')) {
+    try {
+      const data = (await axios.get('/nutrition/macronutrientDensities/')).data;
+      localStorage.setItem('macronutrientDensities', JSON.stringify(data));
+    } catch (err) {
+      console.error(err.response);
+    }
+  }
+  return JSON.parse(localStorage.getItem('macronutrientDensities'));
+};
+
+export { getCalories, getMacroDensities };
