@@ -1,10 +1,10 @@
 import React from 'react';
 import MacroSummaryRow from './MacroSummaryRow';
-import axios from 'axios';
 import { connect } from 'react-redux';
 import { setIngredients } from '../../../stateManagement/reducers/ingredients';
 import { setNutritionInfo } from '../../../stateManagement/reducers/user';
 import { setMeasurement } from '../../../stateManagement/reducers/measurements';
+import { getMacroDensities } from '../util';
 
 class NutrientSummary extends React.Component {
   constructor() {
@@ -57,18 +57,7 @@ class NutrientSummary extends React.Component {
     if (this.props.user.nutrition) nutrition = this.props.user.nutrition;
     if (this.props.measurements.weight)
       weight = this.props.measurements.weight[0].value;
-    if (!localStorage.getItem('macronutrientDensities')) {
-      try {
-        const data = (await axios.get('/nutrition/macronutrientDensities/'))
-          .data;
-        localStorage.setItem('macronutrientDensities', JSON.stringify(data));
-      } catch (err) {
-        console.error(err.response);
-      }
-    }
-    const macroDensities = JSON.parse(
-      localStorage.getItem('macronutrientDensities')
-    );
+    const macroDensities = await getMacroDensities();
     const calories = weight * nutrition.caloriesPerKg + nutrition.calorieOffset;
     const protein = weight * nutrition.proteinGramsPerKg;
     const fat =
