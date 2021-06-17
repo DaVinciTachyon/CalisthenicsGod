@@ -4,8 +4,15 @@ import ExerciseSelect from '../ExerciseSelect';
 import { Select, Number } from '../../../style/inputs';
 import { Button, DeleteButton } from '../../../style/buttons';
 import SetEditor from './SetEditor';
+import { connect } from 'react-redux';
+import { setExercises } from '../../../stateManagement/reducers/exercises';
+import {
+  modifyCurrentExercise,
+  addCurrentExerciseSet,
+  removeCurrentExerciseSet,
+} from '../../../stateManagement/reducers/workouts';
 
-export default class ExerciseRow extends React.Component {
+class ExerciseRow extends React.Component {
   constructor() {
     super();
     this.state = {
@@ -22,20 +29,54 @@ export default class ExerciseRow extends React.Component {
   }
 
   componentDidMount() {
-    this.onUpdate();
+    if (this.props.exercises.length === 0) this.props.setExercises();
+    else this.set();
   }
 
-  onUpdate = () => {
-    const { sets, variation, sagittalPlane, id, intersetRest, intrasetRest } =
-      this.state;
-    this.props.onUpdate({
-      sets,
+  componentDidUpdate(prevProps) {
+    if (prevProps.exercises !== this.props.exercises) this.set();
+  }
+
+  set = () => {
+    const { sets, variation, sagittalPlane, id, rest } =
+      this.props.workouts.current.stages.find(
+        (stage) => stage.id === this.props.stageId
+      ).exercises[this.props.index];
+    const exercise = this.props.exercises.find(
+      (exercise) => exercise._id === id
+    );
+    this.setState({
+      isWeighted:
+        sets && sets.length > 0
+          ? sets[0].weight > 0
+            ? 1
+            : sets[0].weight < 0
+            ? -1
+            : 0
+          : 0,
       variation,
       sagittalPlane,
-      id,
-      rest: {
-        intraset: intrasetRest,
-        interset: intersetRest,
+      id: id || '',
+      intrasetRest: rest?.intraset,
+      intersetRest: rest?.interset || 0,
+      exercise,
+      variationOptions: this.getVariationOptions(
+        exercise?.motionType || undefined
+      ),
+    });
+  };
+
+  onUpdate = () => {
+    const { variation, sagittalPlane, id, intrasetRest, intersetRest } =
+      this.state;
+    this.props.modifyCurrentExercise({
+      stageId: this.props.stageId,
+      index: this.props.index,
+      exercise: {
+        variation,
+        sagittalPlane,
+        id,
+        rest: { intraset: intrasetRest, interset: intersetRest },
       },
     });
   };
@@ -74,67 +115,59 @@ export default class ExerciseRow extends React.Component {
       exercise,
       isWeighted: 0,
       variation: undefined,
-      variationOptions: this.getVariationOptions(exercise.motionType),
+      variationOptions: this.getVariationOptions(
+        exercise?.motionType || undefined
+      ),
       sagittalPlane:
-        exercise.motionType.sagittalPlane === 'unilateral'
+        exercise?.motionType.sagittalPlane === 'unilateral'
           ? 'right'
           : undefined,
     });
     this.onUpdate();
   };
 
-  onUpdateSet = async (index, set) => {
-    await this.setState((state) => {
-      state.sets[index] = set;
-
-      return { sets: state.sets };
-    });
-    this.onUpdate();
-  };
-
-  addSet = async (length) => {
-    await this.setState((state) => {
-      if (state.sets.length < length + 1) state.sets.push({});
-      if (state.sets.length > 1) state.intrasetRest = 0;
-
-      return { sets: state.sets, intrasetRest: state.intrasetRest };
-    });
-    this.onUpdate();
-  };
-
-  removeSet = async (length) => {
-    await this.setState((state) => {
-      if (state.sets.length > length - 1) state.sets.pop();
-      if (state.sets.length <= 1) state.intrasetRest = undefined;
-
-      return { sets: state.sets, intrasetRest: state.intrasetRest };
-    });
-    this.onUpdate();
-  };
-
   render() {
+    const sets =
+      this.props.workouts.current.stages.find(
+        (stage) => stage.id === this.props.stageId
+      ).exercises[this.props.index].sets || [];
     return (
       <Row columns={7}>
         <Column>
-          {this.state.sets.map((set, i) => (
+          {sets.map((set, i) => (
             <SetEditor
               key={i}
+              stageId={this.props.stageId}
+              exerciseIndex={this.props.index}
+              index={i}
+              value={set}
               type={this.state.exercise?.motionType.motion}
               variation={this.state.variation}
               isWeighted={this.state.isWeighted}
-              onUpdate={(set) => this.onUpdateSet(i, set)}
             />
           ))}
           <Row columns={2}>
             <Button
               className="minWidth"
-              onClick={() => this.addSet(this.state.sets.length)}
+              onClick={() =>
+                this.props.addCurrentExerciseSet({
+                  stageId: this.props.stageId,
+                  index: this.props.index,
+                  newLength: sets.length + 1,
+                })
+              }
             >
               +
             </Button>
             <DeleteButton
               className="minWidth"
-              onClick={() => this.removeSet(this.state.sets.length)}
+              onClick={() =>
+                this.props.removeCurrentExerciseSet({
+                  stageId: this.props.stageId,
+                  index: this.props.index,
+                  newLength: sets.length - 1,
+                })
+              }
             >
               -
             </DeleteButton>
@@ -199,3 +232,10 @@ export default class ExerciseRow extends React.Component {
     );
   }
 }
+
+export default connect(({ workouts, exercises }) => ({ workouts, exercises }), {
+  setExercises,
+  modifyCurrentExercise,
+  addCurrentExerciseSet,
+  removeCurrentExerciseSet,
+})(ExerciseRow);

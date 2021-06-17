@@ -4,35 +4,23 @@ import StageEditor from './StageEditor';
 import { Button, ErrorButton } from '../../../style/buttons';
 import { connect } from 'react-redux';
 import { setStages } from '../../../stateManagement/reducers/stages';
-import { addWorkout } from '../../../stateManagement/reducers/workouts';
+import {
+  addWorkout,
+  setCurrentWorkout,
+} from '../../../stateManagement/reducers/workouts';
+import { loadState } from '../../util';
 
 class WorkoutAdder extends React.Component {
   constructor() {
     super();
-    this.state = {
-      workout: {
-        stages: [],
-      },
-    };
+    this.state = {};
   }
 
   componentDidMount() {
     if (this.props.stages.length === 0) this.props.setStages();
+    const state = loadState('currentWorkout');
+    if (state) this.props.setCurrentWorkout(state);
   }
-
-  onUpdate = (stage) =>
-    this.setState((state) => {
-      const index = state.workout.stages.findIndex((s) => s.id === stage.id);
-      if (index !== -1) state.workout.stages[index] = stage;
-      else state.workout.stages.push(stage);
-
-      return { workout: state.workout };
-    });
-
-  onSubmit = async () => {
-    this.props.addWorkout(this.state.workout);
-    window.location = '/workoutTracker';
-  };
 
   render() {
     return (
@@ -53,24 +41,34 @@ class WorkoutAdder extends React.Component {
           </Column>
           <Column />
         </Row>
-        {this.props.stages.map((stage) => (
+        {this.props.stages.map(({ _id }) => (
           <StageEditor
-            key={stage._id}
-            id={stage._id}
-            name={stage.name}
-            onUpdate={this.onUpdate}
+            key={_id}
+            id={_id}
+            details={
+              this.props.workouts.current.stages?.find(
+                (stage) => _id === stage.id
+              ) || undefined
+            }
           />
         ))}
-        <Button onClick={this.onSubmit}>Submit</Button>
-        <ErrorButton onClick={() => (window.location = '/workoutTracker')}>
-          Cancel
-        </ErrorButton>
+        <Row>
+          <Button
+            onClick={() => this.props.addWorkout(this.props.workouts.current)}
+          >
+            Submit
+          </Button>
+          <ErrorButton onClick={() => (window.location = '/workoutTracker')}>
+            Cancel
+          </ErrorButton>
+        </Row>
       </div>
     );
   }
 }
 
-export default connect(({ stages }) => ({ stages }), {
+export default connect(({ stages, workouts }) => ({ stages, workouts }), {
   setStages,
   addWorkout,
+  setCurrentWorkout,
 })(WorkoutAdder);

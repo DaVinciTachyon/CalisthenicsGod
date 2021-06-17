@@ -6,6 +6,7 @@ function* handleRegister({ payload }) {
   try {
     yield call(postRegister, payload);
     yield put(register());
+    window.location = '/login';
   } catch (err) {
     console.error(err.response);
   }
@@ -16,6 +17,7 @@ function* handleLogIn({ payload }) {
     const response = yield call(postLogIn, payload);
     const { data } = response;
     yield put(logIn(data));
+    window.location = '/';
   } catch (err) {
     console.error(err.response);
   }
@@ -23,6 +25,7 @@ function* handleLogIn({ payload }) {
 
 function* handleLogOut({ payload }) {
   yield put(logOut());
+  window.location.reload();
 }
 
 export { handleLogIn, handleRegister, handleLogOut };

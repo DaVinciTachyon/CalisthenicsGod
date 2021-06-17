@@ -1,4 +1,5 @@
 import axios from 'axios';
+import { loadState, saveState } from '../util';
 
 const getCalories = async (
   fat,
@@ -26,15 +27,16 @@ const getCalories = async (
 };
 
 const getMacroDensities = async () => {
-  if (!localStorage.getItem('macronutrientDensities')) {
+  let state = loadState('macronutrientDensities');
+  if (!state) {
     try {
-      const data = (await axios.get('/nutrition/macronutrientDensities/')).data;
-      localStorage.setItem('macronutrientDensities', JSON.stringify(data));
+      state = (await axios.get('/nutrition/macronutrientDensities/')).data;
     } catch (err) {
       console.error(err.response);
     }
+    saveState('macronutrientDensities', state);
   }
-  return JSON.parse(localStorage.getItem('macronutrientDensities'));
+  return state;
 };
 
 export { getCalories, getMacroDensities };

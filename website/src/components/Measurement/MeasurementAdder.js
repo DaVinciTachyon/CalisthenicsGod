@@ -48,7 +48,6 @@ class MeasurementAdder extends React.Component {
       chest: this.state.chest,
       neck: this.state.neck,
     });
-    window.location = '/measurementTracker';
   };
 
   render() {

@@ -11,7 +11,7 @@ class WorkoutTracker extends React.Component {
   }
 
   componentDidMount() {
-    if (this.props.workouts.length === 0) this.props.setWorkouts();
+    if (this.props.workouts.history.length === 0) this.props.setWorkouts();
   }
 
   render() {
@@ -23,7 +23,7 @@ class WorkoutTracker extends React.Component {
         >
           +
         </Button>
-        {this.props.workouts.map((workout) => (
+        {this.props.workouts.history.map((workout) => (
           <Workout key={workout._id} details={workout} />
         ))}
       </div>
