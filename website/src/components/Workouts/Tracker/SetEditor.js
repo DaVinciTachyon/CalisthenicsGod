@@ -27,7 +27,7 @@ class SetEditor extends React.Component {
       this.setParams();
   }
 
-  setParams = () => {
+  setParams = async () => {
     let repetitions, time, distance, weight;
     if (
       this.props.value?.repetitions ||
@@ -44,11 +44,16 @@ class SetEditor extends React.Component {
       distance = this.props.value?.distance || 1;
     if (this.props.isWeighted && this.props.isWeighted !== 0)
       weight = this.props.value?.weight ? Math.abs(this.props.value.weight) : 1;
-    this.setState({ repetitions, time, distance, weight });
+    await this.setState({ repetitions, time, distance, weight });
+    this.update();
   };
 
   onChange = async (evt) => {
     await this.setState({ [evt.target.name]: evt.target.value });
+    this.update();
+  };
+
+  update = () =>
     this.props.modifyCurrentExerciseSet({
       stageId: this.props.stageId,
       exerciseIndex: this.props.exerciseIndex,
@@ -63,7 +68,6 @@ class SetEditor extends React.Component {
             : undefined,
       },
     });
-  };
 
   render() {
     return (

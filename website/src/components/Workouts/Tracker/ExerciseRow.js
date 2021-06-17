@@ -6,7 +6,11 @@ import { Button, DeleteButton } from '../../../style/buttons';
 import SetEditor from './SetEditor';
 import { connect } from 'react-redux';
 import { setExercises } from '../../../stateManagement/reducers/exercises';
-import { modifyCurrentExercise } from '../../../stateManagement/reducers/workouts';
+import {
+  modifyCurrentExercise,
+  addCurrentExerciseSet,
+  removeCurrentExerciseSet,
+} from '../../../stateManagement/reducers/workouts';
 
 class ExerciseRow extends React.Component {
   constructor() {
@@ -42,7 +46,6 @@ class ExerciseRow extends React.Component {
       (exercise) => exercise._id === id
     );
     this.setState({
-      sets: sets || [],
       isWeighted:
         sets && sets.length > 0
           ? sets[0].weight > 0
@@ -64,13 +67,12 @@ class ExerciseRow extends React.Component {
   };
 
   onUpdate = () => {
-    const { sets, variation, sagittalPlane, id, intrasetRest, intersetRest } =
+    const { variation, sagittalPlane, id, intrasetRest, intersetRest } =
       this.state;
     this.props.modifyCurrentExercise({
       stageId: this.props.stageId,
       index: this.props.index,
       exercise: {
-        sets,
         variation,
         sagittalPlane,
         id,
@@ -124,33 +126,15 @@ class ExerciseRow extends React.Component {
     this.onUpdate();
   };
 
-  addSet = async (length) => {
-    await this.setState((state) => {
-      const sets = JSON.parse(JSON.stringify(state.sets));
-      if (sets.length < length + 1) sets.push({});
-      if (sets.length > 1) state.intrasetRest = 0;
-
-      return { sets, intrasetRest: state.intrasetRest };
-    });
-    this.onUpdate();
-  };
-
-  removeSet = async (length) => {
-    await this.setState((state) => {
-      const sets = JSON.parse(JSON.stringify(state.sets));
-      if (sets.length > length - 1) sets.pop();
-      if (sets.length <= 1) state.intrasetRest = undefined;
-
-      return { sets, intrasetRest: state.intrasetRest };
-    });
-    this.onUpdate();
-  };
-
   render() {
+    const sets =
+      this.props.workouts.current.stages.find(
+        (stage) => stage.id === this.props.stageId
+      ).exercises[this.props.index].sets || [];
     return (
       <Row columns={7}>
         <Column>
-          {this.state.sets.map((set, i) => (
+          {sets.map((set, i) => (
             <SetEditor
               key={i}
               stageId={this.props.stageId}
@@ -165,13 +149,25 @@ class ExerciseRow extends React.Component {
           <Row columns={2}>
             <Button
               className="minWidth"
-              onClick={() => this.addSet(this.state.sets.length)}
+              onClick={() =>
+                this.props.addCurrentExerciseSet({
+                  stageId: this.props.stageId,
+                  index: this.props.index,
+                  currentLength: sets.length,
+                })
+              }
             >
               +
             </Button>
             <DeleteButton
               className="minWidth"
-              onClick={() => this.removeSet(this.state.sets.length)}
+              onClick={() =>
+                this.props.removeCurrentExerciseSet({
+                  stageId: this.props.stageId,
+                  index: this.props.index,
+                  currentLength: sets.length,
+                })
+              }
             >
               -
             </DeleteButton>
@@ -240,4 +236,6 @@ class ExerciseRow extends React.Component {
 export default connect(({ workouts, exercises }) => ({ workouts, exercises }), {
   setExercises,
   modifyCurrentExercise,
+  addCurrentExerciseSet,
+  removeCurrentExerciseSet,
 })(ExerciseRow);
