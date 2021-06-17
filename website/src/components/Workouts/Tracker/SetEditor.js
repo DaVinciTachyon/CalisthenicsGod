@@ -1,8 +1,10 @@
 import React from 'react';
 import { Row } from '../../../style/table';
 import { Number } from '../../../style/inputs';
+import { connect } from 'react-redux';
+import { modifyCurrentExerciseSet } from '../../../stateManagement/reducers/workouts';
 
-export default class SetEditor extends React.Component {
+class SetEditor extends React.Component {
   constructor() {
     super();
     this.state = {
@@ -13,12 +15,8 @@ export default class SetEditor extends React.Component {
     };
   }
 
-  async componentDidMount() {
-    await this.setParams();
-    if (!this.props.readOnly) {
-      await this.setState(this.props.value);
-      this.onUpdate();
-    }
+  componentDidMount() {
+    this.setParams();
   }
 
   componentDidUpdate(prevProps) {
@@ -29,7 +27,7 @@ export default class SetEditor extends React.Component {
       this.setParams();
   }
 
-  setParams = async () => {
+  setParams = () => {
     let repetitions, time, distance, weight;
     if (
       this.props.value?.repetitions ||
@@ -46,23 +44,25 @@ export default class SetEditor extends React.Component {
       distance = this.props.value?.distance || 1;
     if (this.props.isWeighted && this.props.isWeighted !== 0)
       weight = this.props.value?.weight ? Math.abs(this.props.value.weight) : 1;
-    await this.setState({ repetitions, time, distance, weight });
+    this.setState({ repetitions, time, distance, weight });
   };
-
-  onUpdate = () =>
-    this.props.onUpdate({
-      repetitions: this.state.repetitions,
-      time: this.state.time,
-      distance: this.state.distance,
-      weight:
-        this.props.isWeighted && this.props.isWeighted !== 0
-          ? this.state.weight * this.props.isWeighted
-          : undefined,
-    });
 
   onChange = async (evt) => {
     await this.setState({ [evt.target.name]: evt.target.value });
-    this.onUpdate();
+    this.props.modifyCurrentExerciseSet({
+      stageId: this.props.stageId,
+      exerciseIndex: this.props.exerciseIndex,
+      index: this.props.index,
+      set: {
+        repetitions: this.state.repetitions,
+        time: this.state.time,
+        distance: this.state.distance,
+        weight:
+          this.props.isWeighted && this.props.isWeighted !== 0
+            ? this.state.weight * this.props.isWeighted
+            : undefined,
+      },
+    });
   };
 
   render() {
@@ -73,7 +73,7 @@ export default class SetEditor extends React.Component {
             .length
         }
       >
-        {this.state.repetitions && (
+        {this.state.repetitions !== undefined && (
           <Number
             name="repetitions"
             min={1}
@@ -83,7 +83,7 @@ export default class SetEditor extends React.Component {
             readOnly={this.props.readOnly}
           />
         )}
-        {this.state.distance && (
+        {this.state.distance !== undefined && (
           <Number
             name="distance"
             min={1}
@@ -93,7 +93,7 @@ export default class SetEditor extends React.Component {
             readOnly={this.props.readOnly}
           />
         )}
-        {this.state.time && (
+        {this.state.time !== undefined && (
           <Number
             name="time"
             min={1}
@@ -103,7 +103,7 @@ export default class SetEditor extends React.Component {
             readOnly={this.props.readOnly}
           />
         )}
-        {this.state.weight && (
+        {this.state.weight !== undefined && (
           <Number
             name="weight"
             min={0.1}
@@ -117,3 +117,7 @@ export default class SetEditor extends React.Component {
     );
   }
 }
+
+export default connect(() => ({}), {
+  modifyCurrentExerciseSet,
+})(SetEditor);

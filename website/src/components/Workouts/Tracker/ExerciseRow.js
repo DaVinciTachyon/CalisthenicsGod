@@ -124,16 +124,6 @@ class ExerciseRow extends React.Component {
     this.onUpdate();
   };
 
-  onUpdateSet = async (index, set) => {
-    await this.setState((state) => {
-      const sets = JSON.parse(JSON.stringify(state.sets));
-      sets[index] = set;
-
-      return { sets };
-    });
-    this.onUpdate();
-  };
-
   addSet = async (length) => {
     await this.setState((state) => {
       const sets = JSON.parse(JSON.stringify(state.sets));
@@ -163,11 +153,13 @@ class ExerciseRow extends React.Component {
           {this.state.sets.map((set, i) => (
             <SetEditor
               key={i}
+              stageId={this.props.stageId}
+              exerciseIndex={this.props.index}
+              index={i}
               value={set}
               type={this.state.exercise?.motionType.motion}
               variation={this.state.variation}
               isWeighted={this.state.isWeighted}
-              onUpdate={(set) => this.onUpdateSet(i, set)}
             />
           ))}
           <Row columns={2}>

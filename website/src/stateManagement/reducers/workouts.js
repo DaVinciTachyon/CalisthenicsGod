@@ -41,6 +41,15 @@ export const slice = createSlice({
         payload.exercise;
       saveState('currentWorkout', state.current);
     },
+    modifyCurrentExerciseSet: (state, { payload }) => {
+      const stageIndex = state.current.stages.findIndex(
+        (stage) => stage.id === payload.stageId
+      );
+      state.current.stages[stageIndex].exercises[payload.exerciseIndex].sets[
+        payload.index
+      ] = payload.set;
+      saveState('currentWorkout', state.current);
+    },
   },
 });
 
@@ -51,6 +60,7 @@ export const {
   addCurrentExercise,
   removeCurrentExercise,
   modifyCurrentExercise,
+  modifyCurrentExerciseSet,
 } = slice.actions;
 
 export default slice.reducer;
