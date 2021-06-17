@@ -22,7 +22,7 @@ class StageEditor extends React.Component {
           this.props.addCurrentExercise({
             stageId: this.props.id,
             index,
-            currentLength: this.props.details?.exercises.length || 0,
+            newLength: (this.props.details?.exercises.length || 0) + 1,
           })
         }
       >
@@ -50,7 +50,7 @@ class StageEditor extends React.Component {
                 this.props.removeCurrentExercise({
                   stageId: this.props.id,
                   index,
-                  currentLength: exercises.length,
+                  newLength: exercises.length - 1,
                 })
               }
             />

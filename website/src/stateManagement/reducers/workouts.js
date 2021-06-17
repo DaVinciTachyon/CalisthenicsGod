@@ -22,7 +22,7 @@ export const slice = createSlice({
       const exercises = state.current.stages.find(
         (stage) => stage.id === payload.stageId
       ).exercises;
-      if (exercises.length < payload.currentLength + 1)
+      if (exercises.length < payload.newLength)
         exercises.splice(payload.index, 0, {
           sets: [],
           variation: undefined,
@@ -36,7 +36,7 @@ export const slice = createSlice({
       const exercises = state.current.stages.find(
         (stage) => stage.id === payload.stageId
       ).exercises;
-      if (exercises.length > payload.currentLength - 1)
+      if (exercises.length > payload.newLength)
         exercises.splice(payload.index, 1);
       saveState('currentWorkout', state.current);
     },
@@ -58,7 +58,7 @@ export const slice = createSlice({
         state.current.stages[stageIndex].exercises[payload.index].sets;
       if (!sets)
         state.current.stages[stageIndex].exercises[payload.index].sets = [];
-      if (sets.length < payload.currentLength + 1) {
+      if (sets.length < payload.newLength) {
         if (sets.length > 0)
           state.current.stages[stageIndex].exercises[payload.index].sets.push(
             sets[sets.length - 1]
@@ -82,7 +82,7 @@ export const slice = createSlice({
         state.current.stages[stageIndex].exercises[payload.index].sets;
       if (!sets)
         state.current.stages[stageIndex].exercises[payload.index].sets = [];
-      if (sets.length > payload.currentLength - 1)
+      if (sets.length > payload.newLength)
         state.current.stages[stageIndex].exercises[payload.index].sets.pop();
       if (sets.length <= 1)
         state.current.stages[stageIndex].exercises[

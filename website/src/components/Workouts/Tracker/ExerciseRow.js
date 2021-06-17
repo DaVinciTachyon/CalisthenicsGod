@@ -153,7 +153,7 @@ class ExerciseRow extends React.Component {
                 this.props.addCurrentExerciseSet({
                   stageId: this.props.stageId,
                   index: this.props.index,
-                  currentLength: sets.length,
+                  newLength: sets.length + 1,
                 })
               }
             >
@@ -165,7 +165,7 @@ class ExerciseRow extends React.Component {
                 this.props.removeCurrentExerciseSet({
                   stageId: this.props.stageId,
                   index: this.props.index,
-                  currentLength: sets.length,
+                  newLength: sets.length - 1,
                 })
               }
             >
