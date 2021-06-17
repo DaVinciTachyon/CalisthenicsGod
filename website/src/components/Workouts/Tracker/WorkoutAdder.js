@@ -45,9 +45,11 @@ class WorkoutAdder extends React.Component {
           <StageEditor
             key={_id}
             id={_id}
-            details={this.props.workouts.current.stages.find(
-              (stage) => _id === stage.id
-            )}
+            details={
+              this.props.workouts.current.stages?.find(
+                (stage) => _id === stage.id
+              ) || undefined
+            }
           />
         ))}
         <Row>

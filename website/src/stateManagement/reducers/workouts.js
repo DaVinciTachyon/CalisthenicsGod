@@ -3,27 +3,38 @@ import { saveState, removeState } from '../../components/util';
 
 export const slice = createSlice({
   name: 'workouts',
-  initialState: { current: {}, history: [] },
+  initialState: {
+    current: {
+      stages: [],
+    },
+    history: [],
+  },
   reducers: {
     setWorkouts: (state, { payload }) => ({ history: payload || [] }),
     addWorkout: (state, { payload }) => {
       if (payload._id) {
-        console.log(payload); //FIXME remove empty stages
         state.history.unshift(payload);
         removeState('currentWorkout');
-        return { current: {} };
+        return { ...state, current: { stages: [] } };
       }
     },
     setCurrentWorkout: (state, { payload }) => {
       saveState('currentWorkout', payload);
-      return { current: payload || {} };
+      return { ...state, current: payload || { stages: [] } };
     },
     addCurrentExercise: (state, { payload }) => {
-      const exercises = state.current.stages.find(
+      let stage = state.current.stages.find(
         (stage) => stage.id === payload.stageId
-      ).exercises;
-      if (exercises.length < payload.newLength)
-        exercises.splice(payload.index, 0, {
+      );
+      if (!stage) {
+        state.current.stages.push({
+          id: payload.stageId,
+          exercises: [],
+        });
+        stage = state.current.stages.find((stg) => stg.id === payload.stageId);
+      }
+      if (stage.exercises.length < payload.newLength)
+        stage.exercises.splice(payload.index, 0, {
           sets: [],
           variation: undefined,
           sagittalPlane: undefined,
@@ -33,11 +44,16 @@ export const slice = createSlice({
       saveState('currentWorkout', state.current);
     },
     removeCurrentExercise: (state, { payload }) => {
-      const exercises = state.current.stages.find(
+      const stageIndex = state.current.stages.findIndex(
         (stage) => stage.id === payload.stageId
-      ).exercises;
-      if (exercises.length > payload.newLength)
-        exercises.splice(payload.index, 1);
+      );
+      if (
+        state.current.stages[stageIndex].exercises.length > payload.newLength
+      ) {
+        state.current.stages[stageIndex].exercises.splice(payload.index, 1);
+        if (state.current.stages[stageIndex].exercises.length === 0)
+          state.current.stages.splice(stageIndex, 1);
+      }
       saveState('currentWorkout', state.current);
     },
     modifyCurrentExercise: (state, { payload }) => {
@@ -59,19 +75,18 @@ export const slice = createSlice({
       if (!sets)
         state.current.stages[stageIndex].exercises[payload.index].sets = [];
       if (sets.length < payload.newLength) {
-        if (sets.length > 0)
+        if (sets.length > 0) {
           state.current.stages[stageIndex].exercises[payload.index].sets.push(
             sets[sets.length - 1]
           );
-        else
+          state.current.stages[stageIndex].exercises[
+            payload.index
+          ].rest.intraset = 0;
+        } else
           state.current.stages[stageIndex].exercises[payload.index].sets.push(
             {}
           );
       }
-      if (sets.length > 1)
-        state.current.stages[stageIndex].exercises[
-          payload.index
-        ].rest.intraset = 0;
       saveState('currentWorkout', state.current);
     },
     removeCurrentExerciseSet: (state, { payload }) => {

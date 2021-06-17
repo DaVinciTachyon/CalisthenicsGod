@@ -45,7 +45,7 @@ class SetEditor extends React.Component {
     if (this.props.isWeighted && this.props.isWeighted !== 0)
       weight = this.props.value?.weight ? Math.abs(this.props.value.weight) : 1;
     await this.setState({ repetitions, time, distance, weight });
-    this.update();
+    if (!this.props.readOnly) this.update();
   };
 
   onChange = async (evt) => {
