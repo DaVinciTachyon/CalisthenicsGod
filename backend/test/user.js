@@ -1,4 +1,4 @@
-const { get, login, post, randomEmail } = require('./util');
+const { get, login, patch, randomEmail } = require('./util');
 const chai = require('chai');
 const { expect } = require('chai');
 const should = chai.should();
@@ -19,14 +19,14 @@ describe('Users', () => {
     });
   });
 
-  describe('/POST', () => {
+  describe('/PATCH', () => {
     it('empty body', async () => {
-      const res = await post('/user', {}, authToken);
+      const res = await patch('/user', {}, authToken);
       res.should.have.status(200);
     });
 
     it('email', async () => {
-      const res = await post(
+      const res = await patch(
         '/user',
         {
           email: expectedEmail,
@@ -41,7 +41,7 @@ describe('Users', () => {
 
     it('duplicate email', async () => {
       const duplicateAuthToken = await login();
-      const res = await post(
+      const res = await patch(
         '/user',
         {
           email: expectedEmail,
