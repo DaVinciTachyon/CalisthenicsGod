@@ -7,6 +7,7 @@ import {
   removeExercise,
 } from '../reducers/exercises';
 import { deleteReq, get, patch, post } from '../requests/exercises';
+import { success, error } from '../reducers/notification';
 
 export default function* exerciseWatcher() {
   yield takeLeading(addExercise.type, handlePostExercise);

@@ -20,6 +20,8 @@ import NonAuthenticatedRoute from './components/NonAuthenticatedRoute';
 import axios from 'axios';
 import { Provider } from 'react-redux';
 import store from './stateManagement/store';
+import ReactNotification from 'react-notifications-component';
+import 'react-notifications-component/dist/theme.css';
 
 axios.defaults.baseURL =
   process.env.REACT_APP_API_URL || 'http://localhost:8080/api';
@@ -30,6 +32,7 @@ axios.defaults.headers.common['Authentication'] =
 ReactDOM.render(
   <React.StrictMode>
     <Provider store={store}>
+      <ReactNotification />
       <Router>
         <Toolbar />
         <Switch>

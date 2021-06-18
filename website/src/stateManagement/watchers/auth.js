@@ -1,6 +1,7 @@
 import { takeLeading, call, put } from 'redux-saga/effects';
 import { postLogIn, postRegister } from '../requests/auth';
 import { logIn, logOut, register } from '../reducers/auth';
+import { success, error } from '../reducers/notification';
 
 export default function* authWatcher() {
   yield takeLeading(logIn.type, handleLogIn);
@@ -13,8 +14,9 @@ function* handleRegister({ payload }) {
     yield call(postRegister, payload);
     yield put(register());
     window.location = '/login';
+    success('Registered!');
   } catch (err) {
-    console.error(err.response);
+    error(err.response.data.error);
   }
 }
 
@@ -24,8 +26,9 @@ function* handleLogIn({ payload }) {
     const { data } = response;
     yield put(logIn(data));
     window.location = '/';
+    success('Logged In!');
   } catch (err) {
-    console.error(err.response);
+    error(err.response.data.error);
   }
 }
 

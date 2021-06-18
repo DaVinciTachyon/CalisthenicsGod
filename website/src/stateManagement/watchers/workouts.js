@@ -8,6 +8,7 @@ import {
 } from '../reducers/workouts';
 import { get, post } from '../requests/workouts';
 import { loadState } from '../../components/util';
+import { success, error } from '../reducers/notification';
 
 export default function* stageWatcher() {
   yield takeLeading(getWorkouts.type, handleGetWorkouts);

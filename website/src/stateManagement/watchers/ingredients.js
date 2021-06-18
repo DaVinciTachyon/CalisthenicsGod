@@ -7,6 +7,7 @@ import {
   patchIngredient,
 } from '../reducers/ingredients';
 import { post, get, deleteReq, patch } from '../requests/ingredients';
+import { success, error } from '../reducers/notification';
 
 export default function* ingredientWatcher() {
   yield takeLeading(addIngredient.type, handlePostIngredient);

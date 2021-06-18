@@ -8,6 +8,7 @@ import {
   setMeasurements,
 } from '../reducers/measurements';
 import { get, post, getHistory } from '../requests/measurements';
+import { success, error } from '../reducers/notification';
 
 export default function* measurementWatcher() {
   yield takeLeading(getMeasurements.type, handleGetMeasurements);

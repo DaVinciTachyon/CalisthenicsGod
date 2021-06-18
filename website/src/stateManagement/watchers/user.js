@@ -13,6 +13,7 @@ import {
   patchNutritionInfo,
   getNutritionInfo,
 } from '../requests/user';
+import { success, error } from '../reducers/notification';
 
 export default function* userWatcher() {
   yield takeLeading(getUserInfo.type, handleGetUser);

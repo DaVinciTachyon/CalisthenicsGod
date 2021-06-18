@@ -8,6 +8,7 @@ import {
   addPresetMeal,
 } from '../reducers/meals';
 import { deleteReq, get, patch, post, postPresetMeal } from '../requests/meals';
+import { success, error } from '../reducers/notification';
 
 export default function* mealWatcher() {
   yield takeLeading(getMeals.type, handleGetMeals);
