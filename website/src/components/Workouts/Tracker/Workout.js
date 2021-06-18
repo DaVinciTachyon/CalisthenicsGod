@@ -3,7 +3,7 @@ import { Row, Column, Title } from '../../../style/table';
 import { Number, Text } from '../../../style/inputs';
 import SetEditor from './SetEditor';
 import { connect } from 'react-redux';
-import { setExercises } from '../../../stateManagement/reducers/exercises';
+import { getExercises } from '../../../stateManagement/reducers/exercises';
 
 class Workout extends React.Component {
   constructor() {
@@ -12,7 +12,7 @@ class Workout extends React.Component {
   }
 
   componentDidMount() {
-    if (this.props.exercises.length === 0) this.props.setExercises();
+    this.props.getExercises();
   }
 
   render() {
@@ -100,5 +100,5 @@ class Workout extends React.Component {
 }
 
 export default connect(({ exercises }) => ({ exercises }), {
-  setExercises,
+  getExercises,
 })(Workout);

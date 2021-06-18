@@ -4,7 +4,8 @@ export const slice = createSlice({
   name: 'meals',
   initialState: [],
   reducers: {
-    setMeals: (state, { payload }) => payload || [],
+    getMeals: () => {},
+    setMeals: (state, { payload }) => payload,
     addPresetMeal: (state, { payload }) => {
       if (payload._id) state.unshift(payload);
     },
@@ -39,6 +40,7 @@ export const slice = createSlice({
 });
 
 export const {
+  getMeals,
   setMeals,
   modifyIngredient,
   removeIngredient,

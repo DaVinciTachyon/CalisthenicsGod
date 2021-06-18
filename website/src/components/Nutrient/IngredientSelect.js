@@ -1,7 +1,7 @@
 import React from 'react';
 import { Select } from '../../style/inputs';
 import { connect } from 'react-redux';
-import { setIngredients } from '../../stateManagement/reducers/ingredients';
+import { getIngredients } from '../../stateManagement/reducers/ingredients';
 
 class IngredientSelect extends React.Component {
   constructor() {
@@ -10,7 +10,7 @@ class IngredientSelect extends React.Component {
   }
 
   componentDidMount() {
-    if (this.props.ingredients.length === 0) this.props.setIngredients();
+    this.props.getIngredients();
   }
 
   onChange = (evt) =>
@@ -40,5 +40,5 @@ class IngredientSelect extends React.Component {
 }
 
 export default connect(({ ingredients }) => ({ ingredients }), {
-  setIngredients,
+  getIngredients,
 })(IngredientSelect);

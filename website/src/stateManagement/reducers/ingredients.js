@@ -4,10 +4,11 @@ export const slice = createSlice({
   name: 'ingredients',
   initialState: [],
   reducers: {
+    getIngredients: () => {},
+    setIngredients: (state, { payload }) => payload,
     addIngredient: (state, { payload }) => {
       if (payload._id) state.push(payload);
     },
-    setIngredients: (state, { payload }) => payload || [],
     changeAvailability: (state, { payload }) => {
       state.find((ingredient) => ingredient._id === payload._id).isAvailable =
         !payload.isAvailable;
@@ -27,6 +28,7 @@ export const slice = createSlice({
 export const {
   addIngredient,
   setIngredients,
+  getIngredients,
   changeAvailability,
   patchIngredient,
 } = slice.actions;

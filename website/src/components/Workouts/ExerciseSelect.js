@@ -1,7 +1,7 @@
 import React from 'react';
 import { Select } from '../../style/inputs';
 import { connect } from 'react-redux';
-import { setExercises } from '../../stateManagement/reducers/exercises';
+import { getExercises } from '../../stateManagement/reducers/exercises';
 
 class ExerciseSelect extends React.Component {
   constructor() {
@@ -10,7 +10,7 @@ class ExerciseSelect extends React.Component {
   }
 
   componentDidMount() {
-    if (this.props.exercises.length === 0) this.props.setExercises();
+    this.props.getExercises();
   }
 
   onChange = (evt) => {
@@ -54,5 +54,5 @@ class ExerciseSelect extends React.Component {
 }
 
 export default connect(({ exercises }) => ({ exercises }), {
-  setExercises,
+  getExercises,
 })(ExerciseSelect);

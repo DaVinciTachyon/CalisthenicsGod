@@ -1,14 +1,15 @@
-import { takeLeading, call, put } from 'redux-saga/effects';
+import { takeLeading, call, put, select } from 'redux-saga/effects';
 import {
   addStage,
   modifyStage,
   removeStage,
   setStages,
+  getStages,
 } from '../reducers/stages';
 import { deleteReq, get, patch, post } from '../requests/stages';
 
 export default function* stageWatcher() {
-  yield takeLeading(setStages.type, handleGetStages);
+  yield takeLeading(getStages.type, handleGetStages);
   yield takeLeading(removeStage.type, handleDeleteStage);
   yield takeLeading(addStage.type, handlePostStage);
   yield takeLeading(modifyStage.type, handlePatchStage);
@@ -16,9 +17,12 @@ export default function* stageWatcher() {
 
 function* handleGetStages({ payload }) {
   try {
-    const response = yield call(get);
-    const { data } = response;
-    yield put(setStages(data.stages));
+    const stages = yield select((state) => state.stages);
+    if (stages.length === 0) {
+      const response = yield call(get);
+      const { data } = response;
+      yield put(setStages(data.stages));
+    }
   } catch (err) {
     console.error(err.response);
   }

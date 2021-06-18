@@ -1,7 +1,8 @@
-import { takeLeading, call, put } from 'redux-saga/effects';
+import { takeLeading, call, put, select } from 'redux-saga/effects';
 import {
   addExercise,
   setExercises,
+  getExercises,
   modifyExercise,
   removeExercise,
 } from '../reducers/exercises';
@@ -11,14 +12,17 @@ export default function* exerciseWatcher() {
   yield takeLeading(addExercise.type, handlePostExercise);
   yield takeLeading(modifyExercise.type, handlePatchExercise);
   yield takeLeading(removeExercise.type, handleDeleteExercise);
-  yield takeLeading(setExercises.type, handleGetExercises);
+  yield takeLeading(getExercises.type, handleGetExercises);
 }
 
 function* handleGetExercises({ payload }) {
   try {
-    const response = yield call(get);
-    const { data } = response;
-    yield put(setExercises(data.exercises));
+    const exercises = yield select((state) => state.exercises);
+    if (exercises.length === 0) {
+      const response = yield call(get);
+      const { data } = response;
+      yield put(setExercises(data.exercises));
+    }
   } catch (err) {
     console.error(err.response);
   }

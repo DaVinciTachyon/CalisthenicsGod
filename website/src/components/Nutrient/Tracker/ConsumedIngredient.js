@@ -21,7 +21,7 @@ import {
   modifyIngredient,
   removeIngredient,
 } from '../../../stateManagement/reducers/meals';
-import { setIngredients } from '../../../stateManagement/reducers/ingredients';
+import { getIngredients } from '../../../stateManagement/reducers/ingredients';
 
 class ConsumedIngredient extends React.Component {
   constructor() {
@@ -43,7 +43,7 @@ class ConsumedIngredient extends React.Component {
       await this.getDetails();
       this.setWeight();
     }
-    if (this.props.ingredients.length === 0) this.props.setIngredients();
+    this.props.getIngredients();
   }
 
   componentDidUpdate(prevProps) {
@@ -199,5 +199,5 @@ class ConsumedIngredient extends React.Component {
 export default connect(({ ingredients, meals }) => ({ ingredients, meals }), {
   modifyIngredient,
   removeIngredient,
-  setIngredients,
+  getIngredients,
 })(ConsumedIngredient);

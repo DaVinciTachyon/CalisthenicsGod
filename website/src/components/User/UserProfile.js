@@ -10,11 +10,11 @@ import {
 } from '../../style/inputs';
 import { Success, Error } from '../../style/notification';
 import { connect } from 'react-redux';
-import { setMeasurement } from '../../stateManagement/reducers/measurements';
+import { getMeasurement } from '../../stateManagement/reducers/measurements';
 import {
-  setUserInfo,
+  getUserInfo,
   modifyUserInfo,
-  setNutritionInfo,
+  getNutritionInfo,
   modifyNutritionInfo,
 } from '../../stateManagement/reducers/user';
 
@@ -41,9 +41,9 @@ class UserProfile extends React.Component {
   }
 
   componentDidMount() {
-    this.props.setUserInfo();
-    this.props.setNutritionInfo();
-    this.props.setMeasurement('weight');
+    this.props.getUserInfo();
+    this.props.getNutritionInfo();
+    this.props.getMeasurement('weight');
     this.getUserInfo();
   }
 
@@ -262,9 +262,9 @@ class UserProfile extends React.Component {
 }
 
 export default connect(({ measurements, user }) => ({ measurements, user }), {
-  setMeasurement,
-  setUserInfo,
+  getMeasurement,
+  getUserInfo,
   modifyUserInfo,
-  setNutritionInfo,
+  getNutritionInfo,
   modifyNutritionInfo,
 })(UserProfile);

@@ -1,9 +1,11 @@
-import { takeLeading, call, put } from 'redux-saga/effects';
+import { takeLeading, call, put, select } from 'redux-saga/effects';
 import {
   setUserInfo,
   modifyUserInfo,
   setNutritionInfo,
   modifyNutritionInfo,
+  getUserInfo,
+  getNutritionInfo as getNutritionInfoRed,
 } from '../reducers/user';
 import {
   get,
@@ -13,17 +15,20 @@ import {
 } from '../requests/user';
 
 export default function* userWatcher() {
-  yield takeLeading(setUserInfo.type, handleGetUser);
+  yield takeLeading(getUserInfo.type, handleGetUser);
   yield takeLeading(modifyUserInfo.type, handlePatchUser);
-  yield takeLeading(setNutritionInfo.type, handleGetNutritionInfo);
+  yield takeLeading(getNutritionInfoRed.type, handleGetNutritionInfo);
   yield takeLeading(modifyNutritionInfo.type, handlePatchNutritionInfo);
 }
 
 function* handleGetUser({ payload }) {
   try {
-    const response = yield call(get);
-    const { data } = response;
-    yield put(setUserInfo(data));
+    const user = yield select((state) => state.user);
+    if (!user.name) {
+      const response = yield call(get);
+      const { data } = response;
+      yield put(setUserInfo(data));
+    }
   } catch (err) {
     console.error(err.response);
   }
@@ -39,9 +44,12 @@ function* handlePatchUser({ payload }) {
 
 function* handleGetNutritionInfo({ payload }) {
   try {
-    const response = yield call(getNutritionInfo);
-    const { data } = response;
-    yield put(setNutritionInfo(data));
+    const nutrition = yield select((state) => state.user.nutrition);
+    if (!nutrition) {
+      const response = yield call(getNutritionInfo);
+      const { data } = response;
+      yield put(setNutritionInfo(data));
+    }
   } catch (err) {
     console.error(err.response);
   }

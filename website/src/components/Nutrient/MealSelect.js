@@ -2,7 +2,7 @@ import React from 'react';
 import { Select } from '../../style/inputs';
 import { Button } from '../../style/buttons';
 import { Row } from '../../style/table';
-import { setPresetMeals } from '../../stateManagement/reducers/presetMeals';
+import { getPresetMeals } from '../../stateManagement/reducers/presetMeals';
 import { connect } from 'react-redux';
 
 class MealSelect extends React.Component {
@@ -12,7 +12,7 @@ class MealSelect extends React.Component {
   }
 
   componentDidMount() {
-    if (this.props.presetMeals.length === 0) this.props.setPresetMeals();
+    if (this.props.presetMeals.length === 0) this.props.getPresetMeals();
   }
 
   render() {
@@ -37,5 +37,5 @@ class MealSelect extends React.Component {
 }
 
 export default connect(({ presetMeals }) => ({ presetMeals }), {
-  setPresetMeals,
+  getPresetMeals,
 })(MealSelect);

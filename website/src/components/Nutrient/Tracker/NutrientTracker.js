@@ -6,7 +6,7 @@ import MealIngredientAdder from './MealIngredientAdder';
 import ConsumedMeal from './ConsumedMeal';
 import { connect } from 'react-redux';
 import {
-  setMeals,
+  getMeals,
   addPresetMeal,
 } from '../../../stateManagement/reducers/meals';
 
@@ -19,7 +19,7 @@ class NutrientTracker extends React.Component {
   }
 
   componentDidMount() {
-    if (this.props.meals.length === 0) this.props.setMeals();
+    this.props.getMeals();
   }
 
   render() {
@@ -55,6 +55,6 @@ class NutrientTracker extends React.Component {
 }
 
 export default connect(({ meals }) => ({ meals }), {
-  setMeals,
+  getMeals,
   addPresetMeal,
 })(NutrientTracker);

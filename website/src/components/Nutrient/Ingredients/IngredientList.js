@@ -3,7 +3,7 @@ import IngredientRow from './IngredientRow';
 import { Title } from '../../../style/table';
 import IngredientAdder from './IngredientAdder';
 import { connect } from 'react-redux';
-import { setIngredients } from '../../../stateManagement/reducers/ingredients';
+import { getIngredients } from '../../../stateManagement/reducers/ingredients';
 
 class IngredientList extends React.Component {
   constructor() {
@@ -12,7 +12,7 @@ class IngredientList extends React.Component {
   }
 
   componentDidMount() {
-    if (this.props.ingredients.length === 0) this.props.setIngredients();
+    this.props.getIngredients();
   }
 
   render() {
@@ -49,5 +49,5 @@ class IngredientList extends React.Component {
 }
 
 export default connect(({ ingredients }) => ({ ingredients }), {
-  setIngredients,
+  getIngredients,
 })(IngredientList);
