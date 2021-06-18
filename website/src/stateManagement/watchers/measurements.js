@@ -24,7 +24,7 @@ function* handlePostMeasurements({ payload }) {
     yield put(setMeasurements(data));
     window.location = '/measurementTracker';
   } catch (err) {
-    console.error(err.response);
+    error(err.response.data.error);
   }
 }
 
@@ -34,7 +34,7 @@ function* handleGetMeasurements({ payload }) {
     const { data } = response;
     yield put(setMeasurements(data));
   } catch (err) {
-    console.error(err.response);
+    error(err.response.data.error);
   }
 }
 
@@ -44,7 +44,7 @@ function* handleGetMeasurementHistory({ payload }) {
     const { data } = response;
     yield put(setMeasurementHistory({ name: payload, ...data }));
   } catch (err) {
-    console.error(err.response);
+    error(err.response.data.error);
   }
 }
 
@@ -57,6 +57,6 @@ function* handleGetMeasurement({ payload }) {
       yield put(setMeasurements(data));
     }
   } catch (err) {
-    console.error(err.response);
+    error(err.response.data.error);
   }
 }

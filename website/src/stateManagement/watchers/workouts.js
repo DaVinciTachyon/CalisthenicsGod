@@ -30,7 +30,7 @@ function* handleGetWorkouts({ payload }) {
       yield put(setWorkouts(data.workouts));
     }
   } catch (err) {
-    console.error(err.response);
+    error(err.response.data.error);
   }
 }
 
@@ -42,6 +42,6 @@ function* handlePostWorkout({ payload }) {
     window.location = '/workoutTracker';
   } catch (err) {
     console.log(err);
-    console.error(err.response);
+    error(err.response.data.error);
   }
 }

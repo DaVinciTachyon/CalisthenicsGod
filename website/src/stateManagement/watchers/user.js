@@ -31,7 +31,7 @@ function* handleGetUser({ payload }) {
       yield put(setUserInfo(data));
     }
   } catch (err) {
-    console.error(err.response);
+    error(err.response.data.error);
   }
 }
 function* handlePatchUser({ payload }) {
@@ -39,7 +39,7 @@ function* handlePatchUser({ payload }) {
     yield call(patch, payload);
     yield put(modifyUserInfo(payload));
   } catch (err) {
-    console.error(err.response);
+    error(err.response.data.error);
   }
 }
 
@@ -52,7 +52,7 @@ function* handleGetNutritionInfo({ payload }) {
       yield put(setNutritionInfo(data));
     }
   } catch (err) {
-    console.error(err.response);
+    error(err.response.data.error);
   }
 }
 
@@ -61,6 +61,6 @@ function* handlePatchNutritionInfo({ payload }) {
     yield call(patchNutritionInfo, payload);
     yield put(modifyNutritionInfo(payload));
   } catch (err) {
-    console.error(err.response);
+    error(err.response.data.error);
   }
 }

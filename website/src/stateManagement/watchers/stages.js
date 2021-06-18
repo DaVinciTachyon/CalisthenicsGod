@@ -25,7 +25,7 @@ function* handleGetStages({ payload }) {
       yield put(setStages(data.stages));
     }
   } catch (err) {
-    console.error(err.response);
+    error(err.response.data.error);
   }
 }
 
@@ -34,7 +34,7 @@ function* handleDeleteStage({ payload }) {
     yield call(deleteReq, payload);
     yield put(removeStage(payload));
   } catch (err) {
-    console.error(err.response);
+    error(err.response.data.error);
   }
 }
 
@@ -44,7 +44,7 @@ function* handlePostStage({ payload }) {
     const { data } = response;
     yield put(addStage({ ...payload, _id: data._id }));
   } catch (err) {
-    console.error(err.response);
+    error(err.response.data.error);
   }
 }
 
@@ -53,6 +53,6 @@ function* handlePatchStage({ payload }) {
     yield call(patch, payload);
     yield put(modifyStage(payload));
   } catch (err) {
-    console.error(err.response);
+    error(err.response.data.error);
   }
 }

@@ -44,7 +44,7 @@ function* handlePostPresetMealIngredient({ payload }) {
       })
     );
   } catch (err) {
-    console.error(err.response);
+    error(err.response.data.error);
   }
 }
 
@@ -53,7 +53,7 @@ function* handlePatchPresetMealIngredient({ payload }) {
     yield call(patchIngredient, payload);
     yield put(modifyIngredient(payload));
   } catch (err) {
-    console.error(err.response);
+    error(err.response.data.error);
   }
 }
 
@@ -62,7 +62,7 @@ function* handleDeletePresetMealIngredient({ payload }) {
     yield call(deleteIngredient, payload);
     yield put(removeIngredient(payload));
   } catch (err) {
-    console.error(err.response);
+    error(err.response.data.error);
   }
 }
 
@@ -75,7 +75,7 @@ function* handleGetPresetMeals({ payload }) {
       yield put(setPresetMeals(data.meals));
     }
   } catch (err) {
-    console.error(err.response);
+    error(err.response.data.error);
   }
 }
 
@@ -85,7 +85,7 @@ function* handlePostPresetMeal({ payload }) {
     const { data } = response;
     yield put(addPresetMeal({ ...payload, _id: data._id }));
   } catch (err) {
-    console.error(err.response);
+    error(err.response.data.error);
   }
 }
 
@@ -94,7 +94,7 @@ function* handleDeletePresetMeal({ payload }) {
     yield call(deleteReq, payload);
     yield put(deletePresetMeal(payload));
   } catch (err) {
-    console.error(err.response);
+    error(err.response.data.error);
   }
 }
 
@@ -103,6 +103,6 @@ function* handlePatchPresetMeal({ payload }) {
     yield call(patch, payload);
     yield put(modifyPresetMeal(payload));
   } catch (err) {
-    console.error(err.response);
+    error(err.response.data.error);
   }
 }

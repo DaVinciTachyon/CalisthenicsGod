@@ -22,7 +22,7 @@ function* handlePostIngredient({ payload }) {
     const { data } = response;
     yield put(addIngredient({ ...data }));
   } catch (err) {
-    console.error(err.response);
+    error(err.response.data.error);
   }
 }
 
@@ -35,7 +35,7 @@ function* handleSetIngredients({ payload }) {
       yield put(setIngredients(data.ingredients));
     }
   } catch (err) {
-    console.error(err.response);
+    error(err.response.data.error);
   }
 }
 
@@ -44,7 +44,7 @@ function* handleIngredientAvailability({ payload }) {
     yield call(deleteReq, payload._id);
     yield put(changeAvailability({ ...payload }));
   } catch (err) {
-    console.error(err.response);
+    error(err.response.data.error);
   }
 }
 
@@ -53,6 +53,6 @@ function* handlePatchIngredient({ payload }) {
     yield call(patch, payload);
     yield put(patchIngredient({ ...payload }));
   } catch (err) {
-    console.error(err.response);
+    error(err.response.data.error);
   }
 }

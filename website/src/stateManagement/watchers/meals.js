@@ -33,7 +33,7 @@ function* handlePostMealIngredient({ payload }) {
       })
     );
   } catch (err) {
-    console.error(err.response);
+    error(err.response.data.error);
   }
 }
 
@@ -43,7 +43,7 @@ function* handlePostPresetMeal({ payload }) {
     const { data } = response;
     yield put(addPresetMeal(data));
   } catch (err) {
-    console.error(err.response);
+    error(err.response.data.error);
   }
 }
 
@@ -56,7 +56,7 @@ function* handleGetMeals({ payload }) {
       yield put(setMeals(data.meals));
     }
   } catch (err) {
-    console.error(err.response);
+    error(err.response.data.error);
   }
 }
 
@@ -65,7 +65,7 @@ function* handleDeleteMealIngredient({ payload }) {
     yield call(deleteReq, payload);
     yield put(removeIngredient(payload));
   } catch (err) {
-    console.error(err.response);
+    error(err.response.data.error);
   }
 }
 
@@ -74,6 +74,6 @@ function* handlePatchMealIngredient({ payload }) {
     yield call(patch, payload);
     yield put(modifyIngredient(payload));
   } catch (err) {
-    console.error(err.response);
+    error(err.response.data.error);
   }
 }
