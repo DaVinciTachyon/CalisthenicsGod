@@ -94,9 +94,9 @@ class MealIngredientAdder extends React.Component {
             onChange={this.onIngredientChange}
             label="Ingredient"
           />
-          {id === '' && (
+          {/* {id === '' && (
             <Text name="name" value={name} onChange={this.onChange} />
-          )}
+          )} */}
         </Column>
         <Calories value={calories} readOnly />
         <Column span={7}>
