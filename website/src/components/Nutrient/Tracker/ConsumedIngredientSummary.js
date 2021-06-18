@@ -25,7 +25,6 @@ class ConsumedIngredientSummary extends React.Component {
 
   componentDidMount() {
     this.setMacros();
-    this.props.getIngredients();
   }
 
   componentDidUpdate(prevProps) {
