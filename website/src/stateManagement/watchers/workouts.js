@@ -39,6 +39,7 @@ function* handlePostWorkout({ payload }) {
     const response = yield call(post, payload);
     const { data } = response;
     yield put(addWorkout(data.workout));
+    success('Workout Added');
     window.location = '/workoutTracker';
   } catch (err) {
     console.log(err);

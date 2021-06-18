@@ -22,6 +22,7 @@ function* handlePostMeasurements({ payload }) {
     const response = yield call(post, payload);
     const { data } = response;
     yield put(setMeasurements(data));
+    success('Measurements Added');
     window.location = '/measurementTracker';
   } catch (err) {
     error(err.response.data.error);

@@ -21,6 +21,7 @@ function* handlePostIngredient({ payload }) {
     const response = yield call(post, payload);
     const { data } = response;
     yield put(addIngredient({ ...data }));
+    success('Ingredient Added');
   } catch (err) {
     error(err.response.data.error);
   }
@@ -43,6 +44,7 @@ function* handleIngredientAvailability({ payload }) {
   try {
     yield call(deleteReq, payload._id);
     yield put(changeAvailability({ ...payload }));
+    success('Ingredient Availability Changed');
   } catch (err) {
     error(err.response.data.error);
   }
@@ -52,6 +54,7 @@ function* handlePatchIngredient({ payload }) {
   try {
     yield call(patch, payload);
     yield put(patchIngredient({ ...payload }));
+    success('Ingredient Updated');
   } catch (err) {
     error(err.response.data.error);
   }

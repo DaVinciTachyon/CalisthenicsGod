@@ -38,6 +38,7 @@ function* handlePatchUser({ payload }) {
   try {
     yield call(patch, payload);
     yield put(modifyUserInfo(payload));
+    success('Updated User Info');
   } catch (err) {
     error(err.response.data.error);
   }
@@ -60,6 +61,7 @@ function* handlePatchNutritionInfo({ payload }) {
   try {
     yield call(patchNutritionInfo, payload);
     yield put(modifyNutritionInfo(payload));
+    success('Updated Nutrition Info');
   } catch (err) {
     error(err.response.data.error);
   }

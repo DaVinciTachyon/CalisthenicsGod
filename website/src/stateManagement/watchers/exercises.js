@@ -33,6 +33,7 @@ function* handleDeleteExercise({ payload }) {
   try {
     yield call(deleteReq, payload);
     yield put(removeExercise(payload));
+    success('Exercise Removed');
   } catch (err) {
     error(err.response.data.error);
   }
@@ -43,6 +44,7 @@ function* handlePostExercise({ payload }) {
     const response = yield call(post, payload);
     const { data } = response;
     yield put(addExercise(data));
+    success('Exercise Added');
   } catch (err) {
     error(err.response.data.error);
   }
@@ -52,6 +54,7 @@ function* handlePatchExercise({ payload }) {
   try {
     yield call(patch, payload);
     yield put(modifyExercise(payload));
+    success('Exercise Updated');
   } catch (err) {
     error(err.response.data.error);
   }
