@@ -1,5 +1,4 @@
 import React from 'react';
-import { Error } from '../../style/notification';
 import { Row } from '../../style/table';
 import Card from '../../style/card';
 import { Button } from '../../style/buttons';
@@ -25,7 +24,6 @@ class Register extends React.Component {
       weight: '',
       gender: '',
       birthDate: '',
-      error: '',
     };
   }
 
@@ -37,10 +35,6 @@ class Register extends React.Component {
   render() {
     return (
       <Card>
-        <Error
-          text={this.state.error}
-          dismiss={() => this.setState({ error: '' })}
-        />
         <Text
           name="firstname"
           value={this.state.firstname}

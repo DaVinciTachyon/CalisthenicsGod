@@ -8,7 +8,6 @@ import {
   Select,
   Range,
 } from '../../style/inputs';
-import { Success, Error } from '../../style/notification';
 import { connect } from 'react-redux';
 import { getMeasurement } from '../../stateManagement/reducers/measurements';
 import {
@@ -35,8 +34,6 @@ class UserProfile extends React.Component {
       caloriesPerKg: 0,
       proteinGramsPerKg: 0,
       fatCalorieProportion: 0,
-      error: '',
-      success: '',
     };
   }
 
@@ -122,14 +119,6 @@ class UserProfile extends React.Component {
   render() {
     return (
       <div>
-        <Success
-          text={this.state.success}
-          dismiss={() => this.setState({ success: '' })}
-        />
-        <Error
-          text={this.state.error}
-          dismiss={() => this.setState({ error: '' })}
-        />
         <Section label="General">
           <Row columns={3}>
             <Text

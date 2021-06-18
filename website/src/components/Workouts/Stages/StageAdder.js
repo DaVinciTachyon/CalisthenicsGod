@@ -1,5 +1,4 @@
 import React from 'react';
-import { Error } from '../../../style/notification';
 import { Row, Column } from '../../../style/table';
 import { Button, ErrorButton } from '../../../style/buttons';
 import { Text } from '../../../style/inputs';
@@ -52,10 +51,6 @@ class StageAdder extends React.Component {
     else
       return (
         <>
-          <Error
-            text={this.state.error}
-            dismiss={() => this.setState({ error: '' })}
-          />
           <Row columns={5}>
             <Column span={2}>
               <Text
