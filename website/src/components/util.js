@@ -21,17 +21,17 @@ const removeState = (name) => {
   localStorage.removeItem(name);
 };
 
-const getWeight = (weights) => {
-  let weight = 0
-  const date = new Date();
-  date.setDate(date.getDate() - 7);
-  if(weights) {
-    const weights = weights.filter(weight =>
+const getWeight = (allWeights) => {
+  let weight = 0;
+  if(allWeights) {
+    const date = new Date();
+    date.setDate(date.getDate() - 7);
+    const weights = allWeights.filter(weight =>
       new Date(weight.date).getTime() >= date.getTime()
     )
     weight = weights.length > 0 ?
       weights.reduce((mean, weight,  _, { length }) => mean + weight.value / length, 0) :
-      weights[0].value
+      allWeights[0].value
   }
   return weight
 }
