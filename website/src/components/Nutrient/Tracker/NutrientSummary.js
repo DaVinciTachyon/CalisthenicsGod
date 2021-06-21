@@ -58,7 +58,7 @@ class NutrientSummary extends React.Component {
     if (this.props.measurements.weight)
       weight = this.props.measurements.weight[0].value;
     const macroDensities = await getMacroDensities();
-    const calories = weight * nutrition.caloriesPerKg + nutrition.calorieOffset;
+    const calories = weight * nutrition.caloriesPerKg * nutrition.calorieOffset;
     const protein = weight * nutrition.proteinGramsPerKg;
     const fat =
       (nutrition.fatCalorieProportion * calories) / macroDensities.fat;

@@ -5,6 +5,7 @@ import {
   Calories,
   Text,
   Date as DateInput,
+  Number,
   Select,
   Range,
 } from '../../style/inputs';
@@ -70,9 +71,9 @@ class UserProfile extends React.Component {
       calorieOffset: user.nutrition?.calorieOffset,
       currentCalorieOffset: user.nutrition?.calorieOffset,
       calorieMode:
-        user.nutrition?.calorieOffset > 0
+        user.nutrition?.calorieOffset > 1
           ? 'bulk'
-          : user.nutrition?.calorieOffset < 0
+          : user.nutrition?.calorieOffset < 1
           ? 'deficit'
           : 'maintenance',
     });
@@ -83,14 +84,14 @@ class UserProfile extends React.Component {
     this.setState({
       calorieOffset:
         evt.value === 'deficit'
-          ? this.state.currentCalorieOffset < 0
+          ? this.state.currentCalorieOffset < 1
             ? this.state.currentCalorieOffset
-            : -300
+            : 0.85
           : evt.value === 'bulk'
-          ? this.state.currentCalorieOffset > 0
+          ? this.state.currentCalorieOffset > 1
             ? this.state.currentCalorieOffset
-            : 200
-          : 0,
+            : 1.05
+          : 1,
     });
   };
 
@@ -117,6 +118,10 @@ class UserProfile extends React.Component {
   onSelectChange = (evt) => this.setState({ [evt.name]: evt.value });
 
   render() {
+    const maintenanceCalories = this.state.caloriesPerKg *
+    (this.props.measurements.weight
+      ? this.props.measurements.weight[0].value
+      : 0)
     return (
       <div>
         <Section label="General">
@@ -171,13 +176,10 @@ class UserProfile extends React.Component {
           />
         </Section>
         <Section label="Nutrient Information">
-          <Row columns={this.state.calorieOffset !== 0 ? 3 : 2}>
+          <Row columns={this.state.calorieOffset !== 1 ? 4 : 2}>
             <Calories
               value={
-                this.state.caloriesPerKg *
-                (this.props.measurements.weight
-                  ? this.props.measurements.weight[0].value
-                  : 0)
+                maintenanceCalories
               }
               label="Maintenance Calories"
               unit="kcal"
@@ -194,20 +196,27 @@ class UserProfile extends React.Component {
               onChange={this.onCalorieModeChange}
               label="Calorie Mode"
             />
-            {this.state.calorieOffset !== 0 && (
-              <Calories
+            {this.state.calorieOffset !== 1 && (
+            <>
+                <Number
                 name="calorieOffset"
-                label="Calorie Offset"
-                value={
-                  (this.state.calorieMode === 'deficit' ? -1 : 1) *
-                  this.state.calorieOffset
-                }
+                label="Offset Percentage"
+                value={(this.state.calorieOffset - 1) * (this.state.calorieMode === 'deficit' ? -100 : 100)}
                 onChange={(evt) => {
-                  evt.target.value *=
-                    this.state.calorieMode === 'deficit' ? -1 : 1;
+                  evt.target.value /= this.state.calorieMode === 'deficit' ? -100 : 100;
+                  evt.target.value++;
                   this.onChange(evt);
                 }}
+                unit='%'
+                min={0}
+                max={100}
               />
+                <Calories
+                  label="Calorie Offset"
+                  value={this.state.calorieOffset * maintenanceCalories - maintenanceCalories}
+                      readOnly
+                />
+              </>
             )}
           </Row>
           <Range

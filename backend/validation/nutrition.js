@@ -23,7 +23,7 @@ const ingredientRef = Joi.object({
 module.exports = {
   userInfo: (data) =>
     Joi.object({
-      calorieOffset: Joi.number().required(),
+      calorieOffset: Joi.number().required().min(0),
       caloriesPerKg: Joi.number().min(0).required(),
       proteinGramsPerKg: Joi.number().min(0).required(),
       fatCalorieProportion: Joi.number().min(0).max(1).required(),
