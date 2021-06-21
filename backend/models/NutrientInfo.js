@@ -15,7 +15,8 @@ module.exports = mongoose.model(
     },
     calorieOffset: {
       type: Number,
-      default: 0,
+      default: 1,
+      min: 0
     },
     proteinGramsPerKg: {
       type: Number,

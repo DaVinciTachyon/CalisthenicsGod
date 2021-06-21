@@ -5,17 +5,19 @@ import {
   Calories,
   Text,
   Date as DateInput,
+  Number,
   Select,
   Range,
 } from '../../style/inputs';
 import { connect } from 'react-redux';
-import { getMeasurement } from '../../stateManagement/reducers/measurements';
+import { getMeasurementHistory } from '../../stateManagement/reducers/measurements';
 import {
   getUserInfo,
   modifyUserInfo,
   getNutritionInfo,
   modifyNutritionInfo,
 } from '../../stateManagement/reducers/user';
+import { getWeight } from '../util'
 
 class UserProfile extends React.Component {
   constructor() {
@@ -40,7 +42,7 @@ class UserProfile extends React.Component {
   componentDidMount() {
     this.props.getUserInfo();
     this.props.getNutritionInfo();
-    this.props.getMeasurement('weight');
+    this.props.getMeasurementHistory('weight');
     this.getUserInfo();
   }
 
@@ -70,9 +72,9 @@ class UserProfile extends React.Component {
       calorieOffset: user.nutrition?.calorieOffset,
       currentCalorieOffset: user.nutrition?.calorieOffset,
       calorieMode:
-        user.nutrition?.calorieOffset > 0
+        user.nutrition?.calorieOffset > 1
           ? 'bulk'
-          : user.nutrition?.calorieOffset < 0
+          : user.nutrition?.calorieOffset < 1
           ? 'deficit'
           : 'maintenance',
     });
@@ -83,14 +85,14 @@ class UserProfile extends React.Component {
     this.setState({
       calorieOffset:
         evt.value === 'deficit'
-          ? this.state.currentCalorieOffset < 0
+          ? this.state.currentCalorieOffset < 1
             ? this.state.currentCalorieOffset
-            : -300
+            : 0.85
           : evt.value === 'bulk'
-          ? this.state.currentCalorieOffset > 0
+          ? this.state.currentCalorieOffset > 1
             ? this.state.currentCalorieOffset
-            : 200
-          : 0,
+            : 1.05
+          : 1,
     });
   };
 
@@ -117,6 +119,7 @@ class UserProfile extends React.Component {
   onSelectChange = (evt) => this.setState({ [evt.name]: evt.value });
 
   render() {
+    const maintenanceCalories = this.state.caloriesPerKg * getWeight(this.props.measurements.weight)
     return (
       <div>
         <Section label="General">
@@ -160,7 +163,7 @@ class UserProfile extends React.Component {
             <DateInput
               name="birthDate"
               value={this.state.birthDate}
-              label="Birth Date"
+              label="Date of Birth"
               onChange={this.onChange}
             />
           </Row>
@@ -171,14 +174,9 @@ class UserProfile extends React.Component {
           />
         </Section>
         <Section label="Nutrient Information">
-          <Row columns={this.state.calorieOffset !== 0 ? 3 : 2}>
+          <Row columns={this.state.calorieOffset !== 1 ? 4 : 2}>
             <Calories
-              value={
-                this.state.caloriesPerKg *
-                (this.props.measurements.weight
-                  ? this.props.measurements.weight[0].value
-                  : 0)
-              }
+              value={maintenanceCalories}
               label="Maintenance Calories"
               unit="kcal"
               readOnly
@@ -194,20 +192,27 @@ class UserProfile extends React.Component {
               onChange={this.onCalorieModeChange}
               label="Calorie Mode"
             />
-            {this.state.calorieOffset !== 0 && (
-              <Calories
+            {this.state.calorieOffset !== 1 && (
+            <>
+                <Number
                 name="calorieOffset"
-                label="Calorie Offset"
-                value={
-                  (this.state.calorieMode === 'deficit' ? -1 : 1) *
-                  this.state.calorieOffset
-                }
+                label="Offset Percentage"
+                value={(this.state.calorieOffset - 1) * (this.state.calorieMode === 'deficit' ? -100 : 100)}
                 onChange={(evt) => {
-                  evt.target.value *=
-                    this.state.calorieMode === 'deficit' ? -1 : 1;
+                  evt.target.value /= this.state.calorieMode === 'deficit' ? -100 : 100;
+                  evt.target.value++;
                   this.onChange(evt);
                 }}
+                unit='%'
+                min={0}
+                max={100}
               />
+                <Calories
+                  label="Calorie Offset"
+                  value={this.state.calorieOffset * maintenanceCalories - maintenanceCalories}
+                      readOnly
+                />
+              </>
             )}
           </Row>
           <Range
@@ -251,7 +256,7 @@ class UserProfile extends React.Component {
 }
 
 export default connect(({ measurements, user }) => ({ measurements, user }), {
-  getMeasurement,
+  getMeasurementHistory,
   getUserInfo,
   modifyUserInfo,
   getNutritionInfo,

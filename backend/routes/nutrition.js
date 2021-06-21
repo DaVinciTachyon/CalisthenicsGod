@@ -66,7 +66,7 @@ router.route('/goals').get(async (req, res) => {
   const nutrients = await NutrientInfo.findOne({ userId: req.user._id });
 
   const calories = Math.round(
-    getMaintenanceCalories(weight, nutrients.caloriesPerKg) +
+    getMaintenanceCalories(weight, nutrients.caloriesPerKg) *
       nutrients.calorieOffset
   );
   const protein = getProteinGrams(weight, nutrients.proteinGramsPerKg);
