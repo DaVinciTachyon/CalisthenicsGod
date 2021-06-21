@@ -5,7 +5,7 @@ import { Select, Number } from '../../../style/inputs';
 import { Button, DeleteButton } from '../../../style/buttons';
 import SetEditor from './SetEditor';
 import { connect } from 'react-redux';
-import { setExercises } from '../../../stateManagement/reducers/exercises';
+import { getExercises } from '../../../stateManagement/reducers/exercises';
 import {
   modifyCurrentExercise,
   addCurrentExerciseSet,
@@ -29,8 +29,8 @@ class ExerciseRow extends React.Component {
   }
 
   componentDidMount() {
-    if (this.props.exercises.length === 0) this.props.setExercises();
-    else this.set();
+    this.props.getExercises();
+    this.set();
   }
 
   componentDidUpdate(prevProps) {
@@ -234,7 +234,7 @@ class ExerciseRow extends React.Component {
 }
 
 export default connect(({ workouts, exercises }) => ({ workouts, exercises }), {
-  setExercises,
+  getExercises,
   modifyCurrentExercise,
   addCurrentExerciseSet,
   removeCurrentExerciseSet,

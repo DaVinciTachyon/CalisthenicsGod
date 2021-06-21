@@ -1,7 +1,7 @@
 import React from 'react';
 import MealRow from './MealRow';
 import MealAdder from './MealAdder';
-import { setPresetMeals } from '../../../stateManagement/reducers/presetMeals';
+import { getPresetMeals } from '../../../stateManagement/reducers/presetMeals';
 import { connect } from 'react-redux';
 
 class Meals extends React.Component {
@@ -11,7 +11,7 @@ class Meals extends React.Component {
   }
 
   componentDidMount() {
-    if (this.props.presetMeals.length === 0) this.props.setPresetMeals();
+    if (this.props.presetMeals.length === 0) this.props.getPresetMeals();
   }
 
   render() {
@@ -28,5 +28,5 @@ class Meals extends React.Component {
 }
 
 export default connect(({ presetMeals }) => ({ presetMeals }), {
-  setPresetMeals,
+  getPresetMeals,
 })(Meals);

@@ -2,7 +2,7 @@ import React from 'react';
 import StageAdder from './StageAdder';
 import StageRow from './StageRow';
 import { connect } from 'react-redux';
-import { setStages } from '../../../stateManagement/reducers/stages';
+import { getStages } from '../../../stateManagement/reducers/stages';
 
 class Stages extends React.Component {
   constructor() {
@@ -11,7 +11,7 @@ class Stages extends React.Component {
   }
 
   componentDidMount() {
-    if (this.props.stages.length === 0) this.props.setStages();
+    this.props.getStages();
   }
 
   render() {
@@ -35,5 +35,5 @@ class Stages extends React.Component {
 }
 
 export default connect(({ stages }) => ({ stages }), {
-  setStages,
+  getStages,
 })(Stages);

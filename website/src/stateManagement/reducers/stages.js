@@ -4,7 +4,8 @@ export const slice = createSlice({
   name: 'stages',
   initialState: [],
   reducers: {
-    setStages: (state, { payload }) => payload || [],
+    getStages: () => {},
+    setStages: (state, { payload }) => payload,
     removeStage: (state, { payload }) =>
       state.filter((stage) => stage._id !== payload),
     addStage: (state, { payload }) => {
@@ -21,6 +22,7 @@ export const slice = createSlice({
   },
 });
 
-export const { setStages, removeStage, addStage, modifyStage } = slice.actions;
+export const { getStages, setStages, removeStage, addStage, modifyStage } =
+  slice.actions;
 
 export default slice.reducer;

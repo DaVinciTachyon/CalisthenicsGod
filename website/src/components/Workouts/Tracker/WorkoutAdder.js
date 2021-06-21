@@ -3,12 +3,11 @@ import { Row, Column, Title } from '../../../style/table';
 import StageEditor from './StageEditor';
 import { Button, ErrorButton } from '../../../style/buttons';
 import { connect } from 'react-redux';
-import { setStages } from '../../../stateManagement/reducers/stages';
+import { getStages } from '../../../stateManagement/reducers/stages';
 import {
   addWorkout,
-  setCurrentWorkout,
+  getCurrentWorkout,
 } from '../../../stateManagement/reducers/workouts';
-import { loadState } from '../../util';
 
 class WorkoutAdder extends React.Component {
   constructor() {
@@ -17,9 +16,8 @@ class WorkoutAdder extends React.Component {
   }
 
   componentDidMount() {
-    if (this.props.stages.length === 0) this.props.setStages();
-    const state = loadState('currentWorkout');
-    if (state) this.props.setCurrentWorkout(state);
+    this.props.getStages();
+    this.props.getCurrentWorkout();
   }
 
   render() {
@@ -68,7 +66,7 @@ class WorkoutAdder extends React.Component {
 }
 
 export default connect(({ stages, workouts }) => ({ stages, workouts }), {
-  setStages,
+  getStages,
   addWorkout,
-  setCurrentWorkout,
+  getCurrentWorkout,
 })(WorkoutAdder);

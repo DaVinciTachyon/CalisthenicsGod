@@ -4,7 +4,7 @@ import { Row } from '../../style/table';
 import { Button } from '../../style/buttons';
 import { Weight, Length } from '../../style/inputs';
 import { connect } from 'react-redux';
-import { setMeasurements } from '../../stateManagement/reducers/measurements';
+import { getMeasurements } from '../../stateManagement/reducers/measurements';
 
 class MeasurementSummary extends React.Component {
   constructor() {
@@ -13,7 +13,7 @@ class MeasurementSummary extends React.Component {
   }
 
   componentDidMount() {
-    this.props.setMeasurements();
+    this.props.getMeasurements();
   }
 
   render() {
@@ -122,5 +122,5 @@ class MeasurementSummary extends React.Component {
 }
 
 export default connect(({ measurements }) => ({ measurements }), {
-  setMeasurements,
+  getMeasurements,
 })(MeasurementSummary);

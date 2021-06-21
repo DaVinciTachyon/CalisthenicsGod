@@ -1,5 +1,4 @@
 import React from 'react';
-import { Error } from '../../style/notification';
 import { Row } from '../../style/table';
 import Card from '../../style/card';
 import { Button } from '../../style/buttons';
@@ -13,7 +12,6 @@ class Login extends React.Component {
     this.state = {
       email: '',
       password: '',
-      error: '',
     };
   }
 
@@ -22,10 +20,6 @@ class Login extends React.Component {
   render() {
     return (
       <Card>
-        <Error
-          text={this.state.error}
-          dismiss={() => this.setState({ error: '' })}
-        />
         <Text
           name="email"
           value={this.state.email}

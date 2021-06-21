@@ -1,9 +1,9 @@
 import React from 'react';
 import MacroSummaryRow from './MacroSummaryRow';
 import { connect } from 'react-redux';
-import { setIngredients } from '../../../stateManagement/reducers/ingredients';
-import { setNutritionInfo } from '../../../stateManagement/reducers/user';
-import { setMeasurement } from '../../../stateManagement/reducers/measurements';
+import { getIngredients } from '../../../stateManagement/reducers/ingredients';
+import { getNutritionInfo } from '../../../stateManagement/reducers/user';
+import { getMeasurement } from '../../../stateManagement/reducers/measurements';
 import { getMacroDensities } from '../util';
 
 class NutrientSummary extends React.Component {
@@ -26,9 +26,9 @@ class NutrientSummary extends React.Component {
   }
 
   componentDidMount() {
-    if (this.props.ingredients.length === 0) this.props.setIngredients();
-    if (!this.props.user.nutrition) this.props.setNutritionInfo();
-    if (!this.props.measurements.weight) this.props.setMeasurement('weight');
+    this.props.getIngredients();
+    this.props.getNutritionInfo();
+    this.props.getMeasurement('weight');
     this.getMacros();
     this.setMacros();
   }
@@ -128,8 +128,8 @@ export default connect(
     measurements,
   }),
   {
-    setIngredients,
-    setNutritionInfo,
-    setMeasurement,
+    getIngredients,
+    getNutritionInfo,
+    getMeasurement,
   }
 )(NutrientSummary);

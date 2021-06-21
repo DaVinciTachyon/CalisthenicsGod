@@ -6,7 +6,7 @@ import { Section } from '../../../style/table';
 import { connect } from 'react-redux';
 import {
   addExercise,
-  setExercises,
+  getExercises,
 } from '../../../stateManagement/reducers/exercises';
 
 class Exercises extends React.Component {
@@ -18,7 +18,7 @@ class Exercises extends React.Component {
   }
 
   componentDidMount() {
-    if (this.props.exercises.length === 0) this.props.setExercises();
+    this.props.getExercises();
   }
 
   render() {
@@ -128,5 +128,5 @@ class Exercises extends React.Component {
 
 export default connect(({ exercises }) => ({ exercises }), {
   addExercise,
-  setExercises,
+  getExercises,
 })(Exercises);

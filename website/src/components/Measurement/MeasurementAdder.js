@@ -1,7 +1,6 @@
 import React from 'react';
 import { Row } from '../../style/table';
 import { Button } from '../../style/buttons';
-import { Error } from '../../style/notification';
 import { Length, Weight } from '../../style/inputs';
 import { connect } from 'react-redux';
 import { addMeasurements } from '../../stateManagement/reducers/measurements';
@@ -21,7 +20,6 @@ class MeasurementAdder extends React.Component {
       shoulders: undefined,
       chest: undefined,
       neck: undefined,
-      error: '',
     };
   }
 
@@ -53,10 +51,6 @@ class MeasurementAdder extends React.Component {
   render() {
     return (
       <div>
-        <Error
-          text={this.state.error}
-          dismiss={() => this.setState({ error: '' })}
-        />
         <Weight
           name="weight"
           value={this.state.weight}

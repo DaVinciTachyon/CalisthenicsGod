@@ -2,7 +2,7 @@ import React from 'react';
 import Workout from './Workout';
 import { Button } from '../../../style/buttons';
 import { connect } from 'react-redux';
-import { setWorkouts } from '../../../stateManagement/reducers/workouts';
+import { getWorkouts } from '../../../stateManagement/reducers/workouts';
 
 class WorkoutTracker extends React.Component {
   constructor() {
@@ -11,7 +11,7 @@ class WorkoutTracker extends React.Component {
   }
 
   componentDidMount() {
-    if (this.props.workouts.history.length === 0) this.props.setWorkouts();
+    this.props.getWorkouts();
   }
 
   render() {
@@ -32,5 +32,5 @@ class WorkoutTracker extends React.Component {
 }
 
 export default connect(({ workouts }) => ({ workouts }), {
-  setWorkouts,
+  getWorkouts,
 })(WorkoutTracker);

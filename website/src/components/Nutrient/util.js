@@ -1,5 +1,6 @@
 import axios from 'axios';
 import { loadState, saveState } from '../util';
+import { error } from '../../stateManagement/reducers/notification';
 
 const getCalories = async (
   fat,
@@ -32,7 +33,7 @@ const getMacroDensities = async () => {
     try {
       state = (await axios.get('/nutrition/macronutrientDensities/')).data;
     } catch (err) {
-      console.error(err.response);
+      error(err.response.data.error);
     }
     saveState('macronutrientDensities', state);
   }

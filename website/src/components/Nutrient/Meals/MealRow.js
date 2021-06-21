@@ -16,7 +16,7 @@ import {
 } from '../../../style/buttons';
 import MealEditor from './MealEditor';
 import { getCalories } from '../util';
-import { setIngredients } from '../../../stateManagement/reducers/ingredients';
+import { getIngredients } from '../../../stateManagement/reducers/ingredients';
 import {
   deletePresetMeal,
   modifyPresetMeal,
@@ -40,7 +40,7 @@ class MealRow extends React.Component {
 
   componentDidMount() {
     if (!this.props.isTitle) this.set();
-    if (this.props.ingredients.length === 0) this.props.setIngredients();
+    this.props.getIngredients();
   }
 
   componentDidUpdate(prevProps) {
@@ -168,7 +168,7 @@ class MealRow extends React.Component {
 }
 
 export default connect(({ ingredients }) => ({ ingredients }), {
-  setIngredients,
+  getIngredients,
   deletePresetMeal,
   modifyPresetMeal,
 })(MealRow);

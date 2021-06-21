@@ -4,6 +4,8 @@ export const slice = createSlice({
   name: 'presetMeals',
   initialState: [],
   reducers: {
+    getPresetMeals: () => {},
+    setPresetMeals: (state, { payload }) => payload,
     addIngredient: (state, { payload }) => {
       if (payload.ingredient._id)
         state
@@ -24,7 +26,6 @@ export const slice = createSlice({
           (ingredient) => ingredient._id !== payload.ingredient._id
         );
     },
-    setPresetMeals: (state, { payload }) => payload || [],
     deletePresetMeal: (state, { payload }) =>
       state.filter((meal) => meal._id !== payload),
     addPresetMeal: (state, { payload }) => {
@@ -45,6 +46,7 @@ export const slice = createSlice({
 });
 
 export const {
+  getPresetMeals,
   addIngredient,
   modifyIngredient,
   removeIngredient,

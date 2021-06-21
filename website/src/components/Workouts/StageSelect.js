@@ -1,7 +1,7 @@
 import React from 'react';
 import { Select } from '../../style/inputs';
 import { connect } from 'react-redux';
-import { setStages } from '../../stateManagement/reducers/stages';
+import { getStages } from '../../stateManagement/reducers/stages';
 
 class StageSelect extends React.Component {
   constructor() {
@@ -10,7 +10,7 @@ class StageSelect extends React.Component {
   }
 
   componentDidMount() {
-    if (this.props.stages.length === 0) this.props.setStages();
+    this.props.getStages();
   }
 
   onChange = async (evt) => {
@@ -39,5 +39,5 @@ class StageSelect extends React.Component {
 }
 
 export default connect(({ stages }) => ({ stages }), {
-  setStages,
+  getStages,
 })(StageSelect);

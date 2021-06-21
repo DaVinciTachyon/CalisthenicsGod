@@ -10,7 +10,8 @@ export const slice = createSlice({
     history: [],
   },
   reducers: {
-    setWorkouts: (state, { payload }) => ({ history: payload || [] }),
+    getWorkouts: () => {},
+    setWorkouts: (state, { payload }) => ({ history: payload }),
     addWorkout: (state, { payload }) => {
       if (payload._id) {
         state.history.unshift(payload);
@@ -18,6 +19,7 @@ export const slice = createSlice({
         state.current = { stages: [] };
       }
     },
+    getCurrentWorkout: () => {},
     setCurrentWorkout: (state, { payload }) => {
       saveState('currentWorkout', payload);
       return { ...state, current: payload || { stages: [] } };
@@ -118,9 +120,11 @@ export const slice = createSlice({
 });
 
 export const {
+  getWorkouts,
   setWorkouts,
   addWorkout,
   setCurrentWorkout,
+  getCurrentWorkout,
   addCurrentExercise,
   removeCurrentExercise,
   modifyCurrentExercise,
