@@ -10,13 +10,14 @@ import {
   Range,
 } from '../../style/inputs';
 import { connect } from 'react-redux';
-import { getMeasurement } from '../../stateManagement/reducers/measurements';
+import { getMeasurementHistory } from '../../stateManagement/reducers/measurements';
 import {
   getUserInfo,
   modifyUserInfo,
   getNutritionInfo,
   modifyNutritionInfo,
 } from '../../stateManagement/reducers/user';
+import { getWeight } from '../util'
 
 class UserProfile extends React.Component {
   constructor() {
@@ -41,7 +42,7 @@ class UserProfile extends React.Component {
   componentDidMount() {
     this.props.getUserInfo();
     this.props.getNutritionInfo();
-    this.props.getMeasurement('weight');
+    this.props.getMeasurementHistory('weight');
     this.getUserInfo();
   }
 
@@ -118,10 +119,7 @@ class UserProfile extends React.Component {
   onSelectChange = (evt) => this.setState({ [evt.name]: evt.value });
 
   render() {
-    const maintenanceCalories = this.state.caloriesPerKg *
-    (this.props.measurements.weight
-      ? this.props.measurements.weight[0].value
-      : 0)
+    const maintenanceCalories = this.state.caloriesPerKg * getWeight(this.props.measurements.weight)
     return (
       <div>
         <Section label="General">
@@ -178,9 +176,7 @@ class UserProfile extends React.Component {
         <Section label="Nutrient Information">
           <Row columns={this.state.calorieOffset !== 1 ? 4 : 2}>
             <Calories
-              value={
-                maintenanceCalories
-              }
+              value={maintenanceCalories}
               label="Maintenance Calories"
               unit="kcal"
               readOnly
@@ -260,7 +256,7 @@ class UserProfile extends React.Component {
 }
 
 export default connect(({ measurements, user }) => ({ measurements, user }), {
-  getMeasurement,
+  getMeasurementHistory,
   getUserInfo,
   modifyUserInfo,
   getNutritionInfo,

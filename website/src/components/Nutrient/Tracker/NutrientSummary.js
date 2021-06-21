@@ -3,8 +3,9 @@ import MacroSummaryRow from './MacroSummaryRow';
 import { connect } from 'react-redux';
 import { getIngredients } from '../../../stateManagement/reducers/ingredients';
 import { getNutritionInfo } from '../../../stateManagement/reducers/user';
-import { getMeasurement } from '../../../stateManagement/reducers/measurements';
+import { getMeasurementHistory } from '../../../stateManagement/reducers/measurements';
 import { getMacroDensities } from '../util';
+import { getWeight } from '../../util';
 
 class NutrientSummary extends React.Component {
   constructor() {
@@ -28,7 +29,7 @@ class NutrientSummary extends React.Component {
   componentDidMount() {
     this.props.getIngredients();
     this.props.getNutritionInfo();
-    this.props.getMeasurement('weight');
+    this.props.getMeasurementHistory('weight');
     this.getMacros();
     this.setMacros();
   }
@@ -47,7 +48,6 @@ class NutrientSummary extends React.Component {
   }
 
   setMacros = async () => {
-    let weight = 0;
     let nutrition = {
       caloriesPerKg: 0,
       calorieOffset: 0,
@@ -55,8 +55,7 @@ class NutrientSummary extends React.Component {
       fatCalorieProportion: 0,
     };
     if (this.props.user.nutrition) nutrition = this.props.user.nutrition;
-    if (this.props.measurements.weight)
-      weight = this.props.measurements.weight[0].value;
+    const weight = getWeight(this.props.measurements.weight)
     const macroDensities = await getMacroDensities();
     const calories = weight * nutrition.caloriesPerKg * nutrition.calorieOffset;
     const protein = weight * nutrition.proteinGramsPerKg;
@@ -130,6 +129,6 @@ export default connect(
   {
     getIngredients,
     getNutritionInfo,
-    getMeasurement,
+    getMeasurementHistory,
   }
 )(NutrientSummary);
