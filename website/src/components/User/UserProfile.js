@@ -160,7 +160,7 @@ class UserProfile extends React.Component {
             <DateInput
               name="birthDate"
               value={this.state.birthDate}
-              label="Birth Date"
+              label="Date of Birth"
               onChange={this.onChange}
             />
           </Row>
