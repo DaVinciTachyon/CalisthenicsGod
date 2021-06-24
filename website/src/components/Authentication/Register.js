@@ -1,6 +1,6 @@
 import React from 'react'
 import { Row } from '../../style/table'
-import Card from '../../style/card'
+import { Paper } from '@material-ui/core'
 import { Button } from '../../style/buttons'
 import {
   Weight,
@@ -30,11 +30,10 @@ class Register extends React.Component {
   getValue = (value) => (value ? value : undefined)
 
   onChange = (evt) => this.setState({ [evt.target.name]: evt.target.value })
-  onSelectChange = (evt) => this.setState({ [evt.name]: evt.value })
 
   render() {
     return (
-      <Card>
+      <Paper>
         <Text
           name="firstname"
           value={this.state.firstname}
@@ -83,7 +82,7 @@ class Register extends React.Component {
             { label: 'Female', value: 'female' },
           ]}
           value={this.state.gender}
-          onChange={this.onSelectChange}
+          onChange={this.onChange}
           label="Gender"
           required
         />
@@ -121,7 +120,7 @@ class Register extends React.Component {
             Login
           </Button>
         </Row>
-      </Card>
+      </Paper>
     )
   }
 }

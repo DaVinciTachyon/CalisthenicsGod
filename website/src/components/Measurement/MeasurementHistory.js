@@ -1,12 +1,12 @@
-import React from 'react';
-import { Line } from 'react-chartjs-2';
-import Card from '../../style/card';
-import { connect } from 'react-redux';
-import { getMeasurementHistory } from '../../stateManagement/reducers/measurements';
+import React from 'react'
+import { Line } from 'react-chartjs-2'
+import { connect } from 'react-redux'
+import { getMeasurementHistory } from '../../stateManagement/reducers/measurements'
+import { Paper } from '@material-ui/core'
 
 class MeasurementHistory extends React.Component {
   constructor() {
-    super();
+    super()
     this.state = {
       chart: {
         labels: [],
@@ -22,25 +22,25 @@ class MeasurementHistory extends React.Component {
           },
         ],
       },
-    };
+    }
   }
   componentDidMount() {
-    this.props.getMeasurementHistory('weight');
+    this.props.getMeasurementHistory('weight')
   }
 
   render() {
-    const chart = Object.assign({}, this.state.chart);
-    chart.labels = [];
-    chart.datasets[0].data = [];
+    const chart = Object.assign({}, this.state.chart)
+    chart.labels = []
+    chart.datasets[0].data = []
     for (let i = 0; i < this.props.measurements.weight?.length; i++) {
-      const date = new Date(this.props.measurements.weight[i].date);
+      const date = new Date(this.props.measurements.weight[i].date)
       chart.labels.unshift(
-        `${date.getDate()}/${date.getMonth()}/${date.getFullYear()}`
-      );
-      chart.datasets[0].data.unshift(this.props.measurements.weight[i].value);
+        `${date.getDate()}/${date.getMonth()}/${date.getFullYear()}`,
+      )
+      chart.datasets[0].data.unshift(this.props.measurements.weight[i].value)
     }
     return (
-      <Card>
+      <Paper>
         <Line
           data={chart}
           options={{
@@ -55,11 +55,11 @@ class MeasurementHistory extends React.Component {
             },
           }}
         />
-      </Card>
-    );
+      </Paper>
+    )
   }
 }
 
 export default connect(({ measurements }) => ({ measurements }), {
   getMeasurementHistory,
-})(MeasurementHistory);
+})(MeasurementHistory)

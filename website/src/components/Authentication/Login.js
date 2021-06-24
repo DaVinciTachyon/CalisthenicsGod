@@ -1,10 +1,10 @@
 import React from 'react'
 import { Row } from '../../style/table'
-import Card from '../../style/card'
 import { Button } from '../../style/buttons'
 import { Text, Password } from '../../style/inputs'
 import { connect } from 'react-redux'
 import { logIn } from '../../stateManagement/reducers/auth'
+import { Paper } from '@material-ui/core'
 
 class Login extends React.Component {
   constructor() {
@@ -19,7 +19,7 @@ class Login extends React.Component {
 
   render() {
     return (
-      <Card>
+      <Paper>
         <Text
           name="email"
           value={this.state.email}
@@ -50,7 +50,7 @@ class Login extends React.Component {
             Register
           </Button>
         </Row>
-      </Card>
+      </Paper>
     )
   }
 }

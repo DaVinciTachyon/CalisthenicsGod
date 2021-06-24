@@ -8,7 +8,9 @@ import {
   MenuItem,
   InputLabel,
   Input as MaterialInput,
+  Slider,
 } from '@material-ui/core'
+import { withStyles } from '@material-ui/core/styles'
 
 const Input = styled(
   ({ className, name, placeholder, label, unit, ...rest }) => (
@@ -207,168 +209,94 @@ const Radio = styled(
   margin: auto;
 `
 
-class Select extends React.Component {
-  onChange = (evt) => {
-    if (this.props.readOnly) return
-    this.props.onChange({ name: this.props.name, value: evt.target.value })
-  }
+const Select = ({
+  isMulti,
+  readOnly,
+  options,
+  value,
+  label,
+  name,
+  ...rest
+}) => (
+  <FormControl>
+    <InputLabel id="select">{label}</InputLabel>
+    <MaterialSelect
+      labelId="select"
+      name={name}
+      multiple={isMulti}
+      value={value}
+      input={<MaterialInput />}
+      renderValue={(selected) => (
+        <div>
+          {isMulti &&
+            selected.map((value) => (
+              <Chip
+                key={value}
+                label={
+                  options.find((option) => option.value === value)?.label ||
+                  value
+                }
+              />
+            ))}
+          {!isMulti && <>{selected}</>}
+        </div>
+      )}
+      disabled={readOnly}
+      {...rest}
+    >
+      {options.map(({ label, value }) => (
+        <MenuItem key={value} value={value}>
+          {label}
+        </MenuItem>
+      ))}
+    </MaterialSelect>
+  </FormControl>
+)
 
-  render() {
-    const { isMulti, readOnly, options, value, label, name } = this.props
+const Range = withStyles(() => ({
+  root: {
+    width: '95%',
+    display: 'block',
+    'margin-left': 'auto',
+    'margin-right': 'auto',
+  },
+}))(
+  ({ min, max, unit, value, isPercentage, name, onChange, label, ...rest }) => {
+    const getValue = (val) => val * (isPercentage ? 100 : 1)
+    const getString = (val) => `${getValue(val)}${unit}`
+    const minimum = min || 0
+    const maximum = max || 10
     return (
-      <FormControl>
-        <InputLabel id="select">{label}</InputLabel>
-        <MaterialSelect
-          labelId="select"
-          name={name}
-          multiple={isMulti}
-          value={value}
-          onChange={this.onChange}
-          input={<MaterialInput />}
-          renderValue={(selected) => (
-            <div>
-              {isMulti &&
-                selected.map((value) => (
-                  <Chip
-                    key={value}
-                    label={
-                      options.find((option) => option.value === value)?.label ||
-                      value
-                    }
-                  />
-                ))}
-              {!isMulti && <>{selected}</>}
-            </div>
-          )}
-          disabled={readOnly}
-        >
-          {options.map(({ label, value }) => (
-            <MenuItem key={value} value={value}>
-              {label}
-            </MenuItem>
-          ))}
-        </MaterialSelect>
-      </FormControl>
+      <div>
+        <InputLabel id="range">{label}</InputLabel>
+        <Slider
+          labelId="range"
+          onChange={(evt, val) => {
+            evt.target.name = name
+            evt.target.value = val
+            onChange(evt)
+          }}
+          value={value || minimum}
+          min={minimum}
+          max={maximum}
+          valueLabelDisplay="on"
+          valueLabelFormat={getValue}
+          marks={[
+            {
+              value: minimum,
+              label: getString(minimum),
+            },
+            {
+              value: maximum,
+              label: getString(maximum),
+            },
+          ]}
+          {...rest}
+        />
+      </div>
     )
-  }
-}
-
-const Range = styled(
-  ({
-    className,
-    value,
-    step,
-    min,
-    max,
-    label,
-    unit,
-    isPercentage,
-    name,
-    ...rest
-  }) => (
-    <div className={className}>
-      <span className="label">{label}</span>
-      <span className="value">{`${(() => {
-        let decimalPlaces = 0
-        let nStep = step
-        while (nStep % 1 !== 0) {
-          nStep *= 10
-          decimalPlaces++
-        }
-        return (
-          Math.round(
-            value * Math.pow(10, decimalPlaces + (isPercentage ? 2 : 0)),
-          ) / Math.pow(10, decimalPlaces)
-        )
-      })()} ${unit}`}</span>
-      <input
-        type="range"
-        step={step || 1}
-        min={min || 0}
-        max={max || 10}
-        value={value}
-        name={name || 'range'}
-        {...rest}
-      />
-    </div>
-  ),
-)`
-  width: 100%;
-  padding: 3px 10px;
-  text-align: center;
-  position: relative;
-
-  & span.label {
-    position: absolute;
-    left: 0;
-    top: 0;
-    padding: 2px 0.5em;
-    white-space: nowrap;
-    font-size: 0.8em;
-    font-weight: bold;
-    border-radius: 10px;
-  }
-
-  & span.value {
-    font-size: 0.8rem;
-  }
-
-  & input {
-    border: 1px solid currentColor;
-    border-radius: 4px;
-    -webkit-appearance: none;
-    appearance: none;
-    width: 100%;
-    height: 1.5em;
-    overflow: hidden;
-
-    &::before,
-    &::after {
-      padding: 5px;
-    }
-
-    &::before {
-      content: '${({ isPercentage, min, unit }) =>
-        `${(isPercentage ? 100 : 1) * min} ${unit}`}';
-      left: 0;
-      border-right: 1px solid currentColor;
-    }
-
-    &::after {
-      content: '${({ isPercentage, max, unit }) =>
-        `${(isPercentage ? 100 : 1) * max} ${unit}`}';
-      right: 0;
-      border-left: 1px solid currentColor;
-    }
-
-    &::-webkit-slider-thumb {
-      -webkit-appearance: none;
-      appearance: none;
-      border: 1px solid currentColor;
-      width: 1.5em;
-      height: 1.5em;
-      border-radius: 50%;
-      background: lightgray;
-      cursor: pointer;
-    }
-
-    &::-webkit-slider-thumb {
-      border: 1px solid currentColor;
-      width: 1.5em;
-      height: 1.5em;
-      border-radius: 50%;
-      background: lightgray;
-      cursor: pointer;
-    }
-
-    ${({ readOnly }) =>
-      readOnly
-        ? ``
-        : `&:focus {
-      border-width: 2px;
-    }`}
-  }
-`
+  },
+)
 
 export {
   Text,

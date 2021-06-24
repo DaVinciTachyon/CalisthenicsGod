@@ -97,11 +97,6 @@ class ExerciseRow extends React.Component {
     this.onUpdate()
   }
 
-  onSelectChange = async (evt) => {
-    await this.setState({ [evt.name]: evt.value })
-    this.onUpdate()
-  }
-
   getVariationOptions = (motionType) => {
     const variationOptions = []
     if (motionType?.frontalPlane === 'rotational')
@@ -122,7 +117,7 @@ class ExerciseRow extends React.Component {
 
   onExerciseChange = async (evt, exercise) => {
     await this.setState({
-      [evt.name]: evt.value,
+      [evt.target.name]: evt.target.value,
       exercise,
       isWeighted: 0,
       variation: undefined,
@@ -192,13 +187,13 @@ class ExerciseRow extends React.Component {
             { label: 'Assisted', value: -1 },
           ]}
           value={this.state.isWeighted}
-          onChange={this.onSelectChange}
+          onChange={this.onChange}
         />
         <Select
           name="variation"
           options={this.state.variationOptions}
           value={this.state.variation}
-          onChange={this.onSelectChange}
+          onChange={this.onChange}
         />
         <Select
           name="sagittalPlane"
@@ -211,7 +206,7 @@ class ExerciseRow extends React.Component {
               : [{ value: undefined, label: 'Bilateral' }]
           }
           value={this.state.sagittalPlane}
-          onChange={this.onSelectChange}
+          onChange={this.onChange}
         />
         <ExerciseSelect
           name="id"

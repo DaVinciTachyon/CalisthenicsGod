@@ -109,7 +109,6 @@ export default class Exercises extends React.Component {
   }
 
   onChange = (evt) => this.setState({ [evt.target.name]: evt.target.value })
-  onSelectChange = (evt) => this.setState({ [evt.name]: evt.value })
   onHasComponentsChange = (evt) => {
     this.onChange(evt)
     if (evt.target.value === 'singular')
@@ -202,7 +201,7 @@ export default class Exercises extends React.Component {
                   <Column span={6}>
                     <ExerciseSelect
                       name="componentExercises"
-                      onChange={this.onSelectChange}
+                      onChange={this.onChange}
                       value={this.state.componentExercises}
                       isMulti
                       label="Component Exercises"
@@ -220,7 +219,7 @@ export default class Exercises extends React.Component {
                         { label: 'Lower', value: 'lower' },
                         { label: 'Core', value: 'core' },
                       ]}
-                      onChange={this.onSelectChange}
+                      onChange={this.onChange}
                       label="Transverse Plane"
                     />
                     <Select
@@ -232,7 +231,7 @@ export default class Exercises extends React.Component {
                         { label: 'Rotational', value: 'rotational' },
                         { label: 'Lateral', value: 'lateral' },
                       ]}
-                      onChange={this.onSelectChange}
+                      onChange={this.onChange}
                       label="Frontal Plane"
                     />
                     <Select
@@ -242,7 +241,7 @@ export default class Exercises extends React.Component {
                         { label: 'Horizontal', value: 'horizontal' },
                         { label: 'Vertical', value: 'vertical' },
                       ]}
-                      onChange={this.onSelectChange}
+                      onChange={this.onChange}
                       label="Verticality"
                     />
                     <Select
@@ -254,7 +253,7 @@ export default class Exercises extends React.Component {
                         { label: 'Distance', value: 'distance' },
                         { label: 'Timed', value: 'timed' },
                       ]}
-                      onChange={this.onSelectChange}
+                      onChange={this.onChange}
                       label="Motion"
                     />
                     <Select
@@ -264,7 +263,7 @@ export default class Exercises extends React.Component {
                         { label: 'Closed', value: 'closed' },
                         { label: 'Open', value: 'open' },
                       ]}
-                      onChange={this.onSelectChange}
+                      onChange={this.onChange}
                       label="Kinetic Chain"
                     />
                     <Select
@@ -274,7 +273,7 @@ export default class Exercises extends React.Component {
                         { label: 'Bilateral', value: 'bilateral' },
                         { label: 'Unilateral', value: 'unilateral' },
                       ]}
-                      onChange={this.onSelectChange}
+                      onChange={this.onChange}
                       label="Sagittal Plane"
                     />
                   </Column>
@@ -284,14 +283,14 @@ export default class Exercises extends React.Component {
           </Column>
           <StageSelect
             name="potentialStages"
-            onChange={this.onSelectChange}
+            onChange={this.onChange}
             value={this.state.potentialStages}
             isMulti
             label="Potential Stages"
           />
           <ExerciseSelect
             name="requirements"
-            onChange={this.onSelectChange}
+            onChange={this.onChange}
             value={this.state.requirements}
             isMulti
             label="Requirements"
