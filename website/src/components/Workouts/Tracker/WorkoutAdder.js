@@ -1,23 +1,24 @@
-import React from 'react';
-import { Row, Column, Title } from '../../../style/table';
-import StageEditor from './StageEditor';
-import { Button, ErrorButton } from '../../../style/buttons';
-import { connect } from 'react-redux';
-import { getStages } from '../../../stateManagement/reducers/stages';
+import React from 'react'
+import { Row, Column, Title } from '../../../style/table'
+import StageEditor from './StageEditor'
+import { Button, ErrorButton } from '../../../style/buttons'
+import { connect } from 'react-redux'
+import { getStages } from '../../../stateManagement/reducers/stages'
 import {
   addWorkout,
   getCurrentWorkout,
-} from '../../../stateManagement/reducers/workouts';
+} from '../../../stateManagement/reducers/workouts'
+import { ButtonGroup } from '@material-ui/core'
 
 class WorkoutAdder extends React.Component {
   constructor() {
-    super();
-    this.state = {};
+    super()
+    this.state = {}
   }
 
   componentDidMount() {
-    this.props.getStages();
-    this.props.getCurrentWorkout();
+    this.props.getStages()
+    this.props.getCurrentWorkout()
   }
 
   render() {
@@ -45,12 +46,12 @@ class WorkoutAdder extends React.Component {
             id={_id}
             details={
               this.props.workouts.current.stages?.find(
-                (stage) => _id === stage.id
+                (stage) => _id === stage.id,
               ) || undefined
             }
           />
         ))}
-        <Row>
+        <ButtonGroup orientation="vertical">
           <Button
             onClick={() => this.props.addWorkout(this.props.workouts.current)}
           >
@@ -59,9 +60,9 @@ class WorkoutAdder extends React.Component {
           <ErrorButton onClick={() => (window.location = '/workoutTracker')}>
             Cancel
           </ErrorButton>
-        </Row>
+        </ButtonGroup>
       </div>
-    );
+    )
   }
 }
 
@@ -69,4 +70,4 @@ export default connect(({ stages, workouts }) => ({ stages, workouts }), {
   getStages,
   addWorkout,
   getCurrentWorkout,
-})(WorkoutAdder);
+})(WorkoutAdder)

@@ -1,5 +1,5 @@
-import React from 'react';
-import { Row, Column } from '../../../style/table';
+import React from 'react'
+import { Row, Column } from '../../../style/table'
 import {
   Text,
   Calories,
@@ -8,24 +8,25 @@ import {
   Carbohydrate,
   Protein,
   Ethanol,
-} from '../../../style/inputs';
+} from '../../../style/inputs'
 import {
   Button,
   SuccessButton,
   ErrorButton,
   DeleteButton,
-} from '../../../style/buttons';
-import { getCalories } from '../util';
-import { connect } from 'react-redux';
+} from '../../../style/buttons'
+import { getCalories } from '../util'
+import { connect } from 'react-redux'
 import {
   modifyIngredient,
   removeIngredient,
-} from '../../../stateManagement/reducers/meals';
-import { getIngredients } from '../../../stateManagement/reducers/ingredients';
+} from '../../../stateManagement/reducers/meals'
+import { getIngredients } from '../../../stateManagement/reducers/ingredients'
+import { ButtonGroup } from '@material-ui/core'
 
 class ConsumedIngredient extends React.Component {
   constructor() {
-    super();
+    super()
     this.state = {
       weight: 0,
       isEditing: false,
@@ -35,27 +36,27 @@ class ConsumedIngredient extends React.Component {
       protein: 0,
       ethanol: 0,
       name: '',
-    };
+    }
   }
 
   async componentDidMount() {
     if (!this.props.isTitle) {
-      await this.getDetails();
-      this.setWeight();
+      await this.getDetails()
+      this.setWeight()
     }
-    this.props.getIngredients();
+    this.props.getIngredients()
   }
 
   componentDidUpdate(prevProps) {
-    if (prevProps.ingredients !== this.props.ingredients) this.getDetails();
+    if (prevProps.ingredients !== this.props.ingredients) this.getDetails()
   }
 
   setWeight = async () => {
     const weight = this.props.meals
       .find((meal) => meal._id === this.props.mealId)
       .ingredients.find(
-        (ingredient) => ingredient._id === this.props.ingredient._id
-      ).weight;
+        (ingredient) => ingredient._id === this.props.ingredient._id,
+      ).weight
     this.setState({
       weight,
       calories: await getCalories(
@@ -63,31 +64,31 @@ class ConsumedIngredient extends React.Component {
         this.state.carbohydrate,
         this.state.protein,
         this.state.ethanol,
-        weight
+        weight,
       ),
-    });
-  };
+    })
+  }
 
   onChange = async (evt) => {
-    await this.setState({ [evt.target.name]: evt.target.value });
+    await this.setState({ [evt.target.name]: evt.target.value })
     this.setState({
       calories: await getCalories(
         this.state.fat,
         this.state.carbohydrate,
         this.state.protein,
         this.state.ethanol,
-        this.state.weight
+        this.state.weight,
       ),
-    });
-  };
+    })
+  }
 
   getDetails = async () => {
     const { name, macronutrients } = this.props.ingredients.find(
-      (ingredient) => ingredient._id === this.props.ingredient.id
+      (ingredient) => ingredient._id === this.props.ingredient.id,
     ) || {
       name: '',
       macronutrients: { fat: 0, carbohydrate: 0, protein: 0, ethanol: 0 },
-    };
+    }
     this.setState({
       name,
       fat: macronutrients.fat,
@@ -99,13 +100,13 @@ class ConsumedIngredient extends React.Component {
         macronutrients.carbohydrate,
         macronutrients.protein,
         macronutrients.ethanol,
-        this.state.weight
+        this.state.weight,
       ),
-    });
-  };
+    })
+  }
 
   render() {
-    const { isTitle } = this.props;
+    const { isTitle } = this.props
     if (isTitle)
       return (
         <Row columns={9} isTitle>
@@ -118,7 +119,7 @@ class ConsumedIngredient extends React.Component {
           <Column>Ethanol</Column>
           <Column />
         </Row>
-      );
+      )
     const {
       isEditing,
       weight,
@@ -128,7 +129,7 @@ class ConsumedIngredient extends React.Component {
       protein,
       ethanol,
       calories,
-    } = this.state;
+    } = this.state
     return (
       <Row columns={9}>
         <Column span={2}>
@@ -145,54 +146,52 @@ class ConsumedIngredient extends React.Component {
         <Carbohydrate value={(carbohydrate * weight) / 100} readOnly />
         <Protein value={(protein * weight) / 100} readOnly />
         <Ethanol value={(ethanol * weight) / 100} readOnly />
-        <Column>
-          {!isEditing && (
-            <>
-              <Button onClick={() => this.setState({ isEditing: true })}>
-                Edit
-              </Button>
-              <DeleteButton
-                onClick={() => {
-                  this.props.removeIngredient({
-                    _id: this.props.mealId,
-                    ingredient: { _id: this.props.ingredient._id },
-                  });
-                  this.setState({ isEditing: false });
-                }}
-              >
-                Remove
-              </DeleteButton>
-            </>
-          )}
-          {isEditing && (
-            <>
-              <SuccessButton
-                onClick={() => {
-                  this.props.modifyIngredient({
-                    _id: this.props.mealId,
-                    ingredient: {
-                      _id: this.props.ingredient._id,
-                      weight,
-                    },
-                  });
-                  this.setState({ isEditing: false });
-                }}
-              >
-                Submit
-              </SuccessButton>
-              <ErrorButton
-                onClick={() => {
-                  this.setState({ isEditing: false });
-                  this.setWeight();
-                }}
-              >
-                Cancel
-              </ErrorButton>
-            </>
-          )}
-        </Column>
+        {!isEditing && (
+          <ButtonGroup orientation="vertical">
+            <Button onClick={() => this.setState({ isEditing: true })}>
+              Edit
+            </Button>
+            <DeleteButton
+              onClick={() => {
+                this.props.removeIngredient({
+                  _id: this.props.mealId,
+                  ingredient: { _id: this.props.ingredient._id },
+                })
+                this.setState({ isEditing: false })
+              }}
+            >
+              Remove
+            </DeleteButton>
+          </ButtonGroup>
+        )}
+        {isEditing && (
+          <ButtonGroup orientation="vertical">
+            <SuccessButton
+              onClick={() => {
+                this.props.modifyIngredient({
+                  _id: this.props.mealId,
+                  ingredient: {
+                    _id: this.props.ingredient._id,
+                    weight,
+                  },
+                })
+                this.setState({ isEditing: false })
+              }}
+            >
+              Submit
+            </SuccessButton>
+            <ErrorButton
+              onClick={() => {
+                this.setState({ isEditing: false })
+                this.setWeight()
+              }}
+            >
+              Cancel
+            </ErrorButton>
+          </ButtonGroup>
+        )}
       </Row>
-    );
+    )
   }
 }
 
@@ -200,4 +199,4 @@ export default connect(({ ingredients, meals }) => ({ ingredients, meals }), {
   modifyIngredient,
   removeIngredient,
   getIngredients,
-})(ConsumedIngredient);
+})(ConsumedIngredient)

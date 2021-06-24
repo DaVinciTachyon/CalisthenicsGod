@@ -1,5 +1,5 @@
-import React from 'react';
-import { Row, Column } from '../../../style/table';
+import React from 'react'
+import { Row, Column } from '../../../style/table'
 import {
   Text,
   Calories,
@@ -8,23 +8,24 @@ import {
   Carbohydrate,
   Protein,
   Ethanol,
-} from '../../../style/inputs';
+} from '../../../style/inputs'
 import {
   Button,
   SuccessButton,
   ErrorButton,
   DeleteButton,
-} from '../../../style/buttons';
-import { getCalories } from '../util';
-import { connect } from 'react-redux';
+} from '../../../style/buttons'
+import { getCalories } from '../util'
+import { connect } from 'react-redux'
 import {
   changeAvailability,
   patchIngredient,
-} from '../../../stateManagement/reducers/ingredients';
+} from '../../../stateManagement/reducers/ingredients'
+import { ButtonGroup } from '@material-ui/core'
 
 class IngredientRow extends React.Component {
   constructor() {
-    super();
+    super()
     this.state = {
       isEditing: false,
       weight: 100,
@@ -34,20 +35,20 @@ class IngredientRow extends React.Component {
       ethanol: 0,
       name: '',
       calories: 0,
-    };
+    }
   }
 
   componentDidMount() {
-    if (!this.props.isTitle) this.setMacros();
+    if (!this.props.isTitle) this.setMacros()
   }
 
   componentDidUpdate(prevProps) {
-    if (prevProps !== this.props && !this.props.isTitle) this.setMacros();
+    if (prevProps !== this.props && !this.props.isTitle) this.setMacros()
   }
 
   setMacros = async () => {
-    const { name, macronutrients } = this.props;
-    const { fat, carbohydrate, protein, ethanol } = macronutrients;
+    const { name, macronutrients } = this.props
+    const { fat, carbohydrate, protein, ethanol } = macronutrients
     this.setState({
       name,
       fat,
@@ -59,26 +60,26 @@ class IngredientRow extends React.Component {
         carbohydrate,
         protein,
         ethanol,
-        this.state.weight
+        this.state.weight,
       ),
-    });
-  };
+    })
+  }
 
   onChange = async (evt) => {
-    await this.setState({ [evt.target.name]: evt.target.value });
+    await this.setState({ [evt.target.name]: evt.target.value })
     this.setState({
       calories: await getCalories(
         this.state.fat,
         this.state.carbohydrate,
         this.state.protein,
         this.state.ethanol,
-        this.state.weight
+        this.state.weight,
       ),
-    });
-  };
+    })
+  }
 
   onSubmit = async () => {
-    const { name, fat, carbohydrate, protein, ethanol } = this.state;
+    const { name, fat, carbohydrate, protein, ethanol } = this.state
     this.props.patchIngredient({
       _id: this.props.id,
       name,
@@ -88,14 +89,21 @@ class IngredientRow extends React.Component {
         protein,
         ethanol,
       },
-    });
-    this.setState({ isEditing: false });
-  };
+    })
+    this.setState({ isEditing: false })
+  }
 
   render() {
-    const { isTitle, isAvailable } = this.props;
-    const { isEditing, name, weight, fat, carbohydrate, protein, ethanol } =
-      this.state;
+    const { isTitle, isAvailable } = this.props
+    const {
+      isEditing,
+      name,
+      weight,
+      fat,
+      carbohydrate,
+      protein,
+      ethanol,
+    } = this.state
     if (isTitle)
       return (
         <Row columns={9} isTitle>
@@ -108,7 +116,7 @@ class IngredientRow extends React.Component {
           <Column>Ethanol</Column>
           <Column />
         </Row>
-      );
+      )
     return (
       <Row columns={9}>
         <Column span={2}>
@@ -146,7 +154,7 @@ class IngredientRow extends React.Component {
           readOnly={!isEditing}
         />
         {!isEditing && (
-          <div>
+          <ButtonGroup orientation="vertical">
             <Button onClick={() => this.setState({ isEditing: true })}>
               Edit
             </Button>
@@ -174,7 +182,7 @@ class IngredientRow extends React.Component {
                 Available
               </SuccessButton>
             )}
-          </div>
+          </ButtonGroup>
         )}
         {isEditing && (
           <div>
@@ -183,8 +191,8 @@ class IngredientRow extends React.Component {
             </SuccessButton>
             <ErrorButton
               onClick={() => {
-                this.setMacros();
-                this.setState({ isEditing: false });
+                this.setMacros()
+                this.setState({ isEditing: false })
               }}
             >
               Cancel
@@ -192,11 +200,11 @@ class IngredientRow extends React.Component {
           </div>
         )}
       </Row>
-    );
+    )
   }
 }
 
 export default connect(() => ({}), {
   changeAvailability,
   patchIngredient,
-})(IngredientRow);
+})(IngredientRow)

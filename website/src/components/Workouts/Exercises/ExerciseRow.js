@@ -1,22 +1,23 @@
-import React from 'react';
-import { Row, Column } from '../../../style/table';
-import { Text } from '../../../style/inputs';
-import { Button, DeleteButton } from '../../../style/buttons';
-import StageSelect from '../StageSelect';
-import ExerciseSelect from '../ExerciseSelect';
-import ExerciseAdder from './ExerciseAdder';
-import { connect } from 'react-redux';
+import React from 'react'
+import { Row, Column } from '../../../style/table'
+import { Text } from '../../../style/inputs'
+import { Button, DeleteButton } from '../../../style/buttons'
+import StageSelect from '../StageSelect'
+import ExerciseSelect from '../ExerciseSelect'
+import ExerciseAdder from './ExerciseAdder'
+import { connect } from 'react-redux'
 import {
   modifyExercise,
   removeExercise,
-} from '../../../stateManagement/reducers/exercises';
+} from '../../../stateManagement/reducers/exercises'
+import { ButtonGroup } from '@material-ui/core'
 
 class ExerciseRow extends React.Component {
   constructor() {
-    super();
+    super()
     this.state = {
       isEditing: false,
-    };
+    }
   }
 
   render() {
@@ -33,7 +34,7 @@ class ExerciseRow extends React.Component {
           <Column>Description</Column>
           <Column />
         </Row>
-      );
+      )
     if (!this.state.isEditing)
       return (
         <Row columns={9}>
@@ -76,7 +77,7 @@ class ExerciseRow extends React.Component {
             isMulti
           />
           <Text value={this.props.exercise.description} readOnly />
-          <Column>
+          <ButtonGroup orientation="vertical">
             <Button onClick={() => this.setState({ isEditing: true })}>
               Edit
             </Button>
@@ -85,16 +86,16 @@ class ExerciseRow extends React.Component {
             >
               Remove
             </DeleteButton>
-          </Column>
+          </ButtonGroup>
         </Row>
-      );
+      )
     return (
       <ExerciseAdder
         id={this.props.id}
         exercise={this.props.exercise}
         onSubmit={(exercise) => {
-          this.props.modifyExercise(exercise);
-          this.setState({ isEditing: false });
+          this.props.modifyExercise(exercise)
+          this.setState({ isEditing: false })
         }}
         onCancel={() =>
           this.setState({
@@ -102,11 +103,11 @@ class ExerciseRow extends React.Component {
           })
         }
       />
-    );
+    )
   }
 }
 
 export default connect(() => ({}), {
   modifyExercise,
   removeExercise,
-})(ExerciseRow);
+})(ExerciseRow)

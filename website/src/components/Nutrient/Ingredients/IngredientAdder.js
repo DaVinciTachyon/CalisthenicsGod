@@ -1,6 +1,6 @@
-import React from 'react';
-import { Button, ErrorButton } from '../../../style/buttons';
-import { Row, Column } from '../../../style/table';
+import React from 'react'
+import { Button, ErrorButton } from '../../../style/buttons'
+import { Row, Column } from '../../../style/table'
 import {
   Text,
   Calories,
@@ -9,14 +9,15 @@ import {
   Carbohydrate,
   Protein,
   Ethanol,
-} from '../../../style/inputs';
-import { getCalories } from '../util';
-import { addIngredient } from '../../../stateManagement/reducers/ingredients';
-import { connect } from 'react-redux';
+} from '../../../style/inputs'
+import { getCalories } from '../util'
+import { addIngredient } from '../../../stateManagement/reducers/ingredients'
+import { connect } from 'react-redux'
+import { ButtonGroup } from '@material-ui/core'
 
 class IngredientAdder extends React.Component {
   constructor() {
-    super();
+    super()
     this.state = {
       isAdding: false,
       name: '',
@@ -26,7 +27,7 @@ class IngredientAdder extends React.Component {
       ethanol: 0,
       weight: 100,
       calories: 0,
-    };
+    }
   }
 
   onSubmit = () => {
@@ -38,9 +39,9 @@ class IngredientAdder extends React.Component {
         protein: this.state.protein,
         ethanol: this.state.ethanol,
       },
-    });
-    this.reset();
-  };
+    })
+    this.reset()
+  }
 
   reset = () =>
     this.setState({
@@ -51,20 +52,20 @@ class IngredientAdder extends React.Component {
       protein: 0,
       ethanol: 0,
       calories: 0,
-    });
+    })
 
   onChange = async (evt) => {
-    await this.setState({ [evt.target.name]: evt.target.value });
+    await this.setState({ [evt.target.name]: evt.target.value })
     this.setState({
       calories: await getCalories(
         this.state.fat,
         this.state.carbohydrate,
         this.state.protein,
         this.state.ethanol,
-        this.state.weight
+        this.state.weight,
       ),
-    });
-  };
+    })
+  }
 
   render() {
     if (!this.state.isAdding)
@@ -75,9 +76,16 @@ class IngredientAdder extends React.Component {
         >
           Add
         </Button>
-      );
-    const { name, fat, carbohydrate, protein, ethanol, weight, calories } =
-      this.state;
+      )
+    const {
+      name,
+      fat,
+      carbohydrate,
+      protein,
+      ethanol,
+      weight,
+      calories,
+    } = this.state
     return (
       <Row columns={9} className="input">
         <Column span={2}>
@@ -93,15 +101,15 @@ class IngredientAdder extends React.Component {
         />
         <Protein name="protein" onChange={this.onChange} value={protein} />
         <Ethanol name="ethanol" onChange={this.onChange} value={ethanol} />
-        <Column>
+        <ButtonGroup orientation="vertical">
           <Button onClick={this.onSubmit}>Submit</Button>
-          <ErrorButton onClick={this.resetState}>Cancel</ErrorButton>
-        </Column>
+          <ErrorButton onClick={this.reset}>Cancel</ErrorButton>
+        </ButtonGroup>
       </Row>
-    );
+    )
   }
 }
 
 export default connect(() => ({}), {
   addIngredient,
-})(IngredientAdder);
+})(IngredientAdder)

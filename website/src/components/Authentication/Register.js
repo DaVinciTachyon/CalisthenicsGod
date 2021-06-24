@@ -1,20 +1,20 @@
-import React from 'react';
-import { Row } from '../../style/table';
-import Card from '../../style/card';
-import { Button } from '../../style/buttons';
+import React from 'react'
+import { Row } from '../../style/table'
+import Card from '../../style/card'
+import { Button } from '../../style/buttons'
 import {
   Weight,
   Text,
   Password,
   Date as DateInput,
   Select,
-} from '../../style/inputs';
-import { connect } from 'react-redux';
-import { register } from '../../stateManagement/reducers/auth';
+} from '../../style/inputs'
+import { connect } from 'react-redux'
+import { register } from '../../stateManagement/reducers/auth'
 
 class Register extends React.Component {
   constructor() {
-    super();
+    super()
     this.state = {
       firstname: '',
       middlename: '',
@@ -24,13 +24,13 @@ class Register extends React.Component {
       weight: '',
       gender: '',
       birthDate: '',
-    };
+    }
   }
 
-  getValue = (value) => (value ? value : undefined);
+  getValue = (value) => (value ? value : undefined)
 
-  onChange = (evt) => this.setState({ [evt.target.name]: evt.target.value });
-  onSelectChange = (evt) => this.setState({ [evt.name]: evt.value });
+  onChange = (evt) => this.setState({ [evt.target.name]: evt.target.value })
+  onSelectChange = (evt) => this.setState({ [evt.name]: evt.value })
 
   render() {
     return (
@@ -117,18 +117,15 @@ class Register extends React.Component {
           </Button>
         </Row>
         <Row>
-          <Button
-            className="secondary"
-            onClick={() => (window.location = '/login')}
-          >
+          <Button onClick={() => (window.location = '/login')} isSecondary>
             Login
           </Button>
         </Row>
       </Card>
-    );
+    )
   }
 }
 
 export default connect(() => ({}), {
   register,
-})(Register);
+})(Register)

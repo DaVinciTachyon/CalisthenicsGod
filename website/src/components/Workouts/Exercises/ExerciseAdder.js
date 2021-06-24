@@ -1,13 +1,14 @@
-import React from 'react';
-import { Row, Column, Section } from '../../../style/table';
-import { Button, ErrorButton } from '../../../style/buttons';
-import { Text, Select, Radio } from '../../../style/inputs';
-import StageSelect from '../StageSelect';
-import ExerciseSelect from '../ExerciseSelect';
+import React from 'react'
+import { Row, Column, Section } from '../../../style/table'
+import { Button, ErrorButton } from '../../../style/buttons'
+import { Text, Select, Radio } from '../../../style/inputs'
+import StageSelect from '../StageSelect'
+import ExerciseSelect from '../ExerciseSelect'
+import { ButtonGroup } from '@material-ui/core'
 
 export default class Exercises extends React.Component {
   constructor() {
-    super();
+    super()
     this.state = {
       name: '',
       abbreviation: '',
@@ -22,12 +23,12 @@ export default class Exercises extends React.Component {
       potentialStages: [],
       requirements: [],
       hasComponents: '',
-    };
-    this.onSubmit = this.onSubmit.bind(this);
+    }
+    this.onSubmit = this.onSubmit.bind(this)
   }
 
   componentDidMount() {
-    this.set();
+    this.set()
   }
 
   set = () => {
@@ -39,7 +40,7 @@ export default class Exercises extends React.Component {
         motionType,
         potentialStages,
         requirements,
-      } = this.props.exercise;
+      } = this.props.exercise
       return this.setState({
         name: name || '',
         abbreviation: abbreviation || '',
@@ -88,7 +89,7 @@ export default class Exercises extends React.Component {
             : 'isometric'),
         potentialStages: potentialStages || [],
         requirements: requirements || [],
-      });
+      })
     }
     this.setState({
       name: '',
@@ -104,13 +105,13 @@ export default class Exercises extends React.Component {
       motion: 'isometric',
       potentialStages: [],
       requirements: [],
-    });
-  };
+    })
+  }
 
-  onChange = (evt) => this.setState({ [evt.target.name]: evt.target.value });
-  onSelectChange = (evt) => this.setState({ [evt.name]: evt.value });
+  onChange = (evt) => this.setState({ [evt.target.name]: evt.target.value })
+  onSelectChange = (evt) => this.setState({ [evt.name]: evt.value })
   onHasComponentsChange = (evt) => {
-    this.onChange(evt);
+    this.onChange(evt)
     if (evt.target.value === 'singular')
       this.setState({
         componentExercises: undefined,
@@ -123,7 +124,7 @@ export default class Exercises extends React.Component {
         sagittalPlane:
           this.props.exercise?.motionType?.sagittalPlane || 'bilateral',
         motion: this.props.exercise?.motionType?.motion || 'isometric',
-      });
+      })
     else if (evt.target.value === 'combinational')
       this.setState({
         componentExercises:
@@ -134,8 +135,8 @@ export default class Exercises extends React.Component {
         frontalPlane: undefined,
         sagittalPlane: undefined,
         motion: undefined,
-      });
-  };
+      })
+  }
 
   onSubmit = async () => {
     if (
@@ -143,7 +144,7 @@ export default class Exercises extends React.Component {
       this.state.componentExercises &&
       this.state.componentExercises.length === 0
     )
-      return this.setState({ error: 'Component Exercises Required' });
+      return this.setState({ error: 'Component Exercises Required' })
     this.props.onSubmit({
       _id: this.props.id,
       name: this.state.name,
@@ -160,13 +161,13 @@ export default class Exercises extends React.Component {
       },
       potentialStages: this.state.potentialStages,
       requirements: this.state.requirements,
-    });
-  };
+    })
+  }
 
   onCancel = () => {
-    this.set();
-    this.props.onCancel();
-  };
+    this.set()
+    this.props.onCancel()
+  }
 
   render() {
     return (
@@ -301,12 +302,12 @@ export default class Exercises extends React.Component {
             onChange={this.onChange}
             label="Description"
           />
-          <Column>
+          <ButtonGroup orientation="vertical">
             <Button onClick={this.onSubmit}>Submit</Button>
             <ErrorButton onClick={this.onCancel}>Cancel</ErrorButton>
-          </Column>
+          </ButtonGroup>
         </Row>
       </>
-    );
+    )
   }
 }

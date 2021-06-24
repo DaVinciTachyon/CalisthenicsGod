@@ -1,6 +1,14 @@
-import React from 'react';
-import styled from 'styled-components';
-import { Nutrients } from './constants';
+import React from 'react'
+import styled from 'styled-components'
+import { Nutrients } from './constants'
+import {
+  Chip,
+  Select as MaterialSelect,
+  FormControl,
+  MenuItem,
+  InputLabel,
+  Input as MaterialInput,
+} from '@material-ui/core'
 
 const Input = styled(
   ({ className, name, placeholder, label, unit, ...rest }) => (
@@ -13,7 +21,7 @@ const Input = styled(
         </span>
       )}
     </label>
-  )
+  ),
 )`
   position: relative;
   margin: ${({ label }) => (label ? '10px' : '2px')};
@@ -70,15 +78,15 @@ const Input = styled(
       }
     }
   }
-`;
+`
 
 const Text = styled(Input).attrs({
   type: 'text',
-})``;
+})``
 
 const Password = styled(Text).attrs({
   type: 'password',
-})``;
+})``
 
 const Date = styled(Input).attrs({
   type: 'text',
@@ -88,7 +96,7 @@ const Date = styled(Input).attrs({
   & input {
     text-align: center;
   }
-`;
+`
 
 const Number = styled(Input).attrs(({ value, decimalPlaces }) => ({
   value:
@@ -105,44 +113,44 @@ const Number = styled(Input).attrs(({ value, decimalPlaces }) => ({
       margin: 0;
     }
   }
-`;
+`
 
 const Weight = styled(Number).attrs(({ unit, step }) => ({
   unit: unit || 'g',
   min: 0,
   step: step || 0.1,
-}))``;
+}))``
 
 const Length = styled(Number).attrs({
   min: 0,
   step: 0.1,
-})``;
+})``
 
 const Calories = styled(Number).attrs({
   min: 0,
   step: 1,
   unit: 'kcal',
-})``;
+})``
 
 const Fat = styled(Weight).attrs({
   primaryColor: Nutrients.fat.light,
   secondaryColor: Nutrients.fat.dark,
-})``;
+})``
 
 const Carbohydrate = styled(Weight).attrs({
   primaryColor: Nutrients.carbohydrate.light,
   secondaryColor: Nutrients.carbohydrate.dark,
-})``;
+})``
 
 const Protein = styled(Weight).attrs({
   primaryColor: Nutrients.protein.light,
   secondaryColor: Nutrients.protein.dark,
-})``;
+})``
 
 const Ethanol = styled(Weight).attrs({
   primaryColor: Nutrients.ethanol.light,
   secondaryColor: Nutrients.ethanol.dark,
-})``;
+})``
 
 const RadioOption = styled(({ className, label, value, name, ...rest }) => (
   <div className={className}>
@@ -175,7 +183,7 @@ const RadioOption = styled(({ className, label, value, name, ...rest }) => (
     background-color: black;
     color: white;
   }
-`;
+`
 
 const Radio = styled(
   ({ className, options, name, value, onChange, ...rest }) => (
@@ -191,268 +199,59 @@ const Radio = styled(
         />
       ))}
     </div>
-  )
+  ),
 )`
   display: table-cell;
   vertical-align: middle;
   text-align: center;
   margin: auto;
-`;
+`
 
-const SelectedOption = styled(({ className, label, ...rest }) => (
-  <div className={className} {...rest}>
-    <span>{label}</span>
-    <span className="cross">✕</span>
-  </div>
-))`
-  background: lightgrey;
-  display: inline-block;
-  border-radius: 4px;
-  font-size: 0.7rem;
-  margin: 2px;
-  padding: 2px;
-
-  & span {
-    padding: 3px;
+class Select extends React.Component {
+  onChange = (evt) => {
+    if (this.props.readOnly) return
+    this.props.onChange({ name: this.props.name, value: evt.target.value })
   }
-
-  ${({ readOnly }) =>
-    !readOnly
-      ? `
-  &:hover {
-    background: crimson;
-  }
-  `
-      : `
-  & span.cross {
-    display: none;
-  }
-  `}
-`;
-
-const DropdownOption = styled(({ className, label, value, ...rest }) => (
-  <div className={className} value={value} data-id={value} {...rest}>
-    {label}
-  </div>
-))`
-  width: 100%;
-  font-size: 0.7rem;
-  padding: 2px;
-
-  &:hover {
-    background: lightgreen;
-  }
-`;
-
-const SelectDropdown = styled(
-  ({ className, options, value, onSelect, isMulti, ...rest }) => (
-    <div className={className} {...rest}>
-      {options.map((option) =>
-        (isMulti ? value?.find((id) => option.value === id) : false) ? (
-          <></>
-        ) : (
-          <DropdownOption
-            key={option.value}
-            label={option.label}
-            value={option.value}
-            onClick={() => onSelect(option)}
-          />
-        )
-      )}
-    </div>
-  )
-)`
-  display: none;
-  position: absolute;
-  background: white;
-  border: 1px solid currentColor;
-  width: 100%;
-  z-index: 1;
-`;
-
-const EmptySpan = <span className="empty">&#8203;</span>;
-
-const SelectChoices = styled(
-  ({ className, options, value, onSelect, readOnly, isMulti, ...rest }) => (
-    <div
-      className={className}
-      data-id={`select-${
-        isMulti
-          ? value
-              .map((id) => {
-                const option = options.find((option) => option.value === id);
-                return option ? option.value : undefined;
-              })
-              .join('-')
-          : options.find((option) => option.value === value)
-          ? options.find((option) => option.value === value).value
-          : ''
-      }`}
-      {...rest}
-    >
-      <div>
-        {isMulti
-          ? (() => {
-              const optionDivs = value?.map((id) => {
-                const option = options.find((option) => option.value === id);
-                return option ? (
-                  <SelectedOption
-                    key={option.value}
-                    label={option.label}
-                    value={option.value}
-                    onClick={() => onSelect(option)}
-                    readOnly={readOnly}
-                  />
-                ) : (
-                  <></>
-                );
-              });
-              return optionDivs.length > 0 ? optionDivs : EmptySpan;
-            })()
-          : (() => {
-              const option = options.find((option) => option.value === value);
-              return option ? <span>{option.label}</span> : EmptySpan;
-            })()}
-      </div>
-      <span className="arrow">🢓</span>
-    </div>
-  )
-)`
-  position: relative;
-  overflow: hidden;
-  display: flex;
-
-  &:hover {
-    & span.arrow {
-      background: lightgrey;
-    }
-  }
-
-  &:active {
-    & span.arrow {
-      color: black;
-    }
-  }
-
-  & span.arrow {
-    position: absolute;
-    right: 0;
-    top: 0;
-    height: 100%;
-    color: darkgrey;
-    justify-content: center;
-    align-items: center;
-    display: ${({ readOnly }) => (readOnly ? `none` : `flex`)};
-  }
-`;
-
-class BaseSelect extends React.Component {
-  constructor() {
-    super();
-    this.state = {};
-  }
-
-  componentDidMount() {
-    this.set();
-  }
-
-  componentDidUpdate(prevProps) {
-    if (prevProps !== this.props) this.set();
-  }
-
-  set = () =>
-    this.setState({
-      value: this.props.value || (this.props.isMulti ? [] : ''),
-    });
-
-  onChange = (evt, isAdding = true) => {
-    const { readOnly, isMulti, name, onChange } = this.props;
-    if (readOnly) return;
-    let value = this.props.value;
-    if (isMulti && isAdding) value = value.concat(evt.value);
-    else if (isMulti) value = value.filter((id) => id !== evt.value);
-    else value = evt.value;
-    onChange({ name, value });
-  };
 
   render() {
-    const { isMulti, readOnly, className, options, value, label, name } =
-      this.props;
+    const { isMulti, readOnly, options, value, label, name } = this.props
     return (
-      <div className={className} name={name || 'select'}>
-        <SelectChoices
-          options={options}
+      <FormControl>
+        <InputLabel id="select">{label}</InputLabel>
+        <MaterialSelect
+          labelId="select"
+          name={name}
+          multiple={isMulti}
           value={value}
-          onSelect={(option) => this.onChange(option, false)}
-          readOnly={readOnly}
-          isMulti={isMulti}
-          label={label}
-        />
-        {!readOnly && (
-          <SelectDropdown
-            options={options}
-            value={value}
-            onSelect={(option) => this.onChange(option, true)}
-            isMulti={isMulti}
-          />
-        )}
-        {label && (
-          <span
-            className="label"
-            style={(() =>
-              (isMulti && value.length > 0) || (!isMulti && value !== undefined)
-                ? {
-                    transform: 'translate(0.25rem, -65%) scale(0.8)',
-                    background: 'white',
-                  }
-                : {})()}
-          >
-            {label}
-          </span>
-        )}
-      </div>
-    );
+          onChange={this.onChange}
+          input={<MaterialInput />}
+          renderValue={(selected) => (
+            <div>
+              {isMulti &&
+                selected.map((value) => (
+                  <Chip
+                    key={value}
+                    label={
+                      options.find((option) => option.value === value)?.label ||
+                      value
+                    }
+                  />
+                ))}
+              {!isMulti && <>{selected}</>}
+            </div>
+          )}
+          disabled={readOnly}
+        >
+          {options.map(({ label, value }) => (
+            <MenuItem key={value} value={value}>
+              {label}
+            </MenuItem>
+          ))}
+        </MaterialSelect>
+      </FormControl>
+    )
   }
 }
-
-const Select = styled(BaseSelect)`
-  position: relative;
-  margin: 10px;
-
-  & ${SelectChoices} {
-    border: 1px solid currentColor;
-    border-radius: 4px;
-    box-sizing: border-box;
-    padding: calc(0.5rem * 1.5) 0.5rem;
-    width: 100%;
-  }
-
-  & ${SelectChoices}:hover + ${SelectDropdown}, & ${SelectDropdown}:hover {
-    display: block;
-  }
-
-  & span.label {
-    position: absolute;
-    left: 0;
-    top: 0;
-    padding: calc(0.5rem * 0.75) calc(0.5rem * 0.5);
-    margin: calc(0.5rem * 0.75 + 3px) calc(0.5rem * 0.5);
-    white-space: nowrap;
-    transform-origin: 0 0;
-    transition: transform 120ms ease-in;
-    font-weight: bold;
-    line-height: 1.2;
-    border-radius: 10px;
-    transform: translate(0, 0);
-  }
-
-  ${({ readOnly }) =>
-    readOnly
-      ? `& option:not(:checked) {
-    display: none;
-  }`
-      : ``}
-`;
 
 const Range = styled(
   ({
@@ -470,17 +269,17 @@ const Range = styled(
     <div className={className}>
       <span className="label">{label}</span>
       <span className="value">{`${(() => {
-        let decimalPlaces = 0;
-        let nStep = step;
+        let decimalPlaces = 0
+        let nStep = step
         while (nStep % 1 !== 0) {
-          nStep *= 10;
-          decimalPlaces++;
+          nStep *= 10
+          decimalPlaces++
         }
         return (
           Math.round(
-            value * Math.pow(10, decimalPlaces + (isPercentage ? 2 : 0))
+            value * Math.pow(10, decimalPlaces + (isPercentage ? 2 : 0)),
           ) / Math.pow(10, decimalPlaces)
-        );
+        )
       })()} ${unit}`}</span>
       <input
         type="range"
@@ -492,7 +291,7 @@ const Range = styled(
         {...rest}
       />
     </div>
-  )
+  ),
 )`
   width: 100%;
   padding: 3px 10px;
@@ -569,7 +368,7 @@ const Range = styled(
       border-width: 2px;
     }`}
   }
-`;
+`
 
 export {
   Text,
@@ -586,4 +385,4 @@ export {
   Ethanol,
   Select,
   Range,
-};
+}

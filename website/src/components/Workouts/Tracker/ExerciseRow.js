@@ -1,20 +1,21 @@
-import React from 'react';
-import { Row, Column } from '../../../style/table';
-import ExerciseSelect from '../ExerciseSelect';
-import { Select, Number } from '../../../style/inputs';
-import { Button, DeleteButton } from '../../../style/buttons';
-import SetEditor from './SetEditor';
-import { connect } from 'react-redux';
-import { getExercises } from '../../../stateManagement/reducers/exercises';
+import React from 'react'
+import { Row, Column } from '../../../style/table'
+import ExerciseSelect from '../ExerciseSelect'
+import { Select, Number } from '../../../style/inputs'
+import { Button, DeleteButton } from '../../../style/buttons'
+import SetEditor from './SetEditor'
+import { connect } from 'react-redux'
+import { getExercises } from '../../../stateManagement/reducers/exercises'
 import {
   modifyCurrentExercise,
   addCurrentExerciseSet,
   removeCurrentExerciseSet,
-} from '../../../stateManagement/reducers/workouts';
+} from '../../../stateManagement/reducers/workouts'
+import { ButtonGroup } from '@material-ui/core'
 
 class ExerciseRow extends React.Component {
   constructor() {
-    super();
+    super()
     this.state = {
       sets: [],
       isWeighted: 0,
@@ -25,26 +26,31 @@ class ExerciseRow extends React.Component {
       exercise: undefined,
       intrasetRest: undefined,
       intersetRest: 0,
-    };
+    }
   }
 
   componentDidMount() {
-    this.props.getExercises();
-    this.set();
+    this.props.getExercises()
+    this.set()
   }
 
   componentDidUpdate(prevProps) {
-    if (prevProps.exercises !== this.props.exercises) this.set();
+    if (prevProps.exercises !== this.props.exercises) this.set()
   }
 
   set = () => {
-    const { sets, variation, sagittalPlane, id, rest } =
-      this.props.workouts.current.stages.find(
-        (stage) => stage.id === this.props.stageId
-      ).exercises[this.props.index];
+    const {
+      sets,
+      variation,
+      sagittalPlane,
+      id,
+      rest,
+    } = this.props.workouts.current.stages.find(
+      (stage) => stage.id === this.props.stageId,
+    ).exercises[this.props.index]
     const exercise = this.props.exercises.find(
-      (exercise) => exercise._id === id
-    );
+      (exercise) => exercise._id === id,
+    )
     this.setState({
       isWeighted:
         sets && sets.length > 0
@@ -61,14 +67,19 @@ class ExerciseRow extends React.Component {
       intersetRest: rest?.interset || 0,
       exercise,
       variationOptions: this.getVariationOptions(
-        exercise?.motionType || undefined
+        exercise?.motionType || undefined,
       ),
-    });
-  };
+    })
+  }
 
   onUpdate = () => {
-    const { variation, sagittalPlane, id, intrasetRest, intersetRest } =
-      this.state;
+    const {
+      variation,
+      sagittalPlane,
+      id,
+      intrasetRest,
+      intersetRest,
+    } = this.state
     this.props.modifyCurrentExercise({
       stageId: this.props.stageId,
       index: this.props.index,
@@ -78,36 +89,36 @@ class ExerciseRow extends React.Component {
         id,
         rest: { intraset: intrasetRest, interset: intersetRest },
       },
-    });
-  };
+    })
+  }
 
   onChange = async (evt) => {
-    await this.setState({ [evt.target.name]: evt.target.value });
-    this.onUpdate();
-  };
+    await this.setState({ [evt.target.name]: evt.target.value })
+    this.onUpdate()
+  }
 
   onSelectChange = async (evt) => {
-    await this.setState({ [evt.name]: evt.value });
-    this.onUpdate();
-  };
+    await this.setState({ [evt.name]: evt.value })
+    this.onUpdate()
+  }
 
   getVariationOptions = (motionType) => {
-    const variationOptions = [];
+    const variationOptions = []
     if (motionType?.frontalPlane === 'rotational')
       variationOptions.push(
         { value: undefined, label: 'Bidirectional' },
         { value: 'clockwise', label: 'Clockwise' },
-        { value: 'anti-clockwise', label: 'Anti-clockwise' }
-      );
+        { value: 'anti-clockwise', label: 'Anti-clockwise' },
+      )
     else if (motionType?.motion === 'isotonic')
       variationOptions.push(
         { value: undefined, label: 'Isotonic' },
         { value: 'eccentric', label: 'Eccentric' },
-        { value: 'concentric', label: 'Concentric' }
-      );
-    else variationOptions.push({ value: undefined, label: 'Standard' });
-    return variationOptions;
-  };
+        { value: 'concentric', label: 'Concentric' },
+      )
+    else variationOptions.push({ value: undefined, label: 'Standard' })
+    return variationOptions
+  }
 
   onExerciseChange = async (evt, exercise) => {
     await this.setState({
@@ -116,23 +127,23 @@ class ExerciseRow extends React.Component {
       isWeighted: 0,
       variation: undefined,
       variationOptions: this.getVariationOptions(
-        exercise?.motionType || undefined
+        exercise?.motionType || undefined,
       ),
       sagittalPlane:
         exercise?.motionType.sagittalPlane === 'unilateral'
           ? 'right'
           : undefined,
-    });
-    this.onUpdate();
-  };
+    })
+    this.onUpdate()
+  }
 
   render() {
     const sets =
       this.props.workouts.current.stages.find(
-        (stage) => stage.id === this.props.stageId
-      ).exercises[this.props.index].sets || [];
+        (stage) => stage.id === this.props.stageId,
+      ).exercises[this.props.index].sets || []
     return (
-      <Row columns={7}>
+      <Row columns={6}>
         <Column>
           {sets.map((set, i) => (
             <SetEditor
@@ -146,7 +157,7 @@ class ExerciseRow extends React.Component {
               isWeighted={this.state.isWeighted}
             />
           ))}
-          <Row columns={2}>
+          <ButtonGroup orientation="horizontal">
             <Button
               className="minWidth"
               onClick={() =>
@@ -171,7 +182,7 @@ class ExerciseRow extends React.Component {
             >
               -
             </DeleteButton>
-          </Row>
+          </ButtonGroup>
         </Column>
         <Select
           name="isWeighted"
@@ -229,7 +240,7 @@ class ExerciseRow extends React.Component {
         </Column>
         <DeleteButton onClick={this.props.onRemove}>Remove</DeleteButton>
       </Row>
-    );
+    )
   }
 }
 
@@ -238,4 +249,4 @@ export default connect(({ workouts, exercises }) => ({ workouts, exercises }), {
   modifyCurrentExercise,
   addCurrentExerciseSet,
   removeCurrentExerciseSet,
-})(ExerciseRow);
+})(ExerciseRow)

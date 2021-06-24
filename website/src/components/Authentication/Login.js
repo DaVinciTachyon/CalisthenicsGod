@@ -1,21 +1,21 @@
-import React from 'react';
-import { Row } from '../../style/table';
-import Card from '../../style/card';
-import { Button } from '../../style/buttons';
-import { Text, Password } from '../../style/inputs';
-import { connect } from 'react-redux';
-import { logIn } from '../../stateManagement/reducers/auth';
+import React from 'react'
+import { Row } from '../../style/table'
+import Card from '../../style/card'
+import { Button } from '../../style/buttons'
+import { Text, Password } from '../../style/inputs'
+import { connect } from 'react-redux'
+import { logIn } from '../../stateManagement/reducers/auth'
 
 class Login extends React.Component {
   constructor() {
-    super();
+    super()
     this.state = {
       email: '',
       password: '',
-    };
+    }
   }
 
-  onChange = (evt) => this.setState({ [evt.target.name]: evt.target.value });
+  onChange = (evt) => this.setState({ [evt.target.name]: evt.target.value })
 
   render() {
     return (
@@ -46,18 +46,15 @@ class Login extends React.Component {
           </Button>
         </Row>
         <Row>
-          <Button
-            className="secondary"
-            onClick={() => (window.location = '/register')}
-          >
+          <Button onClick={() => (window.location = '/register')} isSecondary>
             Register
           </Button>
         </Row>
       </Card>
-    );
+    )
   }
 }
 
 export default connect(() => ({}), {
   logIn,
-})(Login);
+})(Login)

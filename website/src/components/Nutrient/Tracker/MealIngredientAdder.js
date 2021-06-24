@@ -1,18 +1,18 @@
-import React from 'react';
-import IngredientSelect from '../IngredientSelect';
-import { Row, Column } from '../../../style/table';
-import { Text, Calories } from '../../../style/inputs';
-import { SuccessButton, ErrorButton } from '../../../style/buttons';
-import IngredientMacroRow from './IngredientMacroRow';
-import { getCalories } from '../util';
-import { connect } from 'react-redux';
-import { addIngredient } from '../../../stateManagement/reducers/ingredients';
-import { addIngredient as addPresetMealIngredient } from '../../../stateManagement/reducers/presetMeals';
-import { addIngredient as addMealIngredient } from '../../../stateManagement/reducers/meals';
+import React from 'react'
+import IngredientSelect from '../IngredientSelect'
+import { Row, Column } from '../../../style/table'
+import { Calories } from '../../../style/inputs'
+import { SuccessButton, ErrorButton } from '../../../style/buttons'
+import IngredientMacroRow from './IngredientMacroRow'
+import { getCalories } from '../util'
+import { connect } from 'react-redux'
+import { addIngredient } from '../../../stateManagement/reducers/ingredients'
+import { addIngredient as addPresetMealIngredient } from '../../../stateManagement/reducers/presetMeals'
+import { addIngredient as addMealIngredient } from '../../../stateManagement/reducers/meals'
 
 class MealIngredientAdder extends React.Component {
   constructor() {
-    super();
+    super()
     this.state = {
       fat: 0,
       carbohydrate: 0,
@@ -22,7 +22,7 @@ class MealIngredientAdder extends React.Component {
       name: '',
       id: '',
       calories: 0,
-    };
+    }
   }
 
   onIngredientChange = async (ingredient) => {
@@ -35,7 +35,7 @@ class MealIngredientAdder extends React.Component {
         protein: 0,
         ethanol: 0,
         calories: 0,
-      });
+      })
     else {
       this.setState({
         id: ingredient._id,
@@ -49,13 +49,13 @@ class MealIngredientAdder extends React.Component {
           ingredient.macronutrients.carbohydrate,
           ingredient.macronutrients.protein,
           ingredient.macronutrients.ethanol,
-          this.state.weight
+          this.state.weight,
         ),
-      });
+      })
     }
-  };
+  }
 
-  onChange = (evt) => this.setState({ [evt.target.name]: evt.target.value });
+  onChange = (evt) => this.setState({ [evt.target.name]: evt.target.value })
 
   onSubmit = async () => {
     // if (!this.state.id)
@@ -77,15 +77,22 @@ class MealIngredientAdder extends React.Component {
         // )._id
         weight: this.state.weight,
       },
-    };
-    if (this.props.isPreset) this.props.addPresetMealIngredient(ingredient);
-    this.props.addMealIngredient(ingredient);
-    this.props.onSubmit();
-  };
+    }
+    if (this.props.isPreset) this.props.addPresetMealIngredient(ingredient)
+    this.props.addMealIngredient(ingredient)
+    this.props.onSubmit()
+  }
 
   render() {
-    const { id, name, fat, carbohydrate, protein, ethanol, weight, calories } =
-      this.state;
+    const {
+      id,
+      fat,
+      carbohydrate,
+      protein,
+      ethanol,
+      weight,
+      calories,
+    } = this.state
     return (
       <Row columns={11} className="input">
         <Column span={2}>
@@ -95,7 +102,7 @@ class MealIngredientAdder extends React.Component {
             label="Ingredient"
           />
           {/* {id === '' && (
-            <Text name="name" value={name} onChange={this.onChange} />
+            <Text name="name" value={this.state.name} onChange={this.onChange} />
           )} */}
         </Column>
         <Calories value={calories} readOnly />
@@ -111,7 +118,7 @@ class MealIngredientAdder extends React.Component {
                   this.state.carbohydrate,
                   this.state.protein,
                   this.state.ethanol,
-                  weight
+                  weight,
                 ),
               })
             }
@@ -134,7 +141,7 @@ class MealIngredientAdder extends React.Component {
                   carbohydrate,
                   protein,
                   ethanol,
-                  this.state.weight
+                  this.state.weight,
                 ),
               })
             }
@@ -153,7 +160,7 @@ class MealIngredientAdder extends React.Component {
           <ErrorButton onClick={this.props.onCancel}>Cancel</ErrorButton>
         </Column>
       </Row>
-    );
+    )
   }
 }
 
@@ -161,4 +168,4 @@ export default connect(({ ingredients }) => ({ ingredients }), {
   addIngredient,
   addPresetMealIngredient,
   addMealIngredient,
-})(MealIngredientAdder);
+})(MealIngredientAdder)

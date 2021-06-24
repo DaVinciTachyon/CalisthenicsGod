@@ -1,13 +1,13 @@
-import React from 'react';
-import { Row } from '../../style/table';
-import { Button } from '../../style/buttons';
-import { Length, Weight } from '../../style/inputs';
-import { connect } from 'react-redux';
-import { addMeasurements } from '../../stateManagement/reducers/measurements';
+import React from 'react'
+import { Row } from '../../style/table'
+import { Button } from '../../style/buttons'
+import { Length, Weight } from '../../style/inputs'
+import { connect } from 'react-redux'
+import { addMeasurements } from '../../stateManagement/reducers/measurements'
 
 class MeasurementAdder extends React.Component {
   constructor() {
-    super();
+    super()
     this.state = {
       weight: undefined,
       height: undefined,
@@ -20,7 +20,7 @@ class MeasurementAdder extends React.Component {
       shoulders: undefined,
       chest: undefined,
       neck: undefined,
-    };
+    }
   }
 
   onChange = (evt) =>
@@ -30,7 +30,7 @@ class MeasurementAdder extends React.Component {
           ? evt.target.value
           : undefined
         : this.state[evt.target.name],
-    });
+    })
 
   submitMeasurement = async () => {
     this.props.addMeasurements({
@@ -45,8 +45,8 @@ class MeasurementAdder extends React.Component {
       shoulders: this.state.shoulders,
       chest: this.state.chest,
       neck: this.state.neck,
-    });
-  };
+    })
+  }
 
   render() {
     return (
@@ -129,15 +129,13 @@ class MeasurementAdder extends React.Component {
           unit="cm"
         />
         <Row>
-          <Button onClick={this.submitMeasurement.bind(this)}>
-            Add Measurements
-          </Button>
+          <Button onClick={this.submitMeasurement}>Add Measurements</Button>
         </Row>
       </div>
-    );
+    )
   }
 }
 
 export default connect(() => ({}), {
   addMeasurements,
-})(MeasurementAdder);
+})(MeasurementAdder)
