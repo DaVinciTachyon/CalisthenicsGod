@@ -84,11 +84,11 @@ class UserProfile extends React.Component {
     this.onChange(evt)
     this.setState({
       calorieOffset:
-        evt.value === 'deficit'
+        evt.target.value === 'deficit'
           ? this.state.currentCalorieOffset < 1
             ? this.state.currentCalorieOffset
             : 0.85
-          : evt.value === 'bulk'
+          : evt.target.value === 'bulk'
           ? this.state.currentCalorieOffset > 1
             ? this.state.currentCalorieOffset
             : 1.05

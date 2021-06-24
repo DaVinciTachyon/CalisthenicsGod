@@ -16,7 +16,7 @@ class StageSelect extends React.Component {
   onChange = async (evt) => {
     const stages = this.props.stages.filter((stage) => {
       if (this.props.multiple) return evt.target.value.includes(stage._id)
-      return evt.value === stage._id
+      return evt.target.value === stage._id
     })
     this.props.onChange(evt, this.props.multiple ? stages : stages[0])
   }
