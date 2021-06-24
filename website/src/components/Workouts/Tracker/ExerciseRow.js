@@ -154,7 +154,6 @@ class ExerciseRow extends React.Component {
           ))}
           <ButtonGroup orientation="horizontal">
             <Button
-              className="minWidth"
               onClick={() =>
                 this.props.addCurrentExerciseSet({
                   stageId: this.props.stageId,
@@ -166,7 +165,6 @@ class ExerciseRow extends React.Component {
               +
             </Button>
             <DeleteButton
-              className="minWidth"
               onClick={() =>
                 this.props.removeCurrentExerciseSet({
                   stageId: this.props.stageId,

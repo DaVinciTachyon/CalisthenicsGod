@@ -1,22 +1,22 @@
-import React from 'react';
-import { Row } from '../../../style/table';
-import { Number } from '../../../style/inputs';
-import { connect } from 'react-redux';
-import { modifyCurrentExerciseSet } from '../../../stateManagement/reducers/workouts';
+import React from 'react'
+import { Row } from '../../../style/table'
+import { Number } from '../../../style/inputs'
+import { connect } from 'react-redux'
+import { modifyCurrentExerciseSet } from '../../../stateManagement/reducers/workouts'
 
 class SetEditor extends React.Component {
   constructor() {
-    super();
+    super()
     this.state = {
       repetitions: undefined,
       time: undefined,
       distance: undefined,
       weight: undefined,
-    };
+    }
   }
 
   componentDidMount() {
-    this.setParams();
+    this.setParams()
   }
 
   componentDidUpdate(prevProps) {
@@ -24,34 +24,34 @@ class SetEditor extends React.Component {
       prevProps.type !== this.props.type ||
       prevProps.isWeighted !== this.props.isWeighted
     )
-      this.setParams();
+      this.setParams()
   }
 
   setParams = async () => {
-    let repetitions, time, distance, weight;
+    let repetitions, time, distance, weight
     if (
       this.props.value?.repetitions ||
       ['isotonic', 'eccentric'].includes(this.props.type) ||
-      (!this.props.type && !this.props.readOnly)
+      (!this.props.type && !this.props.disabled)
     )
-      repetitions = this.props.value?.repetitions || 1;
+      repetitions = this.props.value?.repetitions || 1
     if (
       this.props.value?.time ||
       ['isometric', 'eccentric', 'distance', 'timed'].includes(this.props.type)
     )
-      time = this.props.value?.time || 1;
+      time = this.props.value?.time || 1
     if (this.props.value?.distance || ['distance'].includes(this.props.type))
-      distance = this.props.value?.distance || 1;
+      distance = this.props.value?.distance || 1
     if (this.props.isWeighted && this.props.isWeighted !== 0)
-      weight = this.props.value?.weight ? Math.abs(this.props.value.weight) : 1;
-    await this.setState({ repetitions, time, distance, weight });
-    if (!this.props.readOnly) this.update();
-  };
+      weight = this.props.value?.weight ? Math.abs(this.props.value.weight) : 1
+    await this.setState({ repetitions, time, distance, weight })
+    if (!this.props.disabled) this.update()
+  }
 
   onChange = async (evt) => {
-    await this.setState({ [evt.target.name]: evt.target.value });
-    this.update();
-  };
+    await this.setState({ [evt.target.name]: evt.target.value })
+    this.update()
+  }
 
   update = () =>
     this.props.modifyCurrentExerciseSet({
@@ -67,7 +67,7 @@ class SetEditor extends React.Component {
             ? this.state.weight * this.props.isWeighted
             : undefined,
       },
-    });
+    })
 
   render() {
     return (
@@ -84,7 +84,7 @@ class SetEditor extends React.Component {
             value={this.state.repetitions}
             onChange={this.onChange}
             unit="r"
-            readOnly={this.props.readOnly}
+            disabled={this.props.disabled}
           />
         )}
         {this.state.distance !== undefined && (
@@ -94,7 +94,7 @@ class SetEditor extends React.Component {
             value={this.state.distance}
             onChange={this.onChange}
             unit="m"
-            readOnly={this.props.readOnly}
+            disabled={this.props.disabled}
           />
         )}
         {this.state.time !== undefined && (
@@ -104,7 +104,7 @@ class SetEditor extends React.Component {
             value={this.state.time}
             onChange={this.onChange}
             unit="s"
-            readOnly={this.props.readOnly}
+            disabled={this.props.disabled}
           />
         )}
         {this.state.weight !== undefined && (
@@ -114,14 +114,14 @@ class SetEditor extends React.Component {
             value={this.state.weight}
             onChange={this.onChange}
             unit="kg"
-            readOnly={this.props.readOnly}
+            disabled={this.props.disabled}
           />
         )}
       </Row>
-    );
+    )
   }
 }
 
 export default connect(() => ({}), {
   modifyCurrentExerciseSet,
-})(SetEditor);
+})(SetEditor)

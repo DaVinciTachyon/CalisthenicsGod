@@ -122,15 +122,15 @@ class MealRow extends React.Component {
             <Text
               name="name"
               value={name}
-              readOnly={!isEditing}
+              disabled={!isEditing}
               onChange={this.onChange}
             />
           </Column>
-          <Calories value={calories} readOnly />
-          <Fat value={fat} readOnly />
-          <Carbohydrate value={carbohydrate} readOnly />
-          <Protein value={protein} readOnly />
-          <Ethanol value={ethanol} readOnly />
+          <Calories value={calories} disabled />
+          <Fat value={fat} disabled />
+          <Carbohydrate value={carbohydrate} disabled />
+          <Protein value={protein} disabled />
+          <Ethanol value={ethanol} disabled />
           {!isEditing && (
             <ButtonGroup orientation="vertical">
               <Button onClick={() => this.setState({ isEditing: true })}>

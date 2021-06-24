@@ -124,34 +124,34 @@ class IngredientRow extends React.Component {
             name="name"
             onChange={this.onChange}
             value={name}
-            readOnly={!isEditing}
+            disabled={!isEditing}
           />
         </Column>
-        <Calories value={this.state.calories} readOnly />
-        <Weight value={weight} readOnly />
+        <Calories value={this.state.calories} disabled />
+        <Weight value={weight} disabled />
         <Fat
           name="fat"
           onChange={this.onChange}
           value={fat}
-          readOnly={!isEditing}
+          disabled={!isEditing}
         />
         <Carbohydrate
           name="carbohydrate"
           onChange={this.onChange}
           value={carbohydrate}
-          readOnly={!isEditing}
+          disabled={!isEditing}
         />
         <Protein
           name="protein"
           onChange={this.onChange}
           value={protein}
-          readOnly={!isEditing}
+          disabled={!isEditing}
         />
         <Ethanol
           name="ethanol"
           onChange={this.onChange}
           value={ethanol}
-          readOnly={!isEditing}
+          disabled={!isEditing}
         />
         {!isEditing && (
           <ButtonGroup orientation="vertical">

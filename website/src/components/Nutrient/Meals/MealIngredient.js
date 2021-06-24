@@ -98,19 +98,19 @@ class MealIngredient extends React.Component {
     return (
       <Row columns={9}>
         <Column span={2}>
-          <Text value={name} readOnly />
+          <Text value={name} disabled />
         </Column>
-        <Calories value={this.state.calories} readOnly />
+        <Calories value={this.state.calories} disabled />
         <Weight
           name="weight"
           value={weight}
-          readOnly={!isEditing}
+          disabled={!isEditing}
           onChange={this.onChange}
         />
-        <Fat value={(fat * weight) / 100} readOnly />
-        <Carbohydrate value={(carbohydrate * weight) / 100} readOnly />
-        <Protein value={(protein * weight) / 100} readOnly />
-        <Ethanol value={(ethanol * weight) / 100} readOnly />
+        <Fat value={(fat * weight) / 100} disabled />
+        <Carbohydrate value={(carbohydrate * weight) / 100} disabled />
+        <Protein value={(protein * weight) / 100} disabled />
+        <Ethanol value={(ethanol * weight) / 100} disabled />
         {!isEditing && (
           <ButtonGroup orientation="vertical">
             <Button onClick={() => this.setState({ isEditing: true })}>

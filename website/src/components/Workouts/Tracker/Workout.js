@@ -1,18 +1,18 @@
-import React from 'react';
-import { Row, Column, Title } from '../../../style/table';
-import { Number, Text } from '../../../style/inputs';
-import SetEditor from './SetEditor';
-import { connect } from 'react-redux';
-import { getExercises } from '../../../stateManagement/reducers/exercises';
+import React from 'react'
+import { Row, Column, Title } from '../../../style/table'
+import { Number, Text } from '../../../style/inputs'
+import SetEditor from './SetEditor'
+import { connect } from 'react-redux'
+import { getExercises } from '../../../stateManagement/reducers/exercises'
 
 class Workout extends React.Component {
   constructor() {
-    super();
-    this.state = {};
+    super()
+    this.state = {}
   }
 
   componentDidMount() {
-    this.props.getExercises();
+    this.props.getExercises()
   }
 
   render() {
@@ -38,8 +38,8 @@ class Workout extends React.Component {
             <Row>{stage.name}</Row>
             {stage.exercises.map((exercise) => {
               const fullExercise = this.props.exercises.find(
-                (ex) => ex._id === exercise.id
-              );
+                (ex) => ex._id === exercise.id,
+              )
               return (
                 <Row columns={6} key={exercise._id} id={exercise.id}>
                   <Column>
@@ -48,7 +48,7 @@ class Workout extends React.Component {
                         key={`${exercise._id}-${index}`}
                         value={set}
                         isWeighted={set.weight}
-                        readOnly
+                        disabled
                       />
                     ))}
                   </Column>
@@ -60,7 +60,7 @@ class Workout extends React.Component {
                           : 'Assisted'
                         : 'Bodyweight'
                     }
-                    readOnly
+                    disabled
                   />
                   <Text
                     value={
@@ -71,34 +71,34 @@ class Workout extends React.Component {
                         ? 'Isotonic'
                         : 'Standard')
                     }
-                    readOnly
+                    disabled
                   />
                   <Text
                     value={exercise.sagittalPlane || 'Bilateral'}
-                    readOnly
+                    disabled
                   />
-                  <Text value={fullExercise?.name} readOnly />
+                  <Text value={fullExercise?.name} disabled />
                   <Column columns={2}>
                     {exercise.rest.intraset && (
                       <Number
                         value={exercise.rest.intraset}
                         unit="s"
-                        readOnly
+                        disabled
                       />
                     )}
                     {!exercise.rest.intraset && <Column />}
-                    <Number value={exercise.rest.interset} unit="s" readOnly />
+                    <Number value={exercise.rest.interset} unit="s" disabled />
                   </Column>
                 </Row>
-              );
+              )
             })}
           </div>
         ))}
       </div>
-    );
+    )
   }
 }
 
 export default connect(({ exercises }) => ({ exercises }), {
   getExercises,
-})(Workout);
+})(Workout)

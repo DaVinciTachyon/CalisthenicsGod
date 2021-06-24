@@ -9,78 +9,54 @@ import {
   InputLabel,
   Input as MaterialInput,
   Slider,
+  TextField,
+  InputAdornment,
 } from '@material-ui/core'
 import { withStyles } from '@material-ui/core/styles'
 
+const defaultRoot = {
+  display: 'block',
+  margin: '5px',
+  width: '95%',
+}
+
 const Input = styled(
-  ({ className, name, placeholder, label, unit, ...rest }) => (
-    <label className={className}>
-      <input name={name || 'input'} placeholder="&#8203;" {...rest} />
-      {label && <span className="label">{label}</span>}
-      {unit && (
-        <span className="unit">
-          <span>{unit}</span>
-        </span>
-      )}
-    </label>
+  withStyles(() => ({
+    root: { ...defaultRoot },
+  }))(
+    ({
+      type,
+      step = 0.1,
+      unit,
+      primaryColor,
+      secondaryColor,
+      value,
+      ...rest
+    }) => (
+      <TextField
+        value={
+          type === 'number'
+            ? parseFloat(value) - (parseFloat(value) % step)
+            : value
+        }
+        type={type}
+        step={step}
+        variant="outlined"
+        fullWidth={true}
+        InputProps={{
+          endAdornment: (
+            <InputAdornment position="end">{unit || ''}</InputAdornment>
+          ),
+          style: {
+            backgroundColor: primaryColor,
+            borderColor: secondaryColor,
+          },
+        }}
+        {...rest}
+      />
+    ),
   ),
-)`
-  position: relative;
-  margin: ${({ label }) => (label ? '10px' : '2px')};
-  border: ${({ label, readOnly }) =>
-    label || !readOnly ? '1px solid currentColor' : 'none'};
-  border-radius: 4px;
-  display: flex;
-  height: fit-content;
-  background-color: ${({ primaryColor }) => primaryColor || 'transparent'};
-  border-color: ${({ secondaryColor }) => secondaryColor || 'currentColor'};
-
-  ${({ readOnly }) =>
-    readOnly
-      ? ``
-      : `  &:focus-within {
-    border-width: 2px;
-  }`}
-
-  & span.unit {
-    font-size: 0.8em;
-    color: gray;
-    padding-right: 8px;
-    display: flex;
-    align-items: center;
-    background: transparent;
-  }
-
-  & span.label {
-    position: absolute;
-    left: 0;
-    top: 0;
-    padding: calc(0.5rem * 0.75) calc(0.5rem * 0.5);
-    margin: calc(0.5rem * 0.75 + 3px) calc(0.5rem * 0.5);
-    white-space: nowrap;
-    transform: translate(0, 0);
-    transform-origin: 0 0;
-    transition: transform 120ms ease-in;
-    font-weight: bold;
-    line-height: 1.2;
-    border-radius: 10px;
-  }
-
-  & input {
-    width: 100%;
-    padding: calc(0.5rem * 1.5) 0.5rem;
-    color: currentColor;
-    background: transparent;
-
-    ${({ readOnly }) => (readOnly ? '' : '&:focus,')}
-    &:not(:placeholder-shown) {
-      & + span.label {
-        transform: translate(0.25rem, -65%) scale(0.8);
-        background: white;
-      }
-    }
-  }
-`
+)``
 
 const Text = styled(Input).attrs({
   type: 'text',
@@ -91,19 +67,14 @@ const Password = styled(Text).attrs({
 })``
 
 const Date = styled(Input).attrs({
-  type: 'text',
-  onFocus: (e) => (e.target.type = 'date'),
-  onBlur: (e) => (e.target.value === '' ? (e.target.type = 'text') : undefined),
+  type: 'date',
 })`
   & input {
     text-align: center;
   }
 `
 
-const Number = styled(Input).attrs(({ value, decimalPlaces }) => ({
-  value:
-    Math.round(parseFloat(value) * Math.pow(10, decimalPlaces || 1)) /
-    Math.pow(10, decimalPlaces || 1),
+const Number = styled(Input).attrs(() => ({
   type: 'number',
 }))`
   & input {
@@ -209,39 +180,33 @@ const Radio = styled(
   margin: auto;
 `
 
-const Select = ({
-  isMulti,
-  readOnly,
-  options,
-  value,
-  label,
-  name,
-  ...rest
-}) => (
+const Select = withStyles(() => ({
+  root: {
+    ...defaultRoot,
+  },
+}))(({ multiple, options, value, label, name, ...rest }) => (
   <FormControl>
     <InputLabel id="select">{label}</InputLabel>
     <MaterialSelect
       labelId="select"
       name={name}
-      multiple={isMulti}
+      multiple={multiple}
       value={value}
       input={<MaterialInput />}
-      renderValue={(selected) => (
-        <div>
-          {isMulti &&
-            selected.map((value) => (
-              <Chip
-                key={value}
-                label={
-                  options.find((option) => option.value === value)?.label ||
-                  value
-                }
-              />
-            ))}
-          {!isMulti && <>{selected}</>}
-        </div>
-      )}
-      disabled={readOnly}
+      renderValue={(selected) => {
+        if (multiple)
+          return selected.map((value) => (
+            <Chip
+              key={value}
+              label={
+                options.find((option) => option.value === value)?.label || value
+              }
+            />
+          ))
+        return (
+          options.find((option) => option.value === selected)?.label || selected
+        )
+      }}
       {...rest}
     >
       {options.map(({ label, value }) => (
@@ -251,14 +216,12 @@ const Select = ({
       ))}
     </MaterialSelect>
   </FormControl>
-)
+))
 
 const Range = withStyles(() => ({
   root: {
-    width: '95%',
-    display: 'block',
-    'margin-left': 'auto',
-    'margin-right': 'auto',
+    ...defaultRoot,
+    margin: '20px auto 20px auto',
   },
 }))(
   ({ min, max, unit, value, isPercentage, name, onChange, label, ...rest }) => {

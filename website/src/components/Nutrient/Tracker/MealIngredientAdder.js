@@ -105,7 +105,7 @@ class MealIngredientAdder extends React.Component {
             <Text name="name" value={this.state.name} onChange={this.onChange} />
           )} */}
         </Column>
-        <Calories value={calories} readOnly />
+        <Calories value={calories} disabled />
         <Column span={7}>
           <IngredientMacroRow isTitle />
           <IngredientMacroRow

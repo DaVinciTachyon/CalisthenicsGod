@@ -84,7 +84,6 @@ class Register extends React.Component {
           value={this.state.gender}
           onChange={this.onChange}
           label="Gender"
-          required
         />
         <DateInput
           name="birthDate"

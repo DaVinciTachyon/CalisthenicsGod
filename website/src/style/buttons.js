@@ -10,13 +10,8 @@ const Button = withStyles(() => ({
     '&.maxWidth': {
       width: '100%',
     },
-    '&.minWidth': {
-      width: 'fit-content',
-      height: 'fit-content',
-    },
     '&.thin': {
-      height: '1vw',
-      'font-size': '0.5vw',
+      height: '1em',
     },
   },
 }))(({ children, isSecondary, isTertiary, dataId, ...rest }) => (

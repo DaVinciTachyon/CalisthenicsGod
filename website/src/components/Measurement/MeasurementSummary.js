@@ -24,7 +24,7 @@ class MeasurementSummary extends React.Component {
             label="Weight"
             unit="kg"
             value={this.props.measurements.weight[0].value}
-            readOnly
+            disabled
           />
         )}
         {this.props.measurements.height?.length > 0 && (
@@ -32,7 +32,7 @@ class MeasurementSummary extends React.Component {
             label="Height"
             unit="cm"
             value={this.props.measurements.height[0].value}
-            readOnly
+            disabled
           />
         )}
         {this.props.measurements.waist?.length > 0 && (
@@ -40,7 +40,7 @@ class MeasurementSummary extends React.Component {
             label="Waist"
             unit="cm"
             value={this.props.measurements.waist[0].value}
-            readOnly
+            disabled
           />
         )}
         {this.props.measurements.hips?.length > 0 && (
@@ -48,7 +48,7 @@ class MeasurementSummary extends React.Component {
             label="Hips"
             unit="cm"
             value={this.props.measurements.hips[0].value}
-            readOnly
+            disabled
           />
         )}
         {this.props.measurements.rightBicep?.length > 0 && (
@@ -56,7 +56,7 @@ class MeasurementSummary extends React.Component {
             label="Right Bicep"
             unit="cm"
             value={this.props.measurements.rightBicep[0].value}
-            readOnly
+            disabled
           />
         )}
         {this.props.measurements.leftBicep?.length > 0 && (
@@ -64,7 +64,7 @@ class MeasurementSummary extends React.Component {
             label="Left Bicep"
             unit="cm"
             value={this.props.measurements.leftBicep[0].value}
-            readOnly
+            disabled
           />
         )}
         {this.props.measurements.rightForearm?.length > 0 && (
@@ -72,7 +72,7 @@ class MeasurementSummary extends React.Component {
             label="Right Forearm"
             unit="cm"
             value={this.props.measurements.rightForearm[0].value}
-            readOnly
+            disabled
           />
         )}
         {this.props.measurements.leftForearm?.length > 0 && (
@@ -80,7 +80,7 @@ class MeasurementSummary extends React.Component {
             label="Left Forearm"
             unit="cm"
             value={this.props.measurements.leftForearm[0].value}
-            readOnly
+            disabled
           />
         )}
         {this.props.measurements.shoulders?.length > 0 && (
@@ -88,7 +88,7 @@ class MeasurementSummary extends React.Component {
             label="Shoulders"
             unit="cm"
             value={this.props.measurements.shoulders[0].value}
-            readOnly
+            disabled
           />
         )}
         {this.props.measurements.chest?.length > 0 && (
@@ -96,7 +96,7 @@ class MeasurementSummary extends React.Component {
             label="Chest"
             unit="cm"
             value={this.props.measurements.chest[0].value}
-            readOnly
+            disabled
           />
         )}
         {this.props.measurements.neck?.length > 0 && (
@@ -104,7 +104,7 @@ class MeasurementSummary extends React.Component {
             label="Neck"
             unit="cm"
             value={this.props.measurements.neck[0].value}
-            readOnly
+            disabled
           />
         )}
         <Row>

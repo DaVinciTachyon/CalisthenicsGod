@@ -203,7 +203,7 @@ export default class Exercises extends React.Component {
                       name="componentExercises"
                       onChange={this.onChange}
                       value={this.state.componentExercises}
-                      isMulti
+                      multiple
                       label="Component Exercises"
                       unavailable={[this.props.id]}
                     />
@@ -285,14 +285,14 @@ export default class Exercises extends React.Component {
             name="potentialStages"
             onChange={this.onChange}
             value={this.state.potentialStages}
-            isMulti
+            multiple
             label="Potential Stages"
           />
           <ExerciseSelect
             name="requirements"
             onChange={this.onChange}
             value={this.state.requirements}
-            isMulti
+            multiple
             label="Requirements"
           />
           <Text

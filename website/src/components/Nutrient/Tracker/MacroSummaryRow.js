@@ -1,5 +1,5 @@
-import React from 'react';
-import { Row, Column } from '../../../style/table';
+import React from 'react'
+import { Row, Column } from '../../../style/table'
 import {
   Text,
   Calories,
@@ -7,23 +7,23 @@ import {
   Carbohydrate,
   Protein,
   Ethanol,
-} from '../../../style/inputs';
-import { getCalories } from '../util';
+} from '../../../style/inputs'
+import { getCalories } from '../util'
 
 export default class MacroSummaryRow extends React.Component {
   constructor() {
-    super();
+    super()
     this.state = {
       calories: 0,
-    };
+    }
   }
 
   componentDidMount() {
-    this.setCalories();
+    this.setCalories()
   }
 
   componentDidUpdate(prevProps) {
-    if (prevProps !== this.props) this.setCalories();
+    if (prevProps !== this.props) this.setCalories()
   }
 
   setCalories = async () =>
@@ -32,9 +32,9 @@ export default class MacroSummaryRow extends React.Component {
         this.props.fat,
         this.props.carbohydrate,
         this.props.protein,
-        this.props.ethanol
+        this.props.ethanol,
       ),
-    });
+    })
 
   render() {
     if (this.props.isTitle)
@@ -47,18 +47,18 @@ export default class MacroSummaryRow extends React.Component {
           <Column>Protein</Column>
           <Column>Ethanol</Column>
         </Row>
-      );
+      )
     return (
       <Row columns={7} className="emphasis">
         <Column span={2}>
-          <Text value={this.props.name} readOnly />
+          <Text value={this.props.name} disabled />
         </Column>
-        <Calories value={this.state.calories} readOnly />
-        <Fat value={this.props.fat} readOnly />
-        <Carbohydrate value={this.props.carbohydrate} readOnly />
-        <Protein value={this.props.protein} readOnly />
-        <Ethanol value={this.props.ethanol} readOnly />
+        <Calories value={this.state.calories} disabled />
+        <Fat value={this.props.fat} disabled />
+        <Carbohydrate value={this.props.carbohydrate} disabled />
+        <Protein value={this.props.protein} disabled />
+        <Ethanol value={this.props.ethanol} disabled />
       </Row>
-    );
+    )
   }
 }

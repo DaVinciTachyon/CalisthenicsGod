@@ -15,23 +15,26 @@ class StageSelect extends React.Component {
 
   onChange = async (evt) => {
     const stages = this.props.stages.filter((stage) => {
-      if (this.props.isMulti) return evt.target.value.includes(stage._id)
+      if (this.props.multiple) return evt.target.value.includes(stage._id)
       return evt.value === stage._id
     })
-    this.props.onChange(evt, this.props.isMulti ? stages : stages[0])
+    this.props.onChange(evt, this.props.multiple ? stages : stages[0])
   }
 
   render() {
-    const { isMulti, onChange, ...rest } = this.props
+    const { multiple, onChange, ...rest } = this.props
     return (
       <Select
-        options={(isMulti ? [] : [{ label: 'Choose Stage', value: '' }]).concat(
+        options={(multiple
+          ? []
+          : [{ label: 'Choose Stage', value: '' }]
+        ).concat(
           this.props.stages.map((stage) => {
             return { label: stage.name, value: stage._id }
           }),
         )}
         onChange={this.onChange}
-        isMulti={isMulti}
+        multiple={multiple}
         {...rest}
       />
     )

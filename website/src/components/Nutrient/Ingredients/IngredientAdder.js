@@ -91,8 +91,8 @@ class IngredientAdder extends React.Component {
         <Column span={2}>
           <Text name="name" onChange={this.onChange} value={name} />
         </Column>
-        <Calories value={calories} readOnly />
-        <Weight value={weight} readOnly />
+        <Calories value={calories} disabled />
+        <Weight value={weight} disabled />
         <Fat name="fat" onChange={this.onChange} value={fat} />
         <Carbohydrate
           name="carbohydrate"

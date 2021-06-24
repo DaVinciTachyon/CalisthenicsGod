@@ -170,7 +170,7 @@ class UserProfile extends React.Component {
           <DateInput
             value={this.state.dateJoined}
             label="Date Joined"
-            readOnly
+            disabled
           />
         </Section>
         <Section label="Nutrient Information">
@@ -179,7 +179,7 @@ class UserProfile extends React.Component {
               value={maintenanceCalories}
               label="Maintenance Calories"
               unit="kcal"
-              readOnly
+              disabled
             />
             <Select
               name="calorieMode"
@@ -217,7 +217,7 @@ class UserProfile extends React.Component {
                     this.state.calorieOffset * maintenanceCalories -
                     maintenanceCalories
                   }
-                  readOnly
+                  disabled
                 />
               </>
             )}

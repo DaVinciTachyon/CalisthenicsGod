@@ -38,15 +38,15 @@ class ExerciseRow extends React.Component {
     if (!this.state.isEditing)
       return (
         <Row columns={9}>
-          <Text value={this.props.exercise.name} readOnly />
-          <Text value={this.props.exercise.abbreviation} readOnly />
+          <Text value={this.props.exercise.name} disabled />
+          <Text value={this.props.exercise.abbreviation} disabled />
           {this.props.exercise.motionType.componentExercises &&
             this.props.exercise.motionType.componentExercises.length > 0 && (
               <Column span={3}>
                 <ExerciseSelect
                   value={this.props.exercise.motionType.componentExercises}
-                  readOnly
-                  isMulti
+                  disabled
+                  multiple
                   label="Component Exercises"
                 />
               </Column>
@@ -55,28 +55,28 @@ class ExerciseRow extends React.Component {
             this.props.exercise.motionType.componentExercises?.length ===
               0) && (
             <Column span={3} columns={3}>
-              <Text value={this.props.exercise.motionType.motion} readOnly />
+              <Text value={this.props.exercise.motionType.motion} disabled />
               <Text
                 value={this.props.exercise.motionType.kineticChain}
-                readOnly
+                disabled
               />
               <Text
                 value={this.props.exercise.motionType.sagittalPlane}
-                readOnly
+                disabled
               />
             </Column>
           )}
           <StageSelect
             value={this.props.exercise.potentialStages}
-            readOnly
-            isMulti
+            disabled
+            multiple
           />
           <ExerciseSelect
             value={this.props.exercise.requirements}
-            readOnly
-            isMulti
+            disabled
+            multiple
           />
-          <Text value={this.props.exercise.description} readOnly />
+          <Text value={this.props.exercise.description} disabled />
           <ButtonGroup orientation="vertical">
             <Button onClick={() => this.setState({ isEditing: true })}>
               Edit

@@ -1,5 +1,5 @@
-import React from 'react';
-import { Row, Column } from '../../../style/table';
+import React from 'react'
+import { Row, Column } from '../../../style/table'
 import {
   Weight,
   Text,
@@ -7,26 +7,26 @@ import {
   Carbohydrate,
   Protein,
   Ethanol,
-} from '../../../style/inputs';
+} from '../../../style/inputs'
 
 export default class IngredientMacroRow extends React.Component {
   constructor() {
-    super();
+    super()
     this.state = {
       weight: 0,
       fat: 0,
       carbohydrate: 0,
       protein: 0,
       ethanol: 0,
-    };
+    }
   }
 
   componentDidUpdate(prevProps) {
-    if (prevProps !== this.props) this.updateState();
+    if (prevProps !== this.props) this.updateState()
   }
 
   componentDidMount() {
-    this.updateState();
+    this.updateState()
   }
 
   updateState = () =>
@@ -36,12 +36,12 @@ export default class IngredientMacroRow extends React.Component {
       carbohydrate: this.props.carbohydrate,
       protein: this.props.protein,
       ethanol: this.props.ethanol,
-    });
+    })
 
   onChange = async (evt) => {
-    await this.setState({ [evt.target.name]: evt.target.value });
-    this.props.onChange(this.state);
-  };
+    await this.setState({ [evt.target.name]: evt.target.value })
+    this.props.onChange(this.state)
+  }
 
   render() {
     if (this.props.isTitle)
@@ -54,43 +54,43 @@ export default class IngredientMacroRow extends React.Component {
           <Column>Protein</Column>
           <Column>Ethanol</Column>
         </Row>
-      );
+      )
     return (
       <Row columns={7} className={this.props.className}>
         <Column span={2}>
-          <Text value={this.props.name} readOnly />
+          <Text value={this.props.name} disabled />
         </Column>
         <Weight
           name="weight"
           value={this.state.weight}
           onChange={this.onChange}
-          readOnly={this.props.isBaseline}
+          disabled={this.props.isBaseline}
         />
         <Fat
           name="fat"
           value={this.state.fat}
           onChange={this.onChange}
-          readOnly={!this.props.isBaseline || this.props.macroReadOnly}
+          disabled={!this.props.isBaseline || this.props.macroReadOnly}
         />
         <Carbohydrate
           name="carbohydrate"
           value={this.state.carbohydrate}
           onChange={this.onChange}
-          readOnly={!this.props.isBaseline || this.props.macroReadOnly}
+          disabled={!this.props.isBaseline || this.props.macroReadOnly}
         />
         <Protein
           name="protein"
           value={this.state.protein}
           onChange={this.onChange}
-          readOnly={!this.props.isBaseline || this.props.macroReadOnly}
+          disabled={!this.props.isBaseline || this.props.macroReadOnly}
         />
         <Ethanol
           name="ethanol"
           value={this.state.ethanol}
           onChange={this.onChange}
-          readOnly={!this.props.isBaseline || this.props.macroReadOnly}
+          disabled={!this.props.isBaseline || this.props.macroReadOnly}
         />
       </Row>
-    );
+    )
   }
 }

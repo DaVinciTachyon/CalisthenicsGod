@@ -62,7 +62,7 @@ class StageRow extends React.Component {
             name="name"
             onChange={this.onChange}
             value={this.state.name}
-            readOnly={!this.state.isEditing}
+            disabled={!this.state.isEditing}
           />
         </Column>
         <Column span={2}>
@@ -70,7 +70,7 @@ class StageRow extends React.Component {
             name="description"
             onChange={this.onChange}
             value={this.state.description}
-            readOnly={!this.state.isEditing}
+            disabled={!this.state.isEditing}
           />
         </Column>
         {!this.state.isEditing && (
