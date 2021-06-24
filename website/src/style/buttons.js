@@ -1,12 +1,11 @@
 import React from 'react'
-import { Background, Success, Error, Colours } from './constants'
 import { Button as MaterialButton } from '@material-ui/core'
 import { withStyles } from '@material-ui/core/styles'
 
-const Button = withStyles(() => ({
+const Button = withStyles(({ palette }) => ({
   root: {
-    color: Background.primary,
-    backgroundColor: Colours.primary.standard,
+    color: palette.background.default,
+    backgroundColor: palette.text.primary,
     '&.maxWidth': {
       width: '100%',
     },
@@ -24,24 +23,24 @@ const Button = withStyles(() => ({
   </MaterialButton>
 ))
 
-const ErrorButton = withStyles(() => ({
+const ErrorButton = withStyles(({ palette }) => ({
   root: {
-    color: Error.primary,
-    backgroundColor: Background.primary,
+    color: palette.error.main,
+    backgroundColor: palette.background.default,
   },
 }))(Button)
 
-const DeleteButton = withStyles(() => ({
+const DeleteButton = withStyles(({ palette }) => ({
   root: {
-    color: Background.primary,
-    backgroundColor: Error.primary,
+    color: palette.background.default,
+    backgroundColor: palette.error.main,
   },
 }))(Button)
 
-const SuccessButton = withStyles(() => ({
+const SuccessButton = withStyles(({ palette }) => ({
   root: {
-    color: Background.primary,
-    backgroundColor: Success.primary,
+    color: palette.background.default,
+    backgroundColor: palette.success.main,
   },
 }))(Button)
 

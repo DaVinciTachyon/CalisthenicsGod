@@ -1,6 +1,5 @@
 import React from 'react'
 import styled from 'styled-components'
-import { Nutrients } from './constants'
 import {
   Chip,
   Select as MaterialSelect,
@@ -12,7 +11,7 @@ import {
   TextField,
   InputAdornment,
 } from '@material-ui/core'
-import { withStyles } from '@material-ui/core/styles'
+import { withStyles, useTheme } from '@material-ui/core/styles'
 
 const defaultRoot = {
   display: 'block',
@@ -20,110 +19,97 @@ const defaultRoot = {
   width: '95%',
 }
 
-const Input = styled(
-  withStyles(() => ({
-    root: { ...defaultRoot },
-  }))(
-    ({
-      type,
-      step = 0.1,
-      unit,
-      primaryColor,
-      secondaryColor,
-      value,
-      ...rest
-    }) => (
-      <TextField
-        value={
-          type === 'number'
-            ? parseFloat(value) - (parseFloat(value) % step)
-            : value
-        }
-        type={type}
-        step={step}
-        variant="outlined"
-        fullWidth={true}
-        InputProps={{
-          endAdornment: (
-            <InputAdornment position="end">{unit || ''}</InputAdornment>
-          ),
-          style: {
-            backgroundColor: primaryColor,
-            borderColor: secondaryColor,
-          },
-        }}
-        {...rest}
-      />
-    ),
-  ),
-)``
-
-const Text = styled(Input).attrs({
-  type: 'text',
-})``
-
-const Password = styled(Text).attrs({
-  type: 'password',
-})``
-
-const Date = styled(Input).attrs({
-  type: 'date',
-})`
-  & input {
-    text-align: center;
-  }
-`
-
-const Number = styled(Input).attrs(() => ({
-  type: 'number',
-}))`
-  & input {
-    -moz-appearance: textfield;
-    text-align: center;
-
-    &::-webkit-inner-spin-button {
-      -webkit-appearance: none;
-      margin: 0;
+const Input = withStyles(() => ({
+  root: { ...defaultRoot },
+}))(({ type, step = 0.1, unit, value, style = {}, ...rest }) => (
+  <TextField
+    value={
+      type === 'number'
+        ? (() => {
+            //FIXME
+            let it = step
+            let num = 0
+            if (it < 1) {
+              while (it < 1) {
+                num++
+                it *= 10
+              }
+            } else {
+              while (it > 1) {
+                num--
+                it /= 10
+              }
+            }
+            return (
+              Math.round(parseFloat(value) * Math.pow(10, num)) /
+              Math.pow(10, num)
+            )
+          })()
+        : value
     }
-  }
-`
+    type={type}
+    step={step}
+    variant="outlined"
+    fullWidth={true}
+    InputProps={{
+      endAdornment: (
+        <InputAdornment position="end">{unit || ''}</InputAdornment>
+      ),
+      style,
+    }}
+    {...rest}
+  />
+))
 
-const Weight = styled(Number).attrs(({ unit, step }) => ({
-  unit: unit || 'g',
-  min: 0,
-  step: step || 0.1,
-}))``
+const Text = ({ ...rest }) => <Input type="text" {...rest} />
+const Password = ({ ...rest }) => <Input type="password" {...rest} />
 
-const Length = styled(Number).attrs({
-  min: 0,
-  step: 0.1,
-})``
+const Date = withStyles(() => ({
+  root: {
+    '& input': {
+      'text-align': 'center',
+    },
+  },
+}))(({ ...rest }) => <Input type="date" {...rest} />)
 
-const Calories = styled(Number).attrs({
-  min: 0,
-  step: 1,
-  unit: 'kcal',
-})``
+const Number = withStyles(() => ({
+  root: {
+    '& input': {
+      '-moz-appearance': 'textfield',
+      'text-align': 'center',
+      '&::-webkit-inner-spin-button': {
+        '-webkit-appearance': 'none',
+      },
+    },
+  },
+}))(({ ...rest }) => <Input type="number" {...rest} />)
 
-const Fat = styled(Weight).attrs({
-  primaryColor: Nutrients.fat.light,
-  secondaryColor: Nutrients.fat.dark,
-})``
+const Weight = ({ unit, step, ...rest }) => (
+  <Number unit={unit || 'g'} min={0} step={step || 0.1} {...rest} />
+)
+const Length = ({ ...rest }) => <Number min={0} step={0.1} {...rest} />
+const Calories = ({ ...rest }) => (
+  <Number unit={'kcal'} min={0} step={1} {...rest} />
+)
 
-const Carbohydrate = styled(Weight).attrs({
-  primaryColor: Nutrients.carbohydrate.light,
-  secondaryColor: Nutrients.carbohydrate.dark,
-})``
+const Macro = (name, { style, ...rest }) => {
+  const { palette } = useTheme()
+  return (
+    <Weight
+      style={{
+        ...style,
+        backgroundColor: palette[name].light,
+        borderColor: palette[name].dark,
+      }}
+      {...rest}
+    />
+  )
+}
 
-const Protein = styled(Weight).attrs({
-  primaryColor: Nutrients.protein.light,
-  secondaryColor: Nutrients.protein.dark,
-})``
-
-const Ethanol = styled(Weight).attrs({
-  primaryColor: Nutrients.ethanol.light,
-  secondaryColor: Nutrients.ethanol.dark,
-})``
+const Fat = (props) => Macro('fat', props)
+const Carbohydrate = (props) => Macro('carbohydrate', props)
+const Protein = (props) => Macro('protein', props)
+const Ethanol = (props) => Macro('ethanol', props)
 
 const RadioOption = styled(({ className, label, value, name, ...rest }) => (
   <div className={className}>
