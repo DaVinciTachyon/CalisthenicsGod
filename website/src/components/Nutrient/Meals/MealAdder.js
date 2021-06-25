@@ -38,10 +38,7 @@ class MealAdder extends React.Component {
         </Row>
       )
     return (
-      <Button
-        className="maxWidth"
-        onClick={() => this.setState({ isAdding: true })}
-      >
+      <Button onClick={() => this.setState({ isAdding: true })} fullWidth>
         Add
       </Button>
     )

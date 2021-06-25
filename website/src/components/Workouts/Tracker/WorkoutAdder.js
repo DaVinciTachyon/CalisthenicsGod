@@ -8,7 +8,6 @@ import {
   addWorkout,
   getCurrentWorkout,
 } from '../../../stateManagement/reducers/workouts'
-import { ButtonGroup } from '@material-ui/core'
 
 class WorkoutAdder extends React.Component {
   constructor() {
@@ -51,16 +50,18 @@ class WorkoutAdder extends React.Component {
             }
           />
         ))}
-        <ButtonGroup orientation="vertical">
-          <Button
-            onClick={() => this.props.addWorkout(this.props.workouts.current)}
-          >
-            Submit
-          </Button>
-          <ErrorButton onClick={() => (window.location = '/workoutTracker')}>
-            Cancel
-          </ErrorButton>
-        </ButtonGroup>
+        <Button
+          onClick={() => this.props.addWorkout(this.props.workouts.current)}
+          fullWidth
+        >
+          Submit
+        </Button>
+        <ErrorButton
+          onClick={() => (window.location = '/workoutTracker')}
+          fullWidth
+        >
+          Cancel
+        </ErrorButton>
       </div>
     )
   }

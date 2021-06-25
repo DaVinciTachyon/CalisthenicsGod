@@ -138,7 +138,7 @@ class ExerciseRow extends React.Component {
         (stage) => stage.id === this.props.stageId,
       ).exercises[this.props.index].sets || []
     return (
-      <Row columns={6}>
+      <Row columns={7}>
         <Column>
           {sets.map((set, i) => (
             <SetEditor

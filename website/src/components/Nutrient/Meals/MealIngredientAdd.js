@@ -1,11 +1,11 @@
-import React from 'react';
-import { Button } from '../../../style/buttons';
-import MealIngredientAdder from '../Tracker/MealIngredientAdder';
+import React from 'react'
+import { Button } from '../../../style/buttons'
+import MealIngredientAdder from '../Tracker/MealIngredientAdder'
 
 export default class MealIngredientAdd extends React.Component {
   constructor() {
-    super();
-    this.state = { isAdding: false };
+    super()
+    this.state = { isAdding: false }
   }
 
   render() {
@@ -17,14 +17,15 @@ export default class MealIngredientAdd extends React.Component {
           onCancel={() => this.setState({ isAdding: false })}
           isPreset
         />
-      );
+      )
     return (
       <Button
-        className="maxWidth thin"
+        className="thin"
         onClick={() => this.setState({ isAdding: true })}
+        fullWidth
       >
         Add
       </Button>
-    );
+    )
   }
 }

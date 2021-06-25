@@ -1,24 +1,24 @@
-import React from 'react';
-import { Button } from '../../../style/buttons';
-import ExerciseRow from './ExerciseRow';
-import ExerciseAdder from './ExerciseAdder';
-import { Section } from '../../../style/table';
-import { connect } from 'react-redux';
+import React from 'react'
+import { Button } from '../../../style/buttons'
+import ExerciseRow from './ExerciseRow'
+import ExerciseAdder from './ExerciseAdder'
+import { Section } from '../../../style/table'
+import { connect } from 'react-redux'
 import {
   addExercise,
   getExercises,
-} from '../../../stateManagement/reducers/exercises';
+} from '../../../stateManagement/reducers/exercises'
 
 class Exercises extends React.Component {
   constructor() {
-    super();
+    super()
     this.state = {
       isAdding: false,
-    };
+    }
   }
 
   componentDidMount() {
-    this.props.getExercises();
+    this.props.getExercises()
   }
 
   render() {
@@ -29,57 +29,54 @@ class Exercises extends React.Component {
           exercise.motionType.componentExercises &&
           exercise.motionType.componentExercises.length > 0
             ? 'component'
-            : 'singular';
-        exercises[hasComponents] = exercises[hasComponents] || [];
-        exercises[hasComponents].push(exercise);
-        return exercises;
-      }, {});
+            : 'singular'
+        exercises[hasComponents] = exercises[hasComponents] || []
+        exercises[hasComponents].push(exercise)
+        return exercises
+      }, {})
     exercises['singular'] =
       exercises['singular']?.reduce((exercises, exercise) => {
-        let transversePlane = exercise.motionType.transversePlane;
-        exercises[transversePlane] = exercises[transversePlane] || [];
-        exercises[transversePlane].push(exercise);
-        return exercises;
-      }, {}) || [];
+        let transversePlane = exercise.motionType.transversePlane
+        exercises[transversePlane] = exercises[transversePlane] || []
+        exercises[transversePlane].push(exercise)
+        return exercises
+      }, {}) || []
     Object.keys(exercises['singular']).forEach(
       (transversePlane) =>
         (exercises['singular'][transversePlane] = exercises['singular'][
           transversePlane
         ].reduce((exercises, exercise) => {
-          let frontalPlane = exercise.motionType.frontalPlane;
-          exercises[frontalPlane] = exercises[frontalPlane] || [];
-          exercises[frontalPlane].push(exercise);
-          return exercises;
-        }, {}))
-    );
+          let frontalPlane = exercise.motionType.frontalPlane
+          exercises[frontalPlane] = exercises[frontalPlane] || []
+          exercises[frontalPlane].push(exercise)
+          return exercises
+        }, {})),
+    )
     Object.keys(exercises['singular']).forEach((transversePlane) =>
       Object.keys(exercises['singular'][transversePlane]).forEach(
         (frontalPlane) =>
           (exercises['singular'][transversePlane][frontalPlane] = exercises[
             'singular'
           ][transversePlane][frontalPlane].reduce((exercises, exercise) => {
-            let verticality = exercise.motionType.verticality;
-            exercises[verticality] = exercises[verticality] || [];
-            exercises[verticality].push(exercise);
-            return exercises;
-          }, {}))
-      )
-    );
+            let verticality = exercise.motionType.verticality
+            exercises[verticality] = exercises[verticality] || []
+            exercises[verticality].push(exercise)
+            return exercises
+          }, {})),
+      ),
+    )
     return (
       <div>
         {!this.state.isAdding && (
-          <Button
-            className="maxWidth"
-            onClick={() => this.setState({ isAdding: true })}
-          >
+          <Button onClick={() => this.setState({ isAdding: true })} fullWidth>
             Add Exercise
           </Button>
         )}
         {this.state.isAdding && (
           <ExerciseAdder
             onSubmit={(exercise) => {
-              this.props.addExercise(exercise);
-              this.setState({ isAdding: false });
+              this.props.addExercise(exercise)
+              this.setState({ isAdding: false })
             }}
             onCancel={() => this.setState({ isAdding: false })}
           />
@@ -90,7 +87,7 @@ class Exercises extends React.Component {
               (frontalPlane) => (
                 <Section label={frontalPlane}>
                   {Object.keys(
-                    exercises['singular'][transversePlane][frontalPlane]
+                    exercises['singular'][transversePlane][frontalPlane],
                   ).map((verticality) => (
                     <Section label={verticality}>
                       <ExerciseRow isTitle />
@@ -106,7 +103,7 @@ class Exercises extends React.Component {
                     </Section>
                   ))}
                 </Section>
-              )
+              ),
             )}
           </Section>
         ))}
@@ -122,11 +119,11 @@ class Exercises extends React.Component {
           </Section>
         )}
       </div>
-    );
+    )
   }
 }
 
 export default connect(({ exercises }) => ({ exercises }), {
   addExercise,
   getExercises,
-})(Exercises);
+})(Exercises)

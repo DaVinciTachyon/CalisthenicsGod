@@ -6,12 +6,10 @@ const Button = withStyles(({ palette }) => ({
   root: {
     color: palette.background.default,
     backgroundColor: palette.text.primary,
-    '&.maxWidth': {
-      width: '100%',
-    },
     '&.thin': {
       height: '1em',
     },
+    display: 'block',
   },
 }))(({ children, isSecondary, isTertiary, dataId, ...rest }) => (
   <MaterialButton

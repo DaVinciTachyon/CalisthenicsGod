@@ -1,13 +1,13 @@
-import React from 'react';
-import { Button } from '../../../style/buttons';
-import MealIngredientAdder from './MealIngredientAdder';
+import React from 'react'
+import { Button } from '../../../style/buttons'
+import MealIngredientAdder from './MealIngredientAdder'
 
 export default class ConsumedIngredientAdder extends React.Component {
   constructor() {
-    super();
+    super()
     this.state = {
       isAdding: false,
-    };
+    }
   }
 
   render() {
@@ -18,14 +18,15 @@ export default class ConsumedIngredientAdder extends React.Component {
           onSubmit={() => this.setState({ isAdding: false })}
           onCancel={() => this.setState({ isAdding: false })}
         />
-      );
+      )
     return (
       <Button
-        className="maxWidth thin"
+        className="thin"
         onClick={() => this.setState({ isAdding: true })}
+        fullWidth
       >
         Add
       </Button>
-    );
+    )
   }
 }

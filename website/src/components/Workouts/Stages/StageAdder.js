@@ -44,7 +44,8 @@ class StageAdder extends React.Component {
       return (
         <Button
           onClick={() => this.setState({ isAdding: true })}
-          className="maxWidth thin"
+          className="thin"
+          fullWidth
         >
           +
         </Button>

@@ -190,7 +190,10 @@ const Select = withStyles(() => ({
             />
           ))
         return (
-          options.find((option) => option.value === selected)?.label || selected
+          options.find(
+            (option) =>
+              option.value === selected || (!option.value && !selected),
+          )?.label || selected
         )
       }}
       {...rest}
