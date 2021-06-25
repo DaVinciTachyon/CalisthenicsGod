@@ -26,6 +26,7 @@ class IngredientSelect extends React.Component {
     const { name, onChange, ...rest } = this.props
     return (
       <Select
+        searchable
         name={name || 'ingredient'}
         options={[{ label: 'New Ingredient', value: 'default' }].concat(
           this.props.ingredients

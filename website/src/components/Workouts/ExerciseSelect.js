@@ -26,6 +26,7 @@ class ExerciseSelect extends React.Component {
     const { isMulti, onChange, ...rest } = this.props
     return (
       <Select
+        searchable
         options={(isMulti
           ? []
           : [{ label: 'Choose Exercise', value: 'default' }]

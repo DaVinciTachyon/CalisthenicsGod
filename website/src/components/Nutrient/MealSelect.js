@@ -20,6 +20,7 @@ class MealSelect extends React.Component {
     return (
       <Row columns={2}>
         <Select
+          searchable
           options={[{ label: 'New Meal', value: 'default' }].concat(
             this.props.presetMeals.map((meal) => ({
               label: meal.name,

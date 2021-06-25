@@ -26,6 +26,7 @@ class StageSelect extends React.Component {
     const { multiple, onChange, ...rest } = this.props
     return (
       <Select
+        searchable
         options={(multiple
           ? []
           : [{ label: 'Choose Stage', value: 'default' }]

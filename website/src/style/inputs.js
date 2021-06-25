@@ -11,6 +11,7 @@ import {
   TextField,
   InputAdornment,
 } from '@material-ui/core'
+import { Autocomplete } from '@material-ui/lab'
 import { withStyles, useTheme } from '@material-ui/core/styles'
 
 const defaultRoot = {
@@ -170,40 +171,57 @@ const Select = withStyles(() => ({
   root: {
     ...defaultRoot,
   },
-}))(({ multiple, options, value, label, name, ...rest }) => (
+}))(({ multiple, options, value, label, name, searchable, ...rest }) => (
   <FormControl>
-    <InputLabel id="select">{label}</InputLabel>
-    <MaterialSelect
-      labelId="select"
-      name={name}
-      multiple={multiple}
-      value={value || 'default'}
-      input={<MaterialInput />}
-      renderValue={(selected) => {
-        if (multiple)
-          return selected.map((value) => (
-            <Chip
-              key={value}
-              label={
-                options.find((option) => option.value === value)?.label || value
-              }
-            />
-          ))
-        return (
-          options.find(
-            (option) =>
-              (!option.value && !selected) || option.value === selected,
-          )?.label || selected
-        )
-      }}
-      {...rest}
-    >
-      {options.map(({ label, value }) => (
-        <MenuItem key={value} value={value}>
-          {label}
-        </MenuItem>
-      ))}
-    </MaterialSelect>
+    {!searchable && (
+      <>
+        <InputLabel id="select">{label}</InputLabel>
+        <MaterialSelect
+          labelId="select"
+          name={name}
+          multiple={multiple}
+          value={value || 'default'}
+          input={<MaterialInput />}
+          renderValue={(selected) => {
+            if (multiple)
+              return selected.map((value) => (
+                <Chip
+                  key={value}
+                  label={
+                    options.find((option) => option.value === value)?.label ||
+                    value
+                  }
+                />
+              ))
+            return (
+              options.find(
+                (option) =>
+                  (!option.value && !selected) || option.value === selected,
+              )?.label || selected
+            )
+          }}
+          {...rest}
+        >
+          {options.map(({ label, value }) => (
+            <MenuItem key={value} value={value}>
+              {label}
+            </MenuItem>
+          ))}
+        </MaterialSelect>
+      </>
+    )}
+    {searchable && (
+      <Autocomplete
+        labelId="select"
+        name={name}
+        multiple={multiple}
+        options={options}
+        getOptionLabel={(option) => option.label}
+        renderInput={(params) => (
+          <TextField {...params} label={label} variant="outlined" />
+        )}
+      />
+    )}
   </FormControl>
 ))
 
