@@ -1,7 +1,6 @@
 import React from 'react'
 import { Title } from '../../../style/table'
 import { connect } from 'react-redux'
-import { getIngredients } from '../../../stateManagement/reducers/ingredients'
 import {
   Grid,
   Table,
@@ -29,6 +28,7 @@ import {
   changeAvailability,
   patchIngredient,
   addIngredient,
+  getIngredients,
 } from '../../../stateManagement/reducers/ingredients'
 import compose from 'recompose/compose'
 import { withStyles } from '@material-ui/core/styles'
