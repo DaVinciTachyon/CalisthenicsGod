@@ -33,7 +33,14 @@ import {
 import compose from 'recompose/compose'
 import { withStyles } from '@material-ui/core/styles'
 // import { getCalories } from '../util'
-import { Calories, Weight } from '../../../style/inputs'
+import {
+  Calories,
+  Carbohydrate,
+  Ethanol,
+  Fat,
+  Protein,
+  Weight,
+} from '../../../style/inputs'
 
 class IngredientList extends React.Component {
   constructor() {
@@ -105,7 +112,6 @@ class IngredientList extends React.Component {
     const WeightTypeProvider = (props) => (
       <DataTypeProvider
         formatterComponent={({ value }) => <span>{value} g</span>}
-        editorComponent={Weight}
         {...props}
       />
     )
@@ -229,9 +235,14 @@ class IngredientList extends React.Component {
             ]}
           />
           <CalorieTypeProvider for={['calories']} />
+          <WeightTypeProvider for={['weight']} editorComponent={Weight} />
+          <WeightTypeProvider for={['fat']} editorComponent={Fat} />
           <WeightTypeProvider
-            for={['weight', 'fat', 'carbohydrate', 'protein', 'ethanol']}
+            for={['carbohydrate']}
+            editorComponent={Carbohydrate}
           />
+          <WeightTypeProvider for={['protein']} editorComponent={Protein} />
+          <WeightTypeProvider for={['ethanol']} editorComponent={Ethanol} />
 
           <Table
             cellComponent={({ style, ...props }) => {
@@ -245,10 +256,11 @@ class IngredientList extends React.Component {
                 />
               )
               const { column } = props
-              if (column.name === 'fat') macroCell('fat')
-              else if (column.name === 'carbohydrate') macroCell('carbohydrate')
-              else if (column.name === 'protein') macroCell('protein')
-              else if (column.name === 'ethanol') macroCell('ethanol')
+              if (column.name === 'fat') return macroCell('fat')
+              else if (column.name === 'carbohydrate')
+                return macroCell('carbohydrate')
+              else if (column.name === 'protein') return macroCell('protein')
+              else if (column.name === 'ethanol') return macroCell('ethanol')
               return <Table.Cell style={style} {...props} />
             }}
           />
@@ -259,6 +271,9 @@ class IngredientList extends React.Component {
             showAddCommand={!isUnavailable}
             showEditCommand
             showDeleteCommand
+            messages={{
+              deleteCommand: isUnavailable ? 'Add' : 'Remove',
+            }}
             cellComponent={(props) => (
               <EditCell {...props} errors={this.state.errors} />
             )}
