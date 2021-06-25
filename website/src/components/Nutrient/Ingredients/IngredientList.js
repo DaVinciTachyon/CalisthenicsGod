@@ -9,6 +9,10 @@ import {
   PagingPanel,
   TableEditRow,
   TableEditColumn,
+  SearchPanel,
+  Toolbar,
+  TableFixedColumns,
+  // TableRowDetail,
 } from '@devexpress/dx-react-grid-material-ui'
 import {
   SortingState,
@@ -16,6 +20,10 @@ import {
   PagingState,
   IntegratedPaging,
   EditingState,
+  DataTypeProvider,
+  SearchState,
+  IntegratedFiltering,
+  // RowDetailState,
 } from '@devexpress/dx-react-grid'
 import {
   changeAvailability,
@@ -24,20 +32,97 @@ import {
 } from '../../../stateManagement/reducers/ingredients'
 import compose from 'recompose/compose'
 import { withStyles } from '@material-ui/core/styles'
-import { getCalories } from '../util'
+// import { getCalories } from '../util'
+import { Calories, Weight } from '../../../style/inputs'
 
 class IngredientList extends React.Component {
   constructor() {
     super()
-    this.state = {}
+    this.state = {
+      columns: [
+        { name: 'name', title: 'Name', required: true },
+        {
+          name: 'calories',
+          title: 'Calories',
+          getCellValue: (
+            row, //FIXME
+          ) =>
+            row.fat * 9 +
+            row.carbohydrate * 4 +
+            row.protein * 4 +
+            row.ethanol * 7,
+        },
+        {
+          name: 'weight',
+          title: 'Weight',
+          getCellValue: () => 100,
+        },
+        {
+          name: 'fat',
+          title: 'Fat',
+        },
+        {
+          name: 'carbohydrate',
+          title: 'Carbs',
+        },
+        {
+          name: 'protein',
+          title: 'Protein',
+        },
+        {
+          name: 'ethanol',
+          title: 'Ethanol',
+        },
+      ],
+      errors: [],
+    }
   }
 
   componentDidMount() {
     this.props.getIngredients()
   }
 
+  validate = (rows) =>
+    Object.entries(rows).reduce(
+      (acc, [rowId, row]) => ({
+        ...acc,
+        [rowId]: this.state.columns.some(
+          (column) => column.required && row[column.name] === '',
+        ),
+      }),
+      {},
+    )
+
   render() {
     const { isUnavailable, ingredients } = this.props
+    const CalorieTypeProvider = (props) => (
+      <DataTypeProvider
+        formatterComponent={({ value }) => <span>{value} kcal</span>}
+        editorComponent={Calories}
+        {...props}
+      />
+    )
+    const WeightTypeProvider = (props) => (
+      <DataTypeProvider
+        formatterComponent={({ value }) => <span>{value} g</span>}
+        editorComponent={Weight}
+        {...props}
+      />
+    )
+    const EditCell = ({ errors, ...props }) => {
+      const { children } = props
+      return (
+        <TableEditColumn.Cell {...props}>
+          {React.Children.map(children, (child) =>
+            child?.props.id === 'commit'
+              ? React.cloneElement(child, {
+                  disabled: errors[props.tableRow.rowId],
+                })
+              : child,
+          )}
+        </TableEditColumn.Cell>
+      )
+    }
     return (
       <div>
         <Title>
@@ -53,52 +138,24 @@ class IngredientList extends React.Component {
               const { fat, carbohydrate, protein, ethanol } = macronutrients
               return { fat, carbohydrate, protein, ethanol, ...rest }
             })}
-          columns={[
-            { name: 'name', title: 'Name' },
-            {
-              name: 'calories',
-              title: 'Calories',
-              getCellValue: (
-                row, //FIXME
-              ) =>
-                row.fat * 9 +
-                row.carbohydrate * 4 +
-                row.protein * 4 +
-                row.ethanol * 7,
-            },
-            {
-              name: 'weight',
-              title: 'Weight',
-              getCellValue: () => 100,
-            },
-            {
-              name: 'fat',
-              title: 'Fat',
-            },
-            {
-              name: 'carbohydrate',
-              title: 'Carbs',
-            },
-            {
-              name: 'protein',
-              title: 'Protein',
-            },
-            {
-              name: 'ethanol',
-              title: 'Ethanol',
-            },
-          ]}
+          columns={this.state.columns}
           getRowId={(row) => row._id}
         >
+          <SearchState />
+          <IntegratedFiltering />
           <SortingState
             defaultSorting={[{ columnName: 'name', direction: 'asc' }]}
+            columnExtensions={[{ columnName: 'weight', sortingEnabled: false }]}
           />
           <IntegratedSorting />
 
-          <PagingState defaultCurrentPage={0} pageSize={10} />
+          <PagingState defaultCurrentPage={0} defaultPageSize={5} />
           <IntegratedPaging />
 
           <EditingState
+            onRowChangesChange={(edited) =>
+              this.setState({ errors: this.validate(edited) })
+            }
             onCommitChanges={({ added, changed, deleted }) => {
               if (added)
                 added.forEach(
@@ -136,7 +193,8 @@ class IngredientList extends React.Component {
                 columnName: 'name',
                 createRowChange: (row, value) => ({ ...row, name: value }),
               },
-
+              { columnName: 'calories', editingEnabled: false },
+              { columnName: 'weight', editingEnabled: false },
               {
                 name: 'fat',
                 createRowChange: (row, value) => ({
@@ -170,6 +228,10 @@ class IngredientList extends React.Component {
               },
             ]}
           />
+          <CalorieTypeProvider for={['calories']} />
+          <WeightTypeProvider
+            for={['weight', 'fat', 'carbohydrate', 'protein', 'ethanol']}
+          />
 
           <Table
             cellComponent={({ style, ...props }) => {
@@ -197,9 +259,22 @@ class IngredientList extends React.Component {
             showAddCommand={!isUnavailable}
             showEditCommand
             showDeleteCommand
+            cellComponent={(props) => (
+              <EditCell {...props} errors={this.state.errors} />
+            )}
           />
 
-          <PagingPanel />
+          <TableFixedColumns leftColumns={['name']} />
+
+          {/* TODO -micros, fiber etc <RowDetailState />
+          <TableRowDetail
+            contentComponent={({ row }) => <div>Details for {row.name}</div>}
+          /> */}
+
+          <PagingPanel pageSizes={[5, 10]} />
+
+          <Toolbar />
+          <SearchPanel />
         </Grid>
       </div>
     )
