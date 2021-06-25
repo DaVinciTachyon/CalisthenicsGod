@@ -172,58 +172,80 @@ const Select = withStyles(() => ({
   root: {
     ...defaultRoot,
   },
-}))(({ multiple, options, value, label, name, searchable, ...rest }) => (
-  <FormControl>
-    {!searchable && (
-      <>
-        <InputLabel id="select">{label}</InputLabel>
-        <MaterialSelect
-          labelId="select"
+}))(
+  ({
+    multiple,
+    options,
+    value,
+    label,
+    name,
+    searchable,
+    onChange,
+    ...rest
+  }) => (
+    <FormControl>
+      {!searchable && (
+        <>
+          <InputLabel id="select">{label}</InputLabel>
+          <MaterialSelect
+            labelId="select"
+            name={name}
+            multiple={multiple}
+            onChange={onChange}
+            value={value || 'default'}
+            input={<MaterialInput />}
+            renderValue={(selected) => {
+              if (multiple)
+                return selected.map((value) => (
+                  <Chip
+                    key={value}
+                    label={
+                      options.find((option) => option.value === value)?.label ||
+                      value
+                    }
+                  />
+                ))
+              return (
+                options.find(
+                  (option) =>
+                    (!option.value && !selected) || option.value === selected,
+                )?.label || selected
+              )
+            }}
+            {...rest}
+          >
+            {options.map(({ label, value }) => (
+              <MenuItem key={value} value={value}>
+                {label}
+              </MenuItem>
+            ))}
+          </MaterialSelect>
+        </>
+      )}
+      {searchable && (
+        <Autocomplete
           name={name}
+          onChange={(event, newValue) =>
+            onChange({ target: { value: newValue?.value, name } })
+          }
           multiple={multiple}
-          value={value || 'default'}
-          input={<MaterialInput />}
-          renderValue={(selected) => {
-            if (multiple)
-              return selected.map((value) => (
-                <Chip
-                  key={value}
-                  label={
-                    options.find((option) => option.value === value)?.label ||
-                    value
-                  }
-                />
-              ))
-            return (
-              options.find(
-                (option) =>
-                  (!option.value && !selected) || option.value === selected,
-              )?.label || selected
-            )
-          }}
+          options={options}
+          value={value}
+          getOptionLabel={(option) =>
+            options.find(
+              (op) => op.value === option.value || op.value === option,
+            )?.label || ''
+          }
+          getOptionSelected={(option, val) => option.value === val}
+          renderInput={(params) => (
+            <TextField {...params} label={label} variant="outlined" />
+          )}
           {...rest}
-        >
-          {options.map(({ label, value }) => (
-            <MenuItem key={value} value={value}>
-              {label}
-            </MenuItem>
-          ))}
-        </MaterialSelect>
-      </>
-    )}
-    {searchable && (
-      <Autocomplete
-        name={name}
-        multiple={multiple}
-        options={options}
-        getOptionLabel={(option) => option.label}
-        renderInput={(params) => (
-          <TextField {...params} label={label} variant="outlined" />
-        )}
-      />
-    )}
-  </FormControl>
-))
+        />
+      )}
+    </FormControl>
+  ),
+)
 
 const Range = withStyles(() => ({
   root: {

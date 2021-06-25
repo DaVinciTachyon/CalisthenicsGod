@@ -14,12 +14,11 @@ class IngredientSelect extends React.Component {
   }
 
   onChange = (evt) => {
-    if (evt.target.value === 'default') evt.target.value = ''
-    this.props.onChange(
-      this.props.ingredients.filter(
-        (ingredient) => evt.target.value === ingredient._id,
-      )[0],
-    )
+    const ingredients = this.props.ingredients.filter((ingredient) => {
+      if (this.props.multiple) return evt.target.value.includes(ingredient._id)
+      return evt.target.value === ingredient._id
+    })
+    this.props.onChange(this.props.multiple ? ingredients : ingredients[0])
   }
 
   render() {

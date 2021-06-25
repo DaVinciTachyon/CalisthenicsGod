@@ -14,7 +14,6 @@ class ExerciseSelect extends React.Component {
   }
 
   onChange = (evt) => {
-    if (evt.target.value === 'default') evt.target.value = ''
     const exercises = this.props.exercises.filter((exercise) => {
       if (this.props.multiple) return evt.target.value.includes(exercise._id)
       return evt.target.value === exercise._id

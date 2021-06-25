@@ -26,11 +26,7 @@ class MealSelect extends React.Component {
             value: meal._id,
           }))}
           value={this.state.id}
-          onChange={(evt) =>
-            this.setState({
-              id: evt.target.value === 'default' ? '' : evt.target.value,
-            })
-          }
+          onChange={(evt) => this.setState({ id: evt.target.value })}
           {...rest}
         />
         <Button onClick={() => onSubmit(this.state.id)}>Select</Button>

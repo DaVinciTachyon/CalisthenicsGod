@@ -14,7 +14,6 @@ class StageSelect extends React.Component {
   }
 
   onChange = async (evt) => {
-    if (evt.target.value === 'default') evt.target.value = ''
     const stages = this.props.stages.filter((stage) => {
       if (this.props.multiple) return evt.target.value.includes(stage._id)
       return evt.target.value === stage._id
