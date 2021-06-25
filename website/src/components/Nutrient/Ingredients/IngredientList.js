@@ -64,29 +64,48 @@ class IngredientList extends React.Component {
           title: 'Weight',
           getCellValue: () => 100,
         },
+        { name: 'fat', title: 'Fat' },
+        { name: 'carbohydrate', title: 'Carbs' },
+        { name: 'protein', title: 'Protein' },
+        { name: 'ethanol', title: 'Ethanol' },
+      ],
+      errors: [],
+      editExtensions: [
+        {
+          columnName: 'name',
+          createRowChange: (row, value) => ({ ...row, name: value }),
+        },
+        { columnName: 'calories', editingEnabled: false },
+        { columnName: 'weight', editingEnabled: false },
         {
           name: 'fat',
-          title: 'Fat',
+          createRowChange: (row, value) => ({ ...row, fat: value }),
         },
         {
           name: 'carbohydrate',
-          title: 'Carbs',
+          createRowChange: (row, value) => ({ ...row, carbohydrate: value }),
         },
         {
           name: 'protein',
-          title: 'Protein',
+          createRowChange: (row, value) => ({ ...row, protein: value }),
         },
         {
           name: 'ethanol',
-          title: 'Ethanol',
+          createRowChange: (row, value) => ({ ...row, ethanol: value }),
         },
       ],
-      errors: [],
+      editColumnMessages: {},
+      pageSizes: [5, 10],
     }
   }
 
   componentDidMount() {
     this.props.getIngredients()
+    this.setState({
+      editColumnMessages: {
+        deleteCommand: this.props.isUnavailable ? 'Add' : 'Remove',
+      },
+    })
   }
 
   validate = (rows) =>
@@ -100,35 +119,118 @@ class IngredientList extends React.Component {
       {},
     )
 
+  commitChanges = ({ added, changed, deleted }) => {
+    if (added)
+      added.forEach(({ name, fat, carbohydrate, protein, ethanol }) =>
+        this.props.addIngredient({
+          name,
+          macronutrients: {
+            fat: fat || 0,
+            carbohydrate: carbohydrate || 0,
+            protein: protein || 0,
+            ethanol: ethanol || 0,
+          },
+        }),
+      )
+    if (changed)
+      Object.entries(changed).forEach((entry) => {
+        const { name, macronutrients } = this.props.ingredients.find(
+          (ingredient) => ingredient._id === entry[0],
+        )
+        this.props.patchIngredient({
+          _id: entry[0],
+          name: entry[1].name || name,
+          macronutrients: {
+            fat: entry[1].fat || macronutrients.fat,
+            carbohydrate: entry[1].carbohydrate || macronutrients.carbohydrate,
+            protein: entry[1].protein || macronutrients.protein,
+            ethanol: entry[1].ethanol || macronutrients.ethanol,
+          },
+        })
+      })
+    if (deleted)
+      deleted.forEach((_id) =>
+        this.props.changeAvailability({
+          _id,
+          isAvailable: !this.props.isUnavailable,
+        }),
+      )
+  }
+
+  cellComponent = ({ style, ...props }) => {
+    const macroCell = (name) => (
+      <Table.Cell
+        style={{
+          backgroundColor: this.props.theme.palette[name].light,
+          ...style,
+        }}
+        {...props}
+      />
+    )
+    const { column } = props
+    if (column.name === 'fat') return macroCell('fat')
+    else if (column.name === 'carbohydrate') return macroCell('carbohydrate')
+    else if (column.name === 'protein') return macroCell('protein')
+    else if (column.name === 'ethanol') return macroCell('ethanol')
+    return <Table.Cell style={style} {...props} />
+  }
+
+  CalorieTypeProvider = (props) => (
+    <DataTypeProvider
+      formatterComponent={({ value }) => <span>{value} kcal</span>}
+      editorComponent={(props) => <Calories {...props} />}
+      {...props}
+    />
+  )
+
+  WeightTypeProvider = ({ Component, ...rest }) => (
+    <DataTypeProvider
+      formatterComponent={({ value }) => <span>{value} g</span>}
+      editorComponent={({ onValueChange, ...props }) => (
+        <Component
+          onChange={(evt) => onValueChange(evt.target.value)}
+          {...props}
+        />
+      )}
+      {...rest}
+    />
+  )
+
+  EditCell = ({ errors, ...props }) => {
+    const { children } = props
+    return (
+      <TableEditColumn.Cell {...props}>
+        {React.Children.map(children, (child) =>
+          child?.props.id === 'commit'
+            ? React.cloneElement(child, {
+                disabled: errors[props.tableRow.rowId],
+              })
+            : child,
+        )}
+      </TableEditColumn.Cell>
+    )
+  }
+
+  editCellComponent = (props) => {
+    const { EditCell } = this
+    return <EditCell {...props} errors={this.state.errors} />
+  }
+
   render() {
     const { isUnavailable, ingredients } = this.props
-    const CalorieTypeProvider = (props) => (
-      <DataTypeProvider
-        formatterComponent={({ value }) => <span>{value} kcal</span>}
-        editorComponent={Calories}
-        {...props}
-      />
-    )
-    const WeightTypeProvider = (props) => (
-      <DataTypeProvider
-        formatterComponent={({ value }) => <span>{value} g</span>}
-        {...props}
-      />
-    )
-    const EditCell = ({ errors, ...props }) => {
-      const { children } = props
-      return (
-        <TableEditColumn.Cell {...props}>
-          {React.Children.map(children, (child) =>
-            child?.props.id === 'commit'
-              ? React.cloneElement(child, {
-                  disabled: errors[props.tableRow.rowId],
-                })
-              : child,
-          )}
-        </TableEditColumn.Cell>
-      )
-    }
+    const {
+      CalorieTypeProvider,
+      WeightTypeProvider,
+      commitChanges,
+      cellComponent,
+      editCellComponent,
+    } = this
+    const {
+      editExtensions,
+      columns,
+      editColumnMessages,
+      pageSizes,
+    } = this.state
     return (
       <div>
         <Title>
@@ -137,14 +239,14 @@ class IngredientList extends React.Component {
         </Title>
         <Grid
           rows={ingredients
-            .filter((ingredient) =>
-              isUnavailable ? !ingredient.isAvailable : ingredient.isAvailable,
+            .filter(({ isAvailable }) =>
+              isUnavailable ? !isAvailable : isAvailable,
             )
             .map(({ macronutrients, ...rest }) => {
               const { fat, carbohydrate, protein, ethanol } = macronutrients
               return { fat, carbohydrate, protein, ethanol, ...rest }
             })}
-          columns={this.state.columns}
+          columns={columns}
           getRowId={(row) => row._id}
         >
           <SearchState />
@@ -155,115 +257,24 @@ class IngredientList extends React.Component {
           />
           <IntegratedSorting />
 
-          <PagingState defaultCurrentPage={0} defaultPageSize={5} />
+          <PagingState defaultCurrentPage={0} defaultPageSize={pageSizes[0]} />
           <IntegratedPaging />
 
           <EditingState
             onRowChangesChange={(edited) =>
               this.setState({ errors: this.validate(edited) })
             }
-            onCommitChanges={({ added, changed, deleted }) => {
-              if (added)
-                added.forEach(
-                  ({ name, fat, carbohydrate, protein, ethanol }) => {
-                    this.props.addIngredient({
-                      name,
-                      macronutrients: {
-                        fat: fat || 0,
-                        carbohydrate: carbohydrate || 0,
-                        protein: protein || 0,
-                        ethanol: ethanol || 0,
-                      },
-                    })
-                  },
-                )
-              if (changed)
-                Object.entries(changed).forEach((entry) => {
-                  const { name, macronutrients } = entry[1]
-                  this.props.patchIngredient({
-                    _id: entry[0],
-                    name,
-                    macronutrients,
-                  })
-                })
-              if (deleted)
-                deleted.forEach((_id) =>
-                  this.props.changeAvailability({
-                    _id,
-                    isAvailable: !isUnavailable,
-                  }),
-                )
-            }}
-            columnExtensions={[
-              {
-                columnName: 'name',
-                createRowChange: (row, value) => ({ ...row, name: value }),
-              },
-              { columnName: 'calories', editingEnabled: false },
-              { columnName: 'weight', editingEnabled: false },
-              {
-                name: 'fat',
-                createRowChange: (row, value) => ({
-                  ...row,
-                  macronutrients: { ...row.macronutrients, fat: value },
-                }),
-              },
-              {
-                name: 'carbohydrate',
-                createRowChange: (row, value) => ({
-                  ...row,
-                  macronutrients: {
-                    ...row.macronutrients,
-                    carbohydrate: value,
-                  },
-                }),
-              },
-              {
-                name: 'protein',
-                createRowChange: (row, value) => ({
-                  ...row,
-                  macronutrients: { ...row.macronutrients, protein: value },
-                }),
-              },
-              {
-                name: 'ethanol',
-                createRowChange: (row, value) => ({
-                  ...row,
-                  macronutrients: { ...row.macronutrients, ethanol: value },
-                }),
-              },
-            ]}
+            onCommitChanges={commitChanges}
+            columnExtensions={editExtensions}
           />
           <CalorieTypeProvider for={['calories']} />
-          <WeightTypeProvider for={['weight']} editorComponent={Weight} />
-          <WeightTypeProvider for={['fat']} editorComponent={Fat} />
-          <WeightTypeProvider
-            for={['carbohydrate']}
-            editorComponent={Carbohydrate}
-          />
-          <WeightTypeProvider for={['protein']} editorComponent={Protein} />
-          <WeightTypeProvider for={['ethanol']} editorComponent={Ethanol} />
+          <WeightTypeProvider for={['weight']} Component={Weight} />
+          <WeightTypeProvider for={['fat']} Component={Fat} />
+          <WeightTypeProvider for={['carbohydrate']} Component={Carbohydrate} />
+          <WeightTypeProvider for={['protein']} Component={Protein} />
+          <WeightTypeProvider for={['ethanol']} Component={Ethanol} />
 
-          <Table
-            cellComponent={({ style, ...props }) => {
-              const macroCell = (name) => (
-                <Table.Cell
-                  style={{
-                    backgroundColor: this.props.theme.palette[name].light,
-                    ...style,
-                  }}
-                  {...props}
-                />
-              )
-              const { column } = props
-              if (column.name === 'fat') return macroCell('fat')
-              else if (column.name === 'carbohydrate')
-                return macroCell('carbohydrate')
-              else if (column.name === 'protein') return macroCell('protein')
-              else if (column.name === 'ethanol') return macroCell('ethanol')
-              return <Table.Cell style={style} {...props} />
-            }}
-          />
+          <Table cellComponent={cellComponent} />
           <TableHeaderRow showSortingControls />
 
           <TableEditRow />
@@ -271,12 +282,8 @@ class IngredientList extends React.Component {
             showAddCommand={!isUnavailable}
             showEditCommand
             showDeleteCommand
-            messages={{
-              deleteCommand: isUnavailable ? 'Add' : 'Remove',
-            }}
-            cellComponent={(props) => (
-              <EditCell {...props} errors={this.state.errors} />
-            )}
+            messages={editColumnMessages}
+            cellComponent={editCellComponent}
           />
 
           <TableFixedColumns leftColumns={['name']} />
@@ -286,7 +293,7 @@ class IngredientList extends React.Component {
             contentComponent={({ row }) => <div>Details for {row.name}</div>}
           /> */}
 
-          <PagingPanel pageSizes={[5, 10]} />
+          <PagingPanel pageSizes={pageSizes} />
 
           <Toolbar />
           <SearchPanel />

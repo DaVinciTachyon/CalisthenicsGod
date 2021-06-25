@@ -51,10 +51,11 @@ const Input = withStyles(() => ({
     type={type}
     step={step}
     variant="outlined"
-    fullWidth={true}
     InputProps={{
-      endAdornment: (
-        <InputAdornment position="end">{unit || ''}</InputAdornment>
+      endAdornment: unit ? (
+        <InputAdornment position="end">{unit}</InputAdornment>
+      ) : (
+        <></>
       ),
       style,
     }}
