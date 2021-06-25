@@ -23,18 +23,16 @@ class IngredientSelect extends React.Component {
   }
 
   render() {
-    const { name, onChange, ...rest } = this.props
+    const { onChange, ...rest } = this.props
     return (
       <Select
         searchable
-        name={name || 'ingredient'}
-        options={[{ label: 'New Ingredient', value: 'default' }].concat(
-          this.props.ingredients
-            .filter((ingredient) => ingredient.isAvailable)
-            .map((ingredient) => {
-              return { label: ingredient.name, value: ingredient._id }
-            }),
-        )}
+        options={this.props.ingredients
+          .filter((ingredient) => ingredient.isAvailable)
+          .map((ingredient) => ({
+            label: ingredient.name,
+            value: ingredient._id,
+          }))}
         onChange={this.onChange}
         {...rest}
       />

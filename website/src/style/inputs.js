@@ -212,7 +212,6 @@ const Select = withStyles(() => ({
     )}
     {searchable && (
       <Autocomplete
-        labelId="select"
         name={name}
         multiple={multiple}
         options={options}

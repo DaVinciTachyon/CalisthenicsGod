@@ -23,20 +23,15 @@ class StageSelect extends React.Component {
   }
 
   render() {
-    const { multiple, onChange, ...rest } = this.props
+    const { onChange, ...rest } = this.props
     return (
       <Select
         searchable
-        options={(multiple
-          ? []
-          : [{ label: 'Choose Stage', value: 'default' }]
-        ).concat(
-          this.props.stages.map((stage) => {
-            return { label: stage.name, value: stage._id }
-          }),
-        )}
+        options={this.props.stages.map((stage) => ({
+          label: stage.name,
+          value: stage._id,
+        }))}
         onChange={this.onChange}
-        multiple={multiple}
         {...rest}
       />
     )

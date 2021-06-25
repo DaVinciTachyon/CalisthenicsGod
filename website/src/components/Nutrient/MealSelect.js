@@ -21,12 +21,10 @@ class MealSelect extends React.Component {
       <Row columns={2}>
         <Select
           searchable
-          options={[{ label: 'New Meal', value: 'default' }].concat(
-            this.props.presetMeals.map((meal) => ({
-              label: meal.name,
-              value: meal._id,
-            })),
-          )}
+          options={this.props.presetMeals.map((meal) => ({
+            label: meal.name,
+            value: meal._id,
+          }))}
           value={this.state.id}
           onChange={(evt) =>
             this.setState({
