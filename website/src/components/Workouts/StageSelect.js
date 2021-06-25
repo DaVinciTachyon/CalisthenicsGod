@@ -14,6 +14,7 @@ class StageSelect extends React.Component {
   }
 
   onChange = async (evt) => {
+    if (evt.target.value === 'default') evt.target.value = ''
     const stages = this.props.stages.filter((stage) => {
       if (this.props.multiple) return evt.target.value.includes(stage._id)
       return evt.target.value === stage._id
@@ -27,7 +28,7 @@ class StageSelect extends React.Component {
       <Select
         options={(multiple
           ? []
-          : [{ label: 'Choose Stage', value: '' }]
+          : [{ label: 'Choose Stage', value: 'default' }]
         ).concat(
           this.props.stages.map((stage) => {
             return { label: stage.name, value: stage._id }

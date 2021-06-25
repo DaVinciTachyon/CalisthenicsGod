@@ -13,19 +13,21 @@ class IngredientSelect extends React.Component {
     this.props.getIngredients()
   }
 
-  onChange = (evt) =>
+  onChange = (evt) => {
+    if (evt.target.value === 'default') evt.target.value = ''
     this.props.onChange(
-      this.props.ingredients
-        .filter((ingredient) => ingredient.isAvailable)
-        .filter((ingredient) => evt.target.value === ingredient._id)[0],
+      this.props.ingredients.filter(
+        (ingredient) => evt.target.value === ingredient._id,
+      )[0],
     )
+  }
 
   render() {
     const { name, onChange, ...rest } = this.props
     return (
       <Select
         name={name || 'ingredient'}
-        options={[{ label: 'New Ingredient', value: '' }].concat(
+        options={[{ label: 'New Ingredient', value: 'default' }].concat(
           this.props.ingredients
             .filter((ingredient) => ingredient.isAvailable)
             .map((ingredient) => {

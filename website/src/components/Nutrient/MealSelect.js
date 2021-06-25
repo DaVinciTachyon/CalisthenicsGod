@@ -20,14 +20,18 @@ class MealSelect extends React.Component {
     return (
       <Row columns={2}>
         <Select
-          options={[{ label: 'New Meal', value: '' }].concat(
+          options={[{ label: 'New Meal', value: 'default' }].concat(
             this.props.presetMeals.map((meal) => ({
               label: meal.name,
               value: meal._id,
             })),
           )}
           value={this.state.id}
-          onChange={(evt) => this.setState({ id: evt.target.value })}
+          onChange={(evt) =>
+            this.setState({
+              id: evt.target.value === 'default' ? '' : evt.target.value,
+            })
+          }
           {...rest}
         />
         <Button onClick={() => onSubmit(this.state.id)}>Select</Button>

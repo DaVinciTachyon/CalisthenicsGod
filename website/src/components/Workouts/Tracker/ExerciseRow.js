@@ -93,7 +93,10 @@ class ExerciseRow extends React.Component {
   }
 
   onChange = async (evt) => {
-    await this.setState({ [evt.target.name]: evt.target.value })
+    await this.setState({
+      [evt.target.name]:
+        evt.target.value === 'default' ? undefined : evt.target.value,
+    })
     this.onUpdate()
   }
 
@@ -101,17 +104,17 @@ class ExerciseRow extends React.Component {
     const variationOptions = []
     if (motionType?.frontalPlane === 'rotational')
       variationOptions.push(
-        { value: undefined, label: 'Bidirectional' },
+        { value: 'default', label: 'Bidirectional' },
         { value: 'clockwise', label: 'Clockwise' },
         { value: 'anti-clockwise', label: 'Anti-clockwise' },
       )
     else if (motionType?.motion === 'isotonic')
       variationOptions.push(
-        { value: undefined, label: 'Isotonic' },
+        { value: 'default', label: 'Isotonic' },
         { value: 'eccentric', label: 'Eccentric' },
         { value: 'concentric', label: 'Concentric' },
       )
-    else variationOptions.push({ value: undefined, label: 'Standard' })
+    else variationOptions.push({ value: 'default', label: 'Standard' })
     return variationOptions
   }
 
@@ -201,7 +204,7 @@ class ExerciseRow extends React.Component {
                   { value: 'right', label: 'Right' },
                   { value: 'left', label: 'Left' },
                 ]
-              : [{ value: undefined, label: 'Bilateral' }]
+              : [{ value: 'default', label: 'Bilateral' }]
           }
           value={this.state.sagittalPlane}
           onChange={this.onChange}

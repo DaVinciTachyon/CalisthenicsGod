@@ -14,20 +14,21 @@ class ExerciseSelect extends React.Component {
   }
 
   onChange = (evt) => {
+    if (evt.target.value === 'default') evt.target.value = ''
     const exercises = this.props.exercises.filter((exercise) => {
-      if (this.props.multiple) return evt.target.value.includes(exercise._id)
+      if (this.props.isMulti) return evt.target.value.includes(exercise._id)
       return evt.target.value === exercise._id
     })
-    this.props.onChange(evt, this.props.multiple ? exercises : exercises[0])
+    this.props.onChange(evt, this.props.isMulti ? exercises : exercises[0])
   }
 
   render() {
-    const { multiple, onChange, ...rest } = this.props
+    const { isMulti, onChange, ...rest } = this.props
     return (
       <Select
-        options={(multiple
+        options={(isMulti
           ? []
-          : [{ label: 'Choose Exercise', value: '' }]
+          : [{ label: 'Choose Exercise', value: 'default' }]
         ).concat(
           this.props.exercises
             .filter((exercise) => exercise.isAvailable)
@@ -46,7 +47,7 @@ class ExerciseSelect extends React.Component {
             .map((exercise) => ({ label: exercise.name, value: exercise._id })),
         )}
         onChange={this.onChange}
-        multiple={multiple}
+        multiple={isMulti}
         {...rest}
       />
     )

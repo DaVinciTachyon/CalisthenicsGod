@@ -177,7 +177,7 @@ const Select = withStyles(() => ({
       labelId="select"
       name={name}
       multiple={multiple}
-      value={value}
+      value={value || 'default'}
       input={<MaterialInput />}
       renderValue={(selected) => {
         if (multiple)
@@ -192,7 +192,7 @@ const Select = withStyles(() => ({
         return (
           options.find(
             (option) =>
-              option.value === selected || (!option.value && !selected),
+              (!option.value && !selected) || option.value === selected,
           )?.label || selected
         )
       }}
