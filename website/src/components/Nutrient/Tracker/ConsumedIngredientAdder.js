@@ -21,7 +21,7 @@ export default class ConsumedIngredientAdder extends React.Component {
       )
     return (
       <Button
-        className="thin"
+        size="small"
         onClick={() => this.setState({ isAdding: true })}
         fullWidth
       >

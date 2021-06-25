@@ -6,9 +6,6 @@ const Button = withStyles(({ palette }) => ({
   root: {
     color: palette.background.default,
     backgroundColor: palette.text.primary,
-    '&.thin': {
-      height: '1em',
-    },
     display: 'block',
   },
 }))(({ children, isSecondary, isTertiary, dataId, ...rest }) => (

@@ -71,7 +71,7 @@ class IngredientAdder extends React.Component {
     if (!this.state.isAdding)
       return (
         <Button
-          className="thin"
+          size="small"
           onClick={() => this.setState({ isAdding: true })}
           fullWidth
         >

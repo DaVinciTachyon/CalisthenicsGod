@@ -16,7 +16,6 @@ class StageEditor extends React.Component {
 
   addButton = (index) => (
     <Button
-      className="thin"
       onClick={() =>
         this.props.addCurrentExercise({
           stageId: this.props.id,
@@ -25,6 +24,7 @@ class StageEditor extends React.Component {
         })
       }
       fullWidth
+      size="small"
     >
       +
     </Button>
