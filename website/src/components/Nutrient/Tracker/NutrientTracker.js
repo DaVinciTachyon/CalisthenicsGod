@@ -30,8 +30,8 @@ class NutrientTracker extends React.Component {
         </Paper>
         {!this.state.isAddingMeal && (
           <MealSelect
-            onSubmit={async (id) => {
-              if (id === '') this.setState({ isAddingMeal: true })
+            onSubmit={(id) => {
+              if (!id) this.setState({ isAddingMeal: true })
               else this.props.addPresetMeal(id)
             }}
           />
