@@ -34,6 +34,7 @@ class NutrientTracker extends React.Component {
               if (!id) this.setState({ isAddingMeal: true })
               else this.props.addPresetMeal(id)
             }}
+            placeholder="New Meal"
           />
         )}
         {this.state.isAddingMeal && (

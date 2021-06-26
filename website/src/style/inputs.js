@@ -181,6 +181,7 @@ const Select = withStyles(() => ({
     name,
     searchable,
     onChange,
+    placeholder,
     ...rest
   }) => (
     <FormControl>
@@ -192,6 +193,7 @@ const Select = withStyles(() => ({
             name={name}
             multiple={multiple}
             onChange={onChange}
+            placeholder={placeholder}
             value={value || 'default'}
             input={<MaterialInput />}
             renderValue={(selected) => {
@@ -238,7 +240,12 @@ const Select = withStyles(() => ({
           }
           getOptionSelected={(option, val) => option.value === val}
           renderInput={(params) => (
-            <TextField {...params} label={label} variant="outlined" />
+            <TextField
+              {...params}
+              label={label}
+              variant="outlined"
+              placeholder={placeholder}
+            />
           )}
           {...rest}
         />
