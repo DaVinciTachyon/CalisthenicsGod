@@ -82,7 +82,7 @@ module.exports = {
       _id: _id.required(),
       ingredient: Joi.object({
         _id: _id.required(),
-        id: _id,
+        id: _id.required(),
         weight: weight.required(),
       }),
     }).validate(data),
@@ -90,6 +90,10 @@ module.exports = {
     Joi.object({
       _id: _id.required(),
       ingredient: { _id: _id.required() },
+    }).validate(data),
+  mealId: (data) =>
+    Joi.object({
+      _id: _id.required(),
     }).validate(data),
   meal: (data) =>
     Joi.object({ _id, ingredient: ingredientRef.required() }).validate(data),

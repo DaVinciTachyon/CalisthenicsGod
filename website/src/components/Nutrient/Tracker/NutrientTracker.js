@@ -3,7 +3,7 @@ import NutrientSummary from './NutrientSummary'
 import MealSelect from '../MealSelect'
 import { Paper } from '@material-ui/core'
 import MealIngredientAdder from './MealIngredientAdder'
-import ConsumedMeal from './ConsumedMeal'
+import Meals from './Meals'
 import { connect } from 'react-redux'
 import {
   getMeals,
@@ -42,13 +42,7 @@ class NutrientTracker extends React.Component {
             onCancel={() => this.setState({ isAddingMeal: false })}
           />
         )}
-        {this.props.meals.map((meal) => (
-          <ConsumedMeal
-            key={meal._id}
-            id={meal._id}
-            ingredients={meal.ingredients}
-          />
-        ))}
+        <Meals />
       </div>
     )
   }

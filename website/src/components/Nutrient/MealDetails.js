@@ -12,13 +12,8 @@ import {
   IntegratedSorting,
   EditingState,
 } from '@devexpress/dx-react-grid'
-import { Carbohydrate, Ethanol, Fat, Protein } from '../../../style/inputs'
+import { Carbohydrate, Ethanol, Fat, Protein } from '../../style/inputs'
 import { connect } from 'react-redux'
-import {
-  addIngredient,
-  removeIngredient,
-  modifyIngredient,
-} from '../../../stateManagement/reducers/presetMeals'
 import {
   CalorieTypeProvider,
   WeightTypeProvider,
@@ -26,7 +21,7 @@ import {
   CellComponent,
   validate,
   EditCell,
-} from '../gridUtil'
+} from './gridUtil'
 
 class MealDetails extends React.Component {
   constructor() {
@@ -152,7 +147,7 @@ class MealDetails extends React.Component {
               )
             if (changed)
               Object.entries(changed).forEach((entry) => {
-                const { id, weight } = this.props.presetMeals
+                const { id, weight } = this.props.meals
                   .find((meal) => meal._id === this.props.details._id)
                   .ingredients.find((ingredient) => ingredient._id === entry[0])
                 this.props.modifyIngredient({
@@ -198,11 +193,4 @@ class MealDetails extends React.Component {
   }
 }
 
-export default connect(
-  ({ presetMeals, ingredients }) => ({ presetMeals, ingredients }),
-  {
-    addIngredient,
-    removeIngredient,
-    modifyIngredient,
-  },
-)(MealDetails)
+export default connect(({ ingredients }) => ({ ingredients }), {})(MealDetails)

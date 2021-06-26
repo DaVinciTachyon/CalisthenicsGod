@@ -158,10 +158,7 @@ class IngredientList extends React.Component {
     } = this.state
     return (
       <div>
-        <Title>
-          {!isUnavailable && <>Available</>}
-          {isUnavailable && <>Unavailable</>}
-        </Title>
+        <Title>{isUnavailable ? 'Unavailable' : 'Available'}</Title>
         <Grid
           rows={ingredients
             .filter(({ isAvailable }) =>
