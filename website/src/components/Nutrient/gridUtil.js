@@ -3,12 +3,12 @@ import { DataTypeProvider } from '@devexpress/dx-react-grid'
 import { Calories, Weight } from '../../style/inputs'
 import IngredientSelect from './IngredientSelect'
 import { useSelector } from 'react-redux'
-import { Table } from '@devexpress/dx-react-grid-material-ui'
+import { Table, TableEditColumn } from '@devexpress/dx-react-grid-material-ui'
 import { useTheme } from '@material-ui/core/styles'
 
 const CalorieTypeProvider = (props) => (
   <DataTypeProvider
-    formatterComponent={({ value }) => <span>{value} kcal</span>}
+    formatterComponent={({ value }) => <span>{Math.round(value)} kcal</span>}
     editorComponent={(props) => <Calories {...props} />}
     {...props}
   />
@@ -16,7 +16,9 @@ const CalorieTypeProvider = (props) => (
 
 const WeightTypeProvider = ({ Component, ...rest }) => (
   <DataTypeProvider
-    formatterComponent={({ value }) => <span>{value} g</span>}
+    formatterComponent={({ value }) => (
+      <span>{Math.round(value * 10) / 10} g</span>
+    )}
     editorComponent={({ onValueChange, ...props }) =>
       Component ? (
         <Component
@@ -45,7 +47,7 @@ const IngredientTypeProvider = (props) => {
       )}
       editorComponent={({ onValueChange, ...rest }) => (
         <IngredientSelect
-          onChange={(evt) => onValueChange(evt._id)}
+          onChange={(evt) => onValueChange(evt?._id)}
           {...rest}
         />
       )}
@@ -56,21 +58,53 @@ const IngredientTypeProvider = (props) => {
 
 const CellComponent = ({ style, ...props }) => {
   const { palette } = useTheme()
-  const macroCell = (name) => (
-    <Table.Cell
-      style={{
-        backgroundColor: palette[name].light,
-        ...style,
-      }}
-      {...props}
-    />
-  )
   const { column } = props
-  if (column.name === 'fat') return macroCell('fat')
-  else if (column.name === 'carbohydrate') return macroCell('carbohydrate')
-  else if (column.name === 'protein') return macroCell('protein')
-  else if (column.name === 'ethanol') return macroCell('ethanol')
+  if (
+    [
+      'fat',
+      'carbohydrate',
+      'protein',
+      'ethanol',
+      'weight',
+      'calories',
+    ].includes(column.name)
+  )
+    return (
+      <Table.Cell
+        style={{
+          backgroundColor:
+            palette[column.name]?.light || style?.backgroundColor,
+          textAlign: 'center',
+          ...style,
+        }}
+        {...props}
+      />
+    )
   return <Table.Cell style={style} {...props} />
+}
+
+const validate = (rows, columns) =>
+  Object.entries(rows).reduce(
+    (acc, [rowId, row]) => ({
+      ...acc,
+      [rowId]: columns.some((column) => column.required && !row[column.name]),
+    }),
+    {},
+  )
+
+const EditCell = ({ errors, ...props }) => {
+  const { children } = props
+  return (
+    <TableEditColumn.Cell {...props}>
+      {React.Children.map(children, (child) =>
+        child?.props.id === 'commit'
+          ? React.cloneElement(child, {
+              disabled: errors[props.tableRow.rowId],
+            })
+          : child,
+      )}
+    </TableEditColumn.Cell>
+  )
 }
 
 export {
@@ -78,4 +112,6 @@ export {
   WeightTypeProvider,
   IngredientTypeProvider,
   CellComponent,
+  validate,
+  EditCell,
 }

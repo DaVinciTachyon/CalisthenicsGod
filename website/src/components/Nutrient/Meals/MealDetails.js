@@ -24,7 +24,9 @@ import {
   WeightTypeProvider,
   IngredientTypeProvider,
   CellComponent,
-} from '../DataTypeProviders'
+  validate,
+  EditCell,
+} from '../gridUtil'
 
 class MealDetails extends React.Component {
   constructor() {
@@ -32,36 +34,9 @@ class MealDetails extends React.Component {
     this.state = { errors: [] }
   }
 
-  EditCell = ({ errors, ...props }) => {
-    const { children } = props
-    return (
-      <TableEditColumn.Cell {...props}>
-        {React.Children.map(children, (child) =>
-          child?.props.id === 'commit'
-            ? React.cloneElement(child, {
-                disabled: errors[props.tableRow.rowId],
-              })
-            : child,
-        )}
-      </TableEditColumn.Cell>
-    )
-  }
-
-  editCellComponent = (props) => {
-    const { EditCell } = this
-    return <EditCell {...props} errors={this.state.errors} />
-  }
-
-  validate = (rows, columns) =>
-    Object.entries(rows).reduce(
-      (acc, [rowId, row]) => ({
-        ...acc,
-        [rowId]: columns.some(
-          (column) => column.required && row[column.name] === '',
-        ),
-      }),
-      {},
-    )
+  editCellComponent = (props) => (
+    <EditCell {...props} errors={this.state.errors} />
+  )
 
   render() {
     const { editCellComponent } = this
@@ -82,6 +57,7 @@ class MealDetails extends React.Component {
             ethanol: ingredients?.macronutrients.ethanol || 0,
           }
           return (
+            //FIXME
             (fat * 9 + carbohydrate * 4 + protein * 4 + ethanol * 7) * weight
           )
         },
@@ -149,7 +125,7 @@ class MealDetails extends React.Component {
 
         <EditingState
           onRowChangesChange={(edited) =>
-            this.setState({ errors: this.validate(edited, columns) })
+            this.setState({ errors: validate(edited, columns) })
           }
           columnExtensions={[
             {

@@ -34,7 +34,9 @@ import {
   CalorieTypeProvider,
   WeightTypeProvider,
   CellComponent,
-} from '../DataTypeProviders'
+  validate,
+  EditCell,
+} from '../gridUtil'
 import { Carbohydrate, Ethanol, Fat, Protein } from '../../../style/inputs'
 
 class IngredientList extends React.Component {
@@ -103,17 +105,6 @@ class IngredientList extends React.Component {
     })
   }
 
-  validate = (rows) =>
-    Object.entries(rows).reduce(
-      (acc, [rowId, row]) => ({
-        ...acc,
-        [rowId]: this.state.columns.some(
-          (column) => column.required && row[column.name] === '',
-        ),
-      }),
-      {},
-    )
-
   commitChanges = ({ added, changed, deleted }) => {
     if (added)
       added.forEach(({ name, fat, carbohydrate, protein, ethanol }) =>
@@ -152,25 +143,9 @@ class IngredientList extends React.Component {
       )
   }
 
-  EditCell = ({ errors, ...props }) => {
-    const { children } = props
-    return (
-      <TableEditColumn.Cell {...props}>
-        {React.Children.map(children, (child) =>
-          child?.props.id === 'commit'
-            ? React.cloneElement(child, {
-                disabled: errors[props.tableRow.rowId],
-              })
-            : child,
-        )}
-      </TableEditColumn.Cell>
-    )
-  }
-
-  editCellComponent = (props) => {
-    const { EditCell } = this
-    return <EditCell {...props} errors={this.state.errors} />
-  }
+  editCellComponent = (props) => (
+    <EditCell {...props} errors={this.state.errors} />
+  )
 
   render() {
     const { isUnavailable, ingredients } = this.props
@@ -212,7 +187,7 @@ class IngredientList extends React.Component {
 
           <EditingState
             onRowChangesChange={(edited) =>
-              this.setState({ errors: this.validate(edited) })
+              this.setState({ errors: validate(edited, columns) })
             }
             onCommitChanges={commitChanges}
             columnExtensions={editExtensions}
