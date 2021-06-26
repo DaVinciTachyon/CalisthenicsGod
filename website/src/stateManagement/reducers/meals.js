@@ -8,7 +8,7 @@ export const slice = createSlice({
     setMeals: (state, { payload }) => payload,
     removeMeal: (state, { payload }) => {
       const index = state.findIndex((meal) => meal._id === payload)
-      state.splice(index, 1)
+      if (index !== -1) state.splice(index, 1)
     },
     addPresetMeal: (state, { payload }) => {
       if (payload._id) state.unshift(payload)

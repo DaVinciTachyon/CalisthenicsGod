@@ -23,7 +23,7 @@ const postIngredient = (ingredient) =>
 const deleteIngredient = (ingredient) =>
   axios.request({
     method: 'delete',
-    url: '/nutrition/meals/ingrdient/',
+    url: '/nutrition/meals/ingredient/',
     data: ingredient,
   })
 
