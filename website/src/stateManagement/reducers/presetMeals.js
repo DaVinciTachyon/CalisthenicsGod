@@ -1,4 +1,4 @@
-import { createSlice } from '@reduxjs/toolkit';
+import { createSlice } from '@reduxjs/toolkit'
 
 export const slice = createSlice({
   name: 'presetMeals',
@@ -10,40 +10,42 @@ export const slice = createSlice({
       if (payload.ingredient._id)
         state
           .find((meal) => meal._id === payload._id)
-          .ingredients.push(payload.ingredient);
+          .ingredients.push(payload.ingredient)
     },
     modifyIngredient: (state, { payload }) => {
-      state
+      const ingredient = state
         .find((meal) => meal._id === payload._id)
         .ingredients.find(
-          (ingredient) => ingredient._id === payload.ingredient._id
-        ).weight = payload.ingredient.weight;
+          (ingredient) => ingredient._id === payload.ingredient._id,
+        )
+      ingredient.weight = payload.ingredient.weight
+      ingredient.id = payload.ingredient.id
     },
     removeIngredient: (state, { payload }) => {
       state.find((meal) => meal._id === payload._id).ingredients = state
         .find((meal) => meal._id === payload._id)
         .ingredients.filter(
-          (ingredient) => ingredient._id !== payload.ingredient._id
-        );
+          (ingredient) => ingredient._id !== payload.ingredient._id,
+        )
     },
     deletePresetMeal: (state, { payload }) =>
       state.filter((meal) => meal._id !== payload),
     addPresetMeal: (state, { payload }) => {
-      if (payload._id) state.push(payload);
+      if (payload._id) state.push(payload)
     },
     modifyPresetMeal: (state, { payload }) => {
-      const index = state.findIndex((meal) => meal._id === payload._id);
-      state[index].name = payload.name;
-      (payload.ingredients || []).forEach((ingredient) => {
+      const index = state.findIndex((meal) => meal._id === payload._id)
+      state[index].name = payload.name
+      ;(payload.ingredients || []).forEach((ingredient) => {
         state[index].ingredients[
           state[index].ingredients.findIndex(
-            (ing) => ing._id === ingredient._id
+            (ing) => ing._id === ingredient._id,
           )
-        ].weight = ingredient.weight;
-      });
+        ].weight = ingredient.weight
+      })
     },
   },
-});
+})
 
 export const {
   getPresetMeals,
@@ -54,6 +56,6 @@ export const {
   addPresetMeal,
   deletePresetMeal,
   modifyPresetMeal,
-} = slice.actions;
+} = slice.actions
 
-export default slice.reducer;
+export default slice.reducer

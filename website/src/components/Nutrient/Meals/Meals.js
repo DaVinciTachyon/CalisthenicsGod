@@ -1,5 +1,5 @@
 import React from 'react'
-import MealRow from './MealRow'
+import MealDetails from './MealDetails'
 import { Title } from '../../../style/table'
 import {
   getPresetMeals,
@@ -24,7 +24,6 @@ import {
   SortingState,
   IntegratedSorting,
   EditingState,
-  DataTypeProvider,
   PagingState,
   IntegratedPaging,
   SearchState,
@@ -32,13 +31,12 @@ import {
   RowDetailState,
 } from '@devexpress/dx-react-grid'
 import { getIngredients } from '../../../stateManagement/reducers/ingredients'
+import { Carbohydrate, Ethanol, Fat, Protein } from '../../../style/inputs'
 import {
-  Calories,
-  Carbohydrate,
-  Ethanol,
-  Fat,
-  Protein,
-} from '../../../style/inputs'
+  CalorieTypeProvider,
+  WeightTypeProvider,
+  CellComponent,
+} from '../DataTypeProviders'
 
 class Meals extends React.Component {
   constructor() {
@@ -50,27 +48,6 @@ class Meals extends React.Component {
     this.props.getPresetMeals()
     this.props.getIngredients()
   }
-
-  CalorieTypeProvider = (props) => (
-    <DataTypeProvider
-      formatterComponent={({ value }) => <span>{value} kcal</span>}
-      editorComponent={(props) => <Calories {...props} />}
-      {...props}
-    />
-  )
-
-  WeightTypeProvider = ({ Component, ...rest }) => (
-    <DataTypeProvider
-      formatterComponent={({ value }) => <span>{value} g</span>}
-      editorComponent={({ onValueChange, ...props }) => (
-        <Component
-          onChange={(evt) => onValueChange(evt.target.value)}
-          {...props}
-        />
-      )}
-      {...rest}
-    />
-  )
 
   EditCell = ({ errors, ...props }) => {
     const { children } = props
@@ -104,7 +81,7 @@ class Meals extends React.Component {
     )
 
   render() {
-    const { CalorieTypeProvider, WeightTypeProvider, editCellComponent } = this
+    const { editCellComponent } = this
     const { pageSizes } = this.state
     const columns = [
       { name: 'name', title: 'Name', required: true },
@@ -226,9 +203,6 @@ class Meals extends React.Component {
     return (
       <div>
         <Title>Meals</Title>
-        {/* {this.props.presetMeals.map((meal) => (
-          <MealRow key={meal._id} meal={meal} />
-        ))} */}
         <Grid
           rows={this.props.presetMeals}
           columns={columns}
@@ -268,7 +242,7 @@ class Meals extends React.Component {
                     ingredients: [],
                   }),
                 )
-              if (changed) {
+              if (changed)
                 Object.entries(changed).forEach((entry) => {
                   const { name } = this.props.presetMeals.find(
                     (meal) => meal._id === entry[0],
@@ -278,7 +252,6 @@ class Meals extends React.Component {
                     name: entry[1].name || name,
                   })
                 })
-              }
               if (deleted)
                 deleted.forEach((_id) => this.props.deletePresetMeal(_id))
             }}
@@ -291,10 +264,10 @@ class Meals extends React.Component {
 
           <RowDetailState />
 
-          <Table />
+          <Table cellComponent={CellComponent} />
           <TableHeaderRow showSortingControls />
           <TableRowDetail
-            contentComponent={({ row }) => <div>Details for {row.name}</div>}
+            contentComponent={({ row }) => <MealDetails details={row} />}
           />
           <TableEditRow />
           <TableEditColumn

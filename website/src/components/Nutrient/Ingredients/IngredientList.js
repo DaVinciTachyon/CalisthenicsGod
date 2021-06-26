@@ -19,7 +19,6 @@ import {
   PagingState,
   IntegratedPaging,
   EditingState,
-  DataTypeProvider,
   SearchState,
   IntegratedFiltering,
   // RowDetailState,
@@ -30,17 +29,13 @@ import {
   addIngredient,
   getIngredients,
 } from '../../../stateManagement/reducers/ingredients'
-import compose from 'recompose/compose'
-import { withStyles } from '@material-ui/core/styles'
 // import { getCalories } from '../util'
 import {
-  Calories,
-  Carbohydrate,
-  Ethanol,
-  Fat,
-  Protein,
-  Weight,
-} from '../../../style/inputs'
+  CalorieTypeProvider,
+  WeightTypeProvider,
+  CellComponent,
+} from '../DataTypeProviders'
+import { Carbohydrate, Ethanol, Fat, Protein } from '../../../style/inputs'
 
 class IngredientList extends React.Component {
   constructor() {
@@ -157,45 +152,6 @@ class IngredientList extends React.Component {
       )
   }
 
-  cellComponent = ({ style, ...props }) => {
-    const macroCell = (name) => (
-      <Table.Cell
-        style={{
-          backgroundColor: this.props.theme.palette[name].light,
-          ...style,
-        }}
-        {...props}
-      />
-    )
-    const { column } = props
-    if (column.name === 'fat') return macroCell('fat')
-    else if (column.name === 'carbohydrate') return macroCell('carbohydrate')
-    else if (column.name === 'protein') return macroCell('protein')
-    else if (column.name === 'ethanol') return macroCell('ethanol')
-    return <Table.Cell style={style} {...props} />
-  }
-
-  CalorieTypeProvider = (props) => (
-    <DataTypeProvider
-      formatterComponent={({ value }) => <span>{value} kcal</span>}
-      editorComponent={(props) => <Calories {...props} />}
-      {...props}
-    />
-  )
-
-  WeightTypeProvider = ({ Component, ...rest }) => (
-    <DataTypeProvider
-      formatterComponent={({ value }) => <span>{value} g</span>}
-      editorComponent={({ onValueChange, ...props }) => (
-        <Component
-          onChange={(evt) => onValueChange(evt.target.value)}
-          {...props}
-        />
-      )}
-      {...rest}
-    />
-  )
-
   EditCell = ({ errors, ...props }) => {
     const { children } = props
     return (
@@ -218,13 +174,7 @@ class IngredientList extends React.Component {
 
   render() {
     const { isUnavailable, ingredients } = this.props
-    const {
-      CalorieTypeProvider,
-      WeightTypeProvider,
-      commitChanges,
-      cellComponent,
-      editCellComponent,
-    } = this
+    const { commitChanges, editCellComponent } = this
     const {
       editExtensions,
       columns,
@@ -268,13 +218,13 @@ class IngredientList extends React.Component {
             columnExtensions={editExtensions}
           />
           <CalorieTypeProvider for={['calories']} />
-          <WeightTypeProvider for={['weight']} Component={Weight} />
+          <WeightTypeProvider for={['weight']} />
           <WeightTypeProvider for={['fat']} Component={Fat} />
           <WeightTypeProvider for={['carbohydrate']} Component={Carbohydrate} />
           <WeightTypeProvider for={['protein']} Component={Protein} />
           <WeightTypeProvider for={['ethanol']} Component={Ethanol} />
 
-          <Table cellComponent={cellComponent} />
+          <Table cellComponent={CellComponent} />
           <TableHeaderRow showSortingControls />
 
           <TableEditRow />
@@ -303,12 +253,9 @@ class IngredientList extends React.Component {
   }
 }
 
-export default compose(
-  withStyles({}, { withTheme: true }),
-  connect(({ ingredients }) => ({ ingredients }), {
-    getIngredients,
-    changeAvailability,
-    patchIngredient,
-    addIngredient,
-  }),
-)(IngredientList)
+export default connect(({ ingredients }) => ({ ingredients }), {
+  getIngredients,
+  changeAvailability,
+  patchIngredient,
+  addIngredient,
+})(IngredientList)
