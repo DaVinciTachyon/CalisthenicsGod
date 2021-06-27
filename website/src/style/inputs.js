@@ -17,7 +17,7 @@ const defaultRoot = {
 
 const Input = withStyles(() => ({
   root: { ...defaultRoot },
-}))(({ type, step = 0.1, unit, value, style = {}, ...rest }) => (
+}))(({ type, step = 0.1, unit, value, variant, style = {}, ...rest }) => (
   <TextField
     value={
       type === 'number'
@@ -45,7 +45,7 @@ const Input = withStyles(() => ({
     }
     type={type}
     step={step}
-    variant="outlined"
+    variant={variant || 'outlined'}
     InputProps={{
       endAdornment: unit ? (
         <InputAdornment position="end">{unit}</InputAdornment>

@@ -66,6 +66,7 @@ export default class SetEditor extends React.Component {
             value={this.state.repetitions}
             onChange={this.onChange}
             unit="r"
+            margin="dense"
           />
         )}
         {this.state.distance !== undefined && (
@@ -75,6 +76,7 @@ export default class SetEditor extends React.Component {
             value={this.state.distance}
             onChange={this.onChange}
             unit="m"
+            margin="dense"
           />
         )}
         {this.state.time !== undefined && (
@@ -84,6 +86,7 @@ export default class SetEditor extends React.Component {
             value={this.state.time}
             onChange={this.onChange}
             unit="s"
+            margin="dense"
           />
         )}
         {this.state.weight !== undefined && (
@@ -93,6 +96,7 @@ export default class SetEditor extends React.Component {
             value={this.state.weight}
             onChange={this.onChange}
             unit="kg"
+            margin="dense"
           />
         )}
       </Row>

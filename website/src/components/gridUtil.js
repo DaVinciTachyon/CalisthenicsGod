@@ -232,7 +232,9 @@ const TimeTypeProvider = (props) => (
 const CalorieTypeProvider = (props) => (
   <DataTypeProvider
     formatterComponent={({ value }) => <span>{Math.round(value)} kcal</span>}
-    editorComponent={(props) => <Calories {...props} />}
+    editorComponent={(props) => (
+      <Calories margin="dense" variant="standard" {...props} />
+    )}
     {...props}
   />
 )
@@ -246,11 +248,13 @@ const WeightTypeProvider = ({ Component, ...rest }) => (
       Component ? (
         <Component
           onChange={(evt) => onValueChange(evt.target.value)}
+          margin="dense"
           {...props}
         />
       ) : (
         <Weight
           onChange={(evt) => onValueChange(evt.target.value)}
+          margin="dense"
           {...props}
         />
       )
