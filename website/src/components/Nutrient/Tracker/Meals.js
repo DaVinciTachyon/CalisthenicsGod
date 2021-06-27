@@ -23,7 +23,7 @@ import {
   CalorieTypeProvider,
   WeightTypeProvider,
   CellComponent,
-} from '../gridUtil'
+} from '../../gridUtil'
 
 class Meals extends React.Component {
   constructor() {

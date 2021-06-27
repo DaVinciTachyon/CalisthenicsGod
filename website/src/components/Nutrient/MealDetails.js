@@ -21,7 +21,7 @@ import {
   CellComponent,
   validate,
   EditCell,
-} from './gridUtil'
+} from '../gridUtil'
 
 class MealDetails extends React.Component {
   constructor() {

@@ -25,7 +25,6 @@ class IngredientSelect extends React.Component {
     const { onChange, ...rest } = this.props
     return (
       <Select
-        searchable
         options={this.props.ingredients
           .filter((ingredient) => ingredient.isAvailable)
           .map((ingredient) => ({

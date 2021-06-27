@@ -1,4 +1,4 @@
-import { createSlice } from '@reduxjs/toolkit';
+import { createSlice } from '@reduxjs/toolkit'
 
 export const slice = createSlice({
   name: 'exercises',
@@ -9,17 +9,17 @@ export const slice = createSlice({
     removeExercise: (state, { payload }) =>
       state.filter((exercise) => exercise._id !== payload),
     addExercise: (state, { payload }) => {
-      if (payload._id) state.push(payload);
+      if (payload._id) state.push(payload)
     },
     modifyExercise: (state, { payload }) => {
-      const index = state.findIndex((exercise) => exercise._id === payload._id);
+      const index = state.findIndex((exercise) => exercise._id === payload._id)
       state[index] = {
-        ...payload,
         ...state[index],
-      };
+        ...payload,
+      }
     },
   },
-});
+})
 
 export const {
   getExercises,
@@ -27,6 +27,6 @@ export const {
   removeExercise,
   addExercise,
   modifyExercise,
-} = slice.actions;
+} = slice.actions
 
-export default slice.reducer;
+export default slice.reducer

@@ -25,7 +25,6 @@ class StageSelect extends React.Component {
     const { onChange, ...rest } = this.props
     return (
       <Select
-        searchable
         options={this.props.stages.map((stage) => ({
           label: stage.name,
           value: stage._id,

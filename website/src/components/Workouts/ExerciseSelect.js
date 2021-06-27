@@ -22,10 +22,9 @@ class ExerciseSelect extends React.Component {
   }
 
   render() {
-    const { multiple, onChange, ...rest } = this.props
+    const { onChange, ...rest } = this.props
     return (
       <Select
-        searchable
         options={this.props.exercises
           .filter((exercise) => exercise.isAvailable)
           .filter(
@@ -42,7 +41,6 @@ class ExerciseSelect extends React.Component {
           )
           .map((exercise) => ({ label: exercise.name, value: exercise._id }))}
         onChange={this.onChange}
-        multiple={multiple}
         {...rest}
       />
     )

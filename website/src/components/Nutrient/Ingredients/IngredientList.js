@@ -36,7 +36,7 @@ import {
   CellComponent,
   validate,
   EditCell,
-} from '../gridUtil'
+} from '../../gridUtil'
 import { Carbohydrate, Ethanol, Fat, Protein } from '../../../style/inputs'
 
 class IngredientList extends React.Component {

@@ -1,12 +1,7 @@
 import React from 'react'
 import styled from 'styled-components'
 import {
-  Chip,
-  Select as MaterialSelect,
-  FormControl,
-  MenuItem,
   InputLabel,
-  Input as MaterialInput,
   Slider,
   TextField,
   InputAdornment,
@@ -115,8 +110,8 @@ const Ethanol = (props) => Macro('ethanol', props)
 
 const RadioOption = styled(({ className, label, value, name, ...rest }) => (
   <div className={className}>
-    <input id={value} value={value} name={name || 'input'} {...rest} />
-    <label for={value}>{label}</label>
+    <input id={`${value}`} value={value} name={name || 'input'} {...rest} />
+    <label htmlFor={`${value}`}>{label}</label>
   </div>
 )).attrs({
   type: 'radio',
@@ -151,9 +146,10 @@ const Radio = styled(
     <div className={className}>
       {options?.map((option) => (
         <RadioOption
+          key={option.value}
           name={name}
           value={option.value}
-          checked={option.value === value}
+          checked={option.value === value || (!value && !option.value)}
           onClick={onChange}
           label={option.label}
           {...rest}
@@ -172,87 +168,38 @@ const Select = withStyles(() => ({
   root: {
     ...defaultRoot,
   },
-}))(
-  ({
-    multiple,
-    options,
-    value,
-    label,
-    name,
-    searchable,
-    onChange,
-    placeholder,
-    ...rest
-  }) => (
-    <FormControl>
-      {!searchable && (
-        <>
-          <InputLabel id="select">{label}</InputLabel>
-          <MaterialSelect
-            labelId="select"
-            name={name}
-            multiple={multiple}
-            onChange={onChange}
-            placeholder={placeholder}
-            value={value || 'default'}
-            input={<MaterialInput />}
-            renderValue={(selected) => {
-              if (multiple)
-                return selected.map((value) => (
-                  <Chip
-                    key={value}
-                    label={
-                      options.find((option) => option.value === value)?.label ||
-                      value
-                    }
-                  />
-                ))
-              return (
-                options.find(
-                  (option) =>
-                    (!option.value && !selected) || option.value === selected,
-                )?.label || selected
-              )
-            }}
-            {...rest}
-          >
-            {options.map(({ label, value }) => (
-              <MenuItem key={value} value={value}>
-                {label}
-              </MenuItem>
-            ))}
-          </MaterialSelect>
-        </>
-      )}
-      {searchable && (
-        <Autocomplete
-          name={name}
-          onChange={(event, newValue) =>
-            onChange({ target: { value: newValue?.value, name } })
-          }
-          multiple={multiple}
-          options={options}
-          value={value}
-          getOptionLabel={(option) =>
-            options.find(
-              (op) => op.value === option.value || op.value === option,
-            )?.label || ''
-          }
-          getOptionSelected={(option, val) => option.value === val}
-          renderInput={(params) => (
-            <TextField
-              {...params}
-              label={label}
-              variant="outlined"
-              placeholder={placeholder}
-            />
-          )}
-          {...rest}
-        />
-      )}
-    </FormControl>
-  ),
-)
+}))(({ multiple, options, label, name, onChange, placeholder, ...rest }) => (
+  <Autocomplete
+    name={name}
+    onChange={(event, newValue) =>
+      onChange({
+        target: {
+          value: multiple
+            ? newValue.map((value) => value.value || value)
+            : newValue?.value,
+          name,
+        },
+      })
+    }
+    filterSelectedOptions
+    multiple={multiple}
+    options={options}
+    getOptionLabel={(option) =>
+      options.find((op) => op.value === option.value || op.value === option)
+        ?.label || ''
+    }
+    getOptionSelected={(option, val) => option.value === val}
+    renderInput={(params) => (
+      <TextField
+        {...params}
+        label={label}
+        variant="outlined"
+        placeholder={placeholder}
+      />
+    )}
+    {...rest}
+  />
+))
 
 const Range = withStyles(() => ({
   root: {

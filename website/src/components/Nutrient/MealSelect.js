@@ -12,7 +12,7 @@ class MealSelect extends React.Component {
   }
 
   componentDidMount() {
-    if (this.props.presetMeals.length === 0) this.props.getPresetMeals()
+    this.props.getPresetMeals()
   }
 
   render() {
@@ -20,7 +20,6 @@ class MealSelect extends React.Component {
     return (
       <Row columns={2}>
         <Select
-          searchable
           options={this.props.presetMeals.map((meal) => ({
             label: meal.name,
             value: meal._id,

@@ -14,7 +14,7 @@ import {
   CalorieTypeProvider,
   WeightTypeProvider,
   CellComponent,
-} from '../gridUtil'
+} from '../../gridUtil'
 
 class NutrientSummary extends React.Component {
   constructor() {

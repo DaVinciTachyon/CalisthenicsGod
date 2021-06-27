@@ -1,4 +1,4 @@
-const mongoose = require('mongoose');
+const mongoose = require('mongoose')
 
 module.exports = mongoose.model(
   'Exercise',
@@ -67,5 +67,5 @@ module.exports = mongoose.model(
       type: Boolean,
       default: true,
     },
-  })
-);
+  }),
+)
