@@ -1,5 +1,4 @@
 import React from 'react'
-import { Row } from '../../style/table'
 import { Button } from '../../style/buttons'
 import { Text, Password } from '../../style/inputs'
 import { connect } from 'react-redux'

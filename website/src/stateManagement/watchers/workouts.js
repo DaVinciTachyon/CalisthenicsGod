@@ -40,7 +40,7 @@ function* handlePostWorkout({ payload }) {
     const { data } = response
     yield put(addWorkout(data.workout))
     success('Workout Added')
-    window.location = '/workoutTracker'
+    window.location.replace('/workoutTracker')
   } catch (err) {
     console.error(err)
     error(err.response.data.error)
