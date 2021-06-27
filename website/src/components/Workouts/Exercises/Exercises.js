@@ -425,26 +425,11 @@ class Exercises extends React.Component {
   commitChanges = ({ changed }) => {
     if (changed)
       Object.entries(changed).forEach((entry) => {
-        const {
-          name,
-          abbreviation,
-          description,
-          componentExercises,
-          transversePlane,
-          frontalPlane,
-          verticality,
-          motion,
-          kineticChain,
-          sagittalPlane,
-          potentialStages,
-          requirements,
-        } = entry[1]
-        this.props.modifyExercise({
-          _id: entry[0],
-          name,
-          abbreviation,
-          description,
-          motionType: {
+        if (entry[1]) {
+          const {
+            name,
+            abbreviation,
+            description,
             componentExercises,
             transversePlane,
             frontalPlane,
@@ -452,10 +437,27 @@ class Exercises extends React.Component {
             motion,
             kineticChain,
             sagittalPlane,
-          },
-          potentialStages,
-          requirements,
-        })
+            potentialStages,
+            requirements,
+          } = entry[1]
+          this.props.modifyExercise({
+            _id: entry[0],
+            name,
+            abbreviation,
+            description,
+            motionType: {
+              componentExercises,
+              transversePlane,
+              frontalPlane,
+              verticality,
+              motion,
+              kineticChain,
+              sagittalPlane,
+            },
+            potentialStages,
+            requirements,
+          })
+        }
       })
   }
 

@@ -222,13 +222,13 @@ class Meals extends React.Component {
                 )
               if (changed)
                 Object.entries(changed).forEach((entry) => {
-                  const { name } = this.props.presetMeals.find(
-                    (meal) => meal._id === entry[0],
-                  )
-                  this.props.modifyPresetMeal({
-                    _id: entry[0],
-                    name: entry[1].name || name,
-                  })
+                  if (entry[1]) {
+                    const { name } = entry[1]
+                    this.props.modifyPresetMeal({
+                      _id: entry[0],
+                      name,
+                    })
+                  }
                 })
               if (deleted)
                 deleted.forEach((_id) => this.props.deletePresetMeal(_id))
@@ -248,7 +248,6 @@ class Meals extends React.Component {
             contentComponent={({ row }) => (
               <MealDetails
                 details={row}
-                meals={this.props.presetMeals}
                 addIngredient={this.props.addIngredient}
                 removeIngredient={this.props.removeIngredient}
                 modifyIngredient={this.props.modifyIngredient}

@@ -179,7 +179,6 @@ class Meals extends React.Component {
             contentComponent={({ row }) => (
               <MealDetails
                 details={row}
-                meals={this.props.meals}
                 addIngredient={this.props.addIngredient}
                 removeIngredient={this.props.removeIngredient}
                 modifyIngredient={this.props.modifyIngredient}

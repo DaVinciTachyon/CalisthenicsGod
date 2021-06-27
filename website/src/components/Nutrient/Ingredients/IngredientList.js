@@ -120,19 +120,19 @@ class IngredientList extends React.Component {
       )
     if (changed)
       Object.entries(changed).forEach((entry) => {
-        const { name, macronutrients } = this.props.ingredients.find(
-          (ingredient) => ingredient._id === entry[0],
-        )
-        this.props.patchIngredient({
-          _id: entry[0],
-          name: entry[1].name || name,
-          macronutrients: {
-            fat: entry[1].fat || macronutrients.fat,
-            carbohydrate: entry[1].carbohydrate || macronutrients.carbohydrate,
-            protein: entry[1].protein || macronutrients.protein,
-            ethanol: entry[1].ethanol || macronutrients.ethanol,
-          },
-        })
+        if (entry[1]) {
+          const { name, fat, carbohydrate, protein, ethanol } = entry[1]
+          this.props.patchIngredient({
+            _id: entry[0],
+            name,
+            macronutrients: {
+              fat,
+              carbohydrate,
+              protein,
+              ethanol,
+            },
+          })
+        }
       })
     if (deleted)
       deleted.forEach((_id) =>

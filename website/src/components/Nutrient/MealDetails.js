@@ -147,17 +147,17 @@ class MealDetails extends React.Component {
               )
             if (changed)
               Object.entries(changed).forEach((entry) => {
-                const { id, weight } = this.props.meals
-                  .find((meal) => meal._id === this.props.details._id)
-                  .ingredients.find((ingredient) => ingredient._id === entry[0])
-                this.props.modifyIngredient({
-                  _id: this.props.details._id,
-                  ingredient: {
-                    _id: entry[0],
-                    id: entry[1].id || id,
-                    weight: entry[1].weight || weight,
-                  },
-                })
+                if (entry[1]) {
+                  const { id, weight } = entry[1]
+                  this.props.modifyIngredient({
+                    _id: this.props.details._id,
+                    ingredient: {
+                      _id: entry[0],
+                      id,
+                      weight,
+                    },
+                  })
+                }
               })
             if (deleted)
               deleted.forEach((_id) =>
