@@ -46,7 +46,6 @@ import StageSelect from '../StageSelect'
 import ExerciseSelect from '../ExerciseSelect'
 import { Row, Column } from '../../../style/table'
 import classNames from 'clsx'
-import { validate } from '../../gridUtil'
 
 class Exercises extends React.Component {
   constructor() {
@@ -517,9 +516,6 @@ class Exercises extends React.Component {
           <IntegratedPaging />
 
           <EditingState
-            onRowChangesChange={(edited) =>
-              this.setState({ errors: validate(edited, columns) })
-            }
             onCommitChanges={commitChanges}
             columnExtensions={editExtensions}
           />

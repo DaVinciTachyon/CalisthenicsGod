@@ -1,13 +1,21 @@
 import React from 'react'
 import { connect } from 'react-redux'
 import { getExercises } from '../../../stateManagement/reducers/exercises'
+import { getStages } from '../../../stateManagement/reducers/stages'
 import {
   Grid,
   Table,
   TableHeaderRow,
 } from '@devexpress/dx-react-grid-material-ui'
 import { Title } from '../../../style/table'
-import { SetsTypeProvider } from '../../gridUtil'
+import {
+  WeightedTypeProvider,
+  VariationTypeProvider,
+  SagittalPlaneTypeProvider,
+  ExerciseTypeProvider,
+  TimeTypeProvider,
+  SetsTypeProvider,
+} from '../../gridUtil'
 
 class Stage extends React.Component {
   constructor() {
@@ -15,40 +23,17 @@ class Stage extends React.Component {
     this.state = {
       columns: [
         { name: 'sets', title: 'Sets' },
+        { name: 'weight', title: 'Weight' },
+        { name: 'variation', title: 'Variation' },
+        { name: 'sagittalPlane', title: 'Sagittal Plane' },
+        { name: 'id', title: 'Exercise' },
         {
-          name: 'weight',
-          title: 'Weight',
-          getCellValue: (row) =>
-            row.sets?.length > 0 && row.sets[0].weight
-              ? row.sets[0].weight > 0
-                ? 'Weighted'
-                : 'Assisted'
-              : 'Bodyweight',
-        },
-        {
-          name: 'variation',
-          title: 'Variation',
-          getCellValue: (row) =>
-            row.variation ||
-            (row.motionType?.frontalPlane === 'rotational'
-              ? 'Bidirectional'
-              : row.motionType?.motion === 'isotonic'
-              ? 'Isotonic'
-              : 'Standard'),
-        },
-        {
-          name: 'sagittalPlane',
-          title: 'Sagittal Plane',
-          getCellValue: (row) => row.sagittalPlane || 'Bilateral',
-        },
-        { name: 'name', title: 'Name' },
-        {
-          name: 'intraset',
+          name: 'intrasetRest',
           title: 'Intraset Rest',
           getCellValue: (row) => row.rest.intraset,
         },
         {
-          name: 'interset',
+          name: 'intersetRest',
           title: 'Interset Rest',
           getCellValue: (row) => row.rest.interset,
         },
@@ -58,22 +43,26 @@ class Stage extends React.Component {
 
   componentDidMount() {
     this.props.getExercises()
+    this.props.getStages()
   }
 
   render() {
     const { columns } = this.state
     return (
       <>
-        <Title>{this.props.details.name}</Title>
-        <Grid
-          rows={this.props.details.exercises.map((exercise) => {
-            const fullExercise = this.props.exercises.find(
-              (ex) => ex._id === exercise.id,
-            )
-            return { ...fullExercise, ...exercise }
-          })}
-          columns={columns}
-        >
+        <Title>
+          {this.props.stages.find(
+            (stage) => stage._id === this.props.details.id,
+          )?.name || 'NaN'}
+        </Title>
+        <Grid rows={this.props.details.exercises} columns={columns}>
+          <SetsTypeProvider for={['sets']} />
+          <WeightedTypeProvider for={['weight']} />
+          <VariationTypeProvider for={['variation']} />
+          <SagittalPlaneTypeProvider for={['sagittalPlane']} />
+          <ExerciseTypeProvider for={['id']} />
+          <TimeTypeProvider for={['intrasetRest', 'intersetRest']} />
+
           <Table />
           <TableHeaderRow />
 
@@ -84,6 +73,7 @@ class Stage extends React.Component {
   }
 }
 
-export default connect(({ exercises }) => ({ exercises }), {
+export default connect(({ exercises, stages }) => ({ exercises, stages }), {
   getExercises,
+  getStages,
 })(Stage)

@@ -1,10 +1,8 @@
 import React from 'react'
 import { Row } from '../../../style/table'
 import { Number } from '../../../style/inputs'
-import { connect } from 'react-redux'
-import { modifyCurrentExerciseSet } from '../../../stateManagement/reducers/workouts'
 
-class SetEditor extends React.Component {
+export default class SetEditor extends React.Component {
   constructor() {
     super()
     this.state = {
@@ -45,29 +43,13 @@ class SetEditor extends React.Component {
     if (this.props.isWeighted && this.props.isWeighted !== 0)
       weight = this.props.value?.weight ? Math.abs(this.props.value.weight) : 1
     await this.setState({ repetitions, time, distance, weight })
-    if (!this.props.disabled) this.update()
+    if (!this.props.disabled) this.props.onChange(this.state)
   }
 
   onChange = async (evt) => {
     await this.setState({ [evt.target.name]: evt.target.value })
-    this.update()
+    this.props.onChange(this.state)
   }
-
-  update = () =>
-    this.props.modifyCurrentExerciseSet({
-      stageId: this.props.stageId,
-      exerciseIndex: this.props.exerciseIndex,
-      index: this.props.index,
-      set: {
-        repetitions: this.state.repetitions,
-        time: this.state.time,
-        distance: this.state.distance,
-        weight:
-          this.props.isWeighted && this.props.isWeighted !== 0
-            ? this.state.weight * this.props.isWeighted
-            : undefined,
-      },
-    })
 
   render() {
     return (
@@ -84,7 +66,6 @@ class SetEditor extends React.Component {
             value={this.state.repetitions}
             onChange={this.onChange}
             unit="r"
-            disabled={this.props.disabled}
           />
         )}
         {this.state.distance !== undefined && (
@@ -94,7 +75,6 @@ class SetEditor extends React.Component {
             value={this.state.distance}
             onChange={this.onChange}
             unit="m"
-            disabled={this.props.disabled}
           />
         )}
         {this.state.time !== undefined && (
@@ -104,7 +84,6 @@ class SetEditor extends React.Component {
             value={this.state.time}
             onChange={this.onChange}
             unit="s"
-            disabled={this.props.disabled}
           />
         )}
         {this.state.weight !== undefined && (
@@ -114,14 +93,9 @@ class SetEditor extends React.Component {
             value={this.state.weight}
             onChange={this.onChange}
             unit="kg"
-            disabled={this.props.disabled}
           />
         )}
       </Row>
     )
   }
 }
-
-export default connect(() => ({}), {
-  modifyCurrentExerciseSet,
-})(SetEditor)

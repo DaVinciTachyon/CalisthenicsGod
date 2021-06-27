@@ -11,7 +11,6 @@ import {
   SearchPanel,
   Toolbar,
   TableFixedColumns,
-  // TableRowDetail,
 } from '@devexpress/dx-react-grid-material-ui'
 import {
   SortingState,
@@ -21,7 +20,6 @@ import {
   EditingState,
   SearchState,
   IntegratedFiltering,
-  // RowDetailState,
 } from '@devexpress/dx-react-grid'
 import {
   changeAvailability,
@@ -209,11 +207,6 @@ class IngredientList extends React.Component {
           />
 
           <TableFixedColumns leftColumns={['name']} />
-
-          {/* TODO -micros, fiber etc <RowDetailState />
-          <TableRowDetail
-            contentComponent={({ row }) => <div>Details for {row.name}</div>}
-          /> */}
 
           <PagingPanel pageSizes={pageSizes} />
 

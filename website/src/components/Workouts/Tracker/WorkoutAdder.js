@@ -1,5 +1,5 @@
 import React from 'react'
-import { Row, Column, Title } from '../../../style/table'
+import { Title } from '../../../style/table'
 import StageEditor from './StageEditor'
 import { Button, ErrorButton } from '../../../style/buttons'
 import { connect } from 'react-redux'
@@ -24,30 +24,13 @@ class WorkoutAdder extends React.Component {
     return (
       <div>
         <Title>New Workout</Title>
-        <Row columns={7} isTitle>
-          <Column>Sets</Column>
-          <Column>Weighted</Column>
-          <Column>Variation</Column>
-          <Column>Sagittal Plane</Column>
-          <Column>Exercise</Column>
-          <Column>
-            <Column>Rest</Column>
-            <Row columns={2}>
-              <Column>Intraset</Column>
-              <Column>Interset</Column>
-            </Row>
-          </Column>
-          <Column />
-        </Row>
         {this.props.stages.map(({ _id }) => (
           <StageEditor
             key={_id}
             id={_id}
-            details={
-              this.props.workouts.current.stages?.find(
-                (stage) => _id === stage.id,
-              ) || undefined
-            }
+            details={this.props.workouts.current.stages?.find(
+              (stage) => _id === stage.id,
+            )}
           />
         ))}
         <Button

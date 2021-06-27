@@ -19,94 +19,30 @@ class MeasurementSummary extends React.Component {
   render() {
     return (
       <Paper>
-        {this.props.measurements.weight?.length > 0 && (
-          <Weight
-            label="Weight"
-            unit="kg"
-            value={this.props.measurements.weight[0].value}
-            disabled
-          />
-        )}
-        {this.props.measurements.height?.length > 0 && (
-          <Length
-            label="Height"
-            unit="cm"
-            value={this.props.measurements.height[0].value}
-            disabled
-          />
-        )}
-        {this.props.measurements.waist?.length > 0 && (
-          <Length
-            label="Waist"
-            unit="cm"
-            value={this.props.measurements.waist[0].value}
-            disabled
-          />
-        )}
-        {this.props.measurements.hips?.length > 0 && (
-          <Length
-            label="Hips"
-            unit="cm"
-            value={this.props.measurements.hips[0].value}
-            disabled
-          />
-        )}
-        {this.props.measurements.rightBicep?.length > 0 && (
-          <Length
-            label="Right Bicep"
-            unit="cm"
-            value={this.props.measurements.rightBicep[0].value}
-            disabled
-          />
-        )}
-        {this.props.measurements.leftBicep?.length > 0 && (
-          <Length
-            label="Left Bicep"
-            unit="cm"
-            value={this.props.measurements.leftBicep[0].value}
-            disabled
-          />
-        )}
-        {this.props.measurements.rightForearm?.length > 0 && (
-          <Length
-            label="Right Forearm"
-            unit="cm"
-            value={this.props.measurements.rightForearm[0].value}
-            disabled
-          />
-        )}
-        {this.props.measurements.leftForearm?.length > 0 && (
-          <Length
-            label="Left Forearm"
-            unit="cm"
-            value={this.props.measurements.leftForearm[0].value}
-            disabled
-          />
-        )}
-        {this.props.measurements.shoulders?.length > 0 && (
-          <Length
-            label="Shoulders"
-            unit="cm"
-            value={this.props.measurements.shoulders[0].value}
-            disabled
-          />
-        )}
-        {this.props.measurements.chest?.length > 0 && (
-          <Length
-            label="Chest"
-            unit="cm"
-            value={this.props.measurements.chest[0].value}
-            disabled
-          />
-        )}
-        {this.props.measurements.neck?.length > 0 && (
-          <Length
-            label="Neck"
-            unit="cm"
-            value={this.props.measurements.neck[0].value}
-            disabled
-          />
-        )}
+        {Object.entries(this.props.measurements).map((entry) => {
+          if (entry[1]?.length > 0) {
+            if (entry[0] === 'weight')
+              return (
+                <Weight
+                  label={entry[0]}
+                  unit="kg"
+                  value={entry[1][0].value}
+                  disabled
+                  fullWidth
+                />
+              )
+            return (
+              <Length
+                label={entry[0]}
+                unit="cm"
+                value={entry[1][0].value}
+                disabled
+                fullWidth
+              />
+            )
+          }
+          return <></>
+        })}
         <Row>
           <Button onClick={() => (window.location = '/measurementTracker/new')}>
             New Measurements
