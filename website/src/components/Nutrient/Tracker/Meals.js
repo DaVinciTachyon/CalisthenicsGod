@@ -1,68 +1,43 @@
 import React from 'react'
 import MealDetails from '../MealDetails'
-import { Title } from '../../../style/table'
 import {
-  getPresetMeals,
-  modifyPresetMeal,
-  deletePresetMeal,
+  getMeals,
   addPresetMeal,
   addIngredient,
   removeIngredient,
   modifyIngredient,
-} from '../../../stateManagement/reducers/presetMeals'
+  removeMeal,
+} from '../../../stateManagement/reducers/meals'
 import { connect } from 'react-redux'
 import {
   Grid,
   Table,
   TableHeaderRow,
   TableEditColumn,
-  TableEditRow,
-  PagingPanel,
-  Toolbar,
-  SearchPanel,
-  TableFixedColumns,
   TableRowDetail,
 } from '@devexpress/dx-react-grid-material-ui'
-import {
-  SortingState,
-  IntegratedSorting,
-  EditingState,
-  PagingState,
-  IntegratedPaging,
-  SearchState,
-  IntegratedFiltering,
-  RowDetailState,
-} from '@devexpress/dx-react-grid'
+import { EditingState, RowDetailState } from '@devexpress/dx-react-grid'
 import { getIngredients } from '../../../stateManagement/reducers/ingredients'
 import { Carbohydrate, Ethanol, Fat, Protein } from '../../../style/inputs'
 import {
   CalorieTypeProvider,
   WeightTypeProvider,
   CellComponent,
-  validate,
-  EditCell,
 } from '../../gridUtil'
 
 class Meals extends React.Component {
   constructor() {
     super()
-    this.state = { pageSizes: [10, 20], errors: [] }
+    this.state = { errors: [] }
   }
 
   componentDidMount() {
-    this.props.getPresetMeals()
+    this.props.getMeals()
     this.props.getIngredients()
   }
 
-  editCellComponent = (props) => (
-    <EditCell {...props} errors={this.state.errors} />
-  )
-
   render() {
-    const { editCellComponent } = this
-    const { pageSizes } = this.state
     const columns = [
-      { name: 'name', title: 'Name', required: true },
       {
         name: 'calories',
         title: 'Calories',
@@ -180,58 +155,14 @@ class Meals extends React.Component {
     ]
     return (
       <div>
-        <Title>Meals</Title>
         <Grid
-          rows={this.props.presetMeals}
+          rows={this.props.meals}
           columns={columns}
           getRowId={(row) => row._id}
         >
-          <SortingState
-            defaultSorting={[{ columnName: 'name', direction: 'asc' }]}
-          />
-          <IntegratedSorting />
-
-          <SearchState />
-          <IntegratedFiltering />
-
-          <PagingState defaultCurrentPage={0} pageSize={pageSizes[0]} />
-          <IntegratedPaging />
-
           <EditingState
-            onRowChangesChange={(edited) =>
-              this.setState({ errors: validate(edited, columns) })
-            }
-            columnExtensions={[
-              {
-                columnName: 'name',
-                createRowChange: (row, value) => ({ ...row, name: value }),
-              },
-              { columnName: 'calories', editingEnabled: false },
-              { columnName: 'fat', editingEnabled: false },
-              { columnName: 'carbohydrate', editingEnabled: false },
-              { columnName: 'protein', editingEnabled: false },
-              { columnName: 'ethanol', editingEnabled: false },
-            ]}
-            onCommitChanges={({ added, changed, deleted }) => {
-              if (added)
-                added.forEach(({ name }) =>
-                  this.props.addPresetMeal({
-                    name,
-                    ingredients: [],
-                  }),
-                )
-              if (changed)
-                Object.entries(changed).forEach((entry) => {
-                  if (entry[1]) {
-                    const { name } = entry[1]
-                    this.props.modifyPresetMeal({
-                      _id: entry[0],
-                      name,
-                    })
-                  }
-                })
-              if (deleted)
-                deleted.forEach((_id) => this.props.deletePresetMeal(_id))
+            onCommitChanges={({ deleted }) => {
+              if (deleted) deleted.forEach((_id) => this.props.removeMeal(_id))
             }}
           />
           <CalorieTypeProvider for={['calories']} />
@@ -243,7 +174,7 @@ class Meals extends React.Component {
           <RowDetailState />
 
           <Table cellComponent={CellComponent} />
-          <TableHeaderRow showSortingControls />
+          <TableHeaderRow />
           <TableRowDetail
             contentComponent={({ row }) => (
               <MealDetails
@@ -254,36 +185,19 @@ class Meals extends React.Component {
               />
             )}
           />
-          <TableEditRow />
-          <TableEditColumn
-            showAddCommand
-            showEditCommand
-            showDeleteCommand
-            cellComponent={editCellComponent}
-          />
-
-          <TableFixedColumns leftColumns={['name']} />
-
-          <PagingPanel pageSizes={pageSizes} />
-
-          <Toolbar />
-          <SearchPanel />
+          <TableEditColumn showDeleteCommand />
         </Grid>
       </div>
     )
   }
 }
 
-export default connect(
-  ({ presetMeals, ingredients }) => ({ presetMeals, ingredients }),
-  {
-    getPresetMeals,
-    getIngredients,
-    modifyPresetMeal,
-    deletePresetMeal,
-    addPresetMeal,
-    addIngredient,
-    removeIngredient,
-    modifyIngredient,
-  },
-)(Meals)
+export default connect(({ meals, ingredients }) => ({ meals, ingredients }), {
+  getMeals,
+  addPresetMeal,
+  removeMeal,
+  addIngredient,
+  removeIngredient,
+  modifyIngredient,
+  getIngredients,
+})(Meals)

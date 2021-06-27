@@ -1,15 +1,15 @@
-import axios from 'axios';
-import { loadState, saveState } from '../util';
-import { error } from '../../stateManagement/reducers/notification';
+import axios from 'axios'
+import { loadState, saveState } from '../util'
+import { error } from '../../stateManagement/reducers/notification'
 
 const getCalories = async (
   fat,
   carbohydrate,
   protein,
   ethanol,
-  weight = undefined
+  weight = undefined,
 ) => {
-  const macroDensities = await getMacroDensities();
+  const macroDensities = await getMacroDensities()
   if (weight)
     return (
       ((fat * macroDensities.fat +
@@ -18,26 +18,27 @@ const getCalories = async (
         ethanol * macroDensities.ethanol) *
         weight) /
       100
-    );
+    )
   return (
     fat * macroDensities.fat +
     carbohydrate * macroDensities.carbohydrate +
     protein * macroDensities.protein +
     ethanol * macroDensities.ethanol
-  );
-};
+  )
+}
 
 const getMacroDensities = async () => {
-  let state = loadState('macronutrientDensities');
+  let state = loadState('macronutrientDensities')
   if (!state) {
     try {
-      state = (await axios.get('/nutrition/macronutrientDensities/')).data;
+      const response = await axios.get('/nutrition/macronutrientDensities/')
+      state = response.data
     } catch (err) {
-      error(err.response.data.error);
+      error(err.response.data.error)
     }
-    saveState('macronutrientDensities', state);
+    saveState('macronutrientDensities', state)
   }
-  return state;
-};
+  return state
+}
 
-export { getCalories, getMacroDensities };
+export { getCalories, getMacroDensities }

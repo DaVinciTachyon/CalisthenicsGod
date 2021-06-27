@@ -1,6 +1,6 @@
-import React from 'react';
-import { Row, Section } from '../../style/table';
-import { Button } from '../../style/buttons';
+import React from 'react'
+import { Row, Section } from '../../style/table'
+import { Button } from '../../style/buttons'
 import {
   Calories,
   Text,
@@ -8,20 +8,20 @@ import {
   Number,
   Select,
   Range,
-} from '../../style/inputs';
-import { connect } from 'react-redux';
-import { getMeasurementHistory } from '../../stateManagement/reducers/measurements';
+} from '../../style/inputs'
+import { connect } from 'react-redux'
+import { getMeasurementHistory } from '../../stateManagement/reducers/measurements'
 import {
   getUserInfo,
   modifyUserInfo,
   getNutritionInfo,
   modifyNutritionInfo,
-} from '../../stateManagement/reducers/user';
+} from '../../stateManagement/reducers/user'
 import { getWeight } from '../util'
 
 class UserProfile extends React.Component {
   constructor() {
-    super();
+    super()
     this.state = {
       calorieOffset: 0,
       currentCalorieOffset: 0,
@@ -36,27 +36,27 @@ class UserProfile extends React.Component {
       caloriesPerKg: 0,
       proteinGramsPerKg: 0,
       fatCalorieProportion: 0,
-    };
+    }
   }
 
   componentDidMount() {
-    this.props.getUserInfo();
-    this.props.getNutritionInfo();
-    this.props.getMeasurementHistory('weight');
-    this.getUserInfo();
+    this.props.getUserInfo()
+    this.props.getNutritionInfo()
+    this.props.getMeasurementHistory('weight')
+    this.getUserInfo()
   }
 
   componentDidUpdate(prevProps) {
-    if (prevProps.user !== this.props.user) this.getUserInfo();
+    if (prevProps.user !== this.props.user) this.getUserInfo()
   }
 
   formatDate = (date) =>
     `${date.getFullYear().toString().padStart(4, '0')}-${(date.getMonth() + 1)
       .toString()
-      .padStart(2, '0')}-${date.getDate().toString().padStart(2, '0')}`;
+      .padStart(2, '0')}-${date.getDate().toString().padStart(2, '0')}`
 
   getUserInfo = () => {
-    const { user } = this.props;
+    const { user } = this.props
 
     this.setState({
       firstname: user.name?.first,
@@ -77,24 +77,24 @@ class UserProfile extends React.Component {
           : user.nutrition?.calorieOffset < 1
           ? 'deficit'
           : 'maintenance',
-    });
-  };
+    })
+  }
 
   onCalorieModeChange = (evt) => {
-    this.onSelectChange(evt);
+    this.onChange(evt)
     this.setState({
       calorieOffset:
-        evt.value === 'deficit'
+        evt.target.value === 'deficit'
           ? this.state.currentCalorieOffset < 1
             ? this.state.currentCalorieOffset
             : 0.85
-          : evt.value === 'bulk'
+          : evt.target.value === 'bulk'
           ? this.state.currentCalorieOffset > 1
             ? this.state.currentCalorieOffset
             : 1.05
           : 1,
-    });
-  };
+    })
+  }
 
   onSubmit = async () => {
     this.props.modifyUserInfo({
@@ -106,20 +106,20 @@ class UserProfile extends React.Component {
       email: this.state.email,
       birthDate: this.state.birthDate,
       gender: this.state.gender,
-    });
+    })
     this.props.modifyNutritionInfo({
       calorieOffset: this.state.calorieOffset,
       caloriesPerKg: this.state.caloriesPerKg,
       proteinGramsPerKg: this.state.proteinGramsPerKg,
       fatCalorieProportion: this.state.fatCalorieProportion,
-    });
-  };
+    })
+  }
 
-  onChange = (evt) => this.setState({ [evt.target.name]: evt.target.value });
-  onSelectChange = (evt) => this.setState({ [evt.name]: evt.value });
+  onChange = (evt) => this.setState({ [evt.target.name]: evt.target.value })
 
   render() {
-    const maintenanceCalories = this.state.caloriesPerKg * getWeight(this.props.measurements.weight)
+    const maintenanceCalories =
+      this.state.caloriesPerKg * getWeight(this.props.measurements.weight)
     return (
       <div>
         <Section label="General">
@@ -129,18 +129,21 @@ class UserProfile extends React.Component {
               label="First Name"
               value={this.state.firstname}
               onChange={this.onChange}
+              fullWidth
             />
             <Text
               name="middlename"
               label="Middle Name(s)"
               value={this.state.middlename}
               onChange={this.onChange}
+              fullWidth
             />
             <Text
               name="lastname"
               label="Last Name"
               value={this.state.lastname}
               onChange={this.onChange}
+              fullWidth
             />
           </Row>
           <Text
@@ -148,6 +151,7 @@ class UserProfile extends React.Component {
             label="Email"
             value={this.state.email}
             onChange={this.onChange}
+            fullWidth
           />
           <Row columns={2}>
             <Select
@@ -157,7 +161,7 @@ class UserProfile extends React.Component {
                 { label: 'Female', value: 'female' },
               ]}
               value={this.state.gender}
-              onChange={this.onSelectChange}
+              onChange={this.onChange}
               label="Gender"
             />
             <DateInput
@@ -165,12 +169,14 @@ class UserProfile extends React.Component {
               value={this.state.birthDate}
               label="Date of Birth"
               onChange={this.onChange}
+              fullWidth
             />
           </Row>
           <DateInput
             value={this.state.dateJoined}
             label="Date Joined"
-            readOnly
+            disabled
+            fullWidth
           />
         </Section>
         <Section label="Nutrient Information">
@@ -179,7 +185,8 @@ class UserProfile extends React.Component {
               value={maintenanceCalories}
               label="Maintenance Calories"
               unit="kcal"
-              readOnly
+              disabled
+              fullWidth
             />
             <Select
               name="calorieMode"
@@ -193,24 +200,33 @@ class UserProfile extends React.Component {
               label="Calorie Mode"
             />
             {this.state.calorieOffset !== 1 && (
-            <>
+              <>
                 <Number
-                name="calorieOffset"
-                label="Offset Percentage"
-                value={(this.state.calorieOffset - 1) * (this.state.calorieMode === 'deficit' ? -100 : 100)}
-                onChange={(evt) => {
-                  evt.target.value /= this.state.calorieMode === 'deficit' ? -100 : 100;
-                  evt.target.value++;
-                  this.onChange(evt);
-                }}
-                unit='%'
-                min={0}
-                max={100}
-              />
+                  name="calorieOffset"
+                  label="Offset Percentage"
+                  value={
+                    (this.state.calorieOffset - 1) *
+                    (this.state.calorieMode === 'deficit' ? -100 : 100)
+                  }
+                  onChange={(evt) => {
+                    evt.target.value /=
+                      this.state.calorieMode === 'deficit' ? -100 : 100
+                    evt.target.value++
+                    this.onChange(evt)
+                  }}
+                  unit="%"
+                  min={0}
+                  max={100}
+                  fullWidth
+                />
                 <Calories
                   label="Calorie Offset"
-                  value={this.state.calorieOffset * maintenanceCalories - maintenanceCalories}
-                      readOnly
+                  value={
+                    this.state.calorieOffset * maintenanceCalories -
+                    maintenanceCalories
+                  }
+                  disabled
+                  fullWidth
                 />
               </>
             )}
@@ -251,7 +267,7 @@ class UserProfile extends React.Component {
           <Button onClick={this.onSubmit}>Submit</Button>
         </Row>
       </div>
-    );
+    )
   }
 }
 
@@ -261,4 +277,4 @@ export default connect(({ measurements, user }) => ({ measurements, user }), {
   modifyUserInfo,
   getNutritionInfo,
   modifyNutritionInfo,
-})(UserProfile);
+})(UserProfile)

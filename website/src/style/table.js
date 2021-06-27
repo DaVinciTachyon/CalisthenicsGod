@@ -1,6 +1,8 @@
-import React from 'react';
-import styled from 'styled-components';
-import { Background, Text } from './constants';
+import React from 'react'
+import styled from 'styled-components'
+import { Background, Text } from './constants'
+import { Paper, Typography } from '@material-ui/core'
+import { withStyles } from '@material-ui/core/styles'
 
 const Row = styled.div`
   display: grid;
@@ -16,7 +18,7 @@ const Row = styled.div`
   &.emphasis {
     background-color: ${Background.secondary};
   }
-`;
+`
 
 const Column = styled.div`
   grid-column: span ${(props) => props.span || 1};
@@ -24,35 +26,29 @@ const Column = styled.div`
   grid-template-columns: repeat(${(props) => props.columns || 1}, 1fr);
   text-align: center;
   background-color: inherit;
-`;
+`
 
 const Title = styled.div`
   text-align: center;
   font-weight: bold;
   font-size: 1.5rem;
-`;
+`
 
 const Subtitle = styled.div`
   color: ${Text.title.secondary};
   font-size: 0.8rem;
-`;
+`
 
-const Section = styled(({ className, label, children, ...rest }) => (
-  <div className={className} {...rest}>
-    <span className="titleLabel">{label}</span>
+const Section = withStyles(() => ({
+  root: {
+    margin: '10px',
+    padding: '10px',
+  },
+}))(({ label, children, ...rest }) => (
+  <Paper {...rest}>
+    <Typography gutterBottom>{label}</Typography>
     <div>{children}</div>
-  </div>
-))`
-  border: 2px solid gray;
-  border-radius: 5px;
-  margin: 5px;
-  position: relative;
+  </Paper>
+))
 
-  & span.titleLabel {
-    font-weight: bold;
-    margin: 10px;
-    font-size: 1.1rem;
-  }
-`;
-
-export { Row, Column, Title, Subtitle, Section };
+export { Row, Column, Title, Subtitle, Section }
