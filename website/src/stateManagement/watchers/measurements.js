@@ -22,8 +22,8 @@ function* handlePostMeasurements({ payload }) {
     const response = yield call(post, payload)
     const { data } = response
     yield put(setMeasurements(data))
-    success('Measurements Added')
     window.location.replace('/measurementTracker')
+    success('Measurements Added')
   } catch (err) {
     error(err.response.data.error)
   }
