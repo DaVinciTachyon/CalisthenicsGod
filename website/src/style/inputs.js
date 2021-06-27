@@ -11,7 +11,7 @@ import { withStyles, useTheme } from '@material-ui/core/styles'
 
 const defaultRoot = {
   display: 'block',
-  margin: '5px',
+  margin: '5px auto 5px auto',
   width: '95%',
 }
 
