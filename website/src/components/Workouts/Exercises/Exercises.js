@@ -44,7 +44,7 @@ import { Button, ErrorButton } from '../../../style/buttons'
 import { Text, Select, Radio } from '../../../style/inputs'
 import StageSelect from '../StageSelect'
 import ExerciseSelect from '../ExerciseSelect'
-import { Row } from '../../../style/table'
+import { Row, Column } from '../../../style/table'
 import classNames from 'clsx'
 import { validate } from '../../gridUtil'
 
@@ -248,14 +248,17 @@ class Exercises extends React.Component {
             onChange={processValueChange}
           />
           {row.hasComponents === true && (
-            <ExerciseSelect
-              name="componentExercises"
-              onChange={processValueChange}
-              value={row.componentExercises}
-              multiple
-              label="Component Exercises"
-              unavailable={[row._id]}
-            />
+            <Column span={6}>
+              <ExerciseSelect
+                name="componentExercises"
+                onChange={processValueChange}
+                value={row.componentExercises}
+                multiple
+                label="Component Exercises"
+                unavailable={[row._id]}
+                fullWidth
+              />
+            </Column>
           )}
           {row.hasComponents === false && (
             <>

@@ -14,8 +14,6 @@ class StageAdder extends React.Component {
       name: '',
       description: '',
     }
-    this.onChange = this.onChange.bind(this)
-    this.onSubmit = this.onSubmit.bind(this)
   }
 
   set = () =>
