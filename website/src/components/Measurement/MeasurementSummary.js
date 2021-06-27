@@ -19,35 +19,38 @@ class MeasurementSummary extends React.Component {
   render() {
     return (
       <Paper>
-        {Object.entries(this.props.measurements).map((entry) => {
-          if (entry[1]?.length > 0) {
-            if (entry[0] === 'weight')
+        <Row columns={2}>
+          {Object.entries(this.props.measurements).map((entry) => {
+            if (entry[1]?.length > 0) {
+              if (entry[0] === 'weight')
+                return (
+                  <Weight
+                    label={entry[0]}
+                    unit="kg"
+                    value={entry[1][0].value}
+                    disabled
+                    fullWidth
+                  />
+                )
               return (
-                <Weight
+                <Length
                   label={entry[0]}
-                  unit="kg"
+                  unit="cm"
                   value={entry[1][0].value}
                   disabled
                   fullWidth
                 />
               )
-            return (
-              <Length
-                label={entry[0]}
-                unit="cm"
-                value={entry[1][0].value}
-                disabled
-                fullWidth
-              />
-            )
-          }
-          return <></>
-        })}
-        <Row>
-          <Button onClick={() => (window.location = '/measurementTracker/new')}>
-            New Measurements
-          </Button>
+            }
+            return <></>
+          })}
         </Row>
+        <Button
+          onClick={() => (window.location = '/measurementTracker/new')}
+          fullWidth
+        >
+          New Measurements
+        </Button>
       </Paper>
     )
   }

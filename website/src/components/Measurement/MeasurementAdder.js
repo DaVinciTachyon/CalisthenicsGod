@@ -51,86 +51,99 @@ class MeasurementAdder extends React.Component {
   render() {
     return (
       <div>
-        <Weight
-          name="weight"
-          value={this.state.weight}
-          onChange={this.onChange}
-          label="Weight"
-          unit="kg"
-        />
-        <Length
-          name="height"
-          value={this.state.height}
-          onChange={this.onChange}
-          label="Height"
-          unit="cm"
-        />
-        <Length
-          name="waist"
-          value={this.state.waist}
-          onChange={this.onChange}
-          label="Waist"
-          unit="cm"
-        />
-        <Length
-          name="hips"
-          value={this.state.hips}
-          onChange={this.onChange}
-          label="Hips"
-          unit="cm"
-        />
-        <Length
-          name="rightBicep"
-          value={this.state.rightBicep}
-          nge={this.onChange}
-          label="Right Bicep"
-          unit="cm"
-        />
-        <Length
-          name="leftBicep"
-          value={this.state.leftBicep}
-          onChange={this.onChange}
-          label="Left Bicep"
-          unit="cm"
-        />
-        <Length
-          name="rightForearm"
-          value={this.state.rightForearm}
-          onChange={this.onChange}
-          label="Right Forearm"
-          unit="cm"
-        />
-        <Length
-          name="leftForearm"
-          value={this.state.leftForearm}
-          onChange={this.onChange}
-          label="Left Forearm"
-          unit="cm"
-        />
-        <Length
-          name="shoulders"
-          value={this.state.shoulders}
-          onChange={this.onChange}
-          label="Shoulders"
-          unit="cm"
-        />
-        <Length
-          name="chest"
-          value={this.state.chest}
-          onChange={this.onChange}
-          label="Chest"
-          unit="cm"
-        />
-        <Length
-          name="neck"
-          value={this.state.neck}
-          onChange={this.onChange}
-          label="Neck"
-          unit="cm"
-        />
-        <Row>
-          <Button onClick={this.submitMeasurement}>Add Measurements</Button>
+        <Row columns={2}>
+          <Weight
+            name="weight"
+            value={this.state.weight}
+            onChange={this.onChange}
+            label="Weight"
+            unit="kg"
+            fullWidth
+          />
+          <Length
+            name="height"
+            value={this.state.height}
+            onChange={this.onChange}
+            label="Height"
+            unit="cm"
+            fullWidth
+          />
+          <Length
+            name="waist"
+            value={this.state.waist}
+            onChange={this.onChange}
+            label="Waist"
+            unit="cm"
+            fullWidth
+          />
+          <Length
+            name="hips"
+            value={this.state.hips}
+            onChange={this.onChange}
+            label="Hips"
+            unit="cm"
+            fullWidth
+          />
+          <Length
+            name="rightBicep"
+            value={this.state.rightBicep}
+            nge={this.onChange}
+            label="Right Bicep"
+            unit="cm"
+            fullWidth
+          />
+          <Length
+            name="leftBicep"
+            value={this.state.leftBicep}
+            onChange={this.onChange}
+            label="Left Bicep"
+            unit="cm"
+            fullWidth
+          />
+          <Length
+            name="rightForearm"
+            value={this.state.rightForearm}
+            onChange={this.onChange}
+            label="Right Forearm"
+            unit="cm"
+            fullWidth
+          />
+          <Length
+            name="leftForearm"
+            value={this.state.leftForearm}
+            onChange={this.onChange}
+            label="Left Forearm"
+            unit="cm"
+            fullWidth
+          />
+          <Length
+            name="shoulders"
+            value={this.state.shoulders}
+            onChange={this.onChange}
+            label="Shoulders"
+            unit="cm"
+            fullWidth
+          />
+          <Length
+            name="chest"
+            value={this.state.chest}
+            onChange={this.onChange}
+            label="Chest"
+            unit="cm"
+            fullWidth
+          />
+          <Length
+            name="neck"
+            value={this.state.neck}
+            onChange={this.onChange}
+            label="Neck"
+            unit="cm"
+            fullWidth
+          />
         </Row>
+        <Button onClick={this.submitMeasurement} fullWidth>
+          Add Measurements
+        </Button>
       </div>
     )
   }
