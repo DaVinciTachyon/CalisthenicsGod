@@ -42,7 +42,7 @@ class StageAdder extends React.Component {
       return (
         <Button
           onClick={() => this.setState({ isAdding: true })}
-          size="small"
+          margin="dense"
           fullWidth
         >
           +
@@ -57,6 +57,8 @@ class StageAdder extends React.Component {
                 name="name"
                 value={this.state.name}
                 onChange={this.onChange}
+                fullWidth
+                label="Name"
               />
             </Column>
             <Column span={2}>
@@ -64,6 +66,9 @@ class StageAdder extends React.Component {
                 name="description"
                 value={this.state.description}
                 onChange={this.onChange}
+                multiline
+                fullWidth
+                label="Description"
               />
             </Column>
             <ButtonGroup orientation="vertical">

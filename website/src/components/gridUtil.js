@@ -6,6 +6,34 @@ import { useSelector } from 'react-redux'
 import { Table, TableEditColumn } from '@devexpress/dx-react-grid-material-ui'
 import { useTheme } from '@material-ui/core/styles'
 
+const SetsTypeProvider = (props) => (
+  <DataTypeProvider
+    formatterComponent={({ value }) => (
+      <div>
+        {value.map((set) => (
+          <Set key={set._id} set={set} />
+        ))}
+      </div>
+    )}
+    // editorComponent={(props) => <Calories {...props} />} //TODO
+    {...props}
+  />
+)
+
+const Set = ({ set: { repetitions, distance, time, weight } }) => (
+  <div>
+    {repetitions && <span>{repetitions} r</span>}
+    {distance && <span>{distance} m</span>}
+    {time && (
+      <span>
+        {distance ? ' in ' : repetitions ? ' * ' : undefined}
+        {time} s
+      </span>
+    )}
+    {weight && <span> * {weight} kg</span>}
+  </div>
+)
+
 const CalorieTypeProvider = (props) => (
   <DataTypeProvider
     formatterComponent={({ value }) => <span>{Math.round(value)} kcal</span>}
@@ -108,6 +136,7 @@ const EditCell = ({ errors, ...props }) => {
 }
 
 export {
+  SetsTypeProvider,
   CalorieTypeProvider,
   WeightTypeProvider,
   IngredientTypeProvider,

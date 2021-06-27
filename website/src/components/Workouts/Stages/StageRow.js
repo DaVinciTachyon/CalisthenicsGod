@@ -5,7 +5,7 @@ import {
   Button,
   SuccessButton,
   ErrorButton,
-  DeleteButton,
+  // DeleteButton,
 } from '../../../style/buttons'
 import { connect } from 'react-redux'
 import {
@@ -47,14 +47,6 @@ class StageRow extends React.Component {
   }
 
   render() {
-    if (this.props.isTitle)
-      return (
-        <Row columns={5} isTitle>
-          <Column span={2}>Name</Column>
-          <Column span={2}>Description</Column>
-          <Column />
-        </Row>
-      )
     return (
       <Row columns={5}>
         <Column span={2}>
@@ -63,6 +55,8 @@ class StageRow extends React.Component {
             onChange={this.onChange}
             value={this.state.name}
             disabled={!this.state.isEditing}
+            fullWidth
+            label="Name"
           />
         </Column>
         <Column span={2}>
@@ -71,6 +65,9 @@ class StageRow extends React.Component {
             onChange={this.onChange}
             value={this.state.description}
             disabled={!this.state.isEditing}
+            fullWidth
+            multiline
+            label="Description"
           />
         </Column>
         {!this.state.isEditing && (
@@ -78,9 +75,9 @@ class StageRow extends React.Component {
             <Button onClick={() => this.setState({ isEditing: true })}>
               Edit
             </Button>
-            <DeleteButton onClick={() => this.props.removeStage(this.props.id)}>
+            {/* <DeleteButton onClick={() => this.props.removeStage(this.props.id)}>
               Remove
-            </DeleteButton>
+            </DeleteButton> */}
           </ButtonGroup>
         )}
         {this.state.isEditing && (

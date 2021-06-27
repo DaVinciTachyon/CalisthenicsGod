@@ -53,7 +53,11 @@ class Exercises extends React.Component {
     super()
     this.state = {
       isAdding: false,
-      columns: [{ name: 'name', title: 'Name', required: true }],
+      columns: [
+        { name: 'name', title: 'Name' },
+        { name: 'abbreviation', title: 'Abbreviation' },
+        { name: 'description', title: 'Description' },
+      ],
       pageSizes: [10, 20],
       editExtensions: [
         {
@@ -442,21 +446,23 @@ class Exercises extends React.Component {
             sagittalPlane,
             potentialStages,
             requirements,
+            hasComponents,
           } = entry[1]
+          let motionType = {
+            transversePlane,
+            frontalPlane,
+            verticality,
+            motion,
+            kineticChain,
+            sagittalPlane,
+          }
+          if (hasComponents) motionType = { componentExercises }
           this.props.modifyExercise({
             _id: entry[0],
             name,
             abbreviation,
             description,
-            motionType: {
-              componentExercises,
-              transversePlane,
-              frontalPlane,
-              verticality,
-              motion,
-              kineticChain,
-              sagittalPlane,
-            },
+            motionType,
             potentialStages,
             requirements,
           })

@@ -129,18 +129,21 @@ class UserProfile extends React.Component {
               label="First Name"
               value={this.state.firstname}
               onChange={this.onChange}
+              fullWidth
             />
             <Text
               name="middlename"
               label="Middle Name(s)"
               value={this.state.middlename}
               onChange={this.onChange}
+              fullWidth
             />
             <Text
               name="lastname"
               label="Last Name"
               value={this.state.lastname}
               onChange={this.onChange}
+              fullWidth
             />
           </Row>
           <Text
@@ -148,6 +151,7 @@ class UserProfile extends React.Component {
             label="Email"
             value={this.state.email}
             onChange={this.onChange}
+            fullWidth
           />
           <Row columns={2}>
             <Select
@@ -165,12 +169,14 @@ class UserProfile extends React.Component {
               value={this.state.birthDate}
               label="Date of Birth"
               onChange={this.onChange}
+              fullWidth
             />
           </Row>
           <DateInput
             value={this.state.dateJoined}
             label="Date Joined"
             disabled
+            fullWidth
           />
         </Section>
         <Section label="Nutrient Information">
@@ -180,6 +186,7 @@ class UserProfile extends React.Component {
               label="Maintenance Calories"
               unit="kcal"
               disabled
+              fullWidth
             />
             <Select
               name="calorieMode"
@@ -210,6 +217,7 @@ class UserProfile extends React.Component {
                   unit="%"
                   min={0}
                   max={100}
+                  fullWidth
                 />
                 <Calories
                   label="Calorie Offset"
@@ -218,6 +226,7 @@ class UserProfile extends React.Component {
                     maintenanceCalories
                   }
                   disabled
+                  fullWidth
                 />
               </>
             )}

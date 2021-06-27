@@ -24,7 +24,7 @@ class StageEditor extends React.Component {
         })
       }
       fullWidth
-      size="small"
+      margin="dense"
     >
       +
     </Button>

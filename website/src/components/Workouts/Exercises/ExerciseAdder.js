@@ -1,5 +1,5 @@
 import React from 'react'
-import { Row, Column, Section } from '../../../style/table'
+import { Row, Column } from '../../../style/table'
 import { Button, ErrorButton } from '../../../style/buttons'
 import { Text, Select, Radio } from '../../../style/inputs'
 import StageSelect from '../StageSelect'

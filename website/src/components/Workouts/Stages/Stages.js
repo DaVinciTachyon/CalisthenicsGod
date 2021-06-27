@@ -1,23 +1,24 @@
-import React from 'react';
-import StageAdder from './StageAdder';
-import StageRow from './StageRow';
-import { connect } from 'react-redux';
-import { getStages } from '../../../stateManagement/reducers/stages';
+import React from 'react'
+import StageAdder from './StageAdder'
+import StageRow from './StageRow'
+import { connect } from 'react-redux'
+import { getStages } from '../../../stateManagement/reducers/stages'
+import { Title } from '../../../style/table'
 
 class Stages extends React.Component {
   constructor() {
-    super();
-    this.state = {};
+    super()
+    this.state = {}
   }
 
   componentDidMount() {
-    this.props.getStages();
+    this.props.getStages()
   }
 
   render() {
     return (
       <div>
-        <StageRow isTitle />
+        <Title>Stages</Title>
         <StageAdder index={0} />
         {this.props.stages.map((stage, i) => (
           <div key={stage._id}>
@@ -30,10 +31,10 @@ class Stages extends React.Component {
           </div>
         ))}
       </div>
-    );
+    )
   }
 }
 
 export default connect(({ stages }) => ({ stages }), {
   getStages,
-})(Stages);
+})(Stages)
