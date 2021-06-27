@@ -1,5 +1,5 @@
 import React from 'react'
-import { Row } from '../../style/table'
+import { Link } from 'react-router-dom'
 import { Paper } from '@material-ui/core'
 import { Button } from '../../style/buttons'
 import {
@@ -101,32 +101,31 @@ class Register extends React.Component {
           required
           fullWidth
         />
-        <Row>
-          <Button
-            onClick={() =>
-              this.props.register({
-                name: {
-                  first: this.getValue(this.state.firstname),
-                  middle: this.getValue(this.state.middlename),
-                  last: this.getValue(this.state.lastname),
-                },
-                email: this.getValue(this.state.email),
-                password: this.getValue(this.state.password),
-                weight: this.getValue(this.state.weight),
-                gender: this.getValue(this.state.gender),
-                birthDate: this.getValue(this.state.birthDate),
-              })
-            }
-            name="registerButton"
-          >
-            Register
-          </Button>
-        </Row>
-        <Row>
-          <Button onClick={() => (window.location = '/login')} isSecondary>
+        <Button
+          onClick={() =>
+            this.props.register({
+              name: {
+                first: this.getValue(this.state.firstname),
+                middle: this.getValue(this.state.middlename),
+                last: this.getValue(this.state.lastname),
+              },
+              email: this.getValue(this.state.email),
+              password: this.getValue(this.state.password),
+              weight: this.getValue(this.state.weight),
+              gender: this.getValue(this.state.gender),
+              birthDate: this.getValue(this.state.birthDate),
+            })
+          }
+          name="registerButton"
+          fullWidth
+        >
+          Register
+        </Button>
+        <Link to="/Login">
+          <Button isSecondary fullWidth>
             Login
           </Button>
-        </Row>
+        </Link>
       </Paper>
     )
   }

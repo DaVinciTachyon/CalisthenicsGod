@@ -5,6 +5,7 @@ import { Button } from '../../style/buttons'
 import { Weight, Length } from '../../style/inputs'
 import { connect } from 'react-redux'
 import { getMeasurements } from '../../stateManagement/reducers/measurements'
+import { Link } from 'react-router-dom'
 
 class MeasurementSummary extends React.Component {
   constructor() {
@@ -45,12 +46,9 @@ class MeasurementSummary extends React.Component {
             return <></>
           })}
         </Row>
-        <Button
-          onClick={() => (window.location = '/measurementTracker/new')}
-          fullWidth
-        >
-          New Measurements
-        </Button>
+        <Link to="/measurementTracker/new">
+          <Button fullWidth>New Measurements</Button>
+        </Link>
       </Paper>
     )
   }

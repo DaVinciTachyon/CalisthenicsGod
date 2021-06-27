@@ -17,6 +17,7 @@ import {
   IntegratedPaging,
   RowDetailState,
 } from '@devexpress/dx-react-grid'
+import { Link } from 'react-router-dom'
 
 class WorkoutTracker extends React.Component {
   constructor() {
@@ -35,12 +36,9 @@ class WorkoutTracker extends React.Component {
     const { columns, pageSizes } = this.state
     return (
       <div>
-        <Button
-          onClick={() => (window.location = '/workoutTracker/new')}
-          fullWidth
-        >
-          +
-        </Button>
+        <Link to="/workoutTracker/new">
+          <Button fullWidth>+</Button>
+        </Link>
         <Grid rows={this.props.workouts.history} columns={columns}>
           <SortingState
             defaultSorting={[{ columnName: 'date', direction: 'desc' }]}

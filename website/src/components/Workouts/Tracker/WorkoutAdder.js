@@ -8,6 +8,7 @@ import {
   addWorkout,
   getCurrentWorkout,
 } from '../../../stateManagement/reducers/workouts'
+import { Link } from 'react-router-dom'
 
 class WorkoutAdder extends React.Component {
   constructor() {
@@ -39,12 +40,9 @@ class WorkoutAdder extends React.Component {
         >
           Submit
         </Button>
-        <ErrorButton
-          onClick={() => (window.location = '/workoutTracker')}
-          fullWidth
-        >
-          Cancel
-        </ErrorButton>
+        <Link to="/workoutTracker">
+          <ErrorButton fullWidth>Cancel</ErrorButton>
+        </Link>
       </div>
     )
   }
