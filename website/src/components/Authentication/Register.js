@@ -40,12 +40,14 @@ class Register extends React.Component {
           onChange={this.onChange}
           label="First Name"
           required
+          fullWidth
         />
         <Text
           name="middlename"
           value={this.state.middlename}
           onChange={this.onChange}
           label="Middle Name(s)"
+          fullWidth
         />
         <Text
           name="lastname"
@@ -53,6 +55,7 @@ class Register extends React.Component {
           onChange={this.onChange}
           label="Last Name"
           required
+          fullWidth
         />
         <Text
           name="email"
@@ -60,12 +63,14 @@ class Register extends React.Component {
           onChange={this.onChange}
           label="Email"
           required
+          fullWidth
         />
         <Password
           name="password"
           value={this.state.password}
           onChange={this.onChange}
           label="Password"
+          fullWidth
         />
         <Weight
           name="weight"
@@ -74,6 +79,7 @@ class Register extends React.Component {
           label="Weight"
           unit="kg"
           required
+          fullWidth
         />
         <Select
           name="gender"
@@ -84,6 +90,7 @@ class Register extends React.Component {
           value={this.state.gender}
           onChange={this.onChange}
           label="Gender"
+          fullWidth
         />
         <DateInput
           name="birthDate"
@@ -92,6 +99,7 @@ class Register extends React.Component {
           value={this.state.birthDate}
           onChange={this.onChange}
           required
+          fullWidth
         />
         <Row>
           <Button
@@ -109,7 +117,7 @@ class Register extends React.Component {
                 birthDate: this.getValue(this.state.birthDate),
               })
             }
-            dataId="registerButton"
+            name="registerButton"
           >
             Register
           </Button>

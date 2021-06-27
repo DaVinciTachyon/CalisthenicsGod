@@ -25,16 +25,18 @@ class Login extends React.Component {
           value={this.state.email}
           onChange={this.onChange}
           label="Email"
+          fullWidth
         />
         <Password
           name="password"
           value={this.state.password}
           onChange={this.onChange}
           label="Password"
+          fullWidth
         />
         <Row>
           <Button
-            dataId="logInButton"
+            name="logInButton"
             onClick={() =>
               this.props.logIn({
                 email: this.state.email,

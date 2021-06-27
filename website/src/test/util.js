@@ -10,19 +10,19 @@ const {
   buildRandomUser,
   buildRandomIngredient,
   buildRandomStage,
-} = require('../../../util/util');
+} = require('../../../util/util')
 
 const getInputDate = (date) =>
   [
     date.getFullYear().toString().padStart(4, '0'),
     (date.getMonth() + 1).toString().padStart(2, '0'),
     date.getDate().toString().padStart(2, '0'),
-  ].join('-');
+  ].join('-')
 
-const getDateInput = (date) => date.toLocaleDateString().replace(/\//g, '');
+const getDateInput = (date) => date.toLocaleDateString().replace(/\//g, '')
 
 const getLocaleNumber = (number) =>
-  new Intl.NumberFormat(getLanguage()).format(number);
+  new Intl.NumberFormat(getLanguage()).format(number)
 
 const getLanguage = () =>
   navigator.userLanguage ||
@@ -32,56 +32,49 @@ const getLanguage = () =>
   navigator.language ||
   navigator.browserLanguage ||
   navigator.systemLanguage ||
-  'en';
+  'en'
 
 const register = async (user, page) => {
-  await page.goto(`${global.url}/register`);
-  await page.waitForSelector('[data-id="registerButton"]');
+  await page.goto(`${global.url}/register`)
+  await page.waitForSelector('[name="registerButton"]')
 
-  await page.click('[name="firstname"]');
-  await page.type('[name="firstname"]', user.name.first);
-  await page.click('[name="middlename"]');
-  await page.type('[name="middlename"]', user.name.middle);
-  await page.click('[name="lastname"]');
-  await page.type('[name="lastname"]', user.name.last);
-  await page.click('[name="email"]');
-  await page.type('[name="email"]', user.email);
-  await page.click('[name="password"]');
-  await page.type('[name="password"]', user.password);
-  await page.click('[name="weight"]');
-  await page.type('[name="weight"]', user.weight.toString());
-  expect(await page.$eval('[name="weight"]', (el) => el.value)).toEqual(
-    user.weight.toString()
-  );
-  await page.click('[name="gender"]');
-  await page.click(`[data-id="${user.gender}"]`);
-  await page.waitForSelector(`[data-id="select-${user.gender}"]`);
-  await page.click('[name="birthDate"]');
-  await page.type('[name="birthDate"]', getDateInput(user.birthDate));
+  await page.type('[name="firstname"]', user.name.first)
+  await page.type('[name="middlename"]', user.name.middle)
+  await page.type('[name="lastname"]', user.name.last)
+  await page.type('[name="email"]', user.email)
+  await page.type('[name="password"]', user.password)
+  await page.type('[name="weight"]', user.weight.toString())
+  await page.click('[name="gender"]')
+  await page.click(
+    `[id="${await page.$eval('[name="gender"] input', (el) => el.id)}-option-${
+      user.gender === 'name' ? 0 : 1
+    }"]`,
+  )
+  await page.type('[name="birthDate"]', getDateInput(user.birthDate))
   expect(await page.$eval('[name="birthDate"]', (el) => el.value)).toEqual(
-    getInputDate(user.birthDate)
-  );
+    getInputDate(user.birthDate),
+  )
 
-  await page.click('[data-id="registerButton"]');
+  await page.click('[name="registerButton"]')
 
-  await page.waitForSelector('[data-id="registerButton"]', { hidden: true });
-};
+  await page.waitForSelector('[name="registerButton"]', { hidden: true })
+}
 
 const login = async (user, page) => {
-  await register(user, page);
-  await page.goto(`${global.url}/login`);
-  await page.waitForSelector('[data-id="logInButton"]');
+  await register(user, page)
+  await page.goto(`${global.url}/login`)
+  await page.waitForSelector('[name="logInButton"]')
 
-  await page.click('[name="email"]');
-  await page.type('[name="email"]', user.email);
-  await page.click('[name="password"]');
-  await page.type('[name="password"]', user.password);
+  await page.click('[name="email"]')
+  await page.type('[name="email"]', user.email)
+  await page.click('[name="password"]')
+  await page.type('[name="password"]', user.password)
 
-  const logInButton = await page.$('[data-id="logInButton"]');
-  logInButton.click();
+  const logInButton = await page.$('[name="logInButton"]')
+  logInButton.click()
 
-  await page.waitForSelector('[data-id="logInButton"]', { hidden: true });
-};
+  await page.waitForSelector('[name="logInButton"]', { hidden: true })
+}
 
 module.exports = {
   register,
@@ -100,4 +93,4 @@ module.exports = {
   buildRandomUser,
   buildRandomIngredient,
   buildRandomStage,
-};
+}

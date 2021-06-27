@@ -8,10 +8,9 @@ const Button = withStyles(({ palette }) => ({
     backgroundColor: palette.text.primary,
     display: 'block',
   },
-}))(({ children, isSecondary, isTertiary, dataId, ...rest }) => (
+}))(({ children, isSecondary, isTertiary, ...rest }) => (
   <MaterialButton
     variant={isSecondary ? 'outlined' : isTertiary ? 'text' : 'contained'}
-    data-id={dataId || 'button'}
     {...rest}
   >
     {children}
