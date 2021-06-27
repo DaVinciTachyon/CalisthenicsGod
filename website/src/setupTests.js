@@ -5,7 +5,7 @@ jest.setTimeout(10000)
 global.url = process.env.REACT_APP_WEBSITE_URL || 'http://localhost:5000'
 
 beforeAll(async () => {
-  global.browser = await puppeteer.launch({})
+  global.browser = await puppeteer.launch({ headless: false })
 })
 
 afterAll(() => {
