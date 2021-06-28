@@ -2,6 +2,11 @@
   "name": "website",
   "version": "0.1.0",
   "description": "website for calisthenics god",
+  "author": "DaVinciTachyon",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/DaVinciTachyon/CalisthenicsGod.git"
+  },
   "private": true,
   "dependencies": {
     "@devexpress/dx-react-chart": "^2.7.6",
