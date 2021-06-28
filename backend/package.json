@@ -1,7 +1,7 @@
 {
   "name": "calisthenicsgod",
-  "version": "1.0.0",
   "description": "backend for calisthenics god",
+  "version": "1.0.0",
   "main": "index.js",
   "scripts": {
     "start": "node index.js",
@@ -14,7 +14,6 @@
     "url": "https://github.com/DaVinciTachyon/CalisthenicsGod.git"
   },
   "private": true,
-  "license": "ISC",
   "dependencies": {
     "@hapi/joi": "^17.1.1",
     "bcryptjs": "^2.4.3",

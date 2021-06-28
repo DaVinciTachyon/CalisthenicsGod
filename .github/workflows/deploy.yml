@@ -11,6 +11,18 @@ jobs:
       run:
         working-directory: .
     steps:
+      - name: Build front end
+        run: |
+          cd website/
+          npm run build
+      - name: Copy build folder
+        uses: garygrossgarten/github-action-scp@release
+        with:
+          local: /website/build
+          remote: /home/ubuntu/CalisthenicsGod/website
+          host: ${{ secrets.HOSt }}
+          username: ${{ secrets.HOST_USERNAME }}
+          key: ${{ secrets.SERVER_KEY }}
       - name: deploy remotely
         uses: appleboy/ssh-action@master
         with:
@@ -20,7 +32,6 @@ jobs:
           port: 22
           script: |
             cd /home/ubuntu/CalisthenicsGod
-            git pull
-            sudo docker-compose down
-            sudo docker system prune -f
             ./startUp.sh production
+
+# build fe, then transfer over, then build docker containers

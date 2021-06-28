@@ -1,6 +1,5 @@
 FROM node:10
 
-# Create app directory
 WORKDIR /usr/src/app
 
 # Install app dependencies
@@ -15,8 +14,6 @@ RUN npm install
 # Bundle app source
 COPY . .
 
-# EXPOSE 5000
-
-RUN npm run build
+# RUN npm run build
 
 CMD [ "npm", "run", "serve" ]
