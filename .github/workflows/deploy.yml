@@ -10,14 +10,11 @@ jobs:
     runs-on: ubuntu-latest
     defaults:
       run:
-        working-directory: ./website
+        working-directory: .
     steps:
-      - run: ls
-      # - name: Build front end
-      #   run: |
-      #     ls
-      #     cd website/
-      #     npm run build
+      - name: Build front end
+        run: npm run build
+        working-directory: ./website
       # - name: Copy build folder
       #   uses: garygrossgarten/github-action-scp@release
       #   with:
