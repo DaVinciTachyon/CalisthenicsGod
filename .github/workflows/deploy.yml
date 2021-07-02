@@ -12,28 +12,28 @@ jobs:
       run:
         working-directory: .
     steps:
-      - name: Build front end
-        run: |
-          ls
-          cd website/
-          npm run build
-      - name: Copy build folder
-        uses: garygrossgarten/github-action-scp@release
-        with:
-          local: /website/build
-          remote: /home/ubuntu/CalisthenicsGod/website
-          host: ${{ secrets.HOST }}
-          username: ${{ secrets.HOST_USERNAME }}
-          key: ${{ secrets.SERVER_KEY }}
-      - name: deploy remotely
-        uses: appleboy/ssh-action@master
-        with:
-          host: ${{ secrets.HOST }}
-          username: ${{ secrets.HOST_USERNAME }}
-          key: ${{ secrets.SERVER_KEY }}
-          port: 22
-          script: |
-            cd /home/ubuntu/CalisthenicsGod
-            ./startUp.sh production
-
+      - run: ls
+      # - name: Build front end
+      #   run: |
+      #     ls
+      #     cd website/
+      #     npm run build
+      # - name: Copy build folder
+      #   uses: garygrossgarten/github-action-scp@release
+      #   with:
+      #     local: /website/build
+      #     remote: /home/ubuntu/CalisthenicsGod/website
+      #     host: ${{ secrets.HOST }}
+      #     username: ${{ secrets.HOST_USERNAME }}
+      #     key: ${{ secrets.SERVER_KEY }}
+      # - name: deploy remotely
+      #   uses: appleboy/ssh-action@master
+      #   with:
+      #     host: ${{ secrets.HOST }}
+      #     username: ${{ secrets.HOST_USERNAME }}
+      #     key: ${{ secrets.SERVER_KEY }}
+      #     port: 22
+      #     script: |
+      #       cd /home/ubuntu/CalisthenicsGod
+      #       ./startUp.sh production
 # build fe, then transfer over, then build docker containers
