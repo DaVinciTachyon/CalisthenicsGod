@@ -1,8 +1,9 @@
 name: Deploy on Merge
 on:
-  push:
-    branches:
-      - master
+  push
+  # push:
+  #   branches:
+  #     - master
 jobs:
   deploy:
     name: Deploy API and Website
@@ -20,7 +21,7 @@ jobs:
         with:
           local: /website/build
           remote: /home/ubuntu/CalisthenicsGod/website
-          host: ${{ secrets.HOSt }}
+          host: ${{ secrets.HOST }}
           username: ${{ secrets.HOST_USERNAME }}
           key: ${{ secrets.SERVER_KEY }}
       - name: deploy remotely
