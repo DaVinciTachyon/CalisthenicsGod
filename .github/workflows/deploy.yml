@@ -12,7 +12,7 @@ jobs:
       run:
         working-directory: .
     steps:
-      - run: pwd
+      - run: cd /home/runner/work/CalisthenicsGod/CalisthenicsGod/website
       # - name: Build front end
       #   run: |
       #     ls
