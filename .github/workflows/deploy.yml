@@ -25,7 +25,7 @@ jobs:
           remote: /home/ubuntu/CalisthenicsGod/website
           host: ${{ secrets.HOST }}
           username: ${{ secrets.HOST_USERNAME }}
-          key: ${{ secrets.SERVER_KEY }}
+          privateKey: ${{ secrets.SERVER_KEY }}
       # - name: deploy remotely
       #   uses: appleboy/ssh-action@master
       #   with:

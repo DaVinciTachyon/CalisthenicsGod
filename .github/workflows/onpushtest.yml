@@ -70,10 +70,11 @@ jobs:
       - uses: actions/checkout@v1
       - name: deploy for test
         run: ./startUp.sh test backend
+      - name: install
+        run: npm ci
+        working-directory: ./backend
       - name: test
-        run: |
-          npm ci
-          npm run test
+        run: npm run test
         working-directory: ./backend
   testWebsite:
     name: Test Website
@@ -86,12 +87,13 @@ jobs:
       - uses: actions/checkout@v1
       - name: deploy for test
         run: ./startUp.sh test website
+      - name: install
+        run: npm ci
+        working-directory: ./website
       - name: Wait for deploy
-        run: sleep 30s
+        run: sleep 10s
       - name: test
-        run: |
-          npm ci
-          npm run test
+        run: npm run test
         working-directory: ./website
   testApp:
     name: Test App
