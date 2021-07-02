@@ -15,9 +15,9 @@ jobs:
       - uses: actions/checkout@v1
       - name: Build front end
         run: |
-          cd website/
           npm ci
           npm run build
+        working-directory: ./website
       # - name: Copy build folder
       #   uses: garygrossgarten/github-action-scp@release
       #   with:
@@ -36,5 +36,4 @@ jobs:
       #     script: |
       #       cd /home/ubuntu/CalisthenicsGod
       #       ./startUp.sh production
-
 # build fe, then transfer over, then build docker containers
