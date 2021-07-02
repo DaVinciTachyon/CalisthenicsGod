@@ -22,10 +22,12 @@ jobs:
         uses: garygrossgarten/github-action-scp@release
         with:
           local: ./website/build
-          remote: /home/ubuntu/CalisthenicsGod/website
+          remote: /home/ubuntu/CalisthenicsGod/website/build
           host: ${{ secrets.HOST }}
           username: ${{ secrets.HOST_USERNAME }}
           privateKey: ${{ secrets.SERVER_KEY }}
+          port: 22
+          rmRemote: true
       # - name: deploy remotely
       #   uses: appleboy/ssh-action@master
       #   with:
