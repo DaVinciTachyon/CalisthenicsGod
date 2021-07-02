@@ -10,9 +10,9 @@ jobs:
     runs-on: ubuntu-latest
     defaults:
       run:
-        working-directory: .
+        working-directory: ./website
     steps:
-      - run: cd /home/runner/work/CalisthenicsGod/CalisthenicsGod/website
+      - run: ls
       # - name: Build front end
       #   run: |
       #     ls
