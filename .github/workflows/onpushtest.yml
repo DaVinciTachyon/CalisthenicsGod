@@ -23,6 +23,7 @@ jobs:
       - uses: actions/checkout@v1
       - name: Build front end
         run: |
+          cp ../config/.env.test .env
           npm ci
           npm run build
         working-directory: ./website
@@ -98,6 +99,7 @@ jobs:
       - uses: actions/checkout@v1
       - name: Build front end
         run: |
+          cp ../config/.env.test .env
           npm ci
           npm run build
         working-directory: ./website
