@@ -28,14 +28,15 @@ jobs:
           privateKey: ${{ secrets.SERVER_KEY }}
           port: 22
           rmRemote: true
-      # - name: deploy remotely
-      #   uses: appleboy/ssh-action@master
-      #   with:
-      #     host: ${{ secrets.HOST }}
-      #     username: ${{ secrets.HOST_USERNAME }}
-      #     key: ${{ secrets.SERVER_KEY }}
-      #     port: 22
-      #     script: |
-      #       cd /home/ubuntu/CalisthenicsGod
-      #       ./startUp.sh production
+      - name: deploy remotely
+        uses: appleboy/ssh-action@master
+        with:
+          host: ${{ secrets.HOST }}
+          username: ${{ secrets.HOST_USERNAME }}
+          key: ${{ secrets.SERVER_KEY }}
+          port: 22
+          script: |
+            cd /home/ubuntu/CalisthenicsGod
+            ./startUp.sh production
+
 # build fe, then transfer over, then build docker containers
