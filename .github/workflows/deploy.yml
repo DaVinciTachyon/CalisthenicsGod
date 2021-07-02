@@ -1,9 +1,8 @@
 name: Deploy on Merge
 on:
-  push
-  # push:
-  #   branches:
-  #     - master
+  push:
+    branches:
+      - master
 jobs:
   deploy:
     name: Deploy API and Website
@@ -28,7 +27,7 @@ jobs:
           privateKey: ${{ secrets.SERVER_KEY }}
           port: 22
           rmRemote: true
-      - name: deploy remotely
+      - name: Deploy Remotely
         uses: appleboy/ssh-action@master
         with:
           host: ${{ secrets.HOST }}
@@ -37,6 +36,10 @@ jobs:
           port: 22
           script: |
             cd /home/ubuntu/CalisthenicsGod
-            ./startUp.sh production
+            git pull
+            sudo docker-compose --env-file ./config/.env.production build caddy website backend
+            sudo docker-compose down
+            sudo docker system prune -f
+            sudo docker-compose --env-file ./config/.env.production up -d caddy
 
-# build fe, then transfer over, then build docker containers
+# TODO build all locally then only transfer over required build files

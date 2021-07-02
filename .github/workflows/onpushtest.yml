@@ -10,7 +10,9 @@ jobs:
     steps:
       - uses: actions/checkout@v1
       - name: build and deploy
-        run: ./startUp.sh test backend
+        run: |
+          sudo docker-compose --env-file ./config/.env.test build backend calisthenicsgoddb
+          sudo docker-compose --env-file ./config/.env.test up -d backend calisthenicsgoddb
   buildWebsite:
     name: Build Website
     runs-on: ubuntu-latest
@@ -19,8 +21,15 @@ jobs:
         working-directory: .
     steps:
       - uses: actions/checkout@v1
-      - name: build and deploy
-        run: ./startUp.sh test website
+      - name: Build front end
+        run: |
+          npm ci
+          npm run build
+        working-directory: ./website
+      - name: deploy for test
+        run: |
+          sudo docker-compose --env-file ./config/.env.test build website backend calisthenicsgoddb
+          sudo docker-compose --env-file ./config/.env.test up -d website backend calisthenicsgoddb
   buildAPK:
     name: Build APK
     runs-on: ubuntu-latest
@@ -69,7 +78,9 @@ jobs:
     steps:
       - uses: actions/checkout@v1
       - name: deploy for test
-        run: ./startUp.sh test backend
+        run: |
+          sudo docker-compose --env-file ./config/.env.test build backend calisthenicsgoddb
+          sudo docker-compose --env-file ./config/.env.test up -d backend calisthenicsgoddb
       - name: install
         run: npm ci
         working-directory: ./backend
@@ -85,8 +96,15 @@ jobs:
         working-directory: .
     steps:
       - uses: actions/checkout@v1
+      - name: Build front end
+        run: |
+          npm ci
+          npm run build
+        working-directory: ./website
       - name: deploy for test
-        run: ./startUp.sh test website
+        run: |
+          sudo docker-compose --env-file ./config/.env.test build website backend calisthenicsgoddb
+          sudo docker-compose --env-file ./config/.env.test up -d website backend calisthenicsgoddb
       - name: install
         run: npm ci
         working-directory: ./website
