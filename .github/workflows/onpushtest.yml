@@ -73,7 +73,7 @@ jobs:
       - name: test
         run: |
           cd backend/
-          npm install
+          npm ci
           npm run test
   testWebsite:
     name: Test Website
@@ -91,7 +91,7 @@ jobs:
       - name: test
         run: |
           cd website/
-          npm install
+          npm ci
           npm run test
   testApp:
     name: Test App
