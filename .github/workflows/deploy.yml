@@ -12,6 +12,7 @@ jobs:
       run:
         working-directory: .
     steps:
+      - uses: actions/checkout@v1
       - name: Build front end
         run: |
           cd website/
