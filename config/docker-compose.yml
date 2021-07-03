@@ -6,7 +6,7 @@ services:
     image: mongo
     restart: on-failure
     volumes:
-      - ./data:/data/db
+      - ../data:/data/db
     ports:
       - '27017:27017'
     expose:
@@ -15,7 +15,7 @@ services:
       - app-network
   backend:
     build:
-      context: ./backend
+      context: ../backend
       dockerfile: Dockerfile
     image: backend
     container_name: calisthenicsGodBackend
@@ -35,7 +35,7 @@ services:
       - app-network
   website:
     build:
-      context: ./website
+      context: ../website
       dockerfile: Dockerfile
     image: website
     container_name: calisthenicsGodWebsite
