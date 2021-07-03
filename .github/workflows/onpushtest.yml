@@ -108,8 +108,8 @@ jobs:
         working-directory: ./website
       - name: deploy for test
         run: |
-          sudo docker-compose --env-file ./config/.env/.env.test build website backend calisthenicsgoddb
-          sudo docker-compose --env-file ./config/.env/.env.test up -d website backend calisthenicsgoddb
+          sudo docker-compose --env-file ./.env/.env.test build website backend calisthenicsgoddb
+          sudo docker-compose --env-file ./.env/.env.test up -d website backend calisthenicsgoddb
         working-directory: ./config
       - name: install
         run: npm ci
