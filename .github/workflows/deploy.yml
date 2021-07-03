@@ -14,15 +14,46 @@ jobs:
       - uses: actions/checkout@v1
       - name: Build front end
         run: |
-          cp ../config/.env.production .env
+          cp ../config/.env/.env.production .env
           npm ci
           npm run build
         working-directory: ./website
-      - name: Copy build folder
+      - name: Copy website folder
         uses: garygrossgarten/github-action-scp@release
         with:
-          local: ./website/build
-          remote: /home/ubuntu/CalisthenicsGod/website/build
+          local: ./website
+          remote: /home/ubuntu/CalisthenicsGod/website
+          host: ${{ secrets.HOST }}
+          username: ${{ secrets.HOST_USERNAME }}
+          privateKey: ${{ secrets.SERVER_KEY }}
+          port: 22
+          rmRemote: true
+      - name: Copy backend folder
+        uses: garygrossgarten/github-action-scp@release
+        with:
+          local: ./backend
+          remote: /home/ubuntu/CalisthenicsGod/backend
+          host: ${{ secrets.HOST }}
+          username: ${{ secrets.HOST_USERNAME }}
+          privateKey: ${{ secrets.SERVER_KEY }}
+          port: 22
+          rmRemote: true
+      - name: Copy config folder
+        uses: garygrossgarten/github-action-scp@release
+        with:
+          local: ./config
+          remote: /home/ubuntu/CalisthenicsGod/config
+          host: ${{ secrets.HOST }}
+          username: ${{ secrets.HOST_USERNAME }}
+          privateKey: ${{ secrets.SERVER_KEY }}
+          port: 22
+          rmRemote: true
+          dotfiles: true
+      - name: Copy util folder
+        uses: garygrossgarten/github-action-scp@release
+        with:
+          local: ./util
+          remote: /home/ubuntu/CalisthenicsGod/util
           host: ${{ secrets.HOST }}
           username: ${{ secrets.HOST_USERNAME }}
           privateKey: ${{ secrets.SERVER_KEY }}
