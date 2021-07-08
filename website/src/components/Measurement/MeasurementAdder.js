@@ -25,11 +25,7 @@ class MeasurementAdder extends React.Component {
 
   onChange = (evt) =>
     this.setState({
-      [evt.target.name]: evt.target.validity.valid
-        ? evt.target.value !== ''
-          ? evt.target.value
-          : undefined
-        : this.state[evt.target.name],
+      [evt.target.name]: evt.target.value,
     })
 
   submitMeasurement = async () => {

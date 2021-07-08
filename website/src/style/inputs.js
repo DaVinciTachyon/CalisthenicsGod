@@ -17,46 +17,38 @@ const defaultRoot = {
 
 const Input = withStyles(() => ({
   root: { ...defaultRoot },
-}))(({ type, step = 0.1, unit, value, variant, style = {}, ...rest }) => (
-  <TextField
-    value={
-      type === 'number'
-        ? (() => {
-            //FIXME
-            let it = step
-            let num = 0
-            if (it < 1) {
-              while (it < 1) {
-                num++
-                it *= 10
-              }
-            } else {
-              while (it > 1) {
-                num--
-                it /= 10
-              }
+}))(({ type, step = 0.1, unit, variant, style = {}, onChange, ...rest }) => {
+  let decimalPlaces = 0
+  if (Math.floor(step) !== step)
+    decimalPlaces = step.toString().split('.')[1].length || 0
+  return (
+    <TextField
+      onChange={
+        type === 'number'
+          ? (evt) => {
+              evt.target.value =
+                Math.round(
+                  parseFloat(evt.target.value) * Math.pow(10, decimalPlaces),
+                ) / Math.pow(10, decimalPlaces)
+              onChange(evt)
             }
-            return (
-              Math.round(parseFloat(value) * Math.pow(10, num)) /
-              Math.pow(10, num)
-            )
-          })()
-        : value
-    }
-    type={type}
-    step={step}
-    variant={variant || 'outlined'}
-    InputProps={{
-      endAdornment: unit ? (
-        <InputAdornment position="end">{unit}</InputAdornment>
-      ) : (
-        <></>
-      ),
-      style,
-    }}
-    {...rest}
-  />
-))
+          : onChange
+      }
+      type={type}
+      step={step}
+      variant={variant || 'outlined'}
+      InputProps={{
+        endAdornment: unit ? (
+          <InputAdornment position="end">{unit}</InputAdornment>
+        ) : (
+          <></>
+        ),
+        style,
+      }}
+      {...rest}
+    />
+  )
+})
 
 const Text = ({ ...rest }) => <Input type="text" {...rest} />
 const Password = ({ ...rest }) => <Input type="password" {...rest} />
