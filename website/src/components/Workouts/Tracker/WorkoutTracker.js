@@ -1,68 +1,24 @@
 import React from 'react'
-import Workout from './Workout'
+import WorkoutHistory from './WorkoutHistory'
 import { Button } from '../../../style/buttons'
-import { connect } from 'react-redux'
-import { getWorkouts } from '../../../stateManagement/reducers/workouts'
-import {
-  Grid,
-  Table,
-  TableHeaderRow,
-  PagingPanel,
-  TableRowDetail,
-} from '@devexpress/dx-react-grid-material-ui'
-import {
-  SortingState,
-  IntegratedSorting,
-  PagingState,
-  IntegratedPaging,
-  RowDetailState,
-} from '@devexpress/dx-react-grid'
 import { Link } from 'react-router-dom'
+import Microcycle from './Microcycle'
 
-class WorkoutTracker extends React.Component {
+export default class WorkoutTracker extends React.Component {
   constructor() {
     super()
-    this.state = {
-      columns: [{ name: 'date', title: 'Date' }],
-      pageSizes: [10, 20],
-    }
-  }
-
-  componentDidMount() {
-    this.props.getWorkouts()
+    this.state = {}
   }
 
   render() {
-    const { columns, pageSizes } = this.state
     return (
       <div>
+        <Microcycle />
         <Link to="/workoutTracker/new">
           <Button fullWidth>+</Button>
         </Link>
-        <Grid rows={this.props.workouts.history} columns={columns}>
-          <SortingState
-            defaultSorting={[{ columnName: 'date', direction: 'desc' }]}
-          />
-          <IntegratedSorting />
-
-          <PagingState defaultCurrentPage={0} pageSize={pageSizes[0]} />
-          <IntegratedPaging />
-
-          <RowDetailState />
-
-          <Table />
-          <TableHeaderRow showSortingControls />
-          <TableRowDetail
-            contentComponent={({ row }) => <Workout details={row} />}
-          />
-
-          <PagingPanel pageSizes={pageSizes} />
-        </Grid>
+        <WorkoutHistory />
       </div>
     )
   }
 }
-
-export default connect(({ workouts }) => ({ workouts }), {
-  getWorkouts,
-})(WorkoutTracker)
