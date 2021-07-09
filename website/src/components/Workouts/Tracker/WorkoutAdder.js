@@ -35,7 +35,6 @@ class WorkoutAdder extends React.Component {
           <Select
             name="workoutToCopy"
             options={this.props.workouts.history
-
               .map((workout) => ({
                 label: workout.date,
                 value: workout._id,
@@ -63,7 +62,7 @@ class WorkoutAdder extends React.Component {
           <StageEditor
             key={_id}
             id={_id}
-            details={this.props.workouts.current?.stages?.find(
+            details={this.props.workouts.current.stages.find(
               (stage) => _id === stage.id,
             )}
           />

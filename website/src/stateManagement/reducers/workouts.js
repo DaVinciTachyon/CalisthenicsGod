@@ -11,7 +11,7 @@ export const slice = createSlice({
   },
   reducers: {
     getWorkouts: () => {},
-    setWorkouts: (state, { payload }) => ({ history: payload }),
+    setWorkouts: (state, { payload }) => ({ ...state, history: payload }),
     addWorkout: (state, { payload }) => {
       if (payload._id) {
         state.history.unshift(payload)
