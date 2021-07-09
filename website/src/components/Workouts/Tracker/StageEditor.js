@@ -141,15 +141,6 @@ class StageEditor extends React.Component {
   render() {
     const { commitChanges } = this
     const { columns } = this.state
-    console.log(
-      this.props.details?.exercises.map((exercise) => ({
-        ...exercise,
-        variation: exercise.variation || 'default',
-        sagittalPlane: exercise.sagittalPlane || 'default',
-        intrasetRest: exercise.rest.intraset,
-        intersetRest: exercise.rest.interset,
-      })) || [],
-    )
     return (
       <div>
         <Title>
