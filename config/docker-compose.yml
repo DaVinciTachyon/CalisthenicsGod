@@ -14,9 +14,7 @@ services:
     networks:
       - app-network
   backend:
-    build:
-      context: ../backend
-      dockerfile: ./Dockerfile
+    build: ../backend
     image: backend
     container_name: calisthenicsGodBackend
     restart: unless-stopped
@@ -34,9 +32,7 @@ services:
     networks:
       - app-network
   website:
-    build:
-      context: ../website
-      dockerfile: ./Dockerfile
+    build: ../website
     image: website
     container_name: calisthenicsGodWebsite
     restart: unless-stopped
